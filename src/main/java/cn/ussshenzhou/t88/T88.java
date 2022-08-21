@@ -41,7 +41,7 @@ public class T88 {
 
     private void setup(final FMLCommonSetupEvent event) {
         // Some preinit code
-        LOGGER.info("Welcome aboard USS Vancouver!");
+        LOGGER.info("Welcome aboard the USS Vancouver!");
     }
 
     private void enqueueIMC(final InterModEnqueueEvent event) {
