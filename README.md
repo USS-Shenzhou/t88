@@ -1,7 +1,6 @@
 # T88
-
----
 <img src="https://github.com/USS-Shenzhou/t88/blob/master/src/main/resources/t88.png" width="200">
+
 
 欢迎登上联邦星舰温哥华号！
 
