@@ -17,10 +17,13 @@ import org.slf4j.Logger;
 
 import java.util.stream.Collectors;
 
+/**
+ * @author USS_Shenzhou
+ */
 // The value here should match an entry in the META-INF/mods.toml file
 @Mod("t88")
 public class T88 {
-
+    public static final String MOD_ID = "t88";
     // Directly reference a slf4j logger
     private static final Logger LOGGER = LogUtils.getLogger();
 
