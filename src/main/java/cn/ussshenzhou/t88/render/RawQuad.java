@@ -100,27 +100,35 @@ public class RawQuad {
         return points[0].x != points[1].x || points[0].x != points[2].x || points[0].x != points[3].x;
     }
 
-    private Point maxUV() {
+    public Point maxUV() {
         return points[2];
     }
 
-    private Point minXY() {
-        return points[2];
+    public float[] minXYZ() {
+        return new float[]{
+                Math.min(points[0].get(0)[0], points[2].get(0)[0]),
+                Math.min(points[0].get(0)[1], points[2].get(0)[1]),
+                Math.min(points[0].get(0)[2], points[2].get(0)[2]),
+        };
     }
 
-    private Point mimUV() {
+    public Point mimUV() {
         return points[0];
     }
 
-    private Point maxXY() {
-        return points[0];
+    public float[] maxXYZ() {
+        return new float[]{
+                Math.max(points[0].get(0)[0], points[2].get(0)[0]),
+                Math.max(points[0].get(0)[1], points[2].get(0)[1]),
+                Math.max(points[0].get(0)[2], points[2].get(0)[2]),
+        };
     }
 
-    private float URange() {
+    public float URange() {
         return maxUV().u0 - mimUV().u0;
     }
 
-    private float VRange() {
+    public float VRange() {
         return maxUV().v0 - mimUV().v0;
     }
 

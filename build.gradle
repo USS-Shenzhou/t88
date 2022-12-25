@@ -44,7 +44,7 @@ minecraft {
     //mappings channel: 'official', version: '1.18.2'
     mappings channel: 'parchment', version: '2022.08.07-1.18.2'
 
-    // accessTransformer = file('src/main/resources/META-INF/accesstransformer.cfg')
+    accessTransformer = file('src/main/resources/META-INF/accesstransformer.cfg')
 
     // Default run configurations.
     // These can be tweaked, removed, or duplicated as needed.
@@ -73,6 +73,7 @@ minecraft {
                     source sourceSets.main
                 }
             }
+
         }
 
         server {
