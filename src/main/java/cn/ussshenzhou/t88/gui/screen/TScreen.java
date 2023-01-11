@@ -35,6 +35,9 @@ public abstract class TScreen extends Screen {
             layout();
             needRelayout = false;
         }
+        for (TWidget child : tChildren) {
+            child.tickT();
+        }
         super.tick();
     }
 
@@ -157,6 +160,7 @@ public abstract class TScreen extends Screen {
         return this.getFocused() != null && this.getFocused().charTyped(pCodePoint, pModifiers);
     }
 
+    @Deprecated
     @Override
     public void onClose() {
         onClose(true);
@@ -166,6 +170,5 @@ public abstract class TScreen extends Screen {
         if (isFinal) {
             tChildren.forEach(TWidget::onFinalClose);
         }
-        super.onClose();
     }
 }
