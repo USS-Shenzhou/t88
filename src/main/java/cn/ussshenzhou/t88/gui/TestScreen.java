@@ -2,9 +2,8 @@ package cn.ussshenzhou.t88.gui;
 
 import cn.ussshenzhou.t88.gui.screen.TScreen;
 import cn.ussshenzhou.t88.gui.util.Border;
-import cn.ussshenzhou.t88.gui.util.ImageFit;
-import cn.ussshenzhou.t88.gui.widegt.TImage;
 import cn.ussshenzhou.t88.gui.widegt.TLabel;
+import net.minecraft.client.Minecraft;
 import net.minecraft.network.chat.TextComponent;
 
 /**
@@ -13,21 +12,32 @@ import net.minecraft.network.chat.TextComponent;
 public class TestScreen extends TScreen {
     private TLabel title = new TLabel(new TextComponent("T88 Test Screen"));
 
-    private TImage imageTest = new TImage("minecraft", "textures/block/grass_block_side.png");
+    private TLabel linesTest = new TLabel(new TextComponent("§6Test1 \nTest2"));
 
     public TestScreen() {
         super(new TextComponent(""));
         this.add(title);
         title.setFontSize(20);
-        this.add(imageTest);
-        imageTest.setBorder(new Border(0xff00ff00, 1));
-        imageTest.setImageFit(ImageFit.FIT);
+
+        linesTest.setBorder(new Border(0xff00ff00,1));
+        this.add(linesTest);
     }
 
     @Override
     public void layout() {
         title.setBounds(0, 0, title.getPreferredSize().x, title.getPreferredSize().y);
-        imageTest.setBounds(50,50,200,100);
+        linesTest.setBounds(50,50,50,100);
         super.layout();
+    }
+
+    @Override
+    public boolean isPauseScreen() {
+        return false;
+    }
+
+    @Override
+    public void onClose(boolean isFinal) {
+        super.onClose(isFinal);
+        Minecraft.getInstance().setScreen(null);
     }
 }

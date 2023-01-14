@@ -23,7 +23,7 @@ import java.lang.reflect.InvocationTargetException;
 @Mod.EventBusSubscriber(value = Dist.CLIENT)
 public class ModKeyInput {
     public static final KeyMapping GUI_TEST = new KeyMapping(
-            "key.t88.gui_test", KeyConflictContext.UNIVERSAL, KeyModifier.CONTROL,
+            "key.t88.gui_test", KeyConflictContext.UNIVERSAL, KeyModifier.ALT,
             InputConstants.Type.KEYSYM, GLFW.GLFW_KEY_T, "key.categories.t88"
     );
 
