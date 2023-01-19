@@ -3,7 +3,6 @@ package cn.ussshenzhou.t88.gui;
 import cn.ussshenzhou.t88.gui.screen.TScreen;
 import cn.ussshenzhou.t88.gui.util.Border;
 import cn.ussshenzhou.t88.gui.widegt.TLabel;
-import net.minecraft.client.Minecraft;
 import net.minecraft.network.chat.TextComponent;
 
 /**
@@ -35,9 +34,9 @@ public class TestScreen extends TScreen {
         return false;
     }
 
-    @Override
+    /*@Override
     public void onClose(boolean isFinal) {
         super.onClose(isFinal);
         Minecraft.getInstance().setScreen(null);
-    }
+    }*/
 }

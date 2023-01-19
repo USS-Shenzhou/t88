@@ -8,6 +8,7 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.components.Widget;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.network.chat.Component;
+import net.minecraftforge.client.ForgeHooksClient;
 
 import java.util.LinkedList;
 
@@ -170,5 +171,6 @@ public abstract class TScreen extends Screen {
         if (isFinal) {
             tChildren.forEach(TWidget::onFinalClose);
         }
+        ForgeHooksClient.popGuiLayer(Minecraft.getInstance());
     }
 }
