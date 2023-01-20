@@ -8,8 +8,7 @@ import java.lang.annotation.Target;
 /**
  * Annotate to generate a registration class for network registration during FMLCommonSetupEvent.
  *
- * <p>Annotated class should extend {@link cn.ussshenzhou.t88.network.AbstractNetworkPacket},
- * have a proper constructor (for you to create and send the packet),
+ * <p>Annotated class should have a proper constructor (for you to create and send the packet),
  * a {@link Decoder} (constructor) method, a {@link Encoder} method, and a {@link Consumer} method.
  *
  * @author USS_Shenzhou
@@ -17,6 +16,5 @@ import java.lang.annotation.Target;
 @Target(ElementType.TYPE)
 @Retention(RetentionPolicy.SOURCE)
 public @interface NetPacket {
-    String packetName();
     String version() default "1.0";
 }
