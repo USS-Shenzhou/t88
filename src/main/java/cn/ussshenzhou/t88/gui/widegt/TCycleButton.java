@@ -100,7 +100,7 @@ public class TCycleButton<E> extends TButton {
         return super.mouseClicked(pMouseX, pMouseY, pButton);
     }
 
-    private void cycleOnce(int i) {
+    protected void cycleOnce(int i) {
         if (values.size() != 0) {
             this.cycleIndex = cycleIndex + i;
             if (cycleIndex < 0) {

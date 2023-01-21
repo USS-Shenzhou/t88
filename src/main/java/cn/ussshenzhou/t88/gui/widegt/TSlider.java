@@ -21,10 +21,10 @@ import java.util.function.Consumer;
  * @author USS_Shenzhou
  */
 public class TSlider extends SliderButton implements TWidget, TResponder<Double> {
-    private boolean visible = true;
+    protected boolean visible = true;
     TComponent parent = null;
     double min, max;
-    private final LinkedList<Consumer<Double>> responders = new LinkedList<>();
+    protected final LinkedList<Consumer<Double>> responders = new LinkedList<>();
 
     public TSlider(double pMinValue, double pMaxValue, float pSteps, Component tipText) {
         super(Minecraft.getInstance().options, 0, 0, 0, 0,
@@ -70,10 +70,10 @@ public class TSlider extends SliderButton implements TWidget, TResponder<Double>
         setValue(value + delta);
     }
 
-    private float factor0 = 0.2f;
-    private float factor1 = 0.1f;
-    private float factor2 = 0.05f;
-    private float factor3 = 0.01f;
+    protected float factor0 = 0.2f;
+    protected float factor1 = 0.1f;
+    protected float factor2 = 0.05f;
+    protected float factor3 = 0.01f;
 
     @Override
     public boolean mouseScrolled(double pMouseX, double pMouseY, double pDelta) {

@@ -42,7 +42,7 @@ public class LayoutHelper {
     }
 
     public static void BTopOfA(TWidget b, int gap, TWidget a) {
-        b.setAbsBounds(a.getX(), a.getY() - b.getSize().y - gap, a.getSize());
+        b.setAbsBounds(a.getX(), a.getY() - a.getSize().y - gap, a.getSize());
     }
 
     public static void BBottomOfA(TWidget b, int gap, TWidget a, int width, int height) {

@@ -16,8 +16,8 @@ import java.util.LinkedList;
  * @author USS_Shenzhou
  */
 public abstract class TScreen extends Screen {
-    private boolean needRelayout = true;
-    LinkedList<TWidget> tChildren = new LinkedList<>();
+    protected boolean needRelayout = true;
+    protected LinkedList<TWidget> tChildren = new LinkedList<>();
 
     protected TScreen(Component pTitle) {
         super(pTitle);

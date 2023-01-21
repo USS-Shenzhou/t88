@@ -10,11 +10,11 @@ import net.minecraft.util.Mth;
  * @author USS_Shenzhou
  */
 public class TScrollPanel extends TPanel {
-    private double scrollAmount = 0;
-    private double prevScrollAmount = 0;
-    private int bottomY = 0;
-    private static int speedFactor = 6;
-    private int scrollbarGap = 0;
+    protected double scrollAmount = 0;
+    protected double prevScrollAmount = 0;
+    protected int bottomY = 0;
+    protected static int speedFactor = 6;
+    protected int scrollbarGap = 0;
 
     public TScrollPanel() {
         super();
@@ -27,7 +27,7 @@ public class TScrollPanel extends TPanel {
         super.layout();
     }
 
-    private void initPos() {
+    protected void initPos() {
         for (TWidget tWidget : children) {
             int y = tWidget.getY() + tWidget.getSize().y;
             bottomY = 0;
@@ -66,7 +66,7 @@ public class TScrollPanel extends TPanel {
         RenderSystem.disableScissor();
     }
 
-    private void prepareRender(PoseStack pPoseStack, float pPartialTick) {
+    protected void prepareRender(PoseStack pPoseStack, float pPartialTick) {
         Minecraft minecraft = Minecraft.getInstance();
         double scale = minecraft.getWindow().getGuiScale();
         RenderSystem.enableScissor(
@@ -92,7 +92,7 @@ public class TScrollPanel extends TPanel {
      *
      * @see net.minecraft.client.gui.components.AbstractSelectionList#render(PoseStack, int, int, float)
      */
-    private void renderScrollBar() {
+    protected void renderScrollBar() {
         int k1 = this.getMaxScroll();
         if (k1 > 0) {
             int i = getScrollBarX();
@@ -125,7 +125,7 @@ public class TScrollPanel extends TPanel {
         }
     }
 
-    private int getScrollBarX() {
+    protected int getScrollBarX() {
         return this.getX() + width - 6;
     }
 

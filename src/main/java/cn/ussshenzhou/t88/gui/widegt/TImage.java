@@ -15,11 +15,11 @@ import java.io.IOException;
  * @author USS_Shenzhou
  */
 public class TImage extends TPanel {
-    private ResourceLocation imageLocation;
-    private ImageFit imageFit = ImageFit.FILL;
-    private int imageWidth;
-    private int imageHeight;
-    private float scale = 1;
+    protected ResourceLocation imageLocation;
+    protected ImageFit imageFit = ImageFit.FILL;
+    protected int imageWidth;
+    protected int imageHeight;
+    protected float scale = 1;
 
     public TImage(ResourceLocation imageLocation) {
         this.imageLocation = imageLocation;
@@ -59,7 +59,7 @@ public class TImage extends TPanel {
         loadImageWH();
     }
 
-    private void loadImageWH(){
+    protected void loadImageWH(){
         try {
             NativeImage n = NativeImage.read(Minecraft.getInstance().getResourceManager().getResource(imageLocation).getInputStream());
             imageWidth = n.getWidth();

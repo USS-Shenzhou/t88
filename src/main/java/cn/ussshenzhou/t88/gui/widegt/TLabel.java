@@ -16,11 +16,11 @@ import java.util.stream.Stream;
  * @author USS_Shenzhou
  */
 public class TLabel extends TPanel {
-    private Component text;
-    private int fontSize = 7;
-    private HorizontalAlignment horizontalAlignment = HorizontalAlignment.LEFT;
-    private ArrayList<Component> textLines = new ArrayList<>();
-    private int lineSpacing = 2;
+    protected Component text;
+    protected int fontSize = 7;
+    protected HorizontalAlignment horizontalAlignment = HorizontalAlignment.LEFT;
+    protected ArrayList<Component> textLines = new ArrayList<>();
+    protected int lineSpacing = 2;
 
     Font font = Minecraft.getInstance().font;
 
@@ -39,7 +39,7 @@ public class TLabel extends TPanel {
         this.setForeground(foreground);
     }
 
-    private void parseTextLines() {
+    protected void parseTextLines() {
         String[] lines = text.getString().split("\n");
         textLines.clear();
         Stream.of(lines).forEach(line -> {
@@ -91,7 +91,7 @@ public class TLabel extends TPanel {
         pPoseStack.popPose();
     }
 
-    private int getAlignedX() {
+    protected int getAlignedX() {
         int textWidth = getPreferredSize().x;
         if (width == textWidth) {
             return x;

@@ -33,7 +33,7 @@ public class TSelectList<E> extends ObjectSelectionList<TSelectList<E>.Entry> im
     int selectedForeGround = foreground;
     boolean visible = true;
     int scrollbarGap;
-    private HorizontalAlignment horizontalAlignment = HorizontalAlignment.CENTER;
+    protected HorizontalAlignment horizontalAlignment = HorizontalAlignment.CENTER;
 
     public TSelectList(int pItemHeight, int scrollbarGap) {
         super(Minecraft.getInstance(), 0, 0, 0, 0, pItemHeight);
@@ -410,14 +410,14 @@ public class TSelectList<E> extends ObjectSelectionList<TSelectList<E>.Entry> im
         this.horizontalAlignment = horizontalAlignment;
     }
 
-    private TSelectList<E> get() {
+    protected TSelectList<E> get() {
         return this;
     }
 
     public class Entry extends ObjectSelectionList.Entry<Entry> {
         E content;
         Consumer<TSelectList<E>> consumer;
-        private Integer specialForeground = null;
+        protected Integer specialForeground = null;
 
         public Entry(E content, Consumer<TSelectList<E>> consumer) {
             this.content = content;

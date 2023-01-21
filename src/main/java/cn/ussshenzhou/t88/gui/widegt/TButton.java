@@ -13,9 +13,9 @@ import net.minecraft.network.chat.Component;
  */
 public class TButton extends Button implements TWidget {
     public static final Vec2i RECOMMEND_SIZE = new Vec2i(52, 20);
-    private boolean visible = true;
+    protected boolean visible = true;
     TComponent parent = null;
-    private OnPress onPress;
+    protected OnPress onPress;
 
     public TButton(Component pMessage) {
         super(0, 0, 0, 0, pMessage, button -> {
