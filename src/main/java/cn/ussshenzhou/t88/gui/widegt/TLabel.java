@@ -17,7 +17,8 @@ import java.util.stream.Stream;
  */
 public class TLabel extends TPanel {
     protected Component text;
-    protected int fontSize = 7;
+    protected float fontSize = 7;
+    public static final int STD_FONT_SIZE = 7;
     protected HorizontalAlignment horizontalAlignment = HorizontalAlignment.LEFT;
     protected ArrayList<Component> textLines = new ArrayList<>();
     protected int lineSpacing = 2;
@@ -56,7 +57,7 @@ public class TLabel extends TPanel {
         parseTextLines();
     }
 
-    public int getFontSize() {
+    public float getFontSize() {
         return fontSize;
     }
 
@@ -108,7 +109,7 @@ public class TLabel extends TPanel {
 
     @Override
     public Vec2i getPreferredSize() {
-        return new Vec2i(font.width(text) * fontSize / 7, Mth.ceil((fontSize + lineSpacing) * fontSize / 7f));
+        return new Vec2i(Mth.ceil(font.width(text) * fontSize / 7), Mth.ceil((fontSize + lineSpacing) * fontSize / 7f));
     }
 
 }
