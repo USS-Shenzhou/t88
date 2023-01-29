@@ -1,5 +1,6 @@
 package cn.ussshenzhou.t88.gui.widegt;
 
+import cn.ussshenzhou.t88.gui.screen.TScreen;
 import cn.ussshenzhou.t88.gui.util.AccessorProxy;
 import cn.ussshenzhou.t88.gui.util.HorizontalAlignment;
 import cn.ussshenzhou.t88.gui.util.Vec2i;
@@ -28,6 +29,7 @@ import java.util.function.Consumer;
 public class TSelectList<E> extends ObjectSelectionList<TSelectList<E>.Entry> implements TWidget {
     public static final int SCROLLBAR_WIDTH = 6;
     TComponent parent = null;
+    TScreen parentScreen = null;
     int foreground = 0xffffffff;
     int background = 0x80000000;
     int selectedForeGround = foreground;
@@ -362,6 +364,17 @@ public class TSelectList<E> extends ObjectSelectionList<TSelectList<E>.Entry> im
     @Override
     public TComponent getParent() {
         return parent;
+    }
+
+    @Override
+    public void setParentScreen(@Nullable TScreen parentScreen) {
+        this.parentScreen = parentScreen;
+    }
+
+    @Nullable
+    @Override
+    public TScreen getParentScreen() {
+        return parentScreen;
     }
 
     @Override

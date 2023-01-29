@@ -1,10 +1,12 @@
 package cn.ussshenzhou.t88.gui.widegt;
 
+import cn.ussshenzhou.t88.gui.screen.TScreen;
 import cn.ussshenzhou.t88.gui.util.Border;
 import cn.ussshenzhou.t88.gui.util.Vec2i;
 import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraft.client.gui.GuiComponent;
 
+import javax.annotation.Nullable;
 import java.util.Collection;
 import java.util.LinkedList;
 import java.util.stream.Stream;
@@ -22,6 +24,7 @@ public abstract class TComponent extends GuiComponent implements TWidget {
     protected LinkedList<TWidget> children = new LinkedList<>();
     protected Border border = null;
     TComponent parent = null;
+    TScreen parentScreen = null;
     final int id = (int) (Math.random() * Integer.MAX_VALUE);
 
     @Override
@@ -230,6 +233,17 @@ public abstract class TComponent extends GuiComponent implements TWidget {
         this.parent = parent;
     }
 
+    @Override
+    public void setParentScreen(@Nullable TScreen parentScreen) {
+        this.parentScreen = parentScreen;
+    }
+
+    @Nullable
+    @Override
+    public TScreen getParentScreen() {
+        return parentScreen;
+    }
+
     public void remove(TWidget tWidget) {
         children.remove(tWidget);
     }
@@ -292,7 +306,7 @@ public abstract class TComponent extends GuiComponent implements TWidget {
         if (obj == null) {
             return false;
         }
-        if (obj == this){
+        if (obj == this) {
             return true;
         }
         if (obj instanceof TComponent component) {

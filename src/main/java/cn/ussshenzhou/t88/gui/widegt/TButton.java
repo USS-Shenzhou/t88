@@ -1,5 +1,6 @@
 package cn.ussshenzhou.t88.gui.widegt;
 
+import cn.ussshenzhou.t88.gui.screen.TScreen;
 import cn.ussshenzhou.t88.gui.util.MWidget2TComponentHelper;
 import cn.ussshenzhou.t88.gui.util.MouseHelper;
 import cn.ussshenzhou.t88.gui.util.Vec2i;
@@ -7,6 +8,7 @@ import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.components.Button;
 import net.minecraft.network.chat.Component;
+import org.jetbrains.annotations.Nullable;
 
 /**
  * @author USS_Shenzhou
@@ -15,6 +17,7 @@ public class TButton extends Button implements TWidget {
     public static final Vec2i RECOMMEND_SIZE = new Vec2i(52, 20);
     protected boolean visible = true;
     TComponent parent = null;
+    TScreen parentScreen = null;
     protected OnPress onPress;
 
     public TButton(Component pMessage) {
@@ -98,6 +101,17 @@ public class TButton extends Button implements TWidget {
     @Override
     public TComponent getParent() {
         return this.parent;
+    }
+
+    @Override
+    public void setParentScreen(@Nullable TScreen parentScreen) {
+        this.parentScreen = parentScreen;
+    }
+
+    @Nullable
+    @Override
+    public TScreen getParentScreen() {
+        return parentScreen;
     }
 
     @Override

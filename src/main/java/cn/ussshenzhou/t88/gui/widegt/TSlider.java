@@ -1,5 +1,6 @@
 package cn.ussshenzhou.t88.gui.widegt;
 
+import cn.ussshenzhou.t88.gui.screen.TScreen;
 import cn.ussshenzhou.t88.gui.util.AccessorProxy;
 import cn.ussshenzhou.t88.gui.util.MWidget2TComponentHelper;
 import cn.ussshenzhou.t88.gui.util.MouseHelper;
@@ -23,6 +24,7 @@ import java.util.function.Consumer;
 public class TSlider extends SliderButton implements TWidget, TResponder<Double> {
     protected boolean visible = true;
     TComponent parent = null;
+    TScreen parentScreen = null;
     double min, max;
     protected final LinkedList<Consumer<Double>> responders = new LinkedList<>();
 
@@ -150,6 +152,17 @@ public class TSlider extends SliderButton implements TWidget, TResponder<Double>
     @Override
     public TComponent getParent() {
         return parent;
+    }
+
+    @Override
+    public void setParentScreen(@Nullable TScreen parentScreen) {
+        this.parentScreen = parentScreen;
+    }
+
+    @Nullable
+    @Override
+    public TScreen getParentScreen() {
+        return parentScreen;
     }
 
     @Override

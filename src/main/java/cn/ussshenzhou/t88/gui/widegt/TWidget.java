@@ -1,5 +1,6 @@
 package cn.ussshenzhou.t88.gui.widegt;
 
+import cn.ussshenzhou.t88.gui.screen.TScreen;
 import cn.ussshenzhou.t88.gui.util.Vec2i;
 import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraft.client.gui.components.Widget;
@@ -34,6 +35,11 @@ public interface TWidget extends Widget, GuiEventListener {
 
     @Nullable
     TComponent getParent();
+
+    void setParentScreen(@Nullable TScreen parentScreen);
+
+    @Nullable
+    TScreen getParentScreen();
 
     int getX();
 

@@ -2,6 +2,7 @@ package cn.ussshenzhou.t88.gui.widegt;
 
 import cn.ussshenzhou.t88.gui.event.EditBoxFocusedEvent;
 import cn.ussshenzhou.t88.gui.event.TWidgetContentUpdatedEvent;
+import cn.ussshenzhou.t88.gui.screen.TScreen;
 import cn.ussshenzhou.t88.gui.util.AccessorProxy;
 import cn.ussshenzhou.t88.gui.util.MWidget2TComponentHelper;
 import cn.ussshenzhou.t88.gui.util.Vec2i;
@@ -14,6 +15,7 @@ import net.minecraft.network.chat.TextComponent;
 import net.minecraft.util.Mth;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.LinkedList;
 import java.util.function.Consumer;
@@ -23,6 +25,7 @@ import java.util.function.Consumer;
  */
 public class TEditBox extends EditBox implements TWidget, TResponder<String> {
     TComponent parent = null;
+    TScreen parentScreen = null;
     protected final LinkedList<Consumer<String>> responders = new LinkedList<>();
 
     @SubscribeEvent
@@ -130,6 +133,17 @@ public class TEditBox extends EditBox implements TWidget, TResponder<String> {
     @Override
     public TComponent getParent() {
         return parent;
+    }
+
+    @Override
+    public void setParentScreen(@Nullable TScreen parentScreen) {
+        this.parentScreen = parentScreen;
+    }
+
+    @Nullable
+    @Override
+    public TScreen getParentScreen() {
+        return parentScreen;
     }
 
     @Override
