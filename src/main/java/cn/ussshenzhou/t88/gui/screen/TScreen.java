@@ -64,10 +64,12 @@ public abstract class TScreen extends Screen {
 
     public void add(TWidget tWidget) {
         tChildren.add(tWidget);
+        tWidget.setParentScreen(this);
     }
 
     public void remove(TWidget tWidget) {
         tChildren.remove(tWidget);
+        tWidget.setParentScreen(null);
     }
 
 
