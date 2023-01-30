@@ -107,7 +107,7 @@ public class TLabel extends TPanel {
 
     @Override
     public Vec2i getPreferredSize() {
-        return new Vec2i(maxLineWidth, Mth.ceil((fontSize + lineSpacing) * fontSize / 7f));
+        return new Vec2i(maxLineWidth, (int) ((fontSize + lineSpacing) * textLines.size()) + 1);
     }
 
 }

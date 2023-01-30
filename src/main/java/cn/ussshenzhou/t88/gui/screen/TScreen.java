@@ -19,7 +19,7 @@ public abstract class TScreen extends Screen {
     protected boolean needRelayout = true;
     protected LinkedList<TWidget> tChildren = new LinkedList<>();
 
-    protected TScreen(Component pTitle) {
+    public TScreen(Component pTitle) {
         super(pTitle);
         minecraft = Minecraft.getInstance();
     }
