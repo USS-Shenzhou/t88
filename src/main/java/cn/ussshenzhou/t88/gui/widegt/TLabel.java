@@ -22,7 +22,7 @@ public class TLabel extends TPanel {
     protected HorizontalAlignment horizontalAlignment = HorizontalAlignment.LEFT;
     protected ArrayList<Component> textLines = new ArrayList<>();
     protected int lineSpacing = 2;
-    private int maxLineWidth = 0;
+    protected int maxLineWidth = 0;
 
     Font font = Minecraft.getInstance().font;
 
