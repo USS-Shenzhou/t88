@@ -22,6 +22,7 @@ public class TLabel extends TPanel {
     protected HorizontalAlignment horizontalAlignment = HorizontalAlignment.LEFT;
     protected ArrayList<Component> textLines = new ArrayList<>();
     protected int lineSpacing = 2;
+    private int maxLineWidth = 0;
 
     Font font = Minecraft.getInstance().font;
 
@@ -46,6 +47,9 @@ public class TLabel extends TPanel {
         Stream.of(lines).forEach(line -> {
             textLines.add(new TextComponent(line));
         });
+        for (Component line : textLines) {
+            maxLineWidth = Mth.ceil(Math.max(font.width(line) * fontSize / 7, width));
+        }
     }
 
     public Component getText() {
@@ -83,33 +87,27 @@ public class TLabel extends TPanel {
         pPoseStack.pushPose();
         float scaleFactor = fontSize / 7f;
         pPoseStack.scale(scaleFactor, scaleFactor, 1);
-        int x0 = (int) (getAlignedX() / scaleFactor);
-        int y0 = (int) ((y + (height - (fontSize + lineSpacing) * textLines.size()) / 2) / scaleFactor);
-        for (Component component : textLines) {
-            drawString(pPoseStack, font, component, x0, y0, foreground);
+        int y0 = Mth.ceil((y + (height - (fontSize + lineSpacing) * textLines.size()) / 2) / scaleFactor);
+        for (Component line : textLines) {
+            int x0 = (int) (getAlignedX(line) / scaleFactor);
+            drawString(pPoseStack, font, line, x0, y0, foreground);
             y0 += (fontSize + lineSpacing) / scaleFactor;
         }
         pPoseStack.popPose();
     }
 
-    protected int getAlignedX() {
-        int textWidth = getPreferredSize().x;
-        if (width == textWidth) {
-            return x;
-        }
-        switch (horizontalAlignment) {
-            case CENTER:
-                return x + (width - textWidth) / 2;
-            case RIGHT:
-                return x + width - textWidth;
-            default:
-                return x;
-        }
+    protected int getAlignedX(Component line) {
+        int textWidth = Mth.ceil(font.width(line) * fontSize / 7);
+        return switch (horizontalAlignment) {
+            case CENTER -> x + (width - textWidth) / 2;
+            case RIGHT -> x + width - textWidth;
+            default -> x;
+        };
     }
 
     @Override
     public Vec2i getPreferredSize() {
-        return new Vec2i(Mth.ceil(font.width(text) * fontSize / 7), Mth.ceil((fontSize + lineSpacing) * fontSize / 7f));
+        return new Vec2i(maxLineWidth, Mth.ceil((fontSize + lineSpacing) * fontSize / 7f));
     }
 
 }

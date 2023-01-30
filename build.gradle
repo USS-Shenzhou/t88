@@ -19,7 +19,7 @@ apply plugin: 'org.spongepowered.mixin'
 apply plugin: 'org.parchmentmc.librarian.forgegradle'
 
 group = 'cn.ussshenzhou'
-version = '0.2.21'
+version = '0.2.22'
 
 java {
     archivesBaseName = 't88'
