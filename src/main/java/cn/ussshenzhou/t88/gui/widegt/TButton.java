@@ -5,7 +5,6 @@ import cn.ussshenzhou.t88.gui.util.MWidget2TComponentHelper;
 import cn.ussshenzhou.t88.gui.util.MouseHelper;
 import cn.ussshenzhou.t88.gui.util.Vec2i;
 import com.mojang.blaze3d.vertex.PoseStack;
-import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.components.Button;
 import net.minecraft.network.chat.Component;
 import org.jetbrains.annotations.Nullable;
@@ -141,7 +140,6 @@ public class TButton extends Button implements TWidget {
 
     @Override
     public boolean keyPressed(int pKeyCode, int pScanCode, int pModifiers) {
-        Minecraft minecraft = Minecraft.getInstance();
         if (isInRange(MouseHelper.getMouseX(), MouseHelper.getMouseY())) {
             return super.keyPressed(pKeyCode, pScanCode, pModifiers);
         }

@@ -58,6 +58,9 @@ public abstract class TComponent extends GuiComponent implements TWidget {
         }
     }
 
+    public void resizeAsHud(int screenWidth, int screenHeight) {
+    }
+
     @Override
     public void render(PoseStack pPoseStack, int pMouseX, int pMouseY, float pPartialTick) {
         if (border != null) {

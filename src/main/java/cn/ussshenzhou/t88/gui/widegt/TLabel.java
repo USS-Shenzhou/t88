@@ -48,6 +48,7 @@ public class TLabel extends TPanel {
             textLines.add(new TextComponent(line));
         });
         for (Component line : textLines) {
+            //TODO wrong calculate
             maxLineWidth = Mth.ceil(Math.max(font.width(line) * fontSize / 7, width));
         }
     }
