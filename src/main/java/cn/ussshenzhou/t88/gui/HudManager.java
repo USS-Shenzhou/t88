@@ -7,6 +7,7 @@ import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraft.client.Minecraft;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.client.event.RenderGameOverlayEvent;
+import net.minecraftforge.client.event.ScreenEvent;
 import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
@@ -43,6 +44,14 @@ public class HudManager {
                 tComponent.render(poseStack, mouseX, mouseY, partialTick);
             }
         });
+    }
+
+    @SubscribeEvent
+    public static void renderHudAfterScreen(ScreenEvent.DrawScreenEvent.Post event) {
+        PoseStack poseStack = event.getPoseStack();
+        int mouseX = (int) MouseHelper.getMouseX();
+        int mouseY = (int) MouseHelper.getMouseY();
+        float partialTick = event.getPartialTicks();
         CHILDREN.forEach((tComponent) -> {
             if (tComponent.isVisibleT()) {
                 tComponent.renderTop(poseStack, mouseX, mouseY, partialTick);

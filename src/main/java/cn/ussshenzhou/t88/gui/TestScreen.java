@@ -14,7 +14,7 @@ public class TestScreen extends TScreen {
     private TLabel title = new TLabel(new TextComponent("T88 Test Screen"));
 
     private TLabel linesTest = new TLabel(new TextComponent("§6Test1 \nTest223456\n..."));
-    private TTimer tTimer = TTimer.newTimerCountDownAndStart(20);
+    private TTimer tTimer = TTimer.newTimerAndStart();
 
     public TestScreen() {
         super(new TextComponent(""));
@@ -28,11 +28,10 @@ public class TestScreen extends TScreen {
         tTimer.setPrefix("ABC: ");
         tTimer.setBackground(0xff000000);
         tTimer.setForeground(0xff00ffff);
-        //tTimer.setShowMillis(true);
+        tTimer.setShowMillis(true);
         tTimer.setShowFullFormat(true);
         //tTimer.setKeepDigitsLength(false);
-        tTimer.setShowUpto(TTimer.TimeCategory.MIN);
-        this.add(tTimer);
+        HudManager.add(tTimer);
     }
 
     @Override

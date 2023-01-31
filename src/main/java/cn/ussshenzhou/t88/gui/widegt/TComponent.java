@@ -59,6 +59,7 @@ public abstract class TComponent extends GuiComponent implements TWidget {
     }
 
     public void resizeAsHud(int screenWidth, int screenHeight) {
+        layout();
     }
 
     @Override
