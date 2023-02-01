@@ -1,5 +1,6 @@
 package cn.ussshenzhou.t88.gui;
 
+import cn.ussshenzhou.t88.gui.event.GameRendererRenderedEvent;
 import cn.ussshenzhou.t88.gui.event.ResizeHudEvent;
 import cn.ussshenzhou.t88.gui.util.MouseHelper;
 import cn.ussshenzhou.t88.gui.widegt.TComponent;
@@ -7,7 +8,6 @@ import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraft.client.Minecraft;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.client.event.RenderGameOverlayEvent;
-import net.minecraftforge.client.event.ScreenEvent;
 import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
@@ -47,11 +47,11 @@ public class HudManager {
     }
 
     @SubscribeEvent
-    public static void renderHudAfterScreen(ScreenEvent.DrawScreenEvent.Post event) {
+    public static void renderHudAfterScreen(GameRendererRenderedEvent event) {
         PoseStack poseStack = event.getPoseStack();
         int mouseX = (int) MouseHelper.getMouseX();
         int mouseY = (int) MouseHelper.getMouseY();
-        float partialTick = event.getPartialTicks();
+        float partialTick = event.getPartialTick();
         CHILDREN.forEach((tComponent) -> {
             if (tComponent.isVisibleT()) {
                 tComponent.renderTop(poseStack, mouseX, mouseY, partialTick);

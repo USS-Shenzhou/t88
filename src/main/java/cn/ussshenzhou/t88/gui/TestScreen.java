@@ -5,6 +5,7 @@ import cn.ussshenzhou.t88.gui.util.Border;
 import cn.ussshenzhou.t88.gui.util.HorizontalAlignment;
 import cn.ussshenzhou.t88.gui.widegt.TLabel;
 import cn.ussshenzhou.t88.gui.widegt.TTimer;
+import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraft.network.chat.TextComponent;
 
 /**
@@ -14,7 +15,17 @@ public class TestScreen extends TScreen {
     private TLabel title = new TLabel(new TextComponent("T88 Test Screen"));
 
     private TLabel linesTest = new TLabel(new TextComponent("§6Test1 \nTest223456\n..."));
-    private TTimer tTimer = TTimer.newTimerAndStart();
+    private TTimer tTimer = new TTimer(){
+        @Override
+        public void render(PoseStack pPoseStack, int pMouseX, int pMouseY, float pPartialTick) {
+        }
+
+        @Override
+        public void renderTop(PoseStack pPoseStack, int pMouseX, int pMouseY, float pPartialTick) {
+            super.render(pPoseStack, pMouseX, pMouseY, pPartialTick);
+            super.renderTop(pPoseStack, pMouseX, pMouseY, pPartialTick);
+        }
+    };
 
     public TestScreen() {
         super(new TextComponent(""));
@@ -26,11 +37,12 @@ public class TestScreen extends TScreen {
         this.add(linesTest);
 
         tTimer.setPrefix("ABC: ");
-        tTimer.setBackground(0xff000000);
+        tTimer.setBackground(0x80000000);
         tTimer.setForeground(0xff00ffff);
         tTimer.setShowMillis(true);
         tTimer.setShowFullFormat(true);
         //tTimer.setKeepDigitsLength(false);
+        tTimer.start();
         HudManager.add(tTimer);
     }
 
