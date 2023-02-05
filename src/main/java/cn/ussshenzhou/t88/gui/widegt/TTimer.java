@@ -240,6 +240,22 @@ public class TTimer extends TLabel {
         this.showUpto = showUpto;
     }
 
+    public boolean isCountdown() {
+        return countdown;
+    }
+
+    public void setCountdown(boolean countdown) {
+        this.countdown = countdown;
+    }
+
+    public int getCountDownSec() {
+        return countDownSec;
+    }
+
+    public void setCountDownSec(int countDownSec) {
+        this.countDownSec = countDownSec;
+    }
+
     public enum TimeCategory {
         SEC,
         MIN,
