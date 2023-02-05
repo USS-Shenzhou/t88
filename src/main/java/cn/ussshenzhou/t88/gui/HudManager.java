@@ -9,10 +9,12 @@ import net.minecraft.client.Minecraft;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.client.event.RenderGameOverlayEvent;
 import net.minecraftforge.event.TickEvent;
+import net.minecraftforge.event.entity.player.PlayerEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 
 import java.util.LinkedHashSet;
+import java.util.List;
 
 /**
  * @author USS_Shenzhou
@@ -24,6 +26,7 @@ public class HudManager {
 
     public static void add(TComponent tComponent) {
         CHILDREN.add(tComponent);
+        tComponent.resizeAsHud(Minecraft.getInstance().getWindow().getGuiScaledWidth(), Minecraft.getInstance().getWindow().getGuiScaledHeight());
     }
 
     public static void remove(TComponent tComponent) {
@@ -75,5 +78,12 @@ public class HudManager {
         int screenWidth = Minecraft.getInstance().getWindow().getGuiScaledWidth();
         int screenHeight = Minecraft.getInstance().getWindow().getGuiScaledHeight();
         CHILDREN.forEach(tComponent -> tComponent.resizeAsHud(screenWidth, screenHeight));
+    }
+
+    @SubscribeEvent
+    public static void onPlayerOut(PlayerEvent.PlayerLoggedOutEvent event) {
+        List<TComponent> l = CHILDREN.stream().filter(TComponent::isShowHudEvenLoggedOut).toList();
+        CHILDREN.clear();
+        CHILDREN.addAll(l);
     }
 }

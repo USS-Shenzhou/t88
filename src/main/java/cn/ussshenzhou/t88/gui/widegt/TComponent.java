@@ -26,6 +26,7 @@ public abstract class TComponent extends GuiComponent implements TWidget {
     TComponent parent = null;
     TScreen parentScreen = null;
     final int id = (int) (Math.random() * Integer.MAX_VALUE);
+    private boolean showHudEvenLoggedOut = false;
 
     @Override
     public void setBounds(int x, int y, int width, int height) {
@@ -298,6 +299,14 @@ public abstract class TComponent extends GuiComponent implements TWidget {
 
     public void setForeground(int foreground) {
         this.foreground = foreground;
+    }
+
+    public boolean isShowHudEvenLoggedOut() {
+        return showHudEvenLoggedOut;
+    }
+
+    public void setShowHudEvenLoggedOut(boolean showHudEvenLoggedOut) {
+        this.showHudEvenLoggedOut = showHudEvenLoggedOut;
     }
 
     @Override
