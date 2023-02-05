@@ -20,6 +20,8 @@ public class TTimer extends TLabel {
     private boolean showMillis = false;
     private int countDownSec = 0;
     private TimeCategory showUpto = TimeCategory.DAY;
+    String finalString = "";
+    long time;
 
     public TTimer() {
         super();
@@ -45,9 +47,6 @@ public class TTimer extends TLabel {
         t.start();
         return t;
     }
-
-    String finalString = "";
-    long time;
 
     @Override
     public void tickT() {
@@ -238,6 +237,30 @@ public class TTimer extends TLabel {
 
     public void setShowUpto(TimeCategory showUpto) {
         this.showUpto = showUpto;
+    }
+
+    public boolean isCountdown() {
+        return countdown;
+    }
+
+    public void setCountdown(boolean countdown) {
+        this.countdown = countdown;
+    }
+
+    public int getCountDownSec() {
+        return countDownSec;
+    }
+
+    public void setCountDownSec(int countDownSec) {
+        this.countDownSec = countDownSec;
+    }
+
+    public long getTime() {
+        return time;
+    }
+
+    public void setTime(long time) {
+        this.time = time;
     }
 
     public enum TimeCategory {
