@@ -68,13 +68,14 @@ public class NetworkAnnotationProcessor extends AbstractProcessor {
                 NetPacket netPacket = sourceClass.getAnnotation(NetPacket.class);
                 registryWriter.println(String.format("""
                                             SimpleChannel channel%1$s = NetworkRegistry.newSimpleChannel(
-                                                    new ResourceLocation("%1$s"),
-                                                    () -> "%2$s",
-                                                    (version) -> version.equals("%2$s"),
-                                                    (version) -> version.equals("%2$s")
+                                                    new ResourceLocation("%2$s"),
+                                                    () -> "%3$s",
+                                                    (version) -> version.equals("%3$s"),
+                                                    (version) -> version.equals("%3$s")
                                             );
                                 """,
                         sourceClassName,
+                        PacketProxy.classNameToResLocName(sourceClassName),
                         netPacket.version()
                 ));
                 String encoderMethod = null;
@@ -113,7 +114,7 @@ public class NetworkAnnotationProcessor extends AbstractProcessor {
                         encoderMethod,
                         decoderMethod,
                         consumerMethod,
-                        PacketProxy.getStdChannelName(sourceClassName)
+                        PacketProxy.classNameToResLocName(sourceClassName)
                 ));
 
             }

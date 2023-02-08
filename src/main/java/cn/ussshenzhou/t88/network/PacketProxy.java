@@ -12,7 +12,7 @@ public class PacketProxy {
     private static HashMap<String, SimpleChannel> channels = new HashMap<>();
 
     public static SimpleChannel getChannel(Class<?> packetClass) {
-        return getChannel(getStdChannelName(packetClass));
+        return getChannel(classNameToResLocName(packetClass));
     }
 
     private static SimpleChannel getChannel(String channelName) {
@@ -23,11 +23,11 @@ public class PacketProxy {
         channels.put(channelName, channel);
     }
 
-    public static String getStdChannelName(Class<?> clazz) {
-        return getStdChannelName(clazz.getSimpleName());
+    public static String classNameToResLocName(Class<?> clazz) {
+        return classNameToResLocName(clazz.getSimpleName());
     }
 
-    protected static String getStdChannelName(String s){
+    protected static String classNameToResLocName(String s){
         return s.toLowerCase(Locale.ENGLISH).replaceAll("\\$","_");
     }
 }
