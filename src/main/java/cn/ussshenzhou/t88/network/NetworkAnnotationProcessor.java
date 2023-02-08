@@ -74,7 +74,7 @@ public class NetworkAnnotationProcessor extends AbstractProcessor {
                                                     (version) -> version.equals("%2$s")
                                             );
                                 """,
-                        sourceClassName,
+                        PacketProxy.classNameToResLocName(sourceClassName),
                         netPacket.version()
                 ));
                 String encoderMethod = null;
@@ -113,7 +113,7 @@ public class NetworkAnnotationProcessor extends AbstractProcessor {
                         encoderMethod,
                         decoderMethod,
                         consumerMethod,
-                        PacketProxy.getStdChannelName(sourceClassName)
+                        PacketProxy.classNameToResLocName(sourceClassName)
                 ));
 
             }
