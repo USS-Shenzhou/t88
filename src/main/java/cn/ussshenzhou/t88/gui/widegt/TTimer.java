@@ -129,12 +129,16 @@ public class TTimer extends TLabel {
     @Override
     public void render(PoseStack pPoseStack, int pMouseX, int pMouseY, float pPartialTick) {
         if (countdown) {
-            time = startMs + pausedMs - System.currentTimeMillis();
-            if (time <= 0) {
-                time = 0;
-                updateText();
-                updateGui = false;
-                MinecraftForge.EVENT_BUS.post(new TimerCountdownReachEvent(this));
+            if (startMs == 0 && pausedMs == 0) {
+                time = countDownSec * 1000L;
+            } else {
+                time = startMs + pausedMs - System.currentTimeMillis();
+                if (time <= 0) {
+                    time = 0;
+                    updateText();
+                    updateGui = false;
+                    MinecraftForge.EVENT_BUS.post(new TimerCountdownReachEvent(this));
+                }
             }
         } else {
             time = System.currentTimeMillis() - startMs - pausedMs;

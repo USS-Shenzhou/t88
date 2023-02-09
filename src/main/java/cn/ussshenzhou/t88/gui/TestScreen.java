@@ -5,8 +5,9 @@ import cn.ussshenzhou.t88.gui.util.Border;
 import cn.ussshenzhou.t88.gui.util.HorizontalAlignment;
 import cn.ussshenzhou.t88.gui.widegt.TLabel;
 import cn.ussshenzhou.t88.gui.widegt.TTimer;
-import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraft.network.chat.TextComponent;
+
+import java.util.concurrent.CompletableFuture;
 
 /**
  * @author USS_Shenzhou
@@ -15,17 +16,7 @@ public class TestScreen extends TScreen {
     private TLabel title = new TLabel(new TextComponent("T88 Test Screen"));
 
     private TLabel linesTest = new TLabel(new TextComponent("§6Test1 \nTest223456\n..."));
-    private TTimer tTimer = new TTimer(){
-        @Override
-        public void render(PoseStack pPoseStack, int pMouseX, int pMouseY, float pPartialTick) {
-        }
-
-        @Override
-        public void renderTop(PoseStack pPoseStack, int pMouseX, int pMouseY, float pPartialTick) {
-            super.render(pPoseStack, pMouseX, pMouseY, pPartialTick);
-            super.renderTop(pPoseStack, pMouseX, pMouseY, pPartialTick);
-        }
-    };
+    private TTimer tTimer = TTimer.newTimerCountDown(30);
 
     public TestScreen() {
         super(new TextComponent(""));
@@ -43,7 +34,29 @@ public class TestScreen extends TScreen {
         tTimer.setShowFullFormat(true);
         //tTimer.setKeepDigitsLength(false);
         tTimer.start();
-        HudManager.add(tTimer);
+        this.add(tTimer);
+        CompletableFuture.runAsync(()->{
+            try {
+                Thread.sleep(5*1000);
+            } catch (InterruptedException e) {
+            }
+            tTimer.stop();
+            try {
+                Thread.sleep(5*1000);
+            } catch (InterruptedException e) {
+            }
+            tTimer.start();
+            try {
+                Thread.sleep(5*1000);
+            } catch (InterruptedException e) {
+            }
+            tTimer.pause();
+            try {
+                Thread.sleep(5*1000);
+            } catch (InterruptedException e) {
+            }
+            tTimer.resume();
+        });
     }
 
     @Override
