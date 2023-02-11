@@ -20,6 +20,7 @@ public class TImage extends TPanel {
     protected int imageWidth;
     protected int imageHeight;
     protected float scale = 1;
+    protected float alpha = 1;
 
     public TImage(ResourceLocation imageLocation) {
         this.imageLocation = imageLocation;
@@ -59,6 +60,14 @@ public class TImage extends TPanel {
         loadImageWH();
     }
 
+    public float getAlpha() {
+        return alpha;
+    }
+
+    public void setAlpha(float alpha) {
+        this.alpha = alpha;
+    }
+
     protected void loadImageWH(){
         try {
             NativeImage n = NativeImage.read(Minecraft.getInstance().getResourceManager().getResource(imageLocation).getInputStream());
@@ -77,7 +86,7 @@ public class TImage extends TPanel {
         if (imageLocation != null) {
             RenderSystem.setShader(GameRenderer::getPositionTexShader);
             RenderSystem.setShaderTexture(0, imageLocation);
-            RenderSystem.setShaderColor(1, 1, 1, 1);
+            RenderSystem.setShaderColor(1, 1, 1, alpha);
             RenderSystem.enableBlend();
             RenderSystem.defaultBlendFunc();
             RenderSystem.enableDepthTest();
@@ -119,6 +128,7 @@ public class TImage extends TPanel {
                 case TILE ->
                         blit(pPoseStack, this.x, this.y, width, height, 0, 0, width, height, (int) (imageWidth*scale), (int) (imageHeight*scale));
             }
+            RenderSystem.setShaderColor(1, 1, 1, 1);
         }
         super.render(pPoseStack, pMouseX, pMouseY, pPartialTick);
     }
