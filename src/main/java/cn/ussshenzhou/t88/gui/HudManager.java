@@ -13,7 +13,9 @@ import net.minecraftforge.event.entity.player.PlayerEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 
+import java.util.Arrays;
 import java.util.LinkedHashSet;
+import java.util.LinkedList;
 import java.util.List;
 
 /**
@@ -23,14 +25,15 @@ import java.util.List;
 @Mod.EventBusSubscriber(bus = Mod.EventBusSubscriber.Bus.FORGE, value = Dist.CLIENT)
 public class HudManager {
     private static final LinkedHashSet<TComponent> CHILDREN = new LinkedHashSet<>();
+    private static LinkedList<TComponent> needRemove = new LinkedList<>();
 
     public static void add(TComponent tComponent) {
         CHILDREN.add(tComponent);
         tComponent.resizeAsHud(Minecraft.getInstance().getWindow().getGuiScaledWidth(), Minecraft.getInstance().getWindow().getGuiScaledHeight());
     }
 
-    public static void remove(TComponent tComponent) {
-        CHILDREN.remove(tComponent);
+    public static void remove(TComponent... tComponents) {
+        needRemove.addAll(Arrays.stream(tComponents).toList());
     }
 
     @SubscribeEvent
@@ -65,6 +68,8 @@ public class HudManager {
     @SubscribeEvent
     public static void onTick(TickEvent.ClientTickEvent event) {
         if (event.phase == TickEvent.Phase.END) {
+            needRemove.forEach(CHILDREN::remove);
+            needRemove.clear();
             CHILDREN.forEach((tComponent) -> {
                 if (tComponent.isVisibleT()) {
                     tComponent.tickT();
@@ -82,8 +87,10 @@ public class HudManager {
 
     @SubscribeEvent
     public static void onPlayerOut(PlayerEvent.PlayerLoggedOutEvent event) {
-        List<TComponent> l = CHILDREN.stream().filter(TComponent::isShowHudEvenLoggedOut).toList();
-        CHILDREN.clear();
-        CHILDREN.addAll(l);
+        synchronized (CHILDREN) {
+            List<TComponent> l = CHILDREN.stream().filter(TComponent::isShowHudEvenLoggedOut).toList();
+            CHILDREN.clear();
+            CHILDREN.addAll(l);
+        }
     }
 }
