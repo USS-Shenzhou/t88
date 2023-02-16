@@ -20,20 +20,23 @@ import java.util.List;
 
 /**
  * @author USS_Shenzhou
- * TODO move to T88
  */
 @Mod.EventBusSubscriber(bus = Mod.EventBusSubscriber.Bus.FORGE, value = Dist.CLIENT)
 public class HudManager {
     private static final LinkedHashSet<TComponent> CHILDREN = new LinkedHashSet<>();
+    private static LinkedList<TComponent> needAdd = new LinkedList<>();
     private static LinkedList<TComponent> needRemove = new LinkedList<>();
 
-    public static void add(TComponent tComponent) {
-        CHILDREN.add(tComponent);
-        tComponent.resizeAsHud(Minecraft.getInstance().getWindow().getGuiScaledWidth(), Minecraft.getInstance().getWindow().getGuiScaledHeight());
+    public static void add(TComponent... tComponents) {
+        needAdd.addAll(Arrays.stream(tComponents).toList());
     }
 
     public static void remove(TComponent... tComponents) {
         needRemove.addAll(Arrays.stream(tComponents).toList());
+    }
+
+    public static LinkedHashSet<TComponent> getChildren(){
+        return CHILDREN;
     }
 
     @SubscribeEvent
@@ -68,6 +71,8 @@ public class HudManager {
     @SubscribeEvent
     public static void onTick(TickEvent.ClientTickEvent event) {
         if (event.phase == TickEvent.Phase.END) {
+            CHILDREN.addAll(needAdd);
+            needAdd.clear();
             needRemove.forEach(CHILDREN::remove);
             needRemove.clear();
             CHILDREN.forEach((tComponent) -> {
