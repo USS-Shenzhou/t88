@@ -35,7 +35,7 @@ public class HudManager {
         needRemove.addAll(Arrays.stream(tComponents).toList());
     }
 
-    public static LinkedHashSet<TComponent> getChildren(){
+    public static LinkedHashSet<TComponent> getChildren() {
         return CHILDREN;
     }
 
@@ -71,7 +71,12 @@ public class HudManager {
     @SubscribeEvent
     public static void onTick(TickEvent.ClientTickEvent event) {
         if (event.phase == TickEvent.Phase.END) {
-            CHILDREN.addAll(needAdd);
+            int w = Minecraft.getInstance().getWindow().getGuiScaledWidth();
+            int h = Minecraft.getInstance().getWindow().getGuiScaledHeight();
+            needAdd.forEach(tComponent -> {
+                CHILDREN.add(tComponent);
+                tComponent.resizeAsHud(w, h);
+            });
             needAdd.clear();
             needRemove.forEach(CHILDREN::remove);
             needRemove.clear();
