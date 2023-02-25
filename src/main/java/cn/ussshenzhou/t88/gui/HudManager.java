@@ -24,8 +24,8 @@ import java.util.List;
 @Mod.EventBusSubscriber(bus = Mod.EventBusSubscriber.Bus.FORGE, value = Dist.CLIENT)
 public class HudManager {
     private static final LinkedHashSet<TComponent> CHILDREN = new LinkedHashSet<>();
-    private static LinkedList<TComponent> needAdd = new LinkedList<>();
-    private static LinkedList<TComponent> needRemove = new LinkedList<>();
+    private static final LinkedList<TComponent> needAdd = new LinkedList<>();
+    private static final LinkedList<TComponent> needRemove = new LinkedList<>();
 
     public static void add(TComponent... tComponents) {
         needAdd.addAll(Arrays.stream(tComponents).toList());
