@@ -1,44 +1,64 @@
 package cn.ussshenzhou.t88.gui.widegt;
 
 import cn.ussshenzhou.t88.gui.screen.TScreen;
-import cn.ussshenzhou.t88.gui.util.AccessorProxy;
-import cn.ussshenzhou.t88.gui.util.MWidget2TComponentHelper;
+import cn.ussshenzhou.t88.gui.util.VanillaWidget2TComponentHelper;
 import cn.ussshenzhou.t88.gui.util.MouseHelper;
 import cn.ussshenzhou.t88.gui.util.Vec2i;
-import com.google.common.collect.ImmutableList;
 import com.mojang.blaze3d.vertex.PoseStack;
+import com.mojang.serialization.Codec;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.ProgressOption;
-import net.minecraft.client.gui.components.SliderButton;
+import net.minecraft.client.OptionInstance;
+import net.minecraft.client.Options;
+import net.minecraft.client.gui.components.Tooltip;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.network.chat.Component;
 import net.minecraft.util.Mth;
-import org.jetbrains.annotations.Nullable;
 
+import javax.annotation.Nullable;
 import java.util.LinkedList;
+import java.util.Optional;
 import java.util.function.Consumer;
 
 /**
  * @author USS_Shenzhou
  */
-public class TSlider extends SliderButton implements TWidget, TResponder<Double> {
+public class TSlider extends OptionInstance.OptionInstanceSliderButton<Double> implements TWidget, TResponder<Double> {
     protected boolean visible = true;
     TComponent parent = null;
     TScreen parentScreen = null;
     double min, max;
     protected final LinkedList<Consumer<Double>> responders = new LinkedList<>();
 
-    public TSlider(double pMinValue, double pMaxValue, float pSteps, Component tipText) {
+    @Deprecated
+    public TSlider(double minValue, double maxValue, float pSteps, Component tipText) {
+        this(tipText.getString(), minValue, maxValue, false, null);
+    }
+
+    public TSlider(String title, double minValue, double maxValue) {
+        this(title, minValue, maxValue, true, null);
+    }
+
+    public TSlider(String title, double minValue, double maxValue, boolean showValueInTitle, @Nullable Component tipText) {
         super(Minecraft.getInstance().options, 0, 0, 0, 0,
-                new ProgressOption("t88.tslider", pMinValue, pMaxValue, pSteps, o -> 0d, (o, d) -> {
-                }, (o, p) -> tipText), ImmutableList.of());
-        ProgressOption progressOption = new ProgressOption("t88.tslider", pMinValue, pMaxValue, pSteps,
-                (o) -> value, (o, d) -> value = d, (o, p) -> tipText
+                new OptionInstance<>(title,
+                        value -> null,
+                        (pCaption, value) -> showValueInTitle ?
+                                Options.genericValueLabel(pCaption, Component.literal(String.format("%.2f", value))) :
+                                Component.literal(title),
+                        new DoubleRange(minValue, maxValue),
+                        maxValue,
+                        d -> {
+                        }
+                ),
+                new DoubleRange(minValue, maxValue),
+                value -> tipText == null ? null : Tooltip.create(tipText),
+                d -> {
+                }
         );
-        AccessorProxy.SliderProxy.setOption(this, progressOption);
+        //AccessorProxy.SliderProxy.setOption(this, progressOption);
         this.updateMessage();
-        this.min = pMinValue;
-        this.max = pMaxValue;
+        this.min = minValue;
+        this.max = maxValue;
     }
 
     public void setValue(double value) {
@@ -82,7 +102,7 @@ public class TSlider extends SliderButton implements TWidget, TResponder<Double>
         if (isInRange(pMouseX, pMouseY, 2, 2)) {
             if (Screen.hasControlDown()) {
                 if (Screen.hasShiftDown()) {
-
+                    //TODO
                 }
 
             } else if (Screen.hasShiftDown()) {
@@ -116,8 +136,9 @@ public class TSlider extends SliderButton implements TWidget, TResponder<Double>
             //modified for compatibility with TScrollPanel
             double y = getParentScrollAmountIfExist() + pMouseY;
             this.isHovered = pMouseX >= this.x && y >= this.y && pMouseX < this.x + this.width && y < this.y + this.height;
-            this.renderButton(pPoseStack, pMouseX, pMouseY, pPartialTick);
+            super.renderWidget(pPoseStack, pMouseX, pMouseY, pPartialTick);
         }
+        super.render(pPoseStack, pMouseX, pMouseY, pPartialTick);
     }
 
     @Override
@@ -132,7 +153,7 @@ public class TSlider extends SliderButton implements TWidget, TResponder<Double>
 
     @Override
     public void setBounds(int x, int y, int width, int height) {
-        MWidget2TComponentHelper.setBounds(x, y, width, height, this);
+        VanillaWidget2TComponentHelper.setBounds(x, y, width, height, this);
     }
 
     @Override
@@ -202,5 +223,35 @@ public class TSlider extends SliderButton implements TWidget, TResponder<Double>
     @Override
     public void clearResponders() {
         responders.clear();
+    }
+
+    private static class DoubleRange implements OptionInstance.SliderableValueSet<Double> {
+        double minInclusive;
+        double maxInclusive;
+
+        public DoubleRange(double minInclusive, double maxInclusive) {
+            this.minInclusive = minInclusive;
+            this.maxInclusive = maxInclusive;
+        }
+
+        @Override
+        public double toSliderValue(Double value) {
+            return Mth.map(value, minInclusive, maxInclusive, 0, 1);
+        }
+
+        @Override
+        public Double fromSliderValue(double percentage) {
+            return Mth.map(percentage, 0, 1, minInclusive, maxInclusive);
+        }
+
+        @Override
+        public Optional<Double> validateValue(Double value) {
+            return value >= minInclusive && value <= maxInclusive ? Optional.of(value) : Optional.empty();
+        }
+
+        @Override
+        public Codec<Double> codec() {
+            return Codec.DOUBLE;
+        }
     }
 }

@@ -3,7 +3,8 @@ package cn.ussshenzhou.t88.gui.widegt;
 import cn.ussshenzhou.t88.gui.event.TimerCountdownReachEvent;
 import cn.ussshenzhou.t88.mixin.TextComponentAccessor;
 import com.mojang.blaze3d.vertex.PoseStack;
-import net.minecraft.network.chat.TextComponent;
+import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.contents.LiteralContents;
 import net.minecraftforge.common.MinecraftForge;
 
 /**
@@ -26,7 +27,7 @@ public class TTimer extends TLabel {
     public TTimer() {
         super();
         prefix = "";
-        this.text = new TextComponent("");
+        this.text = Component.empty();
     }
 
     public static TTimer newTimerAndStart() {
@@ -84,7 +85,7 @@ public class TTimer extends TLabel {
                     + getRequiredFormatMs(ms);
         }
         this.parseTextLines();
-        ((TextComponentAccessor) text).setText(finalString);
+        ((TextComponentAccessor) text).setContents(new LiteralContents(finalString));
     }
 
     private String getRequiredFormat1(int i) {
@@ -145,9 +146,9 @@ public class TTimer extends TLabel {
         }
         int ms = (int) (time % 1000);
         try {
-            ((TextComponentAccessor) text).setText(finalString
+            ((TextComponentAccessor) text).setContents(new LiteralContents(finalString
                     .substring(0, finalString.indexOf("."))
-                    + getRequiredFormatMs(ms)
+                    + getRequiredFormatMs(ms))
             );
         } catch (StringIndexOutOfBoundsException ignored) {
         }

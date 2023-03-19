@@ -29,8 +29,8 @@ public class TSuggestedEditBox extends TPanel {
         super();
         editBox = new TCommandConstrainedEditBox(consumer) {
             @Override
-            public void setFocus(boolean pIsFocused) {
-                super.setFocus(pIsFocused);
+            public void setFocused(boolean pIsFocused) {
+                super.setFocused(pIsFocused);
                 suggestionList.setVisibleT(pIsFocused);
             }
         };

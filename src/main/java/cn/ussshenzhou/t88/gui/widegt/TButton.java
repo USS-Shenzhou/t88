@@ -1,7 +1,7 @@
 package cn.ussshenzhou.t88.gui.widegt;
 
 import cn.ussshenzhou.t88.gui.screen.TScreen;
-import cn.ussshenzhou.t88.gui.util.MWidget2TComponentHelper;
+import cn.ussshenzhou.t88.gui.util.VanillaWidget2TComponentHelper;
 import cn.ussshenzhou.t88.gui.util.MouseHelper;
 import cn.ussshenzhou.t88.gui.util.Vec2i;
 import com.mojang.blaze3d.vertex.PoseStack;
@@ -21,20 +21,14 @@ public class TButton extends Button implements TWidget {
 
     public TButton(Component pMessage) {
         super(0, 0, 0, 0, pMessage, button -> {
-        });
+        },DEFAULT_NARRATION);
         this.onPress = pButton -> {
         };
     }
 
     public TButton(Component pMessage, OnPress pOnPress) {
         super(0, 0, 0, 0, pMessage, button -> {
-        });
-        this.onPress = pOnPress;
-    }
-
-    public TButton(Component pMessage, OnPress pOnPress, OnTooltip pOnTooltip) {
-        super(0, 0, 0, 0, pMessage, button -> {
-        }, pOnTooltip);
+        },DEFAULT_NARRATION);
         this.onPress = pOnPress;
     }
 
@@ -48,7 +42,7 @@ public class TButton extends Button implements TWidget {
             //modified for compatibility with TScrollPanel
             double y = getParentScrollAmountIfExist() + pMouseY;
             this.isHovered = pMouseX >= this.x && y >= this.y && pMouseX < this.x + this.width && y < this.y + this.height;
-            this.renderButton(pPoseStack, pMouseX, pMouseY, pPartialTick);
+            this.renderWidget(pPoseStack, pMouseX, pMouseY, pPartialTick);
         }
     }
 
@@ -77,7 +71,7 @@ public class TButton extends Button implements TWidget {
 
     @Override
     public void setBounds(int x, int y, int width, int height) {
-        MWidget2TComponentHelper.setBounds(x, y, width, height, this);
+        VanillaWidget2TComponentHelper.setBounds(x, y, width, height, this);
     }
 
     public void setBounds(int x, int y) {

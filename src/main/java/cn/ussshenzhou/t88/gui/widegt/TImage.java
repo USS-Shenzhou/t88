@@ -10,6 +10,7 @@ import net.minecraft.client.renderer.GameRenderer;
 import net.minecraft.resources.ResourceLocation;
 
 import java.io.IOException;
+import java.util.NoSuchElementException;
 
 /**
  * @author USS_Shenzhou
@@ -68,12 +69,13 @@ public class TImage extends TPanel {
         this.alpha = alpha;
     }
 
-    protected void loadImageWH(){
+    @SuppressWarnings("AlibabaLowerCamelCaseVariableNaming")
+    protected void loadImageWH() {
         try {
-            NativeImage n = NativeImage.read(Minecraft.getInstance().getResourceManager().getResource(imageLocation).getInputStream());
+            NativeImage n = NativeImage.read(Minecraft.getInstance().getResourceManager().getResource(imageLocation).get().open());
             imageWidth = n.getWidth();
             imageHeight = n.getHeight();
-        } catch (IOException e) {
+        } catch (IOException | NoSuchElementException e) {
             LogUtils.getLogger().error("Failed to get width and height of {}.", imageLocation.getPath());
             LogUtils.getLogger().error(e.getMessage());
             this.imageLocation = null;
@@ -98,12 +100,12 @@ public class TImage extends TPanel {
                         blit(pPoseStack, this.x, this.y, width, height,
                                 0, (imageHeight - imageWidth / panelWHRatio) / 2,
                                 imageWidth, (int) (imageWidth / panelWHRatio),
-                                (int) (imageWidth*scale), (int) (imageHeight*scale));
+                                (int) (imageWidth * scale), (int) (imageHeight * scale));
                     } else {
                         blit(pPoseStack, this.x, this.y, width, height,
                                 (imageWidth - imageHeight * panelWHRatio) / 2, 0,
                                 (int) (imageHeight * panelWHRatio), imageHeight,
-                                (int) (imageWidth*scale), (int) (imageHeight*scale));
+                                (int) (imageWidth * scale), (int) (imageHeight * scale));
                     }
                 }
                 case FIT -> {
@@ -114,19 +116,19 @@ public class TImage extends TPanel {
                                 (int) (height * imageWHRatio), height,
                                 0, 0,
                                 imageWidth, imageHeight,
-                                (int) (imageWidth*scale), (int) (imageHeight*scale));
+                                (int) (imageWidth * scale), (int) (imageHeight * scale));
                     } else {
                         blit(pPoseStack, this.x, (int) (this.y + (height - width / imageWHRatio) / 2),
                                 width, (int) (width / imageWHRatio),
                                 0, 0,
                                 imageWidth, imageHeight,
-                                (int) (imageWidth*scale), (int) (imageHeight*scale));
+                                (int) (imageWidth * scale), (int) (imageHeight * scale));
                     }
                 }
                 case STRETCH ->
-                        blit(pPoseStack, this.x, this.y, width, height, 0, 0, imageWidth, imageHeight, (int) (imageWidth*scale), (int) (imageHeight*scale));
+                        blit(pPoseStack, this.x, this.y, width, height, 0, 0, imageWidth, imageHeight, (int) (imageWidth * scale), (int) (imageHeight * scale));
                 case TILE ->
-                        blit(pPoseStack, this.x, this.y, width, height, 0, 0, width, height, (int) (imageWidth*scale), (int) (imageHeight*scale));
+                        blit(pPoseStack, this.x, this.y, width, height, 0, 0, width, height, (int) (imageWidth * scale), (int) (imageHeight * scale));
             }
             RenderSystem.setShaderColor(1, 1, 1, 1);
         }

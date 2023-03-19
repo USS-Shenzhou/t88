@@ -5,7 +5,7 @@ import cn.ussshenzhou.t88.gui.widegt.TWidget;
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.components.Widget;
+import net.minecraft.client.gui.components.Renderable;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.network.chat.Component;
 import net.minecraftforge.client.ForgeHooksClient;
@@ -49,7 +49,7 @@ public abstract class TScreen extends Screen {
         RenderSystem.defaultBlendFunc();
         RenderSystem.enableDepthTest();
         renderBackGround(pPoseStack, pMouseX, pMouseY, pPartialTick);
-        LinkedList<Widget> renderTop = new LinkedList<>();
+        LinkedList<Renderable> renderTop = new LinkedList<>();
         for (TWidget w : this.tChildren) {
             if (w.isVisibleT()) {
                 w.render(pPoseStack, pMouseX, pMouseY, pPartialTick);
@@ -74,7 +74,6 @@ public abstract class TScreen extends Screen {
 
 
     public void layout() {
-        Minecraft.getInstance().keyboardHandler.setSendRepeatsToGui(true);
         for (TWidget w : this.tChildren) {
             if (w instanceof TComponent t) {
                 t.layout();

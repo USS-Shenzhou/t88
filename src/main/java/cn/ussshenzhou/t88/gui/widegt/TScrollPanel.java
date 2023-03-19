@@ -99,7 +99,6 @@ public class TScrollPanel extends TPanel {
             int j = i + 6;
             Tesselator tesselator = Tesselator.getInstance();
             BufferBuilder bufferbuilder = tesselator.getBuilder();
-            RenderSystem.disableTexture();
             RenderSystem.setShader(GameRenderer::getPositionColorShader);
             int l1 = (int) ((float) (height * height) / (float) bottomY);
             l1 = Mth.clamp(l1, 32, getY() + height - getY() - 8);

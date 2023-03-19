@@ -4,14 +4,14 @@ import cn.ussshenzhou.t88.gui.event.EditBoxFocusedEvent;
 import cn.ussshenzhou.t88.gui.event.TWidgetContentUpdatedEvent;
 import cn.ussshenzhou.t88.gui.screen.TScreen;
 import cn.ussshenzhou.t88.gui.util.AccessorProxy;
-import cn.ussshenzhou.t88.gui.util.MWidget2TComponentHelper;
+import cn.ussshenzhou.t88.gui.util.VanillaWidget2TComponentHelper;
 import cn.ussshenzhou.t88.gui.util.Vec2i;
+import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Font;
 import net.minecraft.client.gui.components.EditBox;
 import net.minecraft.locale.Language;
 import net.minecraft.network.chat.Component;
-import net.minecraft.network.chat.TextComponent;
 import net.minecraft.util.Mth;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
@@ -31,7 +31,7 @@ public class TEditBox extends EditBox implements TWidget, TResponder<String> {
     @SubscribeEvent
     public void onEditBoxFocused(EditBoxFocusedEvent event) {
         if (event.getWillFocused() != this) {
-            this.setFocus(false);
+            this.setFocused(false);
         }
     }
 
@@ -43,7 +43,7 @@ public class TEditBox extends EditBox implements TWidget, TResponder<String> {
     }
 
     public TEditBox() {
-        this(new TextComponent(""));
+        this(Component.empty());
     }
 
     public int getCursorX() {
@@ -62,9 +62,9 @@ public class TEditBox extends EditBox implements TWidget, TResponder<String> {
     }
 
     @Override
-    public void renderHighlight(int pStartX, int pStartY, int pEndX, int pEndY) {
+    public void renderHighlight(PoseStack poseStack, int pStartX, int pStartY, int pEndX, int pEndY) {
         double scroll = -this.getParentScrollAmountIfExist();
-        super.renderHighlight(pStartX, (int) (pStartY + scroll), pEndX, (int) (pEndY + scroll));
+        super.renderHighlight(poseStack, pStartX, (int) (pStartY + scroll), pEndX, (int) (pEndY + scroll));
     }
 
     @Deprecated
@@ -100,7 +100,7 @@ public class TEditBox extends EditBox implements TWidget, TResponder<String> {
 
     @Override
     public void setBounds(int x, int y, int width, int height) {
-        MWidget2TComponentHelper.setBounds(x, y, width, height, this);
+        VanillaWidget2TComponentHelper.setBounds(x, y, width, height, this);
     }
 
     @Override
@@ -112,11 +112,11 @@ public class TEditBox extends EditBox implements TWidget, TResponder<String> {
     }
 
     @Override
-    public void setFocus(boolean pIsFocused) {
+    public void setFocused(boolean pIsFocused) {
         if (pIsFocused) {
             MinecraftForge.EVENT_BUS.post(new EditBoxFocusedEvent(this));
         }
-        super.setFocus(pIsFocused);
+        super.setFocused(pIsFocused);
     }
 
     @Override

@@ -1,25 +1,21 @@
 package cn.ussshenzhou.t88.mixin;
 
-import net.minecraft.client.ProgressOption;
-import net.minecraft.client.gui.components.SliderButton;
-import net.minecraft.util.FormattedCharSequence;
+import net.minecraft.client.OptionInstance;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Mutable;
 import org.spongepowered.asm.mixin.gen.Accessor;
 
-import java.util.List;
-
 /**
  * @author USS_Shenzhou
  */
-@Mixin(SliderButton.class)
+@Mixin(OptionInstance.OptionInstanceSliderButton.class)
 public interface SliderButtonAccessor {
 
     @Mutable
-    @Accessor
-    void setOption(ProgressOption option);
+    @Accessor("instance")
+    void setOption(OptionInstance<?> option);
 
     @Mutable
     @Accessor
-    void setTooltip(List<FormattedCharSequence> tooltip);
+    void setTooltipSupplier(OptionInstance.TooltipSupplier<?> tooltipSupplier);
 }

@@ -4,12 +4,9 @@ import cn.ussshenzhou.t88.gui.widegt.TSlider;
 import cn.ussshenzhou.t88.mixin.AbstractSelectionListAccessor;
 import cn.ussshenzhou.t88.mixin.EditBoxAccessor;
 import cn.ussshenzhou.t88.mixin.SliderButtonAccessor;
-import net.minecraft.client.ProgressOption;
+import net.minecraft.client.OptionInstance;
 import net.minecraft.client.gui.components.AbstractSelectionList;
 import net.minecraft.client.gui.components.EditBox;
-import net.minecraft.util.FormattedCharSequence;
-
-import java.util.List;
 
 /**
  * @author Tony Yu
@@ -52,12 +49,12 @@ public class AccessorProxy {
     }
 
     public static class SliderProxy {
-        public static void setOption(TSlider that, ProgressOption option) {
+        public static void setOption(TSlider that, OptionInstance<?> option) {
             ((SliderButtonAccessor) that).setOption(option);
         }
 
-        public static void setToolTip(TSlider that, List<FormattedCharSequence> tooltip) {
-            ((SliderButtonAccessor) that).setTooltip(tooltip);
+        public static void setToolTip(TSlider that, OptionInstance.TooltipSupplier<?> tooltipSupplier) {
+            ((SliderButtonAccessor) that).setTooltipSupplier(tooltipSupplier);
         }
     }
 }

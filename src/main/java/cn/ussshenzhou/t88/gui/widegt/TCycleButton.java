@@ -5,8 +5,6 @@ import cn.ussshenzhou.t88.gui.util.ToTranslatableString;
 import net.minecraft.client.Minecraft;
 import net.minecraft.locale.Language;
 import net.minecraft.network.chat.Component;
-import net.minecraft.network.chat.TextComponent;
-import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraft.util.Mth;
 import net.minecraftforge.common.MinecraftForge;
 
@@ -20,7 +18,7 @@ public class TCycleButton<E> extends TButton {
     int cycleIndex = 0;
 
     public TCycleButton() {
-        super(new TextComponent(""));
+        super(Component.empty());
         this.setOnPress(pButton -> cycleOnce(1));
     }
 
@@ -43,7 +41,7 @@ public class TCycleButton<E> extends TButton {
             this.values.remove(index);
         }
         values.add(e);
-        if (getMessage().getString().equals("")) {
+        if ("".equals(getMessage().getString())) {
             this.setMessage(e.getNarration());
         }
     }
@@ -111,7 +109,7 @@ public class TCycleButton<E> extends TButton {
             this.select(cycleIndex);
         } else {
             this.cycleIndex = 0;
-            this.setMessage(new TextComponent(""));
+            this.setMessage(Component.empty());
             MinecraftForge.EVENT_BUS.post(new TWidgetContentUpdatedEvent(this));
         }
     }
@@ -139,9 +137,9 @@ public class TCycleButton<E> extends TButton {
                 s = content.toString();
             }
             if (language.has(s)) {
-                return new TranslatableComponent(s);
+                return Component.translatable(s);
             } else {
-                return new TextComponent(s);
+                return Component.literal(s);
             }
         }
 

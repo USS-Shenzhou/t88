@@ -6,7 +6,6 @@ import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Font;
 import net.minecraft.network.chat.Component;
-import net.minecraft.network.chat.TextComponent;
 import net.minecraft.util.Mth;
 
 import java.util.ArrayList;
@@ -27,7 +26,7 @@ public class TLabel extends TPanel {
     Font font = Minecraft.getInstance().font;
 
     public TLabel() {
-        this.text = new TextComponent("");
+        this.text = Component.empty();
         parseTextLines();
     }
 
@@ -44,9 +43,7 @@ public class TLabel extends TPanel {
     protected void parseTextLines() {
         String[] lines = text.getString().split("\n");
         textLines.clear();
-        Stream.of(lines).forEach(line -> {
-            textLines.add(new TextComponent(line));
-        });
+        Stream.of(lines).forEach(line -> textLines.add(Component.literal(line)));
         for (Component line : textLines) {
             //TODO wrong calculate
             maxLineWidth = Mth.ceil(Math.max(font.width(line) * fontSize / 7, width));

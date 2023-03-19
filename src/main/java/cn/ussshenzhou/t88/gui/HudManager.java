@@ -7,7 +7,7 @@ import cn.ussshenzhou.t88.gui.widegt.TComponent;
 import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraft.client.Minecraft;
 import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.client.event.RenderGameOverlayEvent;
+import net.minecraftforge.client.event.RenderGuiEvent;
 import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.event.entity.player.PlayerEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
@@ -40,14 +40,11 @@ public class HudManager {
     }
 
     @SubscribeEvent
-    public static void onRenderHud(RenderGameOverlayEvent event) {
-        if (event.getType() != RenderGameOverlayEvent.ElementType.ALL) {
-            return;
-        }
-        PoseStack poseStack = event.getMatrixStack();
+    public static void onRenderHud(RenderGuiEvent.Post event) {
+        PoseStack poseStack = event.getPoseStack();
         int mouseX = (int) MouseHelper.getMouseX();
         int mouseY = (int) MouseHelper.getMouseY();
-        float partialTick = event.getPartialTicks();
+        float partialTick = event.getPartialTick();
         CHILDREN.forEach((tComponent) -> {
             if (tComponent.isVisibleT()) {
                 tComponent.render(poseStack, mouseX, mouseY, partialTick);

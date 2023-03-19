@@ -14,13 +14,10 @@ import net.minecraft.client.gui.components.ObjectSelectionList;
 import net.minecraft.client.renderer.GameRenderer;
 import net.minecraft.locale.Language;
 import net.minecraft.network.chat.Component;
-import net.minecraft.network.chat.TextComponent;
-import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraft.util.Mth;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.Collection;
-import java.util.Objects;
 import java.util.function.Consumer;
 
 /**
@@ -214,10 +211,10 @@ public class TSelectList<E> extends ObjectSelectionList<TSelectList<E>.Entry> im
         int j1 = this.getRowLeft();
         int k = this.y0 + 4 - (int) this.getScrollAmount();
         if (AccessorProxy.AbstractSelectionListProxy.isRenderHeader(this)) {
-            this.renderHeader(pPoseStack, j1, k, tesselator);
+            this.renderHeader(pPoseStack, j1, k);
         }
 
-        this.renderList(pPoseStack, j1, k, pMouseX, pMouseY, pPartialTick);
+        this.renderList(pPoseStack, pMouseX, pMouseY, pPartialTick);
         if (AccessorProxy.AbstractSelectionListProxy.isRenderTopAndBottom(this)) {
             RenderSystem.setShader(GameRenderer::getPositionTexColorShader);
             RenderSystem.setShaderTexture(0, GuiComponent.BACKGROUND_LOCATION);
@@ -239,7 +236,6 @@ public class TSelectList<E> extends ObjectSelectionList<TSelectList<E>.Entry> im
             RenderSystem.disableDepthTest();
             RenderSystem.enableBlend();
             RenderSystem.blendFuncSeparate(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA, GlStateManager.SourceFactor.ZERO, GlStateManager.DestFactor.ONE);
-            RenderSystem.disableTexture();
             RenderSystem.setShader(GameRenderer::getPositionColorShader);
             int i1 = 4;
             bufferbuilder.begin(VertexFormat.Mode.QUADS, DefaultVertexFormat.POSITION_COLOR);
@@ -256,7 +252,6 @@ public class TSelectList<E> extends ObjectSelectionList<TSelectList<E>.Entry> im
 
         int k1 = this.getMaxScroll();
         if (k1 > 0) {
-            RenderSystem.disableTexture();
             RenderSystem.setShader(GameRenderer::getPositionColorShader);
             int l1 = (int) ((float) ((this.y1 - this.y0) * (this.y1 - this.y0)) / (float) this.getMaxPosition());
             l1 = Mth.clamp(l1, 32, this.y1 - this.y0 - 8);
@@ -284,11 +279,10 @@ public class TSelectList<E> extends ObjectSelectionList<TSelectList<E>.Entry> im
         }
 
         this.renderDecorations(pPoseStack, pMouseX, pMouseY);
-        RenderSystem.enableTexture();
         RenderSystem.disableBlend();
     }
 
-    @Override
+    /*@Override
     protected void renderList(PoseStack pPoseStack, int pX, int pY, int pMouseX, int pMouseY, float pPartialTick) {
         int i = this.getItemCount();
         Tesselator tesselator = Tesselator.getInstance();
@@ -297,7 +291,7 @@ public class TSelectList<E> extends ObjectSelectionList<TSelectList<E>.Entry> im
         for (int j = 0; j < i; ++j) {
             int k = this.getRowTop(j);
             int l = k + this.itemHeight;
-            //modified not to render oust of box
+            //modified not to render out of box
             float up = k + (itemHeight - 10) / 2f;
             float low = k + 10;
             if (up >= this.y0 && low <= this.y1) {
@@ -311,7 +305,6 @@ public class TSelectList<E> extends ObjectSelectionList<TSelectList<E>.Entry> im
                     //modified due to scrollbarGap
                     int l1 = this.x0 + (this.width - 6 - scrollbarGap) / 2 - k1 / 2;
                     int i2 = this.x0 + (this.width - 6 - scrollbarGap) / 2 + k1 / 2;
-                    RenderSystem.disableTexture();
                     RenderSystem.setShader(GameRenderer::getPositionShader);
                     float f = this.isFocused() ? 1.0F : 0.5F;
                     RenderSystem.setShaderColor(f, f, f, 1.0F);
@@ -328,14 +321,24 @@ public class TSelectList<E> extends ObjectSelectionList<TSelectList<E>.Entry> im
                     bufferbuilder.vertex((double) (i2 - 1), scrollAmount + (double) (i1 - 1), 0.0D).endVertex();
                     bufferbuilder.vertex((double) (l1 + 1), scrollAmount + (double) (i1 - 1), 0.0D).endVertex();
                     tesselator.end();
-                    RenderSystem.enableTexture();
                 }
 
                 int j2 = this.getRowLeft();
                 e.render(pPoseStack, j, k, j2, k1, j1, pMouseX, pMouseY, Objects.equals(getHovered(), e), pPartialTick);
             }
         }
-        //super.renderList(pPoseStack, pX, pY, pMouseX, pMouseY, pPartialTick);
+        super.renderList(pPoseStack, pX, pY, pMouseX, pMouseY, pPartialTick);
+    }*/
+
+    @Override
+    protected void renderSelection(PoseStack pPoseStack, int pTop, int pWidth, int pHeight, int pOuterColor, int pInnerColor) {
+        //modified due to scrollbarGap
+        int i = this.x0 + (this.width - pWidth - 6 - scrollbarGap) / 2;
+        int j = this.x0 + (this.width + pWidth - 6 - scrollbarGap) / 2;
+        //modified for compatibility with TScrollPanel
+        double scrollAmount = -getParentScrollAmountIfExist();
+        fill(pPoseStack, i, (int) (pTop - 2 + scrollAmount), j, (int) (pTop + pHeight + 2 + scrollAmount), pOuterColor);
+        fill(pPoseStack, i + 1, (int) (pTop - 1 + scrollAmount), j - 1, (int) (pTop + pHeight + 1 + scrollAmount), pInnerColor);
     }
 
     @Override
@@ -446,10 +449,11 @@ public class TSelectList<E> extends ObjectSelectionList<TSelectList<E>.Entry> im
         @Override
         public Component getNarration() {
             Language language = Language.getInstance();
-            if (language.has(content.toString())) {
-                return new TranslatableComponent(content.toString());
+            String s = content.toString();
+            if (language.has(s)) {
+                return Component.translatable(s);
             } else {
-                return new TextComponent(content.toString());
+                return Component.literal(s);
             }
         }
 

@@ -28,7 +28,7 @@ public class ModKeyInput {
     );
 
     @SubscribeEvent
-    public static void onKeyInput(InputEvent.KeyInputEvent event) {
+    public static void onKeyInput(InputEvent.Key event) {
         if (T88.TEST) {
 
             if (GUI_TEST.consumeClick()) {

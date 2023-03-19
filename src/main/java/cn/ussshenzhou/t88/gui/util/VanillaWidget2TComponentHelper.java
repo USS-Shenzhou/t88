@@ -6,7 +6,7 @@ import net.minecraft.client.gui.components.AbstractWidget;
 /**
  * @author USS_Shenzhou
  */
-public class MWidget2TComponentHelper {
+public class VanillaWidget2TComponentHelper {
 
     public static <T extends AbstractWidget & TWidget> void setBounds(int x, int y, int width, int height, T that) {
         if (that.getParent() != null) {
