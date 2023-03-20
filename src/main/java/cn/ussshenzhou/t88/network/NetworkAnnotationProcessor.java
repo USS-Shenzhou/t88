@@ -106,7 +106,7 @@ public class NetworkAnnotationProcessor extends AbstractProcessor {
                                             channel%1$s.messageBuilder(%1$s.class, getId())
                                                     .encoder(%1$s::%2$s)
                                                     .decoder(%1$s::%3$s)
-                                                    .consumer(%1$s::%4$s)
+                                                    .consumerMainThread(%1$s::%4$s)
                                                     .add();
                                             PacketProxy.addChannel("%5$s", channel%1$s);
                                 """,
