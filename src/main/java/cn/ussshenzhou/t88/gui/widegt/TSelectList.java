@@ -4,14 +4,12 @@ import cn.ussshenzhou.t88.gui.screen.TScreen;
 import cn.ussshenzhou.t88.gui.util.AccessorProxy;
 import cn.ussshenzhou.t88.gui.util.HorizontalAlignment;
 import cn.ussshenzhou.t88.gui.util.Vec2i;
-import com.mojang.blaze3d.platform.GlStateManager;
 import com.mojang.blaze3d.systems.RenderSystem;
-import com.mojang.blaze3d.vertex.*;
+import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Font;
 import net.minecraft.client.gui.GuiComponent;
 import net.minecraft.client.gui.components.ObjectSelectionList;
-import net.minecraft.client.renderer.GameRenderer;
 import net.minecraft.locale.Language;
 import net.minecraft.network.chat.Component;
 import net.minecraft.util.Mth;
@@ -31,7 +29,7 @@ public class TSelectList<E> extends ObjectSelectionList<TSelectList<E>.Entry> im
     int background = 0x80000000;
     int selectedForeGround = foreground;
     boolean visible = true;
-    int scrollbarGap;
+    int scrollbarGap = 0;
     protected HorizontalAlignment horizontalAlignment = HorizontalAlignment.CENTER;
 
     public TSelectList(int pItemHeight, int scrollbarGap) {
@@ -39,7 +37,6 @@ public class TSelectList<E> extends ObjectSelectionList<TSelectList<E>.Entry> im
         this.setRenderBackground(false);
         this.setRenderTopAndBottom(false);
         this.setRenderHeader(false, 0);
-        this.setRenderSelection(false);
         this.scrollbarGap = scrollbarGap;
     }
 
@@ -191,91 +188,51 @@ public class TSelectList<E> extends ObjectSelectionList<TSelectList<E>.Entry> im
         this.renderBackground(pPoseStack);
         int i = this.getScrollbarPosition();
         int j = i + 6;
-        Tesselator tesselator = Tesselator.getInstance();
-        BufferBuilder bufferbuilder = tesselator.getBuilder();
-        RenderSystem.setShader(GameRenderer::getPositionTexColorShader);
-        AccessorProxy.AbstractSelectionListProxy.setHovered(this,
-                this.isMouseOver((double) pMouseX, (double) pMouseY) ? this.getEntryAtPosition((double) pMouseX, (double) pMouseY) : null);
+        AccessorProxy.AbstractSelectionListProxy.setHovered(this, this.isMouseOver(pMouseX, pMouseY) ? this.getEntryAtPosition(pMouseX, pMouseY) : null);
         if (AccessorProxy.AbstractSelectionListProxy.isRenderBackground(this)) {
             RenderSystem.setShaderTexture(0, GuiComponent.BACKGROUND_LOCATION);
+            RenderSystem.setShaderColor(0.125F, 0.125F, 0.125F, 1.0F);
+            int k = 32;
+            blit(pPoseStack, this.x0, this.y0, (float) this.x1, (float) (this.y1 + (int) this.getScrollAmount()), this.x1 - this.x0, this.y1 - this.y0, 32, 32);
             RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, 1.0F);
-            float f = 32.0F;
-            bufferbuilder.begin(VertexFormat.Mode.QUADS, DefaultVertexFormat.POSITION_TEX_COLOR);
-            bufferbuilder.vertex((double) this.x0, (double) this.y1, 0.0D).uv((float) this.x0 / 32.0F, (float) (this.y1 + (int) this.getScrollAmount()) / 32.0F).color(32, 32, 32, 255).endVertex();
-            bufferbuilder.vertex((double) this.x1, (double) this.y1, 0.0D).uv((float) this.x1 / 32.0F, (float) (this.y1 + (int) this.getScrollAmount()) / 32.0F).color(32, 32, 32, 255).endVertex();
-            bufferbuilder.vertex((double) this.x1, (double) this.y0, 0.0D).uv((float) this.x1 / 32.0F, (float) (this.y0 + (int) this.getScrollAmount()) / 32.0F).color(32, 32, 32, 255).endVertex();
-            bufferbuilder.vertex((double) this.x0, (double) this.y0, 0.0D).uv((float) this.x0 / 32.0F, (float) (this.y0 + (int) this.getScrollAmount()) / 32.0F).color(32, 32, 32, 255).endVertex();
-            tesselator.end();
         }
 
-        int j1 = this.getRowLeft();
-        int k = this.y0 + 4 - (int) this.getScrollAmount();
+        int l1 = this.getRowLeft();
+        int l = this.y0 + 4 - (int) this.getScrollAmount();
+        this.enableScissor();
         if (AccessorProxy.AbstractSelectionListProxy.isRenderHeader(this)) {
-            this.renderHeader(pPoseStack, j1, k);
+            this.renderHeader(pPoseStack, l1, l);
         }
 
         this.renderList(pPoseStack, pMouseX, pMouseY, pPartialTick);
+        disableScissor();
         if (AccessorProxy.AbstractSelectionListProxy.isRenderTopAndBottom(this)) {
-            RenderSystem.setShader(GameRenderer::getPositionTexColorShader);
             RenderSystem.setShaderTexture(0, GuiComponent.BACKGROUND_LOCATION);
-            RenderSystem.enableDepthTest();
-            RenderSystem.depthFunc(519);
-            float f1 = 32.0F;
-            int l = -100;
-            bufferbuilder.begin(VertexFormat.Mode.QUADS, DefaultVertexFormat.POSITION_TEX_COLOR);
-            bufferbuilder.vertex((double) this.x0, (double) this.y0, -100.0D).uv(0.0F, (float) this.y0 / 32.0F).color(64, 64, 64, 255).endVertex();
-            bufferbuilder.vertex((double) (this.x0 + this.width), (double) this.y0, -100.0D).uv((float) this.width / 32.0F, (float) this.y0 / 32.0F).color(64, 64, 64, 255).endVertex();
-            bufferbuilder.vertex((double) (this.x0 + this.width), 0.0D, -100.0D).uv((float) this.width / 32.0F, 0.0F).color(64, 64, 64, 255).endVertex();
-            bufferbuilder.vertex((double) this.x0, 0.0D, -100.0D).uv(0.0F, 0.0F).color(64, 64, 64, 255).endVertex();
-            bufferbuilder.vertex((double) this.x0, (double) this.height, -100.0D).uv(0.0F, (float) this.height / 32.0F).color(64, 64, 64, 255).endVertex();
-            bufferbuilder.vertex((double) (this.x0 + this.width), (double) this.height, -100.0D).uv((float) this.width / 32.0F, (float) this.height / 32.0F).color(64, 64, 64, 255).endVertex();
-            bufferbuilder.vertex((double) (this.x0 + this.width), (double) this.y1, -100.0D).uv((float) this.width / 32.0F, (float) this.y1 / 32.0F).color(64, 64, 64, 255).endVertex();
-            bufferbuilder.vertex((double) this.x0, (double) this.y1, -100.0D).uv(0.0F, (float) this.y1 / 32.0F).color(64, 64, 64, 255).endVertex();
-            tesselator.end();
-            RenderSystem.depthFunc(515);
-            RenderSystem.disableDepthTest();
-            RenderSystem.enableBlend();
-            RenderSystem.blendFuncSeparate(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA, GlStateManager.SourceFactor.ZERO, GlStateManager.DestFactor.ONE);
-            RenderSystem.setShader(GameRenderer::getPositionColorShader);
-            int i1 = 4;
-            bufferbuilder.begin(VertexFormat.Mode.QUADS, DefaultVertexFormat.POSITION_COLOR);
-            bufferbuilder.vertex((double) this.x0, (double) (this.y0 + 4), 0.0D).color(0, 0, 0, 0).endVertex();
-            bufferbuilder.vertex((double) this.x1, (double) (this.y0 + 4), 0.0D).color(0, 0, 0, 0).endVertex();
-            bufferbuilder.vertex((double) this.x1, (double) this.y0, 0.0D).color(0, 0, 0, 255).endVertex();
-            bufferbuilder.vertex((double) this.x0, (double) this.y0, 0.0D).color(0, 0, 0, 255).endVertex();
-            bufferbuilder.vertex((double) this.x0, (double) this.y1, 0.0D).color(0, 0, 0, 255).endVertex();
-            bufferbuilder.vertex((double) this.x1, (double) this.y1, 0.0D).color(0, 0, 0, 255).endVertex();
-            bufferbuilder.vertex((double) this.x1, (double) (this.y1 - 4), 0.0D).color(0, 0, 0, 0).endVertex();
-            bufferbuilder.vertex((double) this.x0, (double) (this.y1 - 4), 0.0D).color(0, 0, 0, 0).endVertex();
-            tesselator.end();
+            int i1 = 32;
+            RenderSystem.setShaderColor(0.25F, 0.25F, 0.25F, 1.0F);
+            blit(pPoseStack, this.x0, 0, 0.0F, 0.0F, this.width, this.y0, 32, 32);
+            blit(pPoseStack, this.x0, this.y1, 0.0F, (float) this.y1, this.width, this.height - this.y1, 32, 32);
+            RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, 1.0F);
+            int j1 = 4;
+            fillGradient(pPoseStack, this.x0, this.y0, this.x1, this.y0 + 4, -16777216, 0);
+            fillGradient(pPoseStack, this.x0, this.y1 - 4, this.x1, this.y1, 0, -16777216);
         }
 
-        int k1 = this.getMaxScroll();
-        if (k1 > 0) {
-            RenderSystem.setShader(GameRenderer::getPositionColorShader);
-            int l1 = (int) ((float) ((this.y1 - this.y0) * (this.y1 - this.y0)) / (float) this.getMaxPosition());
-            l1 = Mth.clamp(l1, 32, this.y1 - this.y0 - 8);
-            int i2 = (int) this.getScrollAmount() * (this.y1 - this.y0 - l1) / k1 + this.y0;
-            if (i2 < this.y0) {
-                i2 = this.y0;
+        int i2 = this.getMaxScroll();
+        if (i2 > 0) {
+            int j2 = (int) ((float) ((this.y1 - this.y0) * (this.y1 - this.y0)) / (float) this.getMaxPosition());
+            j2 = Mth.clamp(j2, 32, this.y1 - this.y0 - 8);
+            int k1 = (int) this.getScrollAmount() * (this.y1 - this.y0 - j2) / i2 + this.y0;
+            if (k1 < this.y0) {
+                k1 = this.y0;
             }
+
             //modified for compatibility with TScrollPanel
             double scrollAmount = -getParentScrollAmountIfExist();
 
-            bufferbuilder.begin(VertexFormat.Mode.QUADS, DefaultVertexFormat.POSITION_COLOR);
-            bufferbuilder.vertex((double) i, scrollAmount + (double) this.y1, 0.0D).color(0, 0, 0, 255).endVertex();
-            bufferbuilder.vertex((double) j, scrollAmount + (double) this.y1, 0.0D).color(0, 0, 0, 255).endVertex();
-            bufferbuilder.vertex((double) j, scrollAmount + (double) this.y0, 0.0D).color(0, 0, 0, 255).endVertex();
-            bufferbuilder.vertex((double) i, scrollAmount + (double) this.y0, 0.0D).color(0, 0, 0, 255).endVertex();
-            bufferbuilder.vertex((double) i, scrollAmount + (double) (i2 + l1), 0.0D).color(128, 128, 128, 255).endVertex();
-            bufferbuilder.vertex((double) j, scrollAmount + (double) (i2 + l1), 0.0D).color(128, 128, 128, 255).endVertex();
-            bufferbuilder.vertex((double) j, scrollAmount + (double) i2, 0.0D).color(128, 128, 128, 255).endVertex();
-            bufferbuilder.vertex((double) i, scrollAmount + (double) i2, 0.0D).color(128, 128, 128, 255).endVertex();
-            bufferbuilder.vertex((double) i, scrollAmount + (double) (i2 + l1 - 1), 0.0D).color(192, 192, 192, 255).endVertex();
-            bufferbuilder.vertex((double) (j - 1), scrollAmount + (double) (i2 + l1 - 1), 0.0D).color(192, 192, 192, 255).endVertex();
-            bufferbuilder.vertex((double) (j - 1), scrollAmount + (double) i2, 0.0D).color(192, 192, 192, 255).endVertex();
-            bufferbuilder.vertex((double) i, scrollAmount + (double) i2, 0.0D).color(192, 192, 192, 255).endVertex();
-            tesselator.end();
+            fill(pPoseStack, i, (int) (scrollAmount + this.y0), j, (int) (scrollAmount + this.y1), -16777216);
+            fill(pPoseStack, i, (int) (scrollAmount + k1), j, (int) (scrollAmount + k1 + j2), -8355712);
+            fill(pPoseStack, i, (int) (scrollAmount + k1), j - 1, (int) (scrollAmount + k1 + j2 - 1), -4144960);
         }
 
         this.renderDecorations(pPoseStack, pMouseX, pMouseY);
@@ -426,7 +383,7 @@ public class TSelectList<E> extends ObjectSelectionList<TSelectList<E>.Entry> im
         this.horizontalAlignment = horizontalAlignment;
     }
 
-    protected TSelectList<E> get() {
+    protected TSelectList<E> getThis() {
         return this;
     }
 
@@ -479,7 +436,7 @@ public class TSelectList<E> extends ObjectSelectionList<TSelectList<E>.Entry> im
         }
 
         public void onSelected() {
-            consumer.accept(get());
+            consumer.accept(getThis());
         }
 
         public void setConsumer(Consumer<TSelectList<E>> consumer) {

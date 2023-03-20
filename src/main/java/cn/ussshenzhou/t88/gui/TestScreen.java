@@ -5,6 +5,7 @@ import cn.ussshenzhou.t88.gui.util.Border;
 import cn.ussshenzhou.t88.gui.util.HorizontalAlignment;
 import cn.ussshenzhou.t88.gui.util.LayoutHelper;
 import cn.ussshenzhou.t88.gui.widegt.TLabel;
+import cn.ussshenzhou.t88.gui.widegt.TSelectList;
 import cn.ussshenzhou.t88.gui.widegt.TSlider;
 import cn.ussshenzhou.t88.gui.widegt.TTimer;
 import net.minecraft.network.chat.Component;
@@ -20,6 +21,7 @@ public class TestScreen extends TScreen {
     private TLabel linesTest = new TLabel(Component.literal("§6Test1 \nTest223456\n..."));
     private TTimer tTimer = TTimer.newTimerCountDown(30);
     private TSlider slider = new TSlider("Test", 2, 5);
+    private TSelectList<String> selectList = new TSelectList<>();
 
     public TestScreen() {
         super(Component.empty());
@@ -61,6 +63,14 @@ public class TestScreen extends TScreen {
             tTimer.resume();
         });
         this.add(slider);
+        selectList.addElement("ABC");
+        selectList.addElement("DEF");
+        selectList.addElement("1");
+        selectList.addElement("2");
+        selectList.addElement("3");
+        selectList.addElement("4");
+        selectList.addElement("5");
+        this.add(selectList);
     }
 
     @Override
@@ -69,6 +79,7 @@ public class TestScreen extends TScreen {
         linesTest.setBounds(50, 50, 80, 40);
         tTimer.setBounds(50, 100, 80, 20);
         LayoutHelper.BBottomOfA(slider, 10, tTimer);
+        selectList.setBounds(150, 50, 50, 100);
         super.layout();
     }
 
