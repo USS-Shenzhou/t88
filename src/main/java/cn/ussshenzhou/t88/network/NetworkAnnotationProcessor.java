@@ -47,7 +47,7 @@ public class NetworkAnnotationProcessor extends AbstractProcessor {
                     import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
                     import net.minecraftforge.network.NetworkRegistry;
                     import net.minecraftforge.network.simple.SimpleChannel;
-                    import cn.ussshenzhou.t88.network.PacketProxy;
+                    import cn.ussshenzhou.t88.network.NetworkHelper;
                     """, packageName));
             for (Element e : sources) {
                 TypeElement sourceClass = (TypeElement) e;
@@ -75,7 +75,7 @@ public class NetworkAnnotationProcessor extends AbstractProcessor {
                                             );
                                 """,
                         sourceClassName,
-                        PacketProxy.classNameToResLocName(sourceClassName) + "_t88_generated",
+                        NetworkHelper.classNameToResLocName(sourceClassName) + "_t88_generated",
                         netPacket.version()
                 ));
                 String encoderMethod = null;
@@ -108,13 +108,13 @@ public class NetworkAnnotationProcessor extends AbstractProcessor {
                                                     .decoder(%1$s::%3$s)
                                                     .consumerMainThread(%1$s::%4$s)
                                                     .add();
-                                            PacketProxy.addChannel("%5$s", channel%1$s);
+                                            NetworkHelper.addChannel("%5$s", channel%1$s);
                                 """,
                         sourceClassName,
                         encoderMethod,
                         decoderMethod,
                         consumerMethod,
-                        PacketProxy.classNameToResLocName(sourceClassName)
+                        NetworkHelper.classNameToResLocName(sourceClassName)
                 ));
 
             }
