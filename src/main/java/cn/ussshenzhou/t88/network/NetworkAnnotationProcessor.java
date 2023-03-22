@@ -75,7 +75,7 @@ public class NetworkAnnotationProcessor extends AbstractProcessor {
                                             );
                                 """,
                         sourceClassName,
-                        PacketProxy.classNameToResLocName(sourceClassName) + "_t88_generated",
+                        NetworkHelper.classNameToResLocName(sourceClassName) + "_t88_generated",
                         netPacket.version()
                 ));
                 String encoderMethod = null;
@@ -114,7 +114,7 @@ public class NetworkAnnotationProcessor extends AbstractProcessor {
                         encoderMethod,
                         decoderMethod,
                         consumerMethod,
-                        PacketProxy.classNameToResLocName(sourceClassName)
+                        NetworkHelper.classNameToResLocName(sourceClassName)
                 ));
 
             }
