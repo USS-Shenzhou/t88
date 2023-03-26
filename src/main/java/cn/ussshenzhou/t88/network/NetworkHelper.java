@@ -51,4 +51,13 @@ public class NetworkHelper {
             LogUtils.getLogger().error("Cannot find channel for {}.", packet);
         }
     }
+
+    public static <MSG> void sendTo(PacketDistributor.PacketTarget target, MSG packet) {
+        SimpleChannel channel = getChannel(packet.getClass());
+        if (channel != null) {
+            getChannel(packet.getClass()).send(target, packet);
+        } else {
+            LogUtils.getLogger().error("Cannot find channel for {}.", packet);
+        }
+    }
 }
