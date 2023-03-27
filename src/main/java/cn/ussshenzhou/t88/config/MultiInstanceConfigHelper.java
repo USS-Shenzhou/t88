@@ -33,7 +33,7 @@ public class MultiInstanceConfigHelper {
     private static File checkChildDir(Class<? extends TMultiInstanceConfig> clazz, String childDirName) {
         checkDir(CONFIG_DIR);
         checkDir(CONFIG_DIR.toPath().resolve(childDirName).toFile());
-        File f = CONFIG_DIR.toPath().resolve(childDirName).resolve(clazz.getName()).toFile();
+        File f = CONFIG_DIR.toPath().resolve(childDirName).resolve(clazz.getSimpleName()).toFile();
         checkDir(f);
         return f;
     }

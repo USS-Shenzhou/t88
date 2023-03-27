@@ -29,7 +29,7 @@ public class ConfigHelper {
 
     private static File checkFile(TConfig config) {
         checkDir(CONFIG_DIR);
-        String configFileName = config.getClass().getName();
+        String configFileName = config.getClass().getSimpleName();
         Path childDir = CONFIG_DIR.toPath().resolve(config.getChildDirName());
         checkDir(childDir.toFile());
         return childDir.resolve(configFileName + ".json").toFile();
