@@ -17,9 +17,10 @@ import java.util.function.Consumer;
  * @author USS_Shenzhou
  */
 public class ConfigHelper {
-    private static File CONFIG_DIR = FMLPaths.CONFIGDIR.relative().toFile();
+    private static final File CONFIG_DIR = FMLPaths.CONFIGDIR.relative().toFile();
     private static final HashMap<Class<? extends TConfig>, TConfig> CACHE = new HashMap<>();
     private static final Gson GSON = new GsonBuilder().setPrettyPrinting().disableHtmlEscaping().create();
+    private static final File UNIVERSAL_CONFIG_DIR = FileUtils.getUserDirectory().toPath().resolve("MinecraftT88Config").toFile();
 
     private static void checkDir(File dir) {
         if (!dir.isDirectory()) {
@@ -27,26 +28,17 @@ public class ConfigHelper {
         }
     }
 
-    private static File checkFile(TConfig config) {
-        checkDir(CONFIG_DIR);
+    private static File checkFile(TConfig config, boolean universal) {
+        checkDir(universal ? UNIVERSAL_CONFIG_DIR : CONFIG_DIR);
         String configFileName = config.getClass().getSimpleName();
-        Path childDir = CONFIG_DIR.toPath().resolve(config.getChildDirName());
+        Path childDir = (universal ? UNIVERSAL_CONFIG_DIR : CONFIG_DIR).toPath().resolve(config.getChildDirName());
         checkDir(childDir.toFile());
         return childDir.resolve(configFileName + ".json").toFile();
     }
 
     public static void loadConfig(TConfig newInstance) {
-        File configFile = checkFile(newInstance);
-        try {
-            if (configFile.isFile()) {
-                newInstance = GSON.fromJson(FileUtils.readFileToString(configFile, StandardCharsets.UTF_8), newInstance.getClass());
-            } else {
-                FileUtils.write(configFile, GSON.toJson(newInstance), StandardCharsets.UTF_8);
-            }
-            CACHE.put(newInstance.getClass(), newInstance);
-        } catch (IOException ignored) {
-            LogUtils.getLogger().error("Failed to load config {}. Things may not work well.", newInstance.getClass());
-        }
+        File configFile = checkFile(newInstance, false);
+        loadConfigInternal(newInstance, configFile);
     }
 
     @SuppressWarnings("unchecked")
@@ -62,7 +54,24 @@ public class ConfigHelper {
     }
 
     private static <T extends TConfig> void saveConfig(T config) {
-        File configFile = checkFile(config);
+        File configFile = checkFile(config, false);
+        saveConfigInternal(config, configFile);
+    }
+
+    private static void loadConfigInternal(TConfig newInstance, File configFile) {
+        try {
+            if (configFile.isFile()) {
+                newInstance = GSON.fromJson(FileUtils.readFileToString(configFile, StandardCharsets.UTF_8), newInstance.getClass());
+            } else {
+                FileUtils.write(configFile, GSON.toJson(newInstance), StandardCharsets.UTF_8);
+            }
+            CACHE.put(newInstance.getClass(), newInstance);
+        } catch (IOException ignored) {
+            LogUtils.getLogger().error("Failed to load config {}. Things may not work well.", newInstance.getClass());
+        }
+    }
+
+    private static <T extends TConfig> void saveConfigInternal(T config, File configFile) {
         try {
             FileUtils.write(configFile, GSON.toJson(config), StandardCharsets.UTF_8);
         } catch (IOException ignored) {
@@ -71,8 +80,22 @@ public class ConfigHelper {
     }
 
     public static class Universal extends ConfigHelper {
-        static {
-            CONFIG_DIR = FileUtils.getUserDirectory().toPath().resolve("T88Config").toFile();
+
+        public static void loadConfig(TConfig newInstance) {
+            File configFile = checkFile(newInstance, true);
+            loadConfigInternal(newInstance, configFile);
+        }
+
+        @SuppressWarnings("unchecked")
+        public static <T extends TConfig> void getConfigWrite(Class<T> configClass, Consumer<T> setter) {
+            T config = (T) CACHE.get(configClass);
+            setter.accept(config);
+            Universal.saveConfig(config);
+        }
+
+        private static <T extends TConfig> void saveConfig(T config) {
+            File configFile = checkFile(config, true);
+            saveConfigInternal(config, configFile);
         }
     }
 }
