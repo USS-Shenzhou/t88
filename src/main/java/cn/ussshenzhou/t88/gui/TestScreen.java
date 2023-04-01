@@ -8,6 +8,7 @@ import cn.ussshenzhou.t88.gui.widegt.TLabel;
 import cn.ussshenzhou.t88.gui.widegt.TSelectList;
 import cn.ussshenzhou.t88.gui.widegt.TSlider;
 import cn.ussshenzhou.t88.gui.widegt.TTimer;
+import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraft.network.chat.Component;
 
 import java.util.concurrent.CompletableFuture;
@@ -18,7 +19,18 @@ import java.util.concurrent.CompletableFuture;
 public class TestScreen extends TScreen {
     private TLabel title = new TLabel(Component.literal("T88 Test Screen"));
 
-    private TLabel linesTest = new TLabel(Component.literal("§6Test1 \nTest223456\n..."));
+    private TLabel linesTest = new TLabel(Component.literal("§6Test1 \nTest223456\n...")){
+        @Override
+        public void render(PoseStack pPoseStack, int pMouseX, int pMouseY, float pPartialTick) {
+
+        }
+
+        @Override
+        public void renderTop(PoseStack pPoseStack, int pMouseX, int pMouseY, float pPartialTick) {
+            super.render(pPoseStack, pMouseX, pMouseY, pPartialTick);
+            super.renderTop(pPoseStack, pMouseX, pMouseY, pPartialTick);
+        }
+    };
     private TTimer tTimer = TTimer.newTimerCountDown(30);
     private TSlider slider = new TSlider("Test", 2, 5);
     private TSelectList<String> selectList = new TSelectList<>();
@@ -30,7 +42,8 @@ public class TestScreen extends TScreen {
 
         linesTest.setBorder(new Border(0xff00ff00, 1));
         linesTest.setHorizontalAlignment(HorizontalAlignment.CENTER);
-        this.add(linesTest);
+        //this.add(linesTest);
+        HudManager.add(linesTest);
 
         tTimer.setPrefix("ABC: ");
         tTimer.setBackground(0x80000000);
@@ -86,5 +99,11 @@ public class TestScreen extends TScreen {
     @Override
     public boolean isPauseScreen() {
         return false;
+    }
+
+    @Override
+    public void onClose(boolean isFinal) {
+        super.onClose(isFinal);
+        HudManager.remove(linesTest);
     }
 }
