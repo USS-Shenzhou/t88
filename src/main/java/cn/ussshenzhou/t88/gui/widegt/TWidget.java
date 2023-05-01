@@ -41,9 +41,11 @@ public interface TWidget extends Renderable, GuiEventListener {
     @Nullable
     TScreen getParentScreen();
 
-    int getX();
+    @SuppressWarnings("AlibabaLowerCamelCaseVariableNaming")
+    int getXT();
 
-    int getY();
+    @SuppressWarnings("AlibabaLowerCamelCaseVariableNaming")
+    int getYT();
 
     Vec2i getPreferredSize();
 
@@ -59,7 +61,7 @@ public interface TWidget extends Renderable, GuiEventListener {
     }
 
     default boolean isInRange(double pMouseX, double pMouseY, double xPadding, double yPadding) {
-        return pMouseX >= getX() - xPadding && pMouseX <= getX() + getSize().x + xPadding && pMouseY >= getY() - yPadding && pMouseY <= getY() + getSize().y + yPadding;
+        return pMouseX >= getXT() - xPadding && pMouseX <= getXT() + getSize().x + xPadding && pMouseY >= getYT() - yPadding && pMouseY <= getYT() + getSize().y + yPadding;
     }
 
     default void onFinalClose() {

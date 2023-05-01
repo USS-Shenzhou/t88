@@ -47,7 +47,7 @@ public class TEditBox extends EditBox implements TWidget, TResponder<String> {
     }
 
     public int getCursorX() {
-        return getX() + Minecraft.getInstance().font.width(getValue().substring(AccessorProxy.EditBoxProxy.getDisplayPos(this), getCursorPosition()));
+        return getXT() + Minecraft.getInstance().font.width(getValue().substring(AccessorProxy.EditBoxProxy.getDisplayPos(this), getCursorPosition()));
     }
 
     public int getCurrentWordBeginX() {
@@ -58,7 +58,7 @@ public class TEditBox extends EditBox implements TWidget, TResponder<String> {
         }
         b++;
         Font font = Minecraft.getInstance().font;
-        return getX() + font.width(s.substring(AccessorProxy.EditBoxProxy.getDisplayPos(this), b)) + font.width(" ");
+        return getXT() + font.width(s.substring(AccessorProxy.EditBoxProxy.getDisplayPos(this), b)) + font.width(" ");
     }
 
     @Override
@@ -147,12 +147,12 @@ public class TEditBox extends EditBox implements TWidget, TResponder<String> {
     }
 
     @Override
-    public int getX() {
+    public int getXT() {
         return x;
     }
 
     @Override
-    public int getY() {
+    public int getYT() {
         return y;
     }
 

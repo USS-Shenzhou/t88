@@ -299,12 +299,12 @@ public class TSelectList<E> extends ObjectSelectionList<TSelectList<E>.Entry> im
     }
 
     @Override
-    public int getX() {
+    public int getXT() {
         return x0;
     }
 
     @Override
-    public int getY() {
+    public int getYT() {
         return y0;
     }
 

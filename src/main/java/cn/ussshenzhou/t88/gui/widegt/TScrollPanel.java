@@ -29,7 +29,7 @@ public class TScrollPanel extends TPanel {
 
     protected void initPos() {
         for (TWidget tWidget : children) {
-            int y = tWidget.getY() + tWidget.getSize().y;
+            int y = tWidget.getYT() + tWidget.getSize().y;
             bottomY = 0;
             if (bottomY < y) {
                 bottomY = y;
@@ -101,17 +101,17 @@ public class TScrollPanel extends TPanel {
             BufferBuilder bufferbuilder = tesselator.getBuilder();
             RenderSystem.setShader(GameRenderer::getPositionColorShader);
             int l1 = (int) ((float) (height * height) / (float) bottomY);
-            l1 = Mth.clamp(l1, 32, getY() + height - getY() - 8);
-            int i2 = (int) this.getScrollAmount() * (getY() + height - getY() - l1) / k1 + getY();
-            if (i2 < getY()) {
-                i2 = getY();
+            l1 = Mth.clamp(l1, 32, getYT() + height - getYT() - 8);
+            int i2 = (int) this.getScrollAmount() * (getYT() + height - getYT() - l1) / k1 + getYT();
+            if (i2 < getYT()) {
+                i2 = getYT();
             }
 
             bufferbuilder.begin(VertexFormat.Mode.QUADS, DefaultVertexFormat.POSITION_COLOR);
-            bufferbuilder.vertex(i, getY() + height, 0.0D).color(0, 0, 0, 255).endVertex();
-            bufferbuilder.vertex(j, getY() + height, 0.0D).color(0, 0, 0, 255).endVertex();
-            bufferbuilder.vertex(j, getY(), 0.0D).color(0, 0, 0, 255).endVertex();
-            bufferbuilder.vertex(i, getY(), 0.0D).color(0, 0, 0, 255).endVertex();
+            bufferbuilder.vertex(i, getYT() + height, 0.0D).color(0, 0, 0, 255).endVertex();
+            bufferbuilder.vertex(j, getYT() + height, 0.0D).color(0, 0, 0, 255).endVertex();
+            bufferbuilder.vertex(j, getYT(), 0.0D).color(0, 0, 0, 255).endVertex();
+            bufferbuilder.vertex(i, getYT(), 0.0D).color(0, 0, 0, 255).endVertex();
             bufferbuilder.vertex(i, (i2 + l1), 0.0D).color(128, 128, 128, 255).endVertex();
             bufferbuilder.vertex(j, (i2 + l1), 0.0D).color(128, 128, 128, 255).endVertex();
             bufferbuilder.vertex(j, i2, 0.0D).color(128, 128, 128, 255).endVertex();
@@ -125,7 +125,7 @@ public class TScrollPanel extends TPanel {
     }
 
     protected int getScrollBarX() {
-        return this.getX() + width - 6;
+        return this.getXT() + width - 6;
     }
 
     public int getUsableWidth() {
@@ -181,7 +181,7 @@ public class TScrollPanel extends TPanel {
     }
 
     public int getMaxScroll() {
-        return Math.max(0, bottomY - getY() - getHeight());
+        return Math.max(0, bottomY - getYT() - getHeight());
     }
 
     public double getScrollAmount() {

@@ -268,12 +268,12 @@ public abstract class TComponent extends GuiComponent implements TWidget {
     }
 
     @Override
-    public int getX() {
+    public int getXT() {
         return x;
     }
 
     @Override
-    public int getY() {
+    public int getYT() {
         return y;
     }
 
