@@ -14,6 +14,7 @@ import net.minecraft.locale.Language;
 import net.minecraft.network.chat.Component;
 import net.minecraft.util.Mth;
 import org.jetbrains.annotations.Nullable;
+import org.lwjgl.glfw.GLFW;
 
 import java.util.Collection;
 import java.util.function.Consumer;
@@ -71,10 +72,43 @@ public class TSelectList<E> extends ObjectSelectionList<TSelectList<E>.Entry> im
     }
 
     @Override
+    public boolean keyPressed(int pKeyCode, int pScanCode, int pModifiers) {
+        if (this.isFocused() && (pKeyCode == GLFW.GLFW_KEY_DOWN || pKeyCode == GLFW.GLFW_KEY_UP)) {
+            Entry selected = this.getSelected();
+            if (selected == null) {
+                this.setSelected(0);
+            } else {
+                int i = this.children().indexOf(selected);
+                if (pKeyCode == GLFW.GLFW_KEY_DOWN) {
+                    if (i >= this.children().size() - 1) {
+                        this.setSelected(0);
+                    } else {
+                        this.setSelected(i + 1);
+                    }
+                } else {
+                    if (i == 0) {
+                        this.setSelected(this.children().size() - 1);
+                    } else {
+                        this.setSelected(i - 1);
+                    }
+                }
+
+            }
+            return true;
+        }
+        return false;
+    }
+
+    @Override
+    public void tickT() {
+    }
+
+
+    @Override
     public boolean mouseClicked(double pMouseX, double pMouseY, int pButton) {
         this.updateScrollingState(pMouseX, pMouseY, pButton);
         if (!this.isMouseOver(pMouseX, pMouseY)) {
-            return false;
+            this.setFocused(false);
         } else {
             Entry e = this.getEntryAtPosition(pMouseX, pMouseY);
             if (e != null) {
@@ -82,15 +116,14 @@ public class TSelectList<E> extends ObjectSelectionList<TSelectList<E>.Entry> im
                     this.setFocused(e);
                     this.setDragging(true);
                     this.setSelected(e);
-                    this.ensureVisible(e);
                     return true;
                 }
             } else if (pButton == 0) {
                 this.clickedHeader((int) (pMouseX - (double) (this.x0 + this.width / 2 - this.getRowWidth() / 2)), (int) (pMouseY - (double) this.y0) + (int) this.getScrollAmount() - 4);
                 return true;
             }
-            return false;
         }
+        return false;
     }
 
     @Override
@@ -115,6 +148,7 @@ public class TSelectList<E> extends ObjectSelectionList<TSelectList<E>.Entry> im
     public void setSelected(@Nullable TSelectList<E>.Entry pSelected) {
         super.setSelected(pSelected);
         if (pSelected != null) {
+            this.ensureVisible(pSelected);
             pSelected.onSelected();
         }
     }
@@ -345,10 +379,6 @@ public class TSelectList<E> extends ObjectSelectionList<TSelectList<E>.Entry> im
     @Override
     public Vec2i getSize() {
         return new Vec2i(width, height);
-    }
-
-    @Override
-    public void tickT() {
     }
 
     public int getForeground() {

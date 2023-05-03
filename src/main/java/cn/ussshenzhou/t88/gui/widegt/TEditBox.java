@@ -1,6 +1,5 @@
 package cn.ussshenzhou.t88.gui.widegt;
 
-import cn.ussshenzhou.t88.gui.event.EditBoxFocusedEvent;
 import cn.ussshenzhou.t88.gui.event.TWidgetContentUpdatedEvent;
 import cn.ussshenzhou.t88.gui.screen.TScreen;
 import cn.ussshenzhou.t88.gui.util.AccessorProxy;
@@ -14,7 +13,6 @@ import net.minecraft.locale.Language;
 import net.minecraft.network.chat.Component;
 import net.minecraft.util.Mth;
 import net.minecraftforge.common.MinecraftForge;
-import net.minecraftforge.eventbus.api.SubscribeEvent;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.LinkedList;
@@ -28,12 +26,13 @@ public class TEditBox extends EditBox implements TWidget, TResponder<String> {
     TScreen parentScreen = null;
     protected final LinkedList<Consumer<String>> responders = new LinkedList<>();
 
+    /*@Override
     @SubscribeEvent
-    public void onEditBoxFocused(EditBoxFocusedEvent event) {
+    public void onOtherWillFocused(ExclusiveFocusedEvent event) {
         if (event.getWillFocused() != this) {
             this.setFocused(false);
         }
-    }
+    }*/
 
     public TEditBox(Component tipText) {
         super(Minecraft.getInstance().font, 0, 0, 0, 0, tipText);
@@ -114,15 +113,9 @@ public class TEditBox extends EditBox implements TWidget, TResponder<String> {
     @Override
     public void setFocused(boolean pIsFocused) {
         if (pIsFocused) {
-            MinecraftForge.EVENT_BUS.post(new EditBoxFocusedEvent(this));
+            //iWillFocused();
         }
         super.setFocused(pIsFocused);
-    }
-
-    @Override
-    public void onFinalClose() {
-        MinecraftForge.EVENT_BUS.unregister(this);
-        TWidget.super.onFinalClose();
     }
 
     @Override

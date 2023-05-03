@@ -4,10 +4,7 @@ import cn.ussshenzhou.t88.gui.screen.TScreen;
 import cn.ussshenzhou.t88.gui.util.Border;
 import cn.ussshenzhou.t88.gui.util.HorizontalAlignment;
 import cn.ussshenzhou.t88.gui.util.LayoutHelper;
-import cn.ussshenzhou.t88.gui.widegt.TLabel;
-import cn.ussshenzhou.t88.gui.widegt.TSelectList;
-import cn.ussshenzhou.t88.gui.widegt.TSlider;
-import cn.ussshenzhou.t88.gui.widegt.TTimer;
+import cn.ussshenzhou.t88.gui.widegt.*;
 import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraft.network.chat.Component;
 
@@ -34,6 +31,8 @@ public class TestScreen extends TScreen {
     private TTimer tTimer = TTimer.newTimerCountDown(30);
     private TSlider slider = new TSlider("Test", 2, 5);
     private TSelectList<String> selectList = new TSelectList<>();
+    private TEditBox editBox = new TEditBox();
+    private TEditBox editBox2 = new TEditBox();
 
     public TestScreen() {
         super(Component.empty());
@@ -84,6 +83,8 @@ public class TestScreen extends TScreen {
         selectList.addElement("4");
         selectList.addElement("5");
         this.add(selectList);
+        this.add(editBox);
+        this.add(editBox2);
     }
 
     @Override
@@ -93,6 +94,8 @@ public class TestScreen extends TScreen {
         tTimer.setBounds(50, 100, 80, 20);
         LayoutHelper.BBottomOfA(slider, 10, tTimer);
         selectList.setBounds(150, 50, 50, 100);
+        LayoutHelper.BRightOfA(editBox,10,selectList,100,20);
+        LayoutHelper.BRightOfA(editBox2,10,editBox,100,20);
         super.layout();
     }
 
