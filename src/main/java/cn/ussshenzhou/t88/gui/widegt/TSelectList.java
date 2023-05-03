@@ -73,7 +73,8 @@ public class TSelectList<E> extends ObjectSelectionList<TSelectList<E>.Entry> im
 
     @Override
     public boolean keyPressed(int pKeyCode, int pScanCode, int pModifiers) {
-        if (this.isFocused() && (pKeyCode == GLFW.GLFW_KEY_DOWN || pKeyCode == GLFW.GLFW_KEY_UP)) {
+        boolean acceptableKey = pKeyCode == GLFW.GLFW_KEY_DOWN || pKeyCode == GLFW.GLFW_KEY_UP;
+        if (this.isFocused() && acceptableKey) {
             Entry selected = this.getSelected();
             if (selected == null) {
                 this.setSelected(0);

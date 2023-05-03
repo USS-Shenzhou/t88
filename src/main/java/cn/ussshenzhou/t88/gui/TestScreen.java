@@ -77,11 +77,11 @@ public class TestScreen extends TScreen {
         this.add(slider);
         selectList.addElement("ABC");
         selectList.addElement("DEF");
-        selectList.addElement("1");
+        /*selectList.addElement("1");
         selectList.addElement("2");
         selectList.addElement("3");
         selectList.addElement("4");
-        selectList.addElement("5");
+        selectList.addElement("5");*/
         this.add(selectList);
         this.add(editBox);
         this.add(editBox2);

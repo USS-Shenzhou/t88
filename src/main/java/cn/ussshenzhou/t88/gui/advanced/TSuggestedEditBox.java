@@ -23,7 +23,7 @@ import java.util.function.Consumer;
  */
 public class TSuggestedEditBox extends TPanel {
     private final TCommandConstrainedEditBox editBox;
-    private final TSelectList<String> suggestionList = new TSelectList<>(12, 0);
+    private final TSelectList<String> suggestionList;
 
     public TSuggestedEditBox(Consumer<CommandDispatcher<CommandSourceStack>> consumer) {
         super();
@@ -38,6 +38,12 @@ public class TSuggestedEditBox extends TPanel {
             this.updateSuggestion(s);
             //editBox.check(s);
         });
+        suggestionList = new TSelectList<>(12, 0){
+            @Override
+            public boolean isFocused() {
+                return super.isFocused() || editBox.isFocused();
+            }
+        };
         suggestionList.setBackground(0xff000000);
         suggestionList.setHorizontalAlignment(HorizontalAlignment.LEFT);
         suggestionList.setSelectedForeGround(0xfffcfc00);
