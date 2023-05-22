@@ -17,6 +17,7 @@ import net.minecraft.util.Mth;
 import javax.annotation.Nullable;
 import java.util.LinkedList;
 import java.util.Optional;
+import java.util.function.BiFunction;
 import java.util.function.Consumer;
 
 /**
@@ -45,6 +46,27 @@ public class TSlider extends OptionInstance.OptionInstanceSliderButton<Double> i
                         (pCaption, value) -> showValueInTitle ?
                                 Options.genericValueLabel(pCaption, Component.literal(String.format("%.2f", value))) :
                                 Component.literal(title),
+                        new DoubleRange(minValue, maxValue),
+                        maxValue,
+                        d -> {
+                        }
+                ),
+                new DoubleRange(minValue, maxValue),
+                value -> tipText == null ? null : Tooltip.create(tipText),
+                d -> {
+                }
+        );
+        //AccessorProxy.SliderProxy.setOption(this, progressOption);
+        this.updateMessage();
+        this.min = minValue;
+        this.max = maxValue;
+    }
+
+    public TSlider(String title, double minValue, double maxValue, BiFunction<Component, Double, Component> getLabelFromCaptionAndValue, @Nullable Component tipText) {
+        super(Minecraft.getInstance().options, 0, 0, 0, 0,
+                new OptionInstance<>(title,
+                        value -> null,
+                        getLabelFromCaptionAndValue::apply,
                         new DoubleRange(minValue, maxValue),
                         maxValue,
                         d -> {
