@@ -144,7 +144,7 @@ public class TSlider extends OptionInstance.OptionInstanceSliderButton<Double> i
             respond(value);
         }
         super.applyValue();
-
+        super.updateMessage();
     }
 
     @Deprecated

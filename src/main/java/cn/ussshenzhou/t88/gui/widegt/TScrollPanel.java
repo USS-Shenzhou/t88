@@ -60,7 +60,7 @@ public class TScrollPanel extends TPanel {
 
     @Override
     public void renderTop(PoseStack pPoseStack, int pMouseX, int pMouseY, float pPartialTick) {
-        prepareRender(pPoseStack,pPartialTick);
+        prepareRender(pPoseStack, pPartialTick);
         super.renderTop(pPoseStack, pMouseX, pMouseY, pPartialTick);
         pPoseStack.popPose();
         RenderSystem.disableScissor();
@@ -156,7 +156,7 @@ public class TScrollPanel extends TPanel {
     @Override
     public boolean mouseScrolled(double pMouseX, double pMouseY, double pDelta) {
         if (isInRange(pMouseX, pMouseY)) {
-            if (!super.mouseScrolled(pMouseX, pMouseY, pDelta)){
+            if (!super.mouseScrolled(pMouseX, pMouseY, pDelta)) {
                 this.addScrollAmount(pDelta);
                 return true;
             }
@@ -190,7 +190,11 @@ public class TScrollPanel extends TPanel {
 
     public void addScrollAmount(double deltaScroll) {
         deltaScroll = -deltaScroll * speedFactor;
-        this.scrollAmount = Mth.clamp(scrollAmount + deltaScroll, 0.0D, this.getMaxScroll());
+        var result = Mth.clamp(scrollAmount + deltaScroll, 0.0D, this.getMaxScroll());
+        if (Double.isNaN(result)) {
+            return;
+        }
+        this.scrollAmount = result;
     }
 
     public int getScrollbarGap() {
