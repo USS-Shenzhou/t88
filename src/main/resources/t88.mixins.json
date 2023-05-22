@@ -9,6 +9,7 @@
   ],
   "client": [
     "AbstractSelectionListAccessor",
+    "AbstractWidgetMixin",
     "EditBoxAccessor",
     "GameRendererMixin",
     "GuiComponentMixin",

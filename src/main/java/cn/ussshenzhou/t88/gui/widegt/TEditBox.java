@@ -62,8 +62,7 @@ public class TEditBox extends EditBox implements TWidget, TResponder<String> {
 
     @Override
     public void renderHighlight(PoseStack poseStack, int pStartX, int pStartY, int pEndX, int pEndY) {
-        double scroll = -this.getParentScrollAmountIfExist();
-        super.renderHighlight(poseStack, pStartX, (int) (pStartY + scroll), pEndX, (int) (pEndY + scroll));
+        super.renderHighlight(poseStack, pStartX, pStartY, pEndX, pEndY);
     }
 
     @Deprecated

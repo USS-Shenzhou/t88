@@ -261,76 +261,27 @@ public class TSelectList<E> extends ObjectSelectionList<TSelectList<E>.Entry> im
             if (k1 < this.y0) {
                 k1 = this.y0;
             }
-
-            //modified for compatibility with TScrollPanel
-            double scrollAmount = -getParentScrollAmountIfExist();
-
-            fill(pPoseStack, i, (int) (scrollAmount + this.y0), j, (int) (scrollAmount + this.y1), -16777216);
-            fill(pPoseStack, i, (int) (scrollAmount + k1), j, (int) (scrollAmount + k1 + j2), -8355712);
-            fill(pPoseStack, i, (int) (scrollAmount + k1), j - 1, (int) (scrollAmount + k1 + j2 - 1), -4144960);
+            fill(pPoseStack, i, this.y0, j, +this.y1, -16777216);
+            fill(pPoseStack, i, k1, j, k1 + j2, -8355712);
+            fill(pPoseStack, i, k1, j - 1, k1 + j2 - 1, -4144960);
         }
 
         this.renderDecorations(pPoseStack, pMouseX, pMouseY);
         RenderSystem.disableBlend();
     }
 
-    /*@Override
-    protected void renderList(PoseStack pPoseStack, int pX, int pY, int pMouseX, int pMouseY, float pPartialTick) {
-        int i = this.getItemCount();
-        Tesselator tesselator = Tesselator.getInstance();
-        BufferBuilder bufferbuilder = tesselator.getBuilder();
-
-        for (int j = 0; j < i; ++j) {
-            int k = this.getRowTop(j);
-            int l = k + this.itemHeight;
-            //modified not to render out of box
-            float up = k + (itemHeight - 10) / 2f;
-            float low = k + 10;
-            if (up >= this.y0 && low <= this.y1) {
-                int i1 = pY + j * this.itemHeight + this.headerHeight;
-                int j1 = this.itemHeight - 4;
-                Entry e = this.getEntry(j);
-                int k1 = this.getRowWidth();
-                if (this.isSelectedItem(j)) {
-                    //modified for compatibility with TScrollPanel
-                    double scrollAmount = -getParentScrollAmountIfExist();
-                    //modified due to scrollbarGap
-                    int l1 = this.x0 + (this.width - 6 - scrollbarGap) / 2 - k1 / 2;
-                    int i2 = this.x0 + (this.width - 6 - scrollbarGap) / 2 + k1 / 2;
-                    RenderSystem.setShader(GameRenderer::getPositionShader);
-                    float f = this.isFocused() ? 1.0F : 0.5F;
-                    RenderSystem.setShaderColor(f, f, f, 1.0F);
-                    bufferbuilder.begin(VertexFormat.Mode.QUADS, DefaultVertexFormat.POSITION);
-                    bufferbuilder.vertex((double) l1, scrollAmount + (double) (i1 + j1 + 2), 0.0D).endVertex();
-                    bufferbuilder.vertex((double) i2, scrollAmount + (double) (i1 + j1 + 2), 0.0D).endVertex();
-                    bufferbuilder.vertex((double) i2, scrollAmount + (double) (i1 - 2), 0.0D).endVertex();
-                    bufferbuilder.vertex((double) l1, scrollAmount + (double) (i1 - 2), 0.0D).endVertex();
-                    tesselator.end();
-                    RenderSystem.setShaderColor(0.0F, 0.0F, 0.0F, 1.0F);
-                    bufferbuilder.begin(VertexFormat.Mode.QUADS, DefaultVertexFormat.POSITION);
-                    bufferbuilder.vertex((double) (l1 + 1), scrollAmount + (double) (i1 + j1 + 1), 0.0D).endVertex();
-                    bufferbuilder.vertex((double) (i2 - 1), scrollAmount + (double) (i1 + j1 + 1), 0.0D).endVertex();
-                    bufferbuilder.vertex((double) (i2 - 1), scrollAmount + (double) (i1 - 1), 0.0D).endVertex();
-                    bufferbuilder.vertex((double) (l1 + 1), scrollAmount + (double) (i1 - 1), 0.0D).endVertex();
-                    tesselator.end();
-                }
-
-                int j2 = this.getRowLeft();
-                e.render(pPoseStack, j, k, j2, k1, j1, pMouseX, pMouseY, Objects.equals(getHovered(), e), pPartialTick);
-            }
-        }
-        super.renderList(pPoseStack, pX, pY, pMouseX, pMouseY, pPartialTick);
-    }*/
+    @Override
+    protected void enableScissor() {
+        GuiComponent.enableScissor(this.x0, (int) (this.y0 - this.getParentScrollAmountIfExist()), this.x1, (int) (this.y1 - this.getParentScrollAmountIfExist()));
+    }
 
     @Override
     protected void renderSelection(PoseStack pPoseStack, int pTop, int pWidth, int pHeight, int pOuterColor, int pInnerColor) {
         //modified due to scrollbarGap
         int i = this.x0 + (this.width - pWidth - 6 - scrollbarGap) / 2;
         int j = this.x0 + (this.width + pWidth - 6 - scrollbarGap) / 2;
-        //modified for compatibility with TScrollPanel
-        double scrollAmount = -getParentScrollAmountIfExist();
-        fill(pPoseStack, i, (int) (pTop - 2 + scrollAmount), j, (int) (pTop + pHeight + 2 + scrollAmount), pOuterColor);
-        fill(pPoseStack, i + 1, (int) (pTop - 1 + scrollAmount), j - 1, (int) (pTop + pHeight + 1 + scrollAmount), pInnerColor);
+        fill(pPoseStack, i, pTop - 2, j, pTop + pHeight + 2, pOuterColor);
+        fill(pPoseStack, i + 1, pTop - 1, j - 1, pTop + pHeight + 1, pInnerColor);
     }
 
     @Override

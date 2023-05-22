@@ -1,10 +1,9 @@
 package cn.ussshenzhou.t88.gui.widegt;
 
 import cn.ussshenzhou.t88.gui.screen.TScreen;
-import cn.ussshenzhou.t88.gui.util.VanillaWidget2TComponentHelper;
 import cn.ussshenzhou.t88.gui.util.MouseHelper;
+import cn.ussshenzhou.t88.gui.util.VanillaWidget2TComponentHelper;
 import cn.ussshenzhou.t88.gui.util.Vec2i;
-import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraft.client.gui.components.Button;
 import net.minecraft.network.chat.Component;
 import org.jetbrains.annotations.Nullable;
@@ -36,7 +35,7 @@ public class TButton extends Button implements TWidget {
         this.onPress = onPress;
     }
 
-    @Override
+    /*@Override
     public void render(PoseStack pPoseStack, int pMouseX, int pMouseY, float pPartialTick) {
         if (this.visible) {
             //modified for compatibility with TScrollPanel
@@ -44,7 +43,7 @@ public class TButton extends Button implements TWidget {
             this.isHovered = pMouseX >= this.x && y >= this.y && pMouseX < this.x + this.width && y < this.y + this.height;
             this.renderWidget(pPoseStack, pMouseX, pMouseY, pPartialTick);
         }
-    }
+    }*/
 
     @Override
     public boolean mouseDragged(double pMouseX, double pMouseY, int pButton, double pDragX, double pDragY) {

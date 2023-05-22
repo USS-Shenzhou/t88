@@ -16,7 +16,7 @@ import java.util.concurrent.CompletableFuture;
 public class TestScreen extends TScreen {
     private TLabel title = new TLabel(Component.literal("T88 Test Screen"));
 
-    private TLabel linesTest = new TLabel(Component.literal("§6Test1 \nTest223456\n...")){
+    private TLabel linesTest = new TLabel(Component.literal("§6Test1 \nTest223456\n...")) {
         @Override
         public void render(PoseStack pPoseStack, int pMouseX, int pMouseY, float pPartialTick) {
 
@@ -33,6 +33,15 @@ public class TestScreen extends TScreen {
     private TSelectList<String> selectList = new TSelectList<>();
     private TEditBox editBox = new TEditBox();
     private TEditBox editBox2 = new TEditBox();
+    private TScrollPanel scrollPanel = new TScrollPanel() {
+        @Override
+        public void layout() {
+            editBox.setBounds(10, 10, 50, 20);
+            editBox2.setBounds(10, 200, 50, 20);
+            selectList.setBounds(10, 230, 50, 100);
+            super.layout();
+        }
+    };
 
     public TestScreen() {
         super(Component.empty());
@@ -77,14 +86,18 @@ public class TestScreen extends TScreen {
         this.add(slider);
         selectList.addElement("ABC");
         selectList.addElement("DEF");
-        /*selectList.addElement("1");
+        selectList.addElement("1");
         selectList.addElement("2");
         selectList.addElement("3");
         selectList.addElement("4");
-        selectList.addElement("5");*/
-        this.add(selectList);
-        this.add(editBox);
-        this.add(editBox2);
+        selectList.addElement("5");
+
+        //this.add(editBox);
+        //this.add(editBox2);
+        this.add(scrollPanel);
+        scrollPanel.add(editBox);
+        scrollPanel.add(editBox2);
+        scrollPanel.add(selectList);
     }
 
     @Override
@@ -93,9 +106,7 @@ public class TestScreen extends TScreen {
         linesTest.setBounds(50, 50, 80, 40);
         tTimer.setBounds(50, 100, 80, 20);
         LayoutHelper.BBottomOfA(slider, 10, tTimer);
-        selectList.setBounds(150, 50, 50, 100);
-        LayoutHelper.BRightOfA(editBox,10,selectList,100,20);
-        LayoutHelper.BRightOfA(editBox2,10,editBox,100,20);
+        scrollPanel.setBounds(210,20,200,100);
         super.layout();
     }
 

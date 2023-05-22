@@ -1,10 +1,9 @@
 package cn.ussshenzhou.t88.gui.widegt;
 
 import cn.ussshenzhou.t88.gui.screen.TScreen;
-import cn.ussshenzhou.t88.gui.util.VanillaWidget2TComponentHelper;
 import cn.ussshenzhou.t88.gui.util.MouseHelper;
+import cn.ussshenzhou.t88.gui.util.VanillaWidget2TComponentHelper;
 import cn.ussshenzhou.t88.gui.util.Vec2i;
-import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.serialization.Codec;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.OptionInstance;
@@ -115,10 +114,12 @@ public class TSlider extends OptionInstance.OptionInstanceSliderButton<Double> i
 
     public void setRelValueWithoutRespond(double relativeValue) {
         this.value = Mth.clamp(relativeValue, 0, 1);
+        this.updateMessage();
     }
 
     public void setAbsValueWithoutRespond(double absoluteValue) {
         this.value = absToRelValueLinear(absoluteValue);
+        this.updateMessage();
     }
 
     @Deprecated
@@ -190,7 +191,7 @@ public class TSlider extends OptionInstance.OptionInstanceSliderButton<Double> i
         return false;
     }
 
-    @Override
+    /*@Override
     public void render(PoseStack pPoseStack, int pMouseX, int pMouseY, float pPartialTick) {
         if (this.visible) {
             //modified for compatibility with TScrollPanel
@@ -199,7 +200,7 @@ public class TSlider extends OptionInstance.OptionInstanceSliderButton<Double> i
             super.renderWidget(pPoseStack, pMouseX, pMouseY, pPartialTick);
         }
         super.render(pPoseStack, pMouseX, pMouseY, pPartialTick);
-    }
+    }*/
 
     @Override
     public boolean isVisibleT() {

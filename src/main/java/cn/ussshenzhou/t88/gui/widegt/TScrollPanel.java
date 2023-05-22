@@ -2,7 +2,6 @@ package cn.ussshenzhou.t88.gui.widegt;
 
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.*;
-import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.GameRenderer;
 import net.minecraft.util.Mth;
 
@@ -55,7 +54,7 @@ public class TScrollPanel extends TPanel {
         prepareRender(pPoseStack, pPartialTick);
         super.renderChildren(pPoseStack, pMouseX, pMouseY, pPartialTick);
         pPoseStack.popPose();
-        RenderSystem.disableScissor();
+        disableScissor();
     }
 
     @Override
@@ -63,17 +62,11 @@ public class TScrollPanel extends TPanel {
         prepareRender(pPoseStack, pPartialTick);
         super.renderTop(pPoseStack, pMouseX, pMouseY, pPartialTick);
         pPoseStack.popPose();
-        RenderSystem.disableScissor();
+        disableScissor();
     }
 
     protected void prepareRender(PoseStack pPoseStack, float pPartialTick) {
-        Minecraft minecraft = Minecraft.getInstance();
-        double scale = minecraft.getWindow().getGuiScale();
-        RenderSystem.enableScissor(
-                (int) (x * scale),
-                (int) (minecraft.getWindow().getHeight() - (y + height) * scale),
-                (int) (width * scale),
-                (int) (height * scale));
+        enableScissor(this.x, (int) (this.y - this.getParentScrollAmountIfExist()), this.x+width, (int) (this.y+height - this.getParentScrollAmountIfExist()));
         pPoseStack.pushPose();
         pPoseStack.translate(0, Mth.lerp(pPartialTick, -prevScrollAmount, -scrollAmount), 0);
     }
