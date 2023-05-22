@@ -83,18 +83,55 @@ public class TSlider extends OptionInstance.OptionInstanceSliderButton<Double> i
         this.max = maxValue;
     }
 
+    public double relToAbsValueLinear(double relativeValue) {
+        return relativeValue * (max - min) + min;
+    }
+
+    public double absToRelValueLinear(double absoluteValue) {
+        return (absoluteValue - min) / (max - min);
+    }
+
+    @Deprecated
     public void setValue(double value) {
         this.value = Mth.clamp(value, min, max);
         applyValue();
     }
 
+    public void setRelValue(double relativeValue) {
+        this.value = Mth.clamp(relativeValue, 0, 1);
+        applyValue();
+    }
+
+    public void setAbsValue(double absoluteValue) {
+        this.value = absToRelValueLinear(absoluteValue);
+        applyValue();
+    }
+
+    @Deprecated
     public void setValueWithoutRespond(double value) {
         this.value = Mth.clamp(value, min, max);
         applyValue(false);
     }
 
+    public void setRelValueWithoutRespond(double relativeValue) {
+        this.value = Mth.clamp(relativeValue, 0, 1);
+    }
+
+    public void setAbsValueWithoutRespond(double absoluteValue) {
+        this.value = absToRelValueLinear(absoluteValue);
+    }
+
+    @Deprecated
     public double getValue() {
         return value;
+    }
+
+    public double getRelValue(){
+        return value;
+    }
+
+    public double getAbsValue(){
+        return relToAbsValueLinear(value);
     }
 
     @Override
@@ -110,6 +147,7 @@ public class TSlider extends OptionInstance.OptionInstanceSliderButton<Double> i
 
     }
 
+    @Deprecated
     public void addValue(double delta) {
         setValue(value + delta);
     }
