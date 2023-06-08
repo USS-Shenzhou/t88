@@ -3,8 +3,7 @@ package cn.ussshenzhou.t88.gui.widegt;
 import cn.ussshenzhou.t88.gui.screen.TScreen;
 import cn.ussshenzhou.t88.gui.util.Border;
 import cn.ussshenzhou.t88.gui.util.Vec2i;
-import com.mojang.blaze3d.vertex.PoseStack;
-import net.minecraft.client.gui.GuiComponent;
+import net.minecraft.client.gui.GuiGraphics;
 
 import javax.annotation.Nullable;
 import java.util.Collection;
@@ -14,7 +13,7 @@ import java.util.stream.Stream;
 /**
  * @author USS_Shenzhou
  */
-public abstract class TComponent extends GuiComponent implements TWidget {
+public abstract class TComponent implements TWidget {
     protected int x, y, width, height;
     protected int relativeX, relativeY;
     boolean visible = true;
@@ -64,40 +63,40 @@ public abstract class TComponent extends GuiComponent implements TWidget {
     }
 
     @Override
-    public void render(PoseStack pPoseStack, int pMouseX, int pMouseY, float pPartialTick) {
+    public void render(GuiGraphics graphics, int pMouseX, int pMouseY, float pPartialTick) {
         if (border != null) {
-            renderBorder(pPoseStack, pMouseX, pMouseY, pPartialTick);
+            renderBorder(graphics, pMouseX, pMouseY, pPartialTick);
         }
-        renderBackground(pPoseStack, pMouseX, pMouseY, pPartialTick);
-        renderChildren(pPoseStack, pMouseX, pMouseY, pPartialTick);
+        renderBackground(graphics, pMouseX, pMouseY, pPartialTick);
+        renderChildren(graphics, pMouseX, pMouseY, pPartialTick);
     }
 
-    protected void renderBorder(PoseStack pPoseStack, int pMouseX, int pMouseY, float pPartialTick) {
+    protected void renderBorder(GuiGraphics graphics, int pMouseX, int pMouseY, float pPartialTick) {
         int thickness = border.getThickness();
         int color = border.getColor();
-        fill(pPoseStack, x - thickness, y - thickness, x + width + thickness, y, color);
-        fill(pPoseStack, x - thickness, y + height, x + width + thickness, y + height + thickness, color);
-        fill(pPoseStack, x - thickness, y, x, y + height, color);
-        fill(pPoseStack, x + width, y, x + width + thickness, y + height, color);
+        graphics.fill(x - thickness, y - thickness, x + width + thickness, y, color);
+        graphics.fill(x - thickness, y + height, x + width + thickness, y + height + thickness, color);
+        graphics.fill(x - thickness, y, x, y + height, color);
+        graphics.fill(x + width, y, x + width + thickness, y + height, color);
     }
 
-    protected void renderBackground(PoseStack pPoseStack, int pMouseX, int pMouseY, float pPartialTick) {
-        fill(pPoseStack, x, y, x + width, y + height, background);
+    protected void renderBackground(GuiGraphics graphics, int pMouseX, int pMouseY, float pPartialTick) {
+        graphics.fill(x, y, x + width, y + height, background);
     }
 
-    protected void renderChildren(PoseStack pPoseStack, int pMouseX, int pMouseY, float pPartialTick) {
+    protected void renderChildren(GuiGraphics graphics, int pMouseX, int pMouseY, float pPartialTick) {
         for (TWidget tWidget : children) {
             if (tWidget.isVisibleT()) {
-                tWidget.render(pPoseStack, pMouseX, pMouseY, pPartialTick);
+                tWidget.render(graphics, pMouseX, pMouseY, pPartialTick);
             }
         }
     }
 
     @Override
-    public void renderTop(PoseStack pPoseStack, int pMouseX, int pMouseY, float pPartialTick) {
+    public void renderTop(GuiGraphics graphics, int pMouseX, int pMouseY, float pPartialTick) {
         for (TWidget w : children) {
             if (w.isVisibleT()) {
-                w.renderTop(pPoseStack, pMouseX, pMouseY, pPartialTick);
+                w.renderTop(graphics, pMouseX, pMouseY, pPartialTick);
             }
         }
     }

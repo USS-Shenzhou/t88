@@ -3,10 +3,9 @@ package cn.ussshenzhou.t88.gui.widegt;
 import cn.ussshenzhou.t88.gui.util.ImageFit;
 import com.mojang.blaze3d.platform.NativeImage;
 import com.mojang.blaze3d.systems.RenderSystem;
-import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.logging.LogUtils;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.renderer.GameRenderer;
+import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.resources.ResourceLocation;
 
 import java.io.IOException;
@@ -84,10 +83,8 @@ public class TImage extends TPanel {
 
     @SuppressWarnings("AlibabaSwitchStatement")
     @Override
-    public void render(PoseStack pPoseStack, int pMouseX, int pMouseY, float pPartialTick) {
+    public void render(GuiGraphics guigraphics, int pMouseX, int pMouseY, float pPartialTick) {
         if (imageLocation != null) {
-            RenderSystem.setShader(GameRenderer::getPositionTexShader);
-            RenderSystem.setShaderTexture(0, imageLocation);
             RenderSystem.setShaderColor(1, 1, 1, alpha);
             RenderSystem.enableBlend();
             RenderSystem.defaultBlendFunc();
@@ -97,12 +94,12 @@ public class TImage extends TPanel {
                     float panelWHRatio = width / (float) height;
                     float imageWHRatio = imageWidth / (float) imageHeight;
                     if (panelWHRatio > imageWHRatio) {
-                        blit(pPoseStack, this.x, this.y, width, height,
+                        guigraphics.blit(imageLocation, this.x, this.y, width, height,
                                 0, (imageHeight - imageWidth / panelWHRatio) / 2,
                                 imageWidth, (int) (imageWidth / panelWHRatio),
                                 (int) (imageWidth * scale), (int) (imageHeight * scale));
                     } else {
-                        blit(pPoseStack, this.x, this.y, width, height,
+                        guigraphics.blit(imageLocation, this.x, this.y, width, height,
                                 (imageWidth - imageHeight * panelWHRatio) / 2, 0,
                                 (int) (imageHeight * panelWHRatio), imageHeight,
                                 (int) (imageWidth * scale), (int) (imageHeight * scale));
@@ -112,13 +109,13 @@ public class TImage extends TPanel {
                     float panelWHRatio = width / (float) height;
                     float imageWHRatio = imageWidth / (float) imageHeight;
                     if (panelWHRatio > imageWHRatio) {
-                        blit(pPoseStack, (int) (this.x + (width - height * imageWHRatio) / 2), this.y,
+                        guigraphics.blit(imageLocation, (int) (this.x + (width - height * imageWHRatio) / 2), this.y,
                                 (int) (height * imageWHRatio), height,
                                 0, 0,
                                 imageWidth, imageHeight,
                                 (int) (imageWidth * scale), (int) (imageHeight * scale));
                     } else {
-                        blit(pPoseStack, this.x, (int) (this.y + (height - width / imageWHRatio) / 2),
+                        guigraphics.blit(imageLocation, this.x, (int) (this.y + (height - width / imageWHRatio) / 2),
                                 width, (int) (width / imageWHRatio),
                                 0, 0,
                                 imageWidth, imageHeight,
@@ -126,12 +123,12 @@ public class TImage extends TPanel {
                     }
                 }
                 case STRETCH ->
-                        blit(pPoseStack, this.x, this.y, width, height, 0, 0, imageWidth, imageHeight, (int) (imageWidth * scale), (int) (imageHeight * scale));
+                        guigraphics.blit(imageLocation, this.x, this.y, width, height, 0, 0, imageWidth, imageHeight, (int) (imageWidth * scale), (int) (imageHeight * scale));
                 case TILE ->
-                        blit(pPoseStack, this.x, this.y, width, height, 0, 0, width, height, (int) (imageWidth * scale), (int) (imageHeight * scale));
+                        guigraphics.blit(imageLocation, this.x, this.y, width, height, 0, 0, width, height, (int) (imageWidth * scale), (int) (imageHeight * scale));
             }
             RenderSystem.setShaderColor(1, 1, 1, 1);
         }
-        super.render(pPoseStack, pMouseX, pMouseY, pPartialTick);
+        super.render(guigraphics, pMouseX, pMouseY, pPartialTick);
     }
 }

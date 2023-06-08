@@ -5,10 +5,9 @@ import cn.ussshenzhou.t88.gui.util.AccessorProxy;
 import cn.ussshenzhou.t88.gui.util.HorizontalAlignment;
 import cn.ussshenzhou.t88.gui.util.Vec2i;
 import com.mojang.blaze3d.systems.RenderSystem;
-import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Font;
-import net.minecraft.client.gui.GuiComponent;
+import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.ObjectSelectionList;
 import net.minecraft.locale.Language;
 import net.minecraft.network.chat.Component;
@@ -174,8 +173,8 @@ public class TSelectList<E> extends ObjectSelectionList<TSelectList<E>.Entry> im
     }
 
     @Override
-    protected void renderBackground(PoseStack pPoseStack) {
-        fill(pPoseStack, x0, y0, x0 + width - scrollbarGap - 6, y0 + height, background);
+    protected void renderBackground(GuiGraphics guigraphics) {
+        guigraphics.fill(x0, y0, x0 + width - scrollbarGap - 6, y0 + height, background);
     }
 
     @Override
@@ -216,41 +215,36 @@ public class TSelectList<E> extends ObjectSelectionList<TSelectList<E>.Entry> im
     /**
      * modified for compatibility with TScrollPanel
      *
-     * @see net.minecraft.client.gui.components.AbstractSelectionList#render(PoseStack, int, int, float)
+     * @see net.minecraft.client.gui.components.AbstractSelectionList#render(GuiGraphics, int, int, float)
      */
     @Override
-    public void render(PoseStack pPoseStack, int pMouseX, int pMouseY, float pPartialTick) {
-        this.renderBackground(pPoseStack);
+    public void render(GuiGraphics guigraphics, int pMouseX, int pMouseY, float pPartialTick) {
+        this.renderBackground(guigraphics);
         int i = this.getScrollbarPosition();
         int j = i + 6;
         AccessorProxy.AbstractSelectionListProxy.setHovered(this, this.isMouseOver(pMouseX, pMouseY) ? this.getEntryAtPosition(pMouseX, pMouseY) : null);
         if (AccessorProxy.AbstractSelectionListProxy.isRenderBackground(this)) {
-            RenderSystem.setShaderTexture(0, GuiComponent.BACKGROUND_LOCATION);
             RenderSystem.setShaderColor(0.125F, 0.125F, 0.125F, 1.0F);
-            int k = 32;
-            blit(pPoseStack, this.x0, this.y0, (float) this.x1, (float) (this.y1 + (int) this.getScrollAmount()), this.x1 - this.x0, this.y1 - this.y0, 32, 32);
+            guigraphics.blit(BACKGROUND_LOCATION, this.x0, this.y0, (float) this.x1, (float) (this.y1 + (int) this.getScrollAmount()), this.x1 - this.x0, this.y1 - this.y0, 32, 32);
             RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, 1.0F);
         }
 
         int l1 = this.getRowLeft();
         int l = this.y0 + 4 - (int) this.getScrollAmount();
-        this.enableScissor();
+        this.enableScissor(guigraphics);
         if (AccessorProxy.AbstractSelectionListProxy.isRenderHeader(this)) {
-            this.renderHeader(pPoseStack, l1, l);
+            this.renderHeader(guigraphics, l1, l);
         }
 
-        this.renderList(pPoseStack, pMouseX, pMouseY, pPartialTick);
-        disableScissor();
+        this.renderList(guigraphics, pMouseX, pMouseY, pPartialTick);
+        guigraphics.disableScissor();
         if (AccessorProxy.AbstractSelectionListProxy.isRenderTopAndBottom(this)) {
-            RenderSystem.setShaderTexture(0, GuiComponent.BACKGROUND_LOCATION);
-            int i1 = 32;
             RenderSystem.setShaderColor(0.25F, 0.25F, 0.25F, 1.0F);
-            blit(pPoseStack, this.x0, 0, 0.0F, 0.0F, this.width, this.y0, 32, 32);
-            blit(pPoseStack, this.x0, this.y1, 0.0F, (float) this.y1, this.width, this.height - this.y1, 32, 32);
+            guigraphics.blit(BACKGROUND_LOCATION, this.x0, 0, 0.0F, 0.0F, this.width, this.y0, 32, 32);
+            guigraphics.blit(BACKGROUND_LOCATION, this.x0, this.y1, 0.0F, (float) this.y1, this.width, this.height - this.y1, 32, 32);
             RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, 1.0F);
-            int j1 = 4;
-            fillGradient(pPoseStack, this.x0, this.y0, this.x1, this.y0 + 4, -16777216, 0);
-            fillGradient(pPoseStack, this.x0, this.y1 - 4, this.x1, this.y1, 0, -16777216);
+            guigraphics.fillGradient(this.x0, this.y0, this.x1, this.y0 + 4, -16777216, 0);
+            guigraphics.fillGradient(this.x0, this.y1 - 4, this.x1, this.y1, 0, -16777216);
         }
 
         int i2 = this.getMaxScroll();
@@ -261,27 +255,27 @@ public class TSelectList<E> extends ObjectSelectionList<TSelectList<E>.Entry> im
             if (k1 < this.y0) {
                 k1 = this.y0;
             }
-            fill(pPoseStack, i, this.y0, j, +this.y1, -16777216);
-            fill(pPoseStack, i, k1, j, k1 + j2, -8355712);
-            fill(pPoseStack, i, k1, j - 1, k1 + j2 - 1, -4144960);
+            guigraphics.fill(i, this.y0, j, +this.y1, -16777216);
+            guigraphics.fill(i, k1, j, k1 + j2, -8355712);
+            guigraphics.fill(i, k1, j - 1, k1 + j2 - 1, -4144960);
         }
 
-        this.renderDecorations(pPoseStack, pMouseX, pMouseY);
+        this.renderDecorations(guigraphics, pMouseX, pMouseY);
         RenderSystem.disableBlend();
     }
 
     @Override
-    protected void enableScissor() {
-        GuiComponent.enableScissor(this.x0, (int) (this.y0 - this.getParentScrollAmountIfExist()), this.x1, (int) (this.y1 - this.getParentScrollAmountIfExist()));
+    protected void enableScissor(GuiGraphics guigraphics) {
+        guigraphics.enableScissor(this.x0, (int) (this.y0 - this.getParentScrollAmountIfExist()), this.x1, (int) (this.y1 - this.getParentScrollAmountIfExist()));
     }
 
     @Override
-    protected void renderSelection(PoseStack pPoseStack, int pTop, int pWidth, int pHeight, int pOuterColor, int pInnerColor) {
+    protected void renderSelection(GuiGraphics guigraphics, int pTop, int pWidth, int pHeight, int pOuterColor, int pInnerColor) {
         //modified due to scrollbarGap
         int i = this.x0 + (this.width - pWidth - 6 - scrollbarGap) / 2;
         int j = this.x0 + (this.width + pWidth - 6 - scrollbarGap) / 2;
-        fill(pPoseStack, i, pTop - 2, j, pTop + pHeight + 2, pOuterColor);
-        fill(pPoseStack, i + 1, pTop - 1, j - 1, pTop + pHeight + 1, pInnerColor);
+        guigraphics.fill(i, pTop - 2, j, pTop + pHeight + 2, pOuterColor);
+        guigraphics.fill(i + 1, pTop - 1, j - 1, pTop + pHeight + 1, pInnerColor);
     }
 
     @Override
@@ -397,18 +391,18 @@ public class TSelectList<E> extends ObjectSelectionList<TSelectList<E>.Entry> im
         }
 
         @Override
-        public void render(PoseStack pPoseStack, int pIndex, int pTop, int pLeft, int pWidth, int pHeight, int pMouseX, int pMouseY, boolean pIsMouseOver, float pPartialTick) {
+        public void render(GuiGraphics guigraphics, int pIndex, int pTop, int pLeft, int pWidth, int pHeight, int pMouseX, int pMouseY, boolean pIsMouseOver, float pPartialTick) {
             Font font = Minecraft.getInstance().font;
             int color = specialForeground == null ? (getSelected() == this ? selectedForeGround : foreground) : specialForeground;
             switch (horizontalAlignment) {
                 case LEFT:
-                    drawString(pPoseStack, font, getNarration(), pLeft + 1, pTop + (pHeight - font.lineHeight) / 2, color);
+                    guigraphics.drawString(font, getNarration(), pLeft + 1, pTop + (pHeight - font.lineHeight) / 2, color);
                     break;
                 case RIGHT:
-                    drawString(pPoseStack, font, getNarration(), pLeft + width - font.width(getNarration()) - 1, pTop + (pHeight - font.lineHeight) / 2, color);
+                    guigraphics.drawString(font, getNarration(), pLeft + width - font.width(getNarration()) - 1, pTop + (pHeight - font.lineHeight) / 2, color);
                     break;
                 default:
-                    drawCenteredString(pPoseStack, font, getNarration(), pLeft + pWidth / 2, pTop + (pHeight - font.lineHeight) / 2, color);
+                    guigraphics.drawCenteredString(font, getNarration(), pLeft + pWidth / 2, pTop + (pHeight - font.lineHeight) / 2, color);
             }
         }
 

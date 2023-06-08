@@ -127,11 +127,11 @@ public class TSlider extends OptionInstance.OptionInstanceSliderButton<Double> i
         return value;
     }
 
-    public double getRelValue(){
+    public double getRelValue() {
         return value;
     }
 
-    public double getAbsValue(){
+    public double getAbsValue() {
         return relToAbsValueLinear(value);
     }
 
@@ -190,17 +190,6 @@ public class TSlider extends OptionInstance.OptionInstanceSliderButton<Double> i
         }
         return false;
     }
-
-    /*@Override
-    public void render(PoseStack pPoseStack, int pMouseX, int pMouseY, float pPartialTick) {
-        if (this.visible) {
-            //modified for compatibility with TScrollPanel
-            double y = getParentScrollAmountIfExist() + pMouseY;
-            this.isHovered = pMouseX >= this.x && y >= this.y && pMouseX < this.x + this.width && y < this.y + this.height;
-            super.renderWidget(pPoseStack, pMouseX, pMouseY, pPartialTick);
-        }
-        super.render(pPoseStack, pMouseX, pMouseY, pPartialTick);
-    }*/
 
     @Override
     public boolean isVisibleT() {
@@ -284,6 +273,13 @@ public class TSlider extends OptionInstance.OptionInstanceSliderButton<Double> i
     @Override
     public void clearResponders() {
         responders.clear();
+    }
+
+    @Override
+    public void onRelease(double pMouseX, double pMouseY) {
+        if (isInRange(pMouseX, pMouseY)) {
+            super.onRelease(pMouseX, pMouseY);
+        }
     }
 
     private static class DoubleRange implements OptionInstance.SliderableValueSet<Double> {

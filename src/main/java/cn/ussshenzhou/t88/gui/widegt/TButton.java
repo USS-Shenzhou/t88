@@ -36,7 +36,7 @@ public class TButton extends Button implements TWidget {
     }
 
     /*@Override
-    public void render(PoseStack pPoseStack, int pMouseX, int pMouseY, float pPartialTick) {
+    public void render(GuiGraphics guigraphics, int pMouseX, int pMouseY, float pPartialTick) {
         if (this.visible) {
             //modified for compatibility with TScrollPanel
             double y = getParentScrollAmountIfExist() + pMouseY;

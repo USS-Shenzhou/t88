@@ -3,12 +3,12 @@ package cn.ussshenzhou.t88.gui.advanced;
 import cn.ussshenzhou.t88.gui.util.HorizontalAlignment;
 import cn.ussshenzhou.t88.gui.widegt.TPanel;
 import cn.ussshenzhou.t88.gui.widegt.TSelectList;
-import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.brigadier.CommandDispatcher;
 import com.mojang.brigadier.ParseResults;
 import com.mojang.brigadier.suggestion.Suggestion;
 import com.mojang.brigadier.suggestion.Suggestions;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.commands.CommandSourceStack;
 import org.lwjgl.glfw.GLFW;
 
@@ -64,18 +64,18 @@ public class TSuggestedEditBox extends TPanel {
     }
 
     @Override
-    protected void renderChildren(PoseStack pPoseStack, int pMouseX, int pMouseY, float pPartialTick) {
+    protected void renderChildren(GuiGraphics guigraphics, int pMouseX, int pMouseY, float pPartialTick) {
         if (editBox.isVisible()) {
-            editBox.render(pPoseStack, pMouseX, pMouseY, pPartialTick);
+            editBox.render(guigraphics, pMouseX, pMouseY, pPartialTick);
         }
     }
 
     @Override
-    public void renderTop(PoseStack pPoseStack, int pMouseX, int pMouseY, float pPartialTick) {
+    public void renderTop(GuiGraphics guigraphics, int pMouseX, int pMouseY, float pPartialTick) {
         if (suggestionList.isVisibleT()) {
-            suggestionList.render(pPoseStack, pMouseX, pMouseY, pPartialTick);
+            suggestionList.render(guigraphics, pMouseX, pMouseY, pPartialTick);
         }
-        super.renderTop(pPoseStack, pMouseX, pMouseY, pPartialTick);
+        super.renderTop(guigraphics, pMouseX, pMouseY, pPartialTick);
     }
 
     public void updateSuggestion(String value) {

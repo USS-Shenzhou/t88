@@ -5,7 +5,7 @@ import cn.ussshenzhou.t88.gui.util.Border;
 import cn.ussshenzhou.t88.gui.util.HorizontalAlignment;
 import cn.ussshenzhou.t88.gui.util.LayoutHelper;
 import cn.ussshenzhou.t88.gui.widegt.*;
-import com.mojang.blaze3d.vertex.PoseStack;
+import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.network.chat.Component;
 
 import java.util.concurrent.CompletableFuture;
@@ -18,14 +18,14 @@ public class TestScreen extends TScreen {
 
     private TLabel linesTest = new TLabel(Component.literal("§6Test1 \nTest223456\n...")) {
         @Override
-        public void render(PoseStack pPoseStack, int pMouseX, int pMouseY, float pPartialTick) {
+        public void render(GuiGraphics guigraphics, int pMouseX, int pMouseY, float pPartialTick) {
 
         }
 
         @Override
-        public void renderTop(PoseStack pPoseStack, int pMouseX, int pMouseY, float pPartialTick) {
-            super.render(pPoseStack, pMouseX, pMouseY, pPartialTick);
-            super.renderTop(pPoseStack, pMouseX, pMouseY, pPartialTick);
+        public void renderTop(GuiGraphics guigraphics, int pMouseX, int pMouseY, float pPartialTick) {
+            super.render(guigraphics, pMouseX, pMouseY, pPartialTick);
+            super.renderTop(guigraphics, pMouseX, pMouseY, pPartialTick);
         }
     };
     private TTimer tTimer = TTimer.newTimerCountDown(30);

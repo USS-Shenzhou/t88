@@ -1,11 +1,11 @@
 package cn.ussshenzhou.t88.gui.widegt;
 
+import cn.ussshenzhou.t88.gui.event.ClearEditBoxFocusEvent;
 import cn.ussshenzhou.t88.gui.event.TWidgetContentUpdatedEvent;
 import cn.ussshenzhou.t88.gui.screen.TScreen;
 import cn.ussshenzhou.t88.gui.util.AccessorProxy;
 import cn.ussshenzhou.t88.gui.util.VanillaWidget2TComponentHelper;
 import cn.ussshenzhou.t88.gui.util.Vec2i;
-import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Font;
 import net.minecraft.client.gui.components.EditBox;
@@ -13,6 +13,7 @@ import net.minecraft.locale.Language;
 import net.minecraft.network.chat.Component;
 import net.minecraft.util.Mth;
 import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.eventbus.api.SubscribeEvent;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.LinkedList;
@@ -26,19 +27,22 @@ public class TEditBox extends EditBox implements TWidget, TResponder<String> {
     TScreen parentScreen = null;
     protected final LinkedList<Consumer<String>> responders = new LinkedList<>();
 
-    /*@Override
     @SubscribeEvent
-    public void onOtherWillFocused(ExclusiveFocusedEvent event) {
-        if (event.getWillFocused() != this) {
-            this.setFocused(false);
-        }
-    }*/
+    public void onClick(ClearEditBoxFocusEvent event) {
+        this.setFocused(false);
+    }
 
     public TEditBox(Component tipText) {
         super(Minecraft.getInstance().font, 0, 0, 0, 0, tipText);
         MinecraftForge.EVENT_BUS.register(this);
         setResponder(this::respond);
         this.addResponder(s -> MinecraftForge.EVENT_BUS.post(new TWidgetContentUpdatedEvent(this)));
+    }
+
+    @Override
+    public void onFinalClose() {
+        MinecraftForge.EVENT_BUS.unregister(this);
+        TWidget.super.onFinalClose();
     }
 
     public TEditBox() {
@@ -58,11 +62,6 @@ public class TEditBox extends EditBox implements TWidget, TResponder<String> {
         b++;
         Font font = Minecraft.getInstance().font;
         return getXT() + font.width(s.substring(AccessorProxy.EditBoxProxy.getDisplayPos(this), b)) + font.width(" ");
-    }
-
-    @Override
-    public void renderHighlight(PoseStack poseStack, int pStartX, int pStartY, int pEndX, int pEndY) {
-        super.renderHighlight(poseStack, pStartX, pStartY, pEndX, pEndY);
     }
 
     @Deprecated
@@ -111,9 +110,6 @@ public class TEditBox extends EditBox implements TWidget, TResponder<String> {
 
     @Override
     public void setFocused(boolean pIsFocused) {
-        if (pIsFocused) {
-            //iWillFocused();
-        }
         super.setFocused(pIsFocused);
     }
 
@@ -174,10 +170,12 @@ public class TEditBox extends EditBox implements TWidget, TResponder<String> {
     @Override
     public boolean mouseClicked(double pMouseX, double pMouseY, int pButton) {
         if (AccessorProxy.EditBoxProxy.isEditBoxEdible(this)) {
-            return super.mouseClicked(pMouseX, pMouseY, pButton);
-        } else {
-            return false;
+            if (isInRange(pMouseX, pMouseY)) {
+                this.setFocused(true);
+                return super.mouseClicked(pMouseX, pMouseY, pButton);
+            }
         }
+        return false;
     }
 
     @Override

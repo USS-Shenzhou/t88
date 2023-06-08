@@ -2,9 +2,9 @@ package cn.ussshenzhou.t88.gui.widegt;
 
 import cn.ussshenzhou.t88.gui.util.HorizontalAlignment;
 import cn.ussshenzhou.t88.gui.util.Vec2i;
-import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Font;
+import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.network.chat.Component;
 import net.minecraft.util.Mth;
 
@@ -80,18 +80,18 @@ public class TLabel extends TPanel {
     }
 
     @Override
-    public void render(PoseStack pPoseStack, int pMouseX, int pMouseY, float pPartialTick) {
-        super.render(pPoseStack, pMouseX, pMouseY, pPartialTick);
-        pPoseStack.pushPose();
+    public void render(GuiGraphics guigraphics, int pMouseX, int pMouseY, float pPartialTick) {
+        super.render(guigraphics, pMouseX, pMouseY, pPartialTick);
+        guigraphics.pose().pushPose();
         float scaleFactor = fontSize / 7f;
-        pPoseStack.scale(scaleFactor, scaleFactor, 1);
+        guigraphics.pose().scale(scaleFactor, scaleFactor, 1);
         int y0 = Mth.ceil((y + (height - (fontSize + lineSpacing) * textLines.size()) / 2) / scaleFactor);
         for (Component line : textLines) {
             int x0 = (int) (getAlignedX(line) / scaleFactor);
-            drawString(pPoseStack, font, line, x0, y0, foreground);
+            guigraphics.drawString(font, line, x0, y0, foreground);
             y0 += (fontSize + lineSpacing) / scaleFactor;
         }
-        pPoseStack.popPose();
+        guigraphics.pose().popPose();
     }
 
     protected int getAlignedX(Component line) {

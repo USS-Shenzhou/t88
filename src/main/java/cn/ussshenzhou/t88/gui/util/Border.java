@@ -1,7 +1,6 @@
 package cn.ussshenzhou.t88.gui.util;
 
-import com.mojang.blaze3d.vertex.PoseStack;
-import net.minecraft.client.gui.GuiComponent;
+import net.minecraft.client.gui.GuiGraphics;
 
 /**
  * @author USS_Shenzhou
@@ -31,10 +30,10 @@ public class Border {
         this.thickness = thickness;
     }
 
-    public static void renderBorder(PoseStack pPoseStack, int color, int thickness, int x, int y, int width, int height) {
-        GuiComponent.fill(pPoseStack, x - thickness, y - thickness, x + width + thickness, y, color);
-        GuiComponent.fill(pPoseStack, x - thickness, y + height, x + width + thickness, y + height + thickness, color);
-        GuiComponent.fill(pPoseStack, x - thickness, y, x, y + height, color);
-        GuiComponent.fill(pPoseStack, x + width, y, x + width + thickness, y + height, color);
+    public static void renderBorder(GuiGraphics guiGraphics, int color, int thickness, int x, int y, int width, int height) {
+        guiGraphics.fill(x - thickness, y - thickness, x + width + thickness, y, color);
+        guiGraphics.fill(x - thickness, y + height, x + width + thickness, y + height + thickness, color);
+        guiGraphics.fill(x - thickness, y, x, y + height, color);
+        guiGraphics.fill(x + width, y, x + width + thickness, y + height, color);
     }
 }

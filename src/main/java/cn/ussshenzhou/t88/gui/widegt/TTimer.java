@@ -2,7 +2,7 @@ package cn.ussshenzhou.t88.gui.widegt;
 
 import cn.ussshenzhou.t88.gui.event.TimerCountdownReachEvent;
 import cn.ussshenzhou.t88.mixin.TextComponentAccessor;
-import com.mojang.blaze3d.vertex.PoseStack;
+import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.contents.LiteralContents;
 import net.minecraftforge.common.MinecraftForge;
@@ -128,7 +128,7 @@ public class TTimer extends TLabel {
     }
 
     @Override
-    public void render(PoseStack pPoseStack, int pMouseX, int pMouseY, float pPartialTick) {
+    public void render(GuiGraphics guigraphics, int pMouseX, int pMouseY, float pPartialTick) {
         if (countdown) {
             if (startMs == 0 && pausedMs == 0) {
                 time = countDownSec * 1000L;
@@ -152,7 +152,7 @@ public class TTimer extends TLabel {
             );
         } catch (StringIndexOutOfBoundsException ignored) {
         }
-        super.render(pPoseStack, pMouseX, pMouseY, pPartialTick);
+        super.render(guigraphics, pMouseX, pMouseY, pPartialTick);
     }
 
     public void start() {

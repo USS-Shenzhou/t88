@@ -4,7 +4,6 @@ import cn.ussshenzhou.t88.gui.event.GameRendererRenderedEvent;
 import cn.ussshenzhou.t88.gui.event.ResizeHudEvent;
 import cn.ussshenzhou.t88.gui.util.MouseHelper;
 import cn.ussshenzhou.t88.gui.widegt.TComponent;
-import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraft.client.Minecraft;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.client.event.RenderGuiEvent;
@@ -41,26 +40,26 @@ public class HudManager {
 
     @SubscribeEvent
     public static void onRenderHud(RenderGuiEvent.Post event) {
-        PoseStack poseStack = event.getPoseStack();
+        var graphics = event.getGuiGraphics();
         int mouseX = (int) MouseHelper.getMouseX();
         int mouseY = (int) MouseHelper.getMouseY();
         float partialTick = event.getPartialTick();
         CHILDREN.forEach((tComponent) -> {
             if (tComponent.isVisibleT()) {
-                tComponent.render(poseStack, mouseX, mouseY, partialTick);
+                tComponent.render(graphics, mouseX, mouseY, partialTick);
             }
         });
     }
 
     @SubscribeEvent
     public static void renderHudAfterScreen(GameRendererRenderedEvent event) {
-        PoseStack poseStack = event.getPoseStack();
+        var graphics = event.getGraphics();
         int mouseX = (int) MouseHelper.getMouseX();
         int mouseY = (int) MouseHelper.getMouseY();
         float partialTick = event.getPartialTick();
         CHILDREN.forEach((tComponent) -> {
             if (tComponent.isVisibleT()) {
-                tComponent.renderTop(poseStack, mouseX, mouseY, partialTick);
+                tComponent.renderTop(graphics, mouseX, mouseY, partialTick);
             }
         });
     }

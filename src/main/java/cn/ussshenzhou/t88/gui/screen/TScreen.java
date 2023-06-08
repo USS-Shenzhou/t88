@@ -1,14 +1,16 @@
 package cn.ussshenzhou.t88.gui.screen;
 
+import cn.ussshenzhou.t88.gui.event.ClearEditBoxFocusEvent;
 import cn.ussshenzhou.t88.gui.widegt.TComponent;
 import cn.ussshenzhou.t88.gui.widegt.TWidget;
 import com.mojang.blaze3d.systems.RenderSystem;
-import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.Renderable;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.network.chat.Component;
 import net.minecraftforge.client.ForgeHooksClient;
+import net.minecraftforge.common.MinecraftForge;
 
 import java.util.LinkedList;
 
@@ -43,21 +45,21 @@ public abstract class TScreen extends Screen {
     }
 
     @Override
-    public void render(PoseStack pPoseStack, int pMouseX, int pMouseY, float pPartialTick) {
+    public void render(GuiGraphics graphics, int pMouseX, int pMouseY, float pPartialTick) {
         RenderSystem.setShaderColor(1, 1, 1, 1);
         RenderSystem.enableBlend();
         RenderSystem.defaultBlendFunc();
         RenderSystem.enableDepthTest();
-        renderBackGround(pPoseStack, pMouseX, pMouseY, pPartialTick);
+        renderBackGround(graphics, pMouseX, pMouseY, pPartialTick);
         LinkedList<Renderable> renderTop = new LinkedList<>();
         for (TWidget w : this.tChildren) {
             if (w.isVisibleT()) {
-                w.render(pPoseStack, pMouseX, pMouseY, pPartialTick);
+                w.render(graphics, pMouseX, pMouseY, pPartialTick);
             }
         }
         for (TWidget w : this.tChildren) {
             if (w.isVisibleT()) {
-                w.renderTop(pPoseStack, pMouseX, pMouseY, pPartialTick);
+                w.renderTop(graphics, pMouseX, pMouseY, pPartialTick);
             }
         }
     }
@@ -81,12 +83,13 @@ public abstract class TScreen extends Screen {
         }
     }
 
-    protected void renderBackGround(PoseStack pPoseStack, int pMouseX, int pMouseY, float pPartialTick) {
-        renderBackground(pPoseStack);
+    protected void renderBackGround(GuiGraphics graphics, int pMouseX, int pMouseY, float pPartialTick) {
+        renderBackground(graphics);
     }
 
     @Override
     public boolean mouseClicked(double pMouseX, double pMouseY, int pButton) {
+        MinecraftForge.EVENT_BUS.post(new ClearEditBoxFocusEvent());
         for (TWidget tWidget : tChildren) {
             if (!tWidget.isVisibleT()) {
                 continue;

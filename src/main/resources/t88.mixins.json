@@ -12,7 +12,7 @@
     "AbstractWidgetMixin",
     "EditBoxAccessor",
     "GameRendererMixin",
-    "GuiComponentMixin",
+    "GuiGraphicsMixin",
     "MinecraftMixin",
     "SliderButtonAccessor"
   ],

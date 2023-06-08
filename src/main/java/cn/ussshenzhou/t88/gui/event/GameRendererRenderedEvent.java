@@ -1,6 +1,6 @@
 package cn.ussshenzhou.t88.gui.event;
 
-import com.mojang.blaze3d.vertex.PoseStack;
+import net.minecraft.client.gui.GuiGraphics;
 import net.minecraftforge.eventbus.api.Event;
 
 /**
@@ -8,18 +8,18 @@ import net.minecraftforge.eventbus.api.Event;
  */
 public class GameRendererRenderedEvent extends Event {
     private final float partialTick;
-    private final PoseStack poseStack;
+    private final GuiGraphics graphics;
 
-    public GameRendererRenderedEvent(float partialTick, PoseStack poseStack) {
+    public GameRendererRenderedEvent(float partialTick, GuiGraphics graphics) {
         this.partialTick = partialTick;
-        this.poseStack = poseStack;
+        this.graphics = graphics;
     }
 
     public float getPartialTick() {
         return partialTick;
     }
 
-    public PoseStack getPoseStack() {
-        return poseStack;
+    public GuiGraphics getGraphics() {
+        return graphics;
     }
 }

@@ -2,6 +2,7 @@ package cn.ussshenzhou.t88.gui.widegt;
 
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.*;
+import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.renderer.GameRenderer;
 import net.minecraft.util.Mth;
 
@@ -12,7 +13,7 @@ public class TScrollPanel extends TPanel {
     protected double scrollAmount = 0;
     protected double prevScrollAmount = 0;
     protected int bottomY = 0;
-    protected static int speedFactor = 6;
+    protected static int speedFactor = 12;
     protected int scrollbarGap = 0;
 
     public TScrollPanel() {
@@ -44,46 +45,46 @@ public class TScrollPanel extends TPanel {
     }
 
     @Override
-    public void render(PoseStack pPoseStack, int pMouseX, int pMouseY, float pPartialTick) {
+    public void render(GuiGraphics guigraphics, int pMouseX, int pMouseY, float pPartialTick) {
         renderScrollBar();
-        super.render(pPoseStack, pMouseX, pMouseY, pPartialTick);
+        super.render(guigraphics, pMouseX, pMouseY, pPartialTick);
     }
 
     @Override
-    protected void renderChildren(PoseStack pPoseStack, int pMouseX, int pMouseY, float pPartialTick) {
-        prepareRender(pPoseStack, pPartialTick);
-        super.renderChildren(pPoseStack, pMouseX, pMouseY, pPartialTick);
-        pPoseStack.popPose();
-        disableScissor();
+    protected void renderChildren(GuiGraphics guigraphics, int pMouseX, int pMouseY, float pPartialTick) {
+        prepareRender(guigraphics, pPartialTick);
+        super.renderChildren(guigraphics, pMouseX, pMouseY, pPartialTick);
+        guigraphics.pose().popPose();
+        guigraphics.disableScissor();
     }
 
     @Override
-    public void renderTop(PoseStack pPoseStack, int pMouseX, int pMouseY, float pPartialTick) {
-        prepareRender(pPoseStack, pPartialTick);
-        super.renderTop(pPoseStack, pMouseX, pMouseY, pPartialTick);
-        pPoseStack.popPose();
-        disableScissor();
+    public void renderTop(GuiGraphics guigraphics, int pMouseX, int pMouseY, float pPartialTick) {
+        prepareRender(guigraphics, pPartialTick);
+        super.renderTop(guigraphics, pMouseX, pMouseY, pPartialTick);
+        guigraphics.pose().popPose();
+        guigraphics.disableScissor();
     }
 
-    protected void prepareRender(PoseStack pPoseStack, float pPartialTick) {
-        enableScissor(this.x, (int) (this.y - this.getParentScrollAmountIfExist()), this.x+width, (int) (this.y+height - this.getParentScrollAmountIfExist()));
-        pPoseStack.pushPose();
-        pPoseStack.translate(0, Mth.lerp(pPartialTick, -prevScrollAmount, -scrollAmount), 0);
+    protected void prepareRender(GuiGraphics guigraphics, float pPartialTick) {
+        guigraphics.enableScissor(this.x, (int) (this.y - this.getParentScrollAmountIfExist()), this.x + width, (int) (this.y + height - this.getParentScrollAmountIfExist()));
+        guigraphics.pose().pushPose();
+        guigraphics.pose().translate(0, Mth.lerp(pPartialTick, -prevScrollAmount, -scrollAmount), 0);
     }
 
     @Override
-    protected void renderBackground(PoseStack pPoseStack, int pMouseX, int pMouseY, float pPartialTick) {
+    protected void renderBackground(GuiGraphics guigraphics, int pMouseX, int pMouseY, float pPartialTick) {
         if (getMaxScroll() > 0) {
-            fill(pPoseStack, x, y, x + width - getScrollbarGap() - 6, y + height, background);
+            guigraphics.fill(x, y, x + width - getScrollbarGap() - 6, y + height, background);
         } else {
-            fill(pPoseStack, x, y, x + width, y + height, background);
+            guigraphics.fill(x, y, x + width, y + height, background);
         }
     }
 
     /**
      * modified from
      *
-     * @see net.minecraft.client.gui.components.AbstractSelectionList#render(PoseStack, int, int, float)
+     * @see net.minecraft.client.gui.components.AbstractSelectionList#render(GuiGraphics, int, int, float)
      */
     protected void renderScrollBar() {
         int k1 = this.getMaxScroll();

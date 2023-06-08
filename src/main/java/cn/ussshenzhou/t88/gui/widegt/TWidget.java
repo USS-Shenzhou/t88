@@ -2,9 +2,10 @@ package cn.ussshenzhou.t88.gui.widegt;
 
 import cn.ussshenzhou.t88.gui.screen.TScreen;
 import cn.ussshenzhou.t88.gui.util.Vec2i;
-import com.mojang.blaze3d.vertex.PoseStack;
+import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.Renderable;
 import net.minecraft.client.gui.components.events.GuiEventListener;
+import net.minecraft.resources.ResourceLocation;
 
 import javax.annotation.Nullable;
 
@@ -14,6 +15,7 @@ import javax.annotation.Nullable;
  */
 @SuppressWarnings("AlibabaAbstractMethodOrInterfaceMethodMustUseJavadoc")
 public interface TWidget extends Renderable, GuiEventListener {
+    public static final ResourceLocation BACKGROUND_LOCATION = new ResourceLocation("textures/gui/options_background.png");
 
     boolean isVisibleT();
 
@@ -53,7 +55,7 @@ public interface TWidget extends Renderable, GuiEventListener {
 
     void tickT();
 
-    default void renderTop(PoseStack pPoseStack, int pMouseX, int pMouseY, float pPartialTick) {
+    default void renderTop(GuiGraphics graphics, int pMouseX, int pMouseY, float pPartialTick) {
     }
 
     default boolean isInRange(double pMouseX, double pMouseY) {
