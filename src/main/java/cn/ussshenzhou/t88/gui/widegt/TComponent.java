@@ -3,7 +3,11 @@ package cn.ussshenzhou.t88.gui.widegt;
 import cn.ussshenzhou.t88.gui.screen.TScreen;
 import cn.ussshenzhou.t88.gui.util.Border;
 import cn.ussshenzhou.t88.gui.util.Vec2i;
+import com.mojang.blaze3d.systems.RenderSystem;
+import com.mojang.blaze3d.vertex.*;
 import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.renderer.GameRenderer;
+import org.joml.Matrix4f;
 
 import javax.annotation.Nullable;
 import java.util.Collection;
@@ -335,5 +339,26 @@ public abstract class TComponent implements TWidget {
     @Override
     public boolean isFocused() {
         return false;
+    }
+
+    public static void blitById(GuiGraphics graphics, int id, int x, int y, int width, int height, float uOffset, float vOffset, int uWidth, int vHeight, int textureWidth, int textureHeight) {
+        blitById(graphics, id, x, x + width, y, y + height, 0, uWidth, vHeight, uOffset, vOffset, textureWidth, textureHeight);
+    }
+
+    public static void blitById(GuiGraphics graphics, int id, int x0, int x1, int y0, int y1, int z, int uWidth, int vHeight, float uOffset, float vOffset, int textureWidth, int textureHeight) {
+        innerBlitById(graphics, id, x0, x1, y0, y1, z, (uOffset + 0.0F) / (float) textureWidth, (uOffset + (float) uWidth) / (float) textureWidth, (vOffset + 0.0F) / (float) textureHeight, (vOffset + (float) vHeight) / (float) textureHeight);
+    }
+
+    public static void innerBlitById(GuiGraphics graphics, int id, int x0, int x1, int y0, int y1, int z, float minU, float maxU, float minV, float maxV) {
+        RenderSystem.setShaderTexture(0, id);
+        RenderSystem.setShader(GameRenderer::getPositionTexShader);
+        Matrix4f matrix4f = graphics.pose().last().pose();
+        BufferBuilder bufferbuilder = Tesselator.getInstance().getBuilder();
+        bufferbuilder.begin(VertexFormat.Mode.QUADS, DefaultVertexFormat.POSITION_TEX);
+        bufferbuilder.vertex(matrix4f, (float) x0, (float) y0, (float) z).uv(minU, minV).endVertex();
+        bufferbuilder.vertex(matrix4f, (float) x0, (float) y1, (float) z).uv(minU, maxV).endVertex();
+        bufferbuilder.vertex(matrix4f, (float) x1, (float) y1, (float) z).uv(maxU, maxV).endVertex();
+        bufferbuilder.vertex(matrix4f, (float) x1, (float) y0, (float) z).uv(maxU, minV).endVertex();
+        BufferUploader.drawWithShader(bufferbuilder.end());
     }
 }
