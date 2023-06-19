@@ -91,6 +91,7 @@ public abstract class TComponent implements TWidget {
     protected void renderChildren(GuiGraphics graphics, int pMouseX, int pMouseY, float pPartialTick) {
         for (TWidget tWidget : children) {
             if (tWidget.isVisibleT()) {
+                graphics.pose().translate(0, 0, 0.1);
                 tWidget.render(graphics, pMouseX, pMouseY, pPartialTick);
             }
         }
@@ -100,6 +101,7 @@ public abstract class TComponent implements TWidget {
     public void renderTop(GuiGraphics graphics, int pMouseX, int pMouseY, float pPartialTick) {
         for (TWidget w : children) {
             if (w.isVisibleT()) {
+                graphics.pose().translate(0, 0, 0.1);
                 w.renderTop(graphics, pMouseX, pMouseY, pPartialTick);
             }
         }

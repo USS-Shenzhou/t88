@@ -54,11 +54,13 @@ public abstract class TScreen extends Screen {
         LinkedList<Renderable> renderTop = new LinkedList<>();
         for (TWidget w : this.tChildren) {
             if (w.isVisibleT()) {
+                graphics.pose().translate(0, 0, 0.1);
                 w.render(graphics, pMouseX, pMouseY, pPartialTick);
             }
         }
         for (TWidget w : this.tChildren) {
             if (w.isVisibleT()) {
+                graphics.pose().translate(0, 0, 0.1);
                 w.renderTop(graphics, pMouseX, pMouseY, pPartialTick);
             }
         }

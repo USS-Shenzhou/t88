@@ -5,6 +5,8 @@ import cn.ussshenzhou.t88.gui.util.Border;
 import cn.ussshenzhou.t88.gui.util.HorizontalAlignment;
 import cn.ussshenzhou.t88.gui.util.LayoutHelper;
 import cn.ussshenzhou.t88.gui.widegt.*;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.Font;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.network.chat.Component;
 
@@ -19,7 +21,7 @@ public class TestScreen extends TScreen {
     private TLabel linesTest = new TLabel(Component.literal("§6Test1 \nTest223456\n...")) {
         @Override
         public void render(GuiGraphics guigraphics, int pMouseX, int pMouseY, float pPartialTick) {
-
+            //super.render(guigraphics, pMouseX, pMouseY, pPartialTick);
         }
 
         @Override
@@ -42,6 +44,7 @@ public class TestScreen extends TScreen {
             super.layout();
         }
     };
+    private TPanel cover = new TPanel();
 
     public TestScreen() {
         super(Component.empty());
@@ -98,15 +101,19 @@ public class TestScreen extends TScreen {
         scrollPanel.add(editBox);
         scrollPanel.add(editBox2);
         scrollPanel.add(selectList);
+        this.add(cover);
+        cover.setBorder(new Border(0xffff0000, 1));
+        cover.setBackground(0x88aaaaaa);
     }
 
     @Override
     public void layout() {
         title.setBounds(0, 0, title.getPreferredSize().x, title.getPreferredSize().y);
         linesTest.setBounds(50, 50, 80, 40);
+        cover.setBounds(25, 25, 260, 180);
         tTimer.setBounds(50, 100, 80, 20);
         LayoutHelper.BBottomOfA(slider, 10, tTimer);
-        scrollPanel.setBounds(210,20,200,100);
+        scrollPanel.setBounds(210, 20, 200, 100);
         super.layout();
     }
 
@@ -119,5 +126,12 @@ public class TestScreen extends TScreen {
     public void onClose(boolean isFinal) {
         super.onClose(isFinal);
         HudManager.remove(linesTest);
+    }
+
+    @Override
+    public void render(GuiGraphics graphics, int pMouseX, int pMouseY, float pPartialTick) {
+        //graphics.drawString(Minecraft.getInstance().font, "ABCDE", 30, 30, 0xff000000);
+        Minecraft.getInstance().font.drawInBatch("ABCDE",30, 30, 0xffff0000,false,graphics.pose().last().pose(),graphics.bufferSource(), Font.DisplayMode.NORMAL,0, 15728880);
+        super.render(graphics, pMouseX, pMouseY, pPartialTick);
     }
 }

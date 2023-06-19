@@ -46,6 +46,7 @@ public class HudManager {
         float partialTick = event.getPartialTick();
         CHILDREN.forEach((tComponent) -> {
             if (tComponent.isVisibleT()) {
+                graphics.pose().translate(0, 0, 0.1);
                 tComponent.render(graphics, mouseX, mouseY, partialTick);
             }
         });
@@ -57,11 +58,14 @@ public class HudManager {
         int mouseX = (int) MouseHelper.getMouseX();
         int mouseY = (int) MouseHelper.getMouseY();
         float partialTick = event.getPartialTick();
+        graphics.pose().translate(0, 0, 1000);
         CHILDREN.forEach((tComponent) -> {
             if (tComponent.isVisibleT()) {
+                graphics.pose().translate(0, 0, 0.1);
                 tComponent.renderTop(graphics, mouseX, mouseY, partialTick);
             }
         });
+        graphics.pose().translate(0, 0, -1000);
     }
 
     @SubscribeEvent

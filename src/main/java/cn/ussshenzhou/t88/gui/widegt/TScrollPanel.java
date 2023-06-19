@@ -54,22 +54,24 @@ public class TScrollPanel extends TPanel {
     protected void renderChildren(GuiGraphics guigraphics, int pMouseX, int pMouseY, float pPartialTick) {
         prepareRender(guigraphics, pPartialTick);
         super.renderChildren(guigraphics, pMouseX, pMouseY, pPartialTick);
-        guigraphics.pose().popPose();
-        guigraphics.disableScissor();
+        endRender(guigraphics, pPartialTick);
     }
 
     @Override
     public void renderTop(GuiGraphics guigraphics, int pMouseX, int pMouseY, float pPartialTick) {
         prepareRender(guigraphics, pPartialTick);
         super.renderTop(guigraphics, pMouseX, pMouseY, pPartialTick);
-        guigraphics.pose().popPose();
-        guigraphics.disableScissor();
+        endRender(guigraphics, pPartialTick);
     }
 
     protected void prepareRender(GuiGraphics guigraphics, float pPartialTick) {
         guigraphics.enableScissor(this.x, (int) (this.y - this.getParentScrollAmountIfExist()), this.x + width, (int) (this.y + height - this.getParentScrollAmountIfExist()));
-        guigraphics.pose().pushPose();
         guigraphics.pose().translate(0, Mth.lerp(pPartialTick, -prevScrollAmount, -scrollAmount), 0);
+    }
+
+    protected void endRender(GuiGraphics guigraphics, float pPartialTick) {
+        guigraphics.pose().translate(0, -Mth.lerp(pPartialTick, -prevScrollAmount, -scrollAmount), 0);
+        guigraphics.disableScissor();
     }
 
     @Override
