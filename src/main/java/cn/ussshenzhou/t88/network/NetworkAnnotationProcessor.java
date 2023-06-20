@@ -75,7 +75,7 @@ public class NetworkAnnotationProcessor extends AbstractProcessor {
                                             );
                                 """,
                         sourceClassName,
-                        NetworkHelper.classNameToResLocName(sourceClassName) + "_t88_generated",
+                        netPacket.modid() + ":" + NetworkHelper.classNameToResLocName(sourceClassName) + "_t88_generated",
                         netPacket.version()
                 ));
                 String encoderMethod = null;
