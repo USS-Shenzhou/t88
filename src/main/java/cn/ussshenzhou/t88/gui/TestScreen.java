@@ -8,6 +8,7 @@ import cn.ussshenzhou.t88.gui.widegt.*;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Font;
 import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.gui.components.Tooltip;
 import net.minecraft.network.chat.Component;
 
 import java.util.concurrent.CompletableFuture;
@@ -104,6 +105,7 @@ public class TestScreen extends TScreen {
         this.add(cover);
         cover.setBorder(new Border(0xffff0000, 1));
         cover.setBackground(0x88aaaaaa);
+        editBox2.setTooltip(Tooltip.create(Component.literal("ABCDEFG")));
     }
 
     @Override

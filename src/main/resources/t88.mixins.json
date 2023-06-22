@@ -10,11 +10,9 @@
   "client": [
     "AbstractSelectionListAccessor",
     "AbstractWidgetMixin",
-    "BelowOrAboveWidgetTooltipPositionerMixin",
     "EditBoxAccessor",
     "GameRendererMixin",
     "GuiGraphicsMixin",
-    "MenuTooltipPositionerMixin",
     "MinecraftMixin",
     "SliderButtonAccessor"
   ],
