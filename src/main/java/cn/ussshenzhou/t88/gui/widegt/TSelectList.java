@@ -86,7 +86,7 @@ public class TSelectList<E> extends ObjectSelectionList<TSelectList<E>.Entry> im
                         this.setSelected(i + 1);
                     }
                 } else {
-                    if (i == 0) {
+                    if (i <= 0) {
                         this.setSelected(this.children().size() - 1);
                     } else {
                         this.setSelected(i - 1);
@@ -154,6 +154,7 @@ public class TSelectList<E> extends ObjectSelectionList<TSelectList<E>.Entry> im
     }
 
     public void setSelected(int index) {
+        int i = Mth.clamp(index, 0, this.children().size() - 1);
         this.setSelected(this.getEntry(index));
     }
 
