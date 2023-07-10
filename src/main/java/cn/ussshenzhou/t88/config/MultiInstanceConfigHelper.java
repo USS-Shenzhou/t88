@@ -105,7 +105,7 @@ public class MultiInstanceConfigHelper {
         configFile.delete();
     }
 
-    private static <T extends TMultiInstanceConfig> void saveConfig(T config) {
+    public static <T extends TMultiInstanceConfig> void saveConfig(T config) {
         File configFile = checkChildDir(config).toPath().resolve(config.getFileName() + ".json").toFile();
         try {
             FileUtils.write(configFile, GSON.toJson(config), StandardCharsets.UTF_8);

@@ -53,7 +53,7 @@ public class ConfigHelper {
         saveConfig(config);
     }
 
-    private static <T extends TConfig> void saveConfig(T config) {
+    public static <T extends TConfig> void saveConfig(T config) {
         File configFile = checkFile(config, false);
         saveConfigInternal(config, configFile);
     }
@@ -93,7 +93,7 @@ public class ConfigHelper {
             Universal.saveConfig(config);
         }
 
-        private static <T extends TConfig> void saveConfig(T config) {
+        public static <T extends TConfig> void saveConfig(T config) {
             File configFile = checkFile(config, true);
             saveConfigInternal(config, configFile);
         }
