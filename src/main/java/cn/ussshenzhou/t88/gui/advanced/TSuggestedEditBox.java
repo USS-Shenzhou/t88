@@ -38,7 +38,7 @@ public class TSuggestedEditBox extends TPanel {
             this.updateSuggestion(s);
             //editBox.check(s);
         });
-        suggestionList = new TSelectList<>(12, 0){
+        suggestionList = new TSelectList<>(12, 0) {
             @Override
             public boolean isFocused() {
                 return super.isFocused() || editBox.isFocused();
@@ -112,7 +112,7 @@ public class TSuggestedEditBox extends TPanel {
                 if (y <= Minecraft.getInstance().screen.height / 2) {
                     listY = y + height + 1;
                 } else {
-                    listY = y - 1;
+                    listY = Math.max(0, y - texts.size() * suggestionList.getItemHeight() - 4 - 1);
                 }
                 int width = Minecraft.getInstance().font.width(l) + TSelectList.SCROLLBAR_WIDTH + 2;
                 suggestionList.setAbsBounds(
