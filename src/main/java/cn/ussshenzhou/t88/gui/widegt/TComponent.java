@@ -22,14 +22,14 @@ public abstract class TComponent implements TWidget {
     protected int relativeX, relativeY;
     boolean visible = true;
     //argb
-    int background = 0x00000000;
-    int foreground = 0xffffffff;
+    protected int background = 0x00000000;
+    protected int foreground = 0xffffffff;
     protected LinkedList<TWidget> children = new LinkedList<>();
     protected Border border = null;
     TComponent parent = null;
     TScreen parentScreen = null;
     final int id = (int) (Math.random() * Integer.MAX_VALUE);
-    private boolean showHudEvenLoggedOut = false;
+    protected boolean showHudEvenLoggedOut = false;
 
     @Override
     public void setBounds(int x, int y, int width, int height) {

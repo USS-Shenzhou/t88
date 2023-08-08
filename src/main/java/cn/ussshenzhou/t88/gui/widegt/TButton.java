@@ -35,16 +35,6 @@ public class TButton extends Button implements TWidget {
         this.onPress = onPress;
     }
 
-    /*@Override
-    public void render(GuiGraphics guigraphics, int pMouseX, int pMouseY, float pPartialTick) {
-        if (this.visible) {
-            //modified for compatibility with TScrollPanel
-            double y = getParentScrollAmountIfExist() + pMouseY;
-            this.isHovered = pMouseX >= this.x && y >= this.y && pMouseX < this.x + this.width && y < this.y + this.height;
-            this.renderWidget(pPoseStack, pMouseX, pMouseY, pPartialTick);
-        }
-    }*/
-
     @Override
     public boolean mouseDragged(double pMouseX, double pMouseY, int pButton, double pDragX, double pDragY) {
         if (isInRange(pMouseX, pMouseY)) {

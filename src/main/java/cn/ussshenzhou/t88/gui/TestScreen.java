@@ -1,5 +1,6 @@
 package cn.ussshenzhou.t88.gui;
 
+import cn.ussshenzhou.t88.gui.container.TScrollContainer;
 import cn.ussshenzhou.t88.gui.screen.TScreen;
 import cn.ussshenzhou.t88.gui.util.Border;
 import cn.ussshenzhou.t88.gui.util.HorizontalAlignment;
@@ -36,7 +37,7 @@ public class TestScreen extends TScreen {
     private TSelectList<String> selectList = new TSelectList<>();
     private TEditBox editBox = new TEditBox();
     private TEditBox editBox2 = new TEditBox();
-    private TScrollPanel scrollPanel = new TScrollPanel() {
+    private TScrollContainer scrollPanel = new TScrollContainer() {
         @Override
         public void layout() {
             editBox.setBounds(10, 10, 50, 20);

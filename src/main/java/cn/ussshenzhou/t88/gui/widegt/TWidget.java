@@ -1,5 +1,6 @@
 package cn.ussshenzhou.t88.gui.widegt;
 
+import cn.ussshenzhou.t88.gui.container.TScrollContainer;
 import cn.ussshenzhou.t88.gui.screen.TScreen;
 import cn.ussshenzhou.t88.gui.util.Vec2i;
 import net.minecraft.client.gui.GuiGraphics;
@@ -84,9 +85,9 @@ public interface TWidget extends Renderable, GuiEventListener {
     }
 
     default double getParentScrollAmountIfExist() {
-        TScrollPanel tScrollPanel = this.getParentInstanceOf(TScrollPanel.class);
-        if (tScrollPanel != null) {
-            return tScrollPanel.getScrollAmount();
+        TScrollContainer tScrollContainer = this.getParentInstanceOf(TScrollContainer.class);
+        if (tScrollContainer != null) {
+            return tScrollContainer.getScrollAmount();
         }
         return 0;
     }
