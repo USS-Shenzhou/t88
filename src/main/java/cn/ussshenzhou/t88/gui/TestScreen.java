@@ -53,7 +53,7 @@ public class TestScreen extends TScreen {
         this.add(title);
         title.setFontSize(20);
 
-        linesTest.setBorder(new Border(0xff00ff00, 1));
+        linesTest.setBorder(new Border(0xff00ff00, -4));
         linesTest.setHorizontalAlignment(HorizontalAlignment.CENTER);
         //this.add(linesTest);
         HudManager.add(linesTest);

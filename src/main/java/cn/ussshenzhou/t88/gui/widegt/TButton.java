@@ -4,6 +4,7 @@ import cn.ussshenzhou.t88.gui.screen.TScreen;
 import cn.ussshenzhou.t88.gui.util.MouseHelper;
 import cn.ussshenzhou.t88.gui.util.VanillaWidget2TComponentHelper;
 import cn.ussshenzhou.t88.gui.util.Vec2i;
+import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.Button;
 import net.minecraft.network.chat.Component;
 import org.jetbrains.annotations.Nullable;
@@ -17,6 +18,7 @@ public class TButton extends Button implements TWidget {
     TComponent parent = null;
     TScreen parentScreen = null;
     protected OnPress onPress;
+    protected boolean skipRenderAsBackend = false;
 
     public TButton(Component pMessage) {
         super(0, 0, 0, 0, pMessage, button -> {
@@ -29,6 +31,21 @@ public class TButton extends Button implements TWidget {
         super(0, 0, 0, 0, pMessage, button -> {
         },DEFAULT_NARRATION);
         this.onPress = pOnPress;
+    }
+
+    @Override
+    public void render(GuiGraphics p_282421_, int p_93658_, int p_93659_, float p_93660_) {
+        if (!skipRenderAsBackend){
+            super.render(p_282421_, p_93658_, p_93659_, p_93660_);
+        }
+    }
+
+    public boolean isSkipRenderAsBackend() {
+        return skipRenderAsBackend;
+    }
+
+    public void setSkipRenderAsBackend(boolean skipRenderAsBackend) {
+        this.skipRenderAsBackend = skipRenderAsBackend;
     }
 
     public void setOnPress(OnPress onPress) {

@@ -20,7 +20,7 @@ import java.util.stream.Stream;
 public abstract class TComponent implements TWidget {
     protected int x, y, width, height;
     protected int relativeX, relativeY;
-    boolean visible = true;
+    protected boolean visible = true;
     //argb
     protected int background = 0x00000000;
     protected int foreground = 0xffffffff;
