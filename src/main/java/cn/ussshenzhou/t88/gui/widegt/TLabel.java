@@ -82,6 +82,10 @@ public class TLabel extends TPanel {
     @Override
     public void render(GuiGraphics guigraphics, int pMouseX, int pMouseY, float pPartialTick) {
         super.render(guigraphics, pMouseX, pMouseY, pPartialTick);
+        renderText(guigraphics, pMouseX, pMouseY, pPartialTick);
+    }
+
+    protected void renderText(GuiGraphics guigraphics, int pMouseX, int pMouseY, float pPartialTick) {
         guigraphics.pose().pushPose();
         float scaleFactor = fontSize / 7f;
         guigraphics.pose().scale(scaleFactor, scaleFactor, 1);

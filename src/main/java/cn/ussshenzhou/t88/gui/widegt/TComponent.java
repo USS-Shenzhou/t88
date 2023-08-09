@@ -258,7 +258,7 @@ public abstract class TComponent implements TWidget {
         children.remove(tWidget);
     }
 
-    public void setBorder(Border border) {
+    public void setBorder(@Nullable Border border) {
         this.border = border;
     }
 

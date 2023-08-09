@@ -11,14 +11,16 @@ public class Vec2i {
         this.y = y;
     }
 
-    public void add(Vec2i vec2i) {
+    public Vec2i add(Vec2i vec2i) {
         x += vec2i.x;
         y += vec2i.y;
+        return this;
     }
 
-    public void add(int x, int y) {
+    public Vec2i add(int x, int y) {
         this.x += x;
         this.y += y;
+        return this;
     }
 
     public Vec2i copy() {

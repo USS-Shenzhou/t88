@@ -2,6 +2,7 @@ package cn.ussshenzhou.t88.gui.advanced;
 
 import cn.ussshenzhou.t88.gui.util.Border;
 import cn.ussshenzhou.t88.gui.util.HorizontalAlignment;
+import cn.ussshenzhou.t88.gui.util.Vec2i;
 import cn.ussshenzhou.t88.gui.widegt.TButton;
 import cn.ussshenzhou.t88.gui.widegt.TLabel;
 import net.minecraft.client.gui.components.Button;
@@ -14,6 +15,11 @@ public class TLabelButton extends TLabel {
     protected TButton button;
     int normalBackGround = 0x00000000;
     int hoverBackGround = 0x7f_ffffff;
+
+    public TLabelButton(Component s) {
+        this(s, pButton -> {
+        });
+    }
 
     public TLabelButton(Component s, Button.OnPress onPress) {
         super(s);
