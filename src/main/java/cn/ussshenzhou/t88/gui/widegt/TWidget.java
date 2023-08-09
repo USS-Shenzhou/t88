@@ -2,7 +2,7 @@ package cn.ussshenzhou.t88.gui.widegt;
 
 import cn.ussshenzhou.t88.gui.container.TScrollContainer;
 import cn.ussshenzhou.t88.gui.screen.TScreen;
-import cn.ussshenzhou.t88.gui.util.Vec2i;
+import org.joml.Vector2i;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.Renderable;
 import net.minecraft.client.gui.components.events.GuiEventListener;
@@ -26,11 +26,11 @@ public interface TWidget extends Renderable, GuiEventListener {
 
     void setAbsBounds(int x, int y, int width, int height);
 
-    default void setBounds(int x, int y, Vec2i size) {
+    default void setBounds(int x, int y, Vector2i size) {
         setBounds(x, y, size.x, size.y);
     }
 
-    default void setAbsBounds(int x, int y, Vec2i size) {
+    default void setAbsBounds(int x, int y, Vector2i size) {
         setAbsBounds(x, y, size.x, size.y);
     }
 
@@ -50,9 +50,9 @@ public interface TWidget extends Renderable, GuiEventListener {
     @SuppressWarnings("AlibabaLowerCamelCaseVariableNaming")
     int getYT();
 
-    Vec2i getPreferredSize();
+    Vector2i getPreferredSize();
 
-    Vec2i getSize();
+    Vector2i getSize();
 
     void tickT();
 

@@ -1,7 +1,7 @@
 package cn.ussshenzhou.t88.gui.combine;
 
 import cn.ussshenzhou.t88.gui.advanced.TSimpleConstrainedEditBox;
-import cn.ussshenzhou.t88.gui.util.Vec2i;
+import org.joml.Vector2i;
 import com.mojang.brigadier.arguments.ArgumentType;
 import net.minecraft.network.chat.Component;
 
@@ -18,8 +18,8 @@ public class TTitledSimpleConstrainedEditBox extends TTitledComponent<TSimpleCon
     }
 
     @Override
-    public Vec2i getPreferredSize() {
-        return new Vec2i(
+    public Vector2i getPreferredSize() {
+        return new Vector2i(
                 widget.getPreferredSize().x,
                 title.getHeight() + widget.getPreferredSize().y
         );

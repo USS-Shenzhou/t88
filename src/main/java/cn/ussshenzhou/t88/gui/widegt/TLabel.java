@@ -1,7 +1,7 @@
 package cn.ussshenzhou.t88.gui.widegt;
 
 import cn.ussshenzhou.t88.gui.util.HorizontalAlignment;
-import cn.ussshenzhou.t88.gui.util.Vec2i;
+import org.joml.Vector2i;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Font;
 import net.minecraft.client.gui.GuiGraphics;
@@ -108,8 +108,8 @@ public class TLabel extends TPanel {
     }
 
     @Override
-    public Vec2i getPreferredSize() {
-        return new Vec2i(maxLineWidth, (int) ((fontSize + lineSpacing) * textLines.size()) + 1);
+    public Vector2i getPreferredSize() {
+        return new Vector2i(maxLineWidth, (int) ((fontSize + lineSpacing) * textLines.size()) + 1);
     }
 
 }

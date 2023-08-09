@@ -3,7 +3,7 @@ package cn.ussshenzhou.t88.gui.container;
 import cn.ussshenzhou.t88.gui.advanced.TLabelButton;
 import cn.ussshenzhou.t88.gui.util.Border;
 import cn.ussshenzhou.t88.gui.util.LayoutHelper;
-import cn.ussshenzhou.t88.gui.util.Vec2i;
+import org.joml.Vector2i;
 import cn.ussshenzhou.t88.gui.widegt.TPanel;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.network.chat.Component;
@@ -43,7 +43,7 @@ public class TTabPageContainer extends TPanel {
         }
 
         @Override
-        public Vec2i getPreferredSize() {
+        public Vector2i getPreferredSize() {
             return super.getPreferredSize().add(12, 0);
         }
     }

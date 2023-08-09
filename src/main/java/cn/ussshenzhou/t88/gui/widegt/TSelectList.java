@@ -3,7 +3,7 @@ package cn.ussshenzhou.t88.gui.widegt;
 import cn.ussshenzhou.t88.gui.screen.TScreen;
 import cn.ussshenzhou.t88.gui.util.AccessorProxy;
 import cn.ussshenzhou.t88.gui.util.HorizontalAlignment;
-import cn.ussshenzhou.t88.gui.util.Vec2i;
+import org.joml.Vector2i;
 import com.mojang.blaze3d.systems.RenderSystem;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Font;
@@ -319,13 +319,13 @@ public class TSelectList<E> extends ObjectSelectionList<TSelectList<E>.Entry> im
     }
 
     @Override
-    public Vec2i getPreferredSize() {
+    public Vector2i getPreferredSize() {
         return null;
     }
 
     @Override
-    public Vec2i getSize() {
-        return new Vec2i(width, height);
+    public Vector2i getSize() {
+        return new Vector2i(width, height);
     }
 
     public int getForeground() {

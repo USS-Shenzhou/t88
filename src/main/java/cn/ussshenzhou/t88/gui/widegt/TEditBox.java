@@ -5,7 +5,7 @@ import cn.ussshenzhou.t88.gui.event.TWidgetContentUpdatedEvent;
 import cn.ussshenzhou.t88.gui.screen.TScreen;
 import cn.ussshenzhou.t88.gui.util.AccessorProxy;
 import cn.ussshenzhou.t88.gui.util.VanillaWidget2TComponentHelper;
-import cn.ussshenzhou.t88.gui.util.Vec2i;
+import org.joml.Vector2i;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Font;
 import net.minecraft.client.gui.components.EditBox;
@@ -145,13 +145,13 @@ public class TEditBox extends EditBox implements TWidget, TResponder<String> {
     }
 
     @Override
-    public Vec2i getPreferredSize() {
-        return new Vec2i(this.width, 20);
+    public Vector2i getPreferredSize() {
+        return new Vector2i(this.width, 20);
     }
 
     @Override
-    public Vec2i getSize() {
-        return new Vec2i(width, height);
+    public Vector2i getSize() {
+        return new Vector2i(width, height);
     }
 
     @Override

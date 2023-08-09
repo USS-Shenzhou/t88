@@ -1,6 +1,6 @@
 package cn.ussshenzhou.t88.gui.combine;
 
-import cn.ussshenzhou.t88.gui.util.Vec2i;
+import org.joml.Vector2i;
 import cn.ussshenzhou.t88.gui.widegt.TButton;
 import cn.ussshenzhou.t88.gui.widegt.TCycleButton;
 import net.minecraft.network.chat.Component;
@@ -21,8 +21,8 @@ public class TTitledCycleButton<E> extends TTitledComponent<TCycleButton<E>> {
     }
 
     @Override
-    public Vec2i getPreferredSize() {
-        return new Vec2i(
+    public Vector2i getPreferredSize() {
+        return new Vector2i(
                 TButton.RECOMMEND_SIZE.x,
                 title.getHeight() + TButton.RECOMMEND_SIZE.y
         );

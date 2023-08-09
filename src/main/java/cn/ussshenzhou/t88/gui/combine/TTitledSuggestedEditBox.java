@@ -1,7 +1,7 @@
 package cn.ussshenzhou.t88.gui.combine;
 
 import cn.ussshenzhou.t88.gui.advanced.TSuggestedEditBox;
-import cn.ussshenzhou.t88.gui.util.Vec2i;
+import org.joml.Vector2i;
 import com.mojang.brigadier.CommandDispatcher;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.network.chat.Component;
@@ -25,8 +25,8 @@ public class TTitledSuggestedEditBox extends TTitledComponent<TSuggestedEditBox>
     }
 
     @Override
-    public Vec2i getPreferredSize() {
-        return new Vec2i(
+    public Vector2i getPreferredSize() {
+        return new Vector2i(
                 widget.getPreferredSize().x,
                 title.getHeight() + widget.getPreferredSize().y
         );

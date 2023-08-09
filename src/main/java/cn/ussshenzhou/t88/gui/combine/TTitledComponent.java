@@ -2,7 +2,7 @@ package cn.ussshenzhou.t88.gui.combine;
 
 import cn.ussshenzhou.t88.gui.util.HorizontalAlignment;
 import cn.ussshenzhou.t88.gui.util.LayoutHelper;
-import cn.ussshenzhou.t88.gui.util.Vec2i;
+import org.joml.Vector2i;
 import cn.ussshenzhou.t88.gui.widegt.TLabel;
 import cn.ussshenzhou.t88.gui.widegt.TPanel;
 import cn.ussshenzhou.t88.gui.widegt.TWidget;
@@ -39,8 +39,8 @@ public abstract class TTitledComponent<T extends TWidget> extends TPanel {
     }
 
     @Override
-    public Vec2i getPreferredSize() {
-        return new Vec2i(Math.max(title.getWidth(), widget.getSize().x),
+    public Vector2i getPreferredSize() {
+        return new Vector2i(Math.max(title.getWidth(), widget.getSize().x),
                 title.getHeight() + widget.getSize().y
         );
     }

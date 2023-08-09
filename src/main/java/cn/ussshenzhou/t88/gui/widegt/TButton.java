@@ -3,7 +3,7 @@ package cn.ussshenzhou.t88.gui.widegt;
 import cn.ussshenzhou.t88.gui.screen.TScreen;
 import cn.ussshenzhou.t88.gui.util.MouseHelper;
 import cn.ussshenzhou.t88.gui.util.VanillaWidget2TComponentHelper;
-import cn.ussshenzhou.t88.gui.util.Vec2i;
+import org.joml.Vector2i;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.Button;
 import net.minecraft.network.chat.Component;
@@ -13,7 +13,7 @@ import org.jetbrains.annotations.Nullable;
  * @author USS_Shenzhou
  */
 public class TButton extends Button implements TWidget {
-    public static final Vec2i RECOMMEND_SIZE = new Vec2i(52, 20);
+    public static final Vector2i RECOMMEND_SIZE = new Vector2i(52, 20);
     protected boolean visible = true;
     TComponent parent = null;
     TScreen parentScreen = null;
@@ -124,13 +124,13 @@ public class TButton extends Button implements TWidget {
     }
 
     @Override
-    public Vec2i getPreferredSize() {
+    public Vector2i getPreferredSize() {
         return RECOMMEND_SIZE;
     }
 
     @Override
-    public Vec2i getSize() {
-        return new Vec2i(width, height);
+    public Vector2i getSize() {
+        return new Vector2i(width, height);
     }
 
     @Override

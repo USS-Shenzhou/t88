@@ -2,7 +2,7 @@ package cn.ussshenzhou.t88.gui.advanced;
 
 import cn.ussshenzhou.t88.gui.util.Border;
 import cn.ussshenzhou.t88.gui.util.HorizontalAlignment;
-import cn.ussshenzhou.t88.gui.util.Vec2i;
+import org.joml.Vector2i;
 import cn.ussshenzhou.t88.gui.widegt.TButton;
 import cn.ussshenzhou.t88.gui.widegt.TLabel;
 import net.minecraft.client.gui.components.Button;
