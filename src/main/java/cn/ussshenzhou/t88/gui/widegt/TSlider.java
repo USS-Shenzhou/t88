@@ -114,12 +114,12 @@ public class TSlider extends OptionInstance.OptionInstanceSliderButton<Double> i
 
     public void setRelValueWithoutRespond(double relativeValue) {
         this.value = Mth.clamp(relativeValue, 0, 1);
-        this.updateMessage();
+        applyValue(false);
     }
 
     public void setAbsValueWithoutRespond(double absoluteValue) {
         this.value = absToRelValueLinear(absoluteValue);
-        this.updateMessage();
+        applyValue(false);
     }
 
     @Deprecated

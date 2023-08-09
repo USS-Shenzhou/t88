@@ -22,21 +22,21 @@ public class TButton extends Button implements TWidget {
 
     public TButton(Component pMessage) {
         super(0, 0, 0, 0, pMessage, button -> {
-        },DEFAULT_NARRATION);
+        }, DEFAULT_NARRATION);
         this.onPress = pButton -> {
         };
     }
 
     public TButton(Component pMessage, OnPress pOnPress) {
         super(0, 0, 0, 0, pMessage, button -> {
-        },DEFAULT_NARRATION);
+        }, DEFAULT_NARRATION);
         this.onPress = pOnPress;
     }
 
     @Override
-    public void render(GuiGraphics p_282421_, int p_93658_, int p_93659_, float p_93660_) {
-        if (!skipRenderAsBackend){
-            super.render(p_282421_, p_93658_, p_93659_, p_93660_);
+    public void renderWidget(GuiGraphics p_281670_, int p_282682_, int p_281714_, float p_282542_) {
+        if (!skipRenderAsBackend) {
+            super.renderWidget(p_281670_, p_282682_, p_281714_, p_282542_);
         }
     }
 

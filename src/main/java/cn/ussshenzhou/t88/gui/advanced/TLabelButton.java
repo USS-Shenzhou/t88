@@ -1,6 +1,7 @@
 package cn.ussshenzhou.t88.gui.advanced;
 
 import cn.ussshenzhou.t88.gui.util.Border;
+import cn.ussshenzhou.t88.gui.util.HorizontalAlignment;
 import cn.ussshenzhou.t88.gui.widegt.TButton;
 import cn.ussshenzhou.t88.gui.widegt.TLabel;
 import net.minecraft.client.gui.components.Button;
@@ -20,6 +21,7 @@ public class TLabelButton extends TLabel {
         button.setSkipRenderAsBackend(true);
         this.add(button);
         this.setBorder(new Border(0xffffffff, -1));
+        this.setHorizontalAlignment(HorizontalAlignment.CENTER);
     }
 
     public TLabelButton(Component s, Button.OnPress onPress, int normalBackGround, int hoverBackGround) {
@@ -44,12 +46,12 @@ public class TLabelButton extends TLabel {
 
     @Override
     public void tickT() {
-        super.tickT();
         if (button.isHoveredOrFocused()) {
             this.setBackground(hoverBackGround);
         } else {
             this.setBackground(normalBackGround);
         }
+        super.tickT();
     }
 
     public int getNormalBackGround() {

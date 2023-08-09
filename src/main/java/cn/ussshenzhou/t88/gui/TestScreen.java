@@ -1,5 +1,6 @@
 package cn.ussshenzhou.t88.gui;
 
+import cn.ussshenzhou.t88.gui.advanced.TLabelButton;
 import cn.ussshenzhou.t88.gui.container.TScrollContainer;
 import cn.ussshenzhou.t88.gui.screen.TScreen;
 import cn.ussshenzhou.t88.gui.util.Border;
@@ -47,6 +48,8 @@ public class TestScreen extends TScreen {
         }
     };
     private TPanel cover = new TPanel();
+    private TLabelButton labelButton = new TLabelButton(Component.literal("Label Button"), pButton -> {
+    });
 
     public TestScreen() {
         super(Component.empty());
@@ -107,6 +110,7 @@ public class TestScreen extends TScreen {
         cover.setBorder(new Border(0xffff0000, 1));
         cover.setBackground(0x88aaaaaa);
         editBox2.setTooltip(Tooltip.create(Component.literal("ABCDEFG")));
+        this.add(labelButton);
     }
 
     @Override
@@ -117,6 +121,7 @@ public class TestScreen extends TScreen {
         tTimer.setBounds(50, 100, 80, 20);
         LayoutHelper.BBottomOfA(slider, 10, tTimer);
         scrollPanel.setBounds(210, 20, 200, 100);
+        labelButton.setBounds(50,210,100,30);
         super.layout();
     }
 
@@ -134,7 +139,7 @@ public class TestScreen extends TScreen {
     @Override
     public void render(GuiGraphics graphics, int pMouseX, int pMouseY, float pPartialTick) {
         //graphics.drawString(Minecraft.getInstance().font, "ABCDE", 30, 30, 0xff000000);
-        Minecraft.getInstance().font.drawInBatch("ABCDE",30, 30, 0xffff0000,false,graphics.pose().last().pose(),graphics.bufferSource(), Font.DisplayMode.NORMAL,0, 15728880);
+        Minecraft.getInstance().font.drawInBatch("ABCDE", 30, 30, 0xffff0000, false, graphics.pose().last().pose(), graphics.bufferSource(), Font.DisplayMode.NORMAL, 0, 15728880);
         super.render(graphics, pMouseX, pMouseY, pPartialTick);
     }
 }
