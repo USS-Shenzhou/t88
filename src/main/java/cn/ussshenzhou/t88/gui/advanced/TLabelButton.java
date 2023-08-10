@@ -13,8 +13,8 @@ import net.minecraft.network.chat.Component;
  */
 public class TLabelButton extends TLabel {
     protected TButton button;
-    int normalBackGround = 0x00000000;
-    int hoverBackGround = 0x7f_ffffff;
+    protected int normalBackGround = 0x00000000;
+    protected int hoverBackGround = 0x7f_ffffff;
 
     public TLabelButton(Component s) {
         this(s, pButton -> {
@@ -74,5 +74,9 @@ public class TLabelButton extends TLabel {
 
     public void setHoverBackGround(int hoverBackGround) {
         this.hoverBackGround = hoverBackGround;
+    }
+
+    public TButton getButton() {
+        return button;
     }
 }

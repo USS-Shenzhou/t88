@@ -17,6 +17,7 @@ public class TScrollContainer extends TPanel {
     protected int bottomY = 0;
     protected static int speedFactor = 12;
     protected int scrollbarGap = 0;
+    protected int bottomMargin = 5;
 
     public TScrollContainer() {
         super();
@@ -37,7 +38,7 @@ public class TScrollContainer extends TPanel {
                 bottomY = y;
             }
         }
-        bottomY += 5;
+        bottomY += bottomMargin;
     }
 
     @Override

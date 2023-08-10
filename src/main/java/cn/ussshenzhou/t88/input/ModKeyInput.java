@@ -1,6 +1,7 @@
 package cn.ussshenzhou.t88.input;
 
 import cn.ussshenzhou.t88.T88;
+import cn.ussshenzhou.t88.analyzer.front.AnalyzerScreen;
 import cn.ussshenzhou.t88.gui.TestScreen;
 import cn.ussshenzhou.t88.gui.screen.TScreen;
 import com.mojang.blaze3d.platform.InputConstants;
@@ -26,14 +27,20 @@ public class ModKeyInput {
             "key.t88.gui_test", KeyConflictContext.UNIVERSAL, KeyModifier.ALT,
             InputConstants.Type.KEYSYM, GLFW.GLFW_KEY_T, "key.categories.t88"
     );
+    public static final KeyMapping ANALYZER = new KeyMapping(
+            "key.t88.analyzer", KeyConflictContext.IN_GAME, KeyModifier.ALT,
+            InputConstants.Type.KEYSYM, GLFW.GLFW_KEY_LEFT_BRACKET, "key.categories.t88"
+    );
 
     @SubscribeEvent
     public static void onKeyInput(InputEvent.Key event) {
         if (T88.TEST) {
-
             if (GUI_TEST.consumeClick()) {
                 runGUITest();
             }
+        }
+        if (ANALYZER.consumeClick()){
+            Minecraft.getInstance().setScreen(new AnalyzerScreen());
         }
     }
 

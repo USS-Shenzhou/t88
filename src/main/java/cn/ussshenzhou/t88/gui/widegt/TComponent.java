@@ -109,6 +109,10 @@ public abstract class TComponent implements TWidget {
 
     @Override
     public void tickT() {
+        tickChildren();
+    }
+
+    public void tickChildren(){
         for (TWidget tWidget : children) {
             tWidget.tickT();
         }
