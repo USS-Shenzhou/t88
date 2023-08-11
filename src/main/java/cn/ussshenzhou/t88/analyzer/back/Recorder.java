@@ -5,7 +5,7 @@ import java.util.LinkedList;
 /**
  * @author USS_Shenzhou
  */
-public class Recorder<T> {
+public class Recorder<T extends Number> {
     private final LinkedList<T> recorded = new LinkedList<>();
 
     public Recorder<T> record(T value){

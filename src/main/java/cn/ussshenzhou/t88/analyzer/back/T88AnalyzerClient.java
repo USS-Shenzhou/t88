@@ -12,7 +12,7 @@ public class T88AnalyzerClient {
     private static final HashMap<String, Recorder> RECORDERS = new HashMap<>();
 
     @SuppressWarnings("unchecked")
-    public static <T> void record(String mark, T value) {
+    public static <T extends Number> void record(String mark, T value) {
         RECORDERS.compute(mark, (key, recorder) -> {
             if (recorder == null) {
                 var r = new Recorder<T>();
