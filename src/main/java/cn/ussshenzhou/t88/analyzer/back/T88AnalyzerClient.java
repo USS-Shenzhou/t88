@@ -9,10 +9,10 @@ import java.util.LinkedList;
  */
 public class T88AnalyzerClient {
     @SuppressWarnings("rawtypes")
-    private static final HashMap<String, Recorder> RECORDERS = new HashMap<>();
+    public static final HashMap<String, Recorder> RECORDERS = new HashMap<>();
 
     @SuppressWarnings("unchecked")
-    public static <T extends Number> void record(String mark, T value) {
+    public static <T extends Number & Comparable<T>> void record(String mark, T value) {
         RECORDERS.compute(mark, (key, recorder) -> {
             if (recorder == null) {
                 var r = new Recorder<T>();

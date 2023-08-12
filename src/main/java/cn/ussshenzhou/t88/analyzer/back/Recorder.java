@@ -5,12 +5,17 @@ import java.util.LinkedList;
 /**
  * @author USS_Shenzhou
  */
-public class Recorder<T extends Number> {
+public class Recorder<T extends Number & Comparable<T>> {
     private final LinkedList<T> recorded = new LinkedList<>();
 
-    public Recorder<T> record(T value){
+    public Recorder<T> record(T value) {
         recorded.add(value);
         return this;
+    }
+
+    @SuppressWarnings("unchecked")
+    public T[] getRecords() {
+        return recorded.toArray(size -> (T[]) new Number[size]);
     }
 
     @Override

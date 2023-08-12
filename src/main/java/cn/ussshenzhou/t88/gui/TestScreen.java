@@ -55,7 +55,7 @@ public class TestScreen extends TScreen {
         super(Component.empty());
         this.add(title);
         title.setFontSize(20);
-
+        title.setAutoScroll(false);
         linesTest.setBorder(new Border(0xff00ff00, -4));
         linesTest.setHorizontalAlignment(HorizontalAlignment.CENTER);
         //this.add(linesTest);

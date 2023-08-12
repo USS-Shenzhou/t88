@@ -1,7 +1,9 @@
 package cn.ussshenzhou.t88.analyzer.front;
 
+import cn.ussshenzhou.t88.analyzer.back.T88AnalyzerClient;
 import cn.ussshenzhou.t88.gui.container.TTabPageContainer;
 import cn.ussshenzhou.t88.gui.screen.TScreen;
+import cn.ussshenzhou.t88.gui.widegt.TDotChart;
 import cn.ussshenzhou.t88.gui.widegt.TImage;
 import cn.ussshenzhou.t88.gui.widegt.TLabel;
 import net.minecraft.network.chat.Component;
@@ -12,21 +14,13 @@ import net.minecraft.network.chat.Component;
 public class AnalyzerScreen extends TScreen {
     protected TTabPageContainer container = new TTabPageContainer();
 
+    @SuppressWarnings({"rawtypes", "unchecked"})
     public AnalyzerScreen() {
         super(Component.literal("T88 Analyzer"));
         this.add(container);
-        container.newTab(Component.literal("TEST1"),new TLabel(Component.literal("""
-                QWRGRGQETHBWRT arh  trh wrstghge
-                defgethg
-                bbrnbverg""")));
-        container.newTab(Component.literal("TEST     2"),new TLabel(Component.literal("""
-                sdagverht 654511
-                894fer1g
-                ga4rth5ndf fds""")));
-        container.newTab(Component.literal("TEST     3 dvbhhfvbiwrefvbhnfbwnigbnwgbnjgnbjwnigbnjignbnigjbnjigbn 3"),new TLabel(Component.literal("""
-                ;l,vr.tlngb.eplw,oo54
-                g425bhrtgb
-                350t0t,..lq.34ferfg fwqgtbwerytnerybnrtr""")));
+        T88AnalyzerClient.RECORDERS.forEach((s, recorder) ->
+                container.newTab(Component.literal(s), new TDotChart(recorder.getRecords(), Component.literal("x"), Component.literal(s)))
+        );
     }
 
     @Override

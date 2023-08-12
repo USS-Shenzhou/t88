@@ -2,6 +2,12 @@ package cn.ussshenzhou.t88.gui.widegt;
 
 import cn.ussshenzhou.t88.gui.screen.TScreen;
 import cn.ussshenzhou.t88.gui.util.Border;
+import cn.ussshenzhou.t88.gui.util.ColorManager;
+import cn.ussshenzhou.t88.gui.util.HorizontalAlignment;
+import net.minecraft.Util;
+import net.minecraft.client.gui.Font;
+import net.minecraft.network.chat.Component;
+import net.minecraft.util.Mth;
 import org.joml.Vector2i;
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.*;
@@ -23,7 +29,7 @@ public abstract class TComponent implements TWidget {
     protected boolean visible = true;
     //argb
     protected int background = 0x00000000;
-    protected int foreground = 0xffffffff;
+    protected int foreground = ColorManager.get().defaultForeground();
     protected LinkedList<TWidget> children = new LinkedList<>();
     protected Border border = null;
     TComponent parent = null;
@@ -68,10 +74,10 @@ public abstract class TComponent implements TWidget {
 
     @Override
     public void render(GuiGraphics graphics, int pMouseX, int pMouseY, float pPartialTick) {
+        renderBackground(graphics, pMouseX, pMouseY, pPartialTick);
         if (border != null) {
             renderBorder(graphics, pMouseX, pMouseY, pPartialTick);
         }
-        renderBackground(graphics, pMouseX, pMouseY, pPartialTick);
         renderChildren(graphics, pMouseX, pMouseY, pPartialTick);
     }
 
@@ -112,7 +118,7 @@ public abstract class TComponent implements TWidget {
         tickChildren();
     }
 
-    public void tickChildren(){
+    public void tickChildren() {
         for (TWidget tWidget : children) {
             tWidget.tickT();
         }
@@ -366,5 +372,53 @@ public abstract class TComponent implements TWidget {
         bufferbuilder.vertex(matrix4f, (float) x1, (float) y1, (float) z).uv(maxU, maxV).endVertex();
         bufferbuilder.vertex(matrix4f, (float) x1, (float) y0, (float) z).uv(maxU, minV).endVertex();
         BufferUploader.drawWithShader(bufferbuilder.end());
+    }
+
+    public static void drawStringSingleLine(GuiGraphics graphics, Font font, Component text, float fontSize, HorizontalAlignment align, int minX, int maxX, int minY, @SuppressWarnings("AlibabaLowerCamelCaseVariableNaming") int maxYOnlyForScissor, int color) {
+        graphics.pose().pushPose();
+        float scaleFactor = fontSize / TLabel.STD_FONT_SIZE;
+        int need = font.width(text);
+        int available = maxX - minX;
+        int extra = need - available;
+        if (extra > 0) {
+            graphics.enableScissor(minX, minY, maxX, maxYOnlyForScissor);
+            graphics.pose().scale(scaleFactor, scaleFactor, 1);
+            minX = (int) (minX / scaleFactor);
+            maxX = (int) (maxX / scaleFactor);
+            minY = (int) (minY / scaleFactor);
+            maxYOnlyForScissor = (int) (maxYOnlyForScissor / scaleFactor);
+            renderScrollingString(extra, graphics, font, text, minX, maxX, minY, maxYOnlyForScissor, color);
+            graphics.disableScissor();
+        } else {
+            graphics.pose().scale(scaleFactor, scaleFactor, 1);
+            minX = (int) (minX / scaleFactor);
+            minY = (int) (minY / scaleFactor);
+            switch (align) {
+                case LEFT -> graphics.drawString(font, text, minX, minY, color);
+                case CENTER -> graphics.drawString(font, text, minX - extra / 2, minY, color);
+                case RIGHT -> graphics.drawString(font, text, minX - extra, minY, color);
+            }
+        }
+        graphics.pose().popPose();
+    }
+
+    public static void drawStringSingleLine(GuiGraphics graphics, Font font, Component text, HorizontalAlignment align, int minX, int maxX, int minY, int color) {
+        drawStringSingleLine(graphics, font, text, TLabel.STD_FONT_SIZE, align, minX, maxX, minY, minY + 9, color);
+    }
+
+    public static void drawStringSingleLine(GuiGraphics graphics, Font font, Component text, int minX, int maxX, int minY, @SuppressWarnings("AlibabaLowerCamelCaseVariableNaming") int maxYOnlyForScissor, int color) {
+        drawStringSingleLine(graphics, font, text, TLabel.STD_FONT_SIZE, HorizontalAlignment.LEFT, minX, maxX, minY, maxYOnlyForScissor, color);
+    }
+
+    public static void drawStringSingleLine(GuiGraphics graphics, Font font, Component text, int minX, int maxX, int minY, int color) {
+        drawStringSingleLine(graphics, font, text, TLabel.STD_FONT_SIZE, HorizontalAlignment.LEFT, minX, maxX, minY, minY + 9, color);
+    }
+
+    public static void renderScrollingString(int extra, GuiGraphics graphics, Font font, Component text, int minX, int maxX, int minY, int maxY, int color) {
+        double d0 = (double) Util.getMillis() / 1000.0D;
+        double d1 = Math.max((double) extra * 0.5D, 3.0D);
+        double d2 = Math.sin((Math.PI / 2D) * Math.cos((Math.PI * 2D) * d0 / d1)) / 2.0D + 0.5D;
+        double d3 = Mth.lerp(d2, 0.0D, extra);
+        graphics.drawString(font, text, minX - (int) d3, minY, color);
     }
 }
