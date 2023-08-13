@@ -90,7 +90,20 @@ public class TDotChart<T extends Number & Comparable<T>> extends TPanel {
     }
 
     protected void renderDots(GuiGraphics graphics) {
+        int i = 0;
+        float stepX = (maxX - minX) * 0.9f / numbers.length;
+        float bottomY = (maxY - minY) * 0.1f;
+        float spaceY = (maxY - minY) * 0.8f;
+        double rangeY = yMax - yMin;
+        int c1 = ColorManager.get().themeColor();
+        for (T dot : numbers) {
+            double v = dot.doubleValue();
+            int x0 = (int) (minX + stepX * i);
+            int y0 = (int) (maxY - bottomY - (v - yMin) / rangeY * spaceY);
+            graphics.fill(x0, y0, x0 + 1, y0 + 1, c1);
 
+            i++;
+        }
     }
 
 }
