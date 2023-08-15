@@ -395,7 +395,8 @@ public class TSelectList<E> extends ObjectSelectionList<TSelectList<E>.Entry> im
         public void render(GuiGraphics guigraphics, int pIndex, int pTop, int pLeft, int pWidth, int pHeight, int pMouseX, int pMouseY, boolean pIsMouseOver, float pPartialTick) {
             Font font = Minecraft.getInstance().font;
             int color = specialForeground == null ? (getSelected() == this ? selectedForeGround : foreground) : specialForeground;
-            switch (horizontalAlignment) {
+            TComponent.drawStringSingleLine(getThis(), guigraphics, font, getNarration(), horizontalAlignment, pLeft + 1, pLeft + width - 2, pTop + (pHeight - font.lineHeight) / 2, color);
+            /*switch (horizontalAlignment) {
                 case LEFT:
                     guigraphics.drawString(font, getNarration(), pLeft + 1, pTop + (pHeight - font.lineHeight) / 2, color);
                     break;
@@ -404,7 +405,7 @@ public class TSelectList<E> extends ObjectSelectionList<TSelectList<E>.Entry> im
                     break;
                 default:
                     guigraphics.drawCenteredString(font, getNarration(), pLeft + pWidth / 2, pTop + (pHeight - font.lineHeight) / 2, color);
-            }
+            }*/
         }
 
         @Override

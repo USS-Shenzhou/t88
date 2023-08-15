@@ -96,7 +96,7 @@ public class TestScreen extends TScreen {
         selectList.addElement("DEF");
         selectList.addElement("1");
         selectList.addElement("2");
-        selectList.addElement("3");
+        selectList.addElement("3456789012");
         selectList.addElement("4");
         selectList.addElement("5");
 

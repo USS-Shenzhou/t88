@@ -374,14 +374,19 @@ public abstract class TComponent implements TWidget {
         BufferUploader.drawWithShader(bufferbuilder.end());
     }
 
-    public static void drawStringSingleLine(GuiGraphics graphics, Font font, Component text, float fontSize, HorizontalAlignment align, int minX, int maxX, int minY, @SuppressWarnings("AlibabaLowerCamelCaseVariableNaming") int maxYOnlyForScissor, int color) {
+    public void drawStringSingleLine(GuiGraphics graphics, Font font, Component text, float fontSize, HorizontalAlignment align, int minX, int maxX, int minY, @SuppressWarnings("AlibabaLowerCamelCaseVariableNaming") int maxYOnlyForScissor, int color) {
+        drawStringSingleLine(this, graphics, font, text, fontSize, align, minX, maxX, minY, maxYOnlyForScissor, color);
+    }
+
+    public static void drawStringSingleLine(TWidget thiz, GuiGraphics graphics, Font font, Component text, float fontSize, HorizontalAlignment align, int minX, int maxX, int minY, @SuppressWarnings("AlibabaLowerCamelCaseVariableNaming") int maxYOnlyForScissor, int color) {
         graphics.pose().pushPose();
         float scaleFactor = fontSize / TLabel.STD_FONT_SIZE;
         int need = font.width(text);
         int available = maxX - minX;
         int extra = need - available;
         if (extra > 0) {
-            graphics.enableScissor(minX, minY, maxX, maxYOnlyForScissor);
+            int scroll = (int) thiz.getParentScrollAmountIfExist();
+            graphics.enableScissor(minX, minY - scroll, maxX, maxYOnlyForScissor - scroll);
             graphics.pose().scale(scaleFactor, scaleFactor, 1);
             minX = (int) (minX / scaleFactor);
             maxX = (int) (maxX / scaleFactor);
@@ -402,16 +407,28 @@ public abstract class TComponent implements TWidget {
         graphics.pose().popPose();
     }
 
-    public static void drawStringSingleLine(GuiGraphics graphics, Font font, Component text, HorizontalAlignment align, int minX, int maxX, int minY, int color) {
-        drawStringSingleLine(graphics, font, text, TLabel.STD_FONT_SIZE, align, minX, maxX, minY, minY + 9, color);
+    public static void drawStringSingleLine(TWidget thiz, GuiGraphics graphics, Font font, Component text, HorizontalAlignment align, int minX, int maxX, int minY, int color) {
+        drawStringSingleLine(thiz, graphics, font, text, TLabel.STD_FONT_SIZE, align, minX, maxX, minY, minY + 9, color);
     }
 
-    public static void drawStringSingleLine(GuiGraphics graphics, Font font, Component text, int minX, int maxX, int minY, @SuppressWarnings("AlibabaLowerCamelCaseVariableNaming") int maxYOnlyForScissor, int color) {
-        drawStringSingleLine(graphics, font, text, TLabel.STD_FONT_SIZE, HorizontalAlignment.LEFT, minX, maxX, minY, maxYOnlyForScissor, color);
+    public static void drawStringSingleLine(TWidget thiz, GuiGraphics graphics, Font font, Component text, int minX, int maxX, int minY, @SuppressWarnings("AlibabaLowerCamelCaseVariableNaming") int maxYOnlyForScissor, int color) {
+        drawStringSingleLine(thiz, graphics, font, text, TLabel.STD_FONT_SIZE, HorizontalAlignment.LEFT, minX, maxX, minY, maxYOnlyForScissor, color);
     }
 
-    public static void drawStringSingleLine(GuiGraphics graphics, Font font, Component text, int minX, int maxX, int minY, int color) {
-        drawStringSingleLine(graphics, font, text, TLabel.STD_FONT_SIZE, HorizontalAlignment.LEFT, minX, maxX, minY, minY + 9, color);
+    public static void drawStringSingleLine(TWidget thiz, GuiGraphics graphics, Font font, Component text, int minX, int maxX, int minY, int color) {
+        drawStringSingleLine(thiz, graphics, font, text, TLabel.STD_FONT_SIZE, HorizontalAlignment.LEFT, minX, maxX, minY, minY + 9, color);
+    }
+
+    public void drawStringSingleLine(GuiGraphics graphics, Font font, Component text, HorizontalAlignment align, int minX, int maxX, int minY, int color) {
+        drawStringSingleLine(this, graphics, font, text, TLabel.STD_FONT_SIZE, align, minX, maxX, minY, minY + 9, color);
+    }
+
+    public void drawStringSingleLine(GuiGraphics graphics, Font font, Component text, int minX, int maxX, int minY, @SuppressWarnings("AlibabaLowerCamelCaseVariableNaming") int maxYOnlyForScissor, int color) {
+        drawStringSingleLine(this, graphics, font, text, TLabel.STD_FONT_SIZE, HorizontalAlignment.LEFT, minX, maxX, minY, maxYOnlyForScissor, color);
+    }
+
+    public void drawStringSingleLine(GuiGraphics graphics, Font font, Component text, int minX, int maxX, int minY, int color) {
+        drawStringSingleLine(this, graphics, font, text, TLabel.STD_FONT_SIZE, HorizontalAlignment.LEFT, minX, maxX, minY, minY + 9, color);
     }
 
     public static void renderScrollingString(int extra, GuiGraphics graphics, Font font, Component text, int minX, int maxX, int minY, int maxY, int color) {
