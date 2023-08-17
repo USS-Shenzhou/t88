@@ -96,10 +96,12 @@ public class TLabel extends TPanel {
             if (autoScroll) {
                 drawStringSingleLine(guigraphics, font, line, fontSize, horizontalAlignment, x, (x + width), (int) y0, (int) (y0 + fontSize + lineSpacing), foreground);
             } else {
+                guigraphics.pose().pushPose();
                 int x0 = getAlignedX(line);
-                float scaleFactor = fontSize / STD_FONT_SIZE;
+                float scaleFactor = fontSize / (float) STD_FONT_SIZE;
                 guigraphics.pose().scale(scaleFactor, scaleFactor, 1);
                 guigraphics.drawString(font, line, (int) (x0 / scaleFactor), (int) (y0 / scaleFactor), foreground);
+                guigraphics.pose().popPose();
             }
             y0 += (fontSize + lineSpacing);
         }

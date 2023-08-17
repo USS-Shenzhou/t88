@@ -17,5 +17,6 @@ public class ModKeyMappingRegistry {
             event.register(ModKeyInput.GUI_TEST);
         }
         event.register(ModKeyInput.OPEN_ANALYZER);
+        event.register(ModKeyInput.CLEAR_ANALYZER);
     }
 }

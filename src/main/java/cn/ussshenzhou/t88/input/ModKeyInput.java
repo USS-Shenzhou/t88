@@ -43,7 +43,8 @@ public class ModKeyInput {
             if (GUI_TEST.consumeClick()) {
                 runGUITest();
             }
-        } else if (OPEN_ANALYZER.consumeClick()) {
+        }
+        if (OPEN_ANALYZER.consumeClick()) {
             Minecraft.getInstance().setScreen(new AnalyzerScreen());
         } else if (CLEAR_ANALYZER.consumeClick()) {
             T88AnalyzerClient.RECORDERS.clear();
