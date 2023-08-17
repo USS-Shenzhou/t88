@@ -16,6 +16,6 @@ public class ModKeyMappingRegistry {
         if (T88.TEST){
             event.register(ModKeyInput.GUI_TEST);
         }
-        event.register(ModKeyInput.ANALYZER);
+        event.register(ModKeyInput.OPEN_ANALYZER);
     }
 }
