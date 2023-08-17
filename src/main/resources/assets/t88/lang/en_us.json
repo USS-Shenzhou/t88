@@ -2,5 +2,6 @@
   "key.t88.gui_test": "GUI Test",
   "key.categories.t88": "T88",
 
-  "key.t88.analyzer": "Analyzer"
+  "key.t88.open_analyzer": "Open Analyzer",
+  "key.t88.clear_recorder": "Clear Recorder"
 }

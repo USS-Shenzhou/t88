@@ -13,11 +13,11 @@ import net.minecraftforge.fml.common.Mod;
 @Mod.EventBusSubscriber(bus = Mod.EventBusSubscriber.Bus.FORGE, value = Dist.CLIENT)
 public class TestListener {
 
-    /*@SubscribeEvent
+    @SubscribeEvent
     public static void recordTick(TickEvent.ClientTickEvent event) {
         if (event.phase == TickEvent.Phase.END) {
             T88AnalyzerClient.record("FPS", Minecraft.getInstance().getFps());
             T88AnalyzerClient.record("random", Math.random()*1000);
         }
-    }*/
+    }
 }

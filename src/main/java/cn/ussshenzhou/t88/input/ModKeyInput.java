@@ -29,11 +29,11 @@ public class ModKeyInput {
             InputConstants.Type.KEYSYM, GLFW.GLFW_KEY_T, "key.categories.t88"
     );
     public static final KeyMapping OPEN_ANALYZER = new KeyMapping(
-            "key.t88.analyzer", KeyConflictContext.IN_GAME, KeyModifier.ALT,
+            "key.t88.open_analyzer", KeyConflictContext.IN_GAME, KeyModifier.ALT,
             InputConstants.Type.KEYSYM, GLFW.GLFW_KEY_COMMA, "key.categories.t88"
     );
     public static final KeyMapping CLEAR_ANALYZER = new KeyMapping(
-            "key.t88.analyzer", KeyConflictContext.IN_GAME, KeyModifier.ALT,
+            "key.t88.clear_recorder", KeyConflictContext.IN_GAME, KeyModifier.CONTROL,
             InputConstants.Type.KEYSYM, GLFW.GLFW_KEY_COMMA, "key.categories.t88"
     );
 
