@@ -122,7 +122,7 @@ public class TLabel extends TPanel {
         int maxLineWidth = 0;
         for (Component line : textLines) {
             maxLineWidth = Mth.ceil(
-                    Math.max(font.width(line) * fontSize / 7, Math.max(width, maxLineWidth))
+                    Math.max(font.width(line) * fontSize / 7,  maxLineWidth)
             );
         }
         return new Vector2i(maxLineWidth, (int) ((fontSize + lineSpacing) * textLines.size()) + 1);
