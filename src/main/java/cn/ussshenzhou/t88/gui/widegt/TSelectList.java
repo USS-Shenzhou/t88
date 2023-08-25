@@ -3,6 +3,7 @@ package cn.ussshenzhou.t88.gui.widegt;
 import cn.ussshenzhou.t88.gui.screen.TScreen;
 import cn.ussshenzhou.t88.gui.util.AccessorProxy;
 import cn.ussshenzhou.t88.gui.util.HorizontalAlignment;
+import com.google.common.collect.ImmutableList;
 import org.joml.Vector2i;
 import com.mojang.blaze3d.systems.RenderSystem;
 import net.minecraft.client.Minecraft;
@@ -58,11 +59,16 @@ public class TSelectList<E> extends ObjectSelectionList<TSelectList<E>.Entry> im
         }
     }
 
+    public ImmutableList<Entry> getElements() {
+        return ImmutableList.copyOf(this.children());
+    }
+
     public void removeElement(Entry entry) {
         this.removeEntry(entry);
     }
 
     public void clearElement() {
+        this.setSelected(null);
         super.children().clear();
     }
 

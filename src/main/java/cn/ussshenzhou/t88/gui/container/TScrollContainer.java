@@ -31,9 +31,9 @@ public class TScrollContainer extends TPanel {
     }
 
     protected void initPos() {
+        bottomY = 0;
         for (TWidget tWidget : children) {
             int y = tWidget.getYT() + tWidget.getSize().y;
-            bottomY = 0;
             if (bottomY < y) {
                 bottomY = y;
             }
@@ -55,26 +55,26 @@ public class TScrollContainer extends TPanel {
 
     @Override
     protected void renderChildren(GuiGraphics guigraphics, int pMouseX, int pMouseY, float pPartialTick) {
-        prepareRender(guigraphics, pPartialTick);
+        guigraphics.enableScissor(this.x, (int) (this.y - this.getParentScrollAmountIfExist()), this.x + width, (int) (this.y + height - this.getParentScrollAmountIfExist()));
+        prepareTranslate(guigraphics, pPartialTick);
         super.renderChildren(guigraphics, pMouseX, pMouseY, pPartialTick);
-        endRender(guigraphics, pPartialTick);
+        endTranslate(guigraphics, pPartialTick);
+        guigraphics.disableScissor();
     }
 
     @Override
     public void renderTop(GuiGraphics guigraphics, int pMouseX, int pMouseY, float pPartialTick) {
-        prepareRender(guigraphics, pPartialTick);
+        prepareTranslate(guigraphics, pPartialTick);
         super.renderTop(guigraphics, pMouseX, pMouseY, pPartialTick);
-        endRender(guigraphics, pPartialTick);
+        endTranslate(guigraphics, pPartialTick);
     }
 
-    protected void prepareRender(GuiGraphics guigraphics, float pPartialTick) {
-        guigraphics.enableScissor(this.x, (int) (this.y - this.getParentScrollAmountIfExist()), this.x + width, (int) (this.y + height - this.getParentScrollAmountIfExist()));
-        guigraphics.pose().translate(0, Mth.lerp(pPartialTick, -prevScrollAmount, -scrollAmount), 0);
+    protected void prepareTranslate(GuiGraphics guigraphics, float pPartialTick) {
+       guigraphics.pose().translate(0, Mth.lerp(pPartialTick, -prevScrollAmount, -scrollAmount), 0);
     }
 
-    protected void endRender(GuiGraphics guigraphics, float pPartialTick) {
+    protected void endTranslate(GuiGraphics guigraphics, float pPartialTick) {
         guigraphics.pose().translate(0, -Mth.lerp(pPartialTick, -prevScrollAmount, -scrollAmount), 0);
-        guigraphics.disableScissor();
     }
 
     @Override

@@ -1,6 +1,7 @@
 package cn.ussshenzhou.t88.gui;
 
 import cn.ussshenzhou.t88.gui.advanced.TLabelButton;
+import cn.ussshenzhou.t88.gui.advanced.TSuggestedEditBox;
 import cn.ussshenzhou.t88.gui.container.TScrollContainer;
 import cn.ussshenzhou.t88.gui.screen.TScreen;
 import cn.ussshenzhou.t88.gui.util.Border;
@@ -11,6 +12,7 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Font;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.Tooltip;
+import net.minecraft.commands.Commands;
 import net.minecraft.network.chat.Component;
 
 import java.util.concurrent.CompletableFuture;
@@ -37,13 +39,21 @@ public class TestScreen extends TScreen {
     private TSlider slider = new TSlider("Test", 2, 5);
     private TSelectList<String> selectList = new TSelectList<>();
     private TEditBox editBox = new TEditBox();
-    private TEditBox editBox2 = new TEditBox();
+    private TSuggestedEditBox editBox2 = new TSuggestedEditBox(d->{
+        d.register(Commands.literal("ABCD"));
+        d.register(Commands.literal("1df"));
+        d.register(Commands.literal("2d"));
+        d.register(Commands.literal("345"));
+        d.register(Commands.literal("6gefrthy"));
+        d.register(Commands.literal("7v"));
+        d.register(Commands.literal("41gtg"));
+    });
     private TScrollContainer scrollPanel = new TScrollContainer() {
         @Override
         public void layout() {
             editBox.setBounds(10, 10, 50, 20);
-            editBox2.setBounds(10, 200, 50, 20);
             selectList.setBounds(10, 230, 50, 100);
+            editBox2.setBounds(10, 350, 50, 20);
             super.layout();
         }
     };
@@ -106,10 +116,10 @@ public class TestScreen extends TScreen {
         scrollPanel.add(editBox);
         scrollPanel.add(editBox2);
         scrollPanel.add(selectList);
-        this.add(cover);
+        //this.add(cover);
         cover.setBorder(new Border(0xffff0000, 1));
         cover.setBackground(0x88aaaaaa);
-        editBox2.setTooltip(Tooltip.create(Component.literal("ABCDEFG")));
+        //editBox2.setTooltip(Tooltip.create(Component.literal("ABCDEFG")));
         this.add(labelButton);
     }
 

@@ -91,4 +91,18 @@ public interface TWidget extends Renderable, GuiEventListener {
         }
         return 0;
     }
+
+    default boolean isOutOfParentScrollContainerScissor() {
+        var scrollContainer = this.getParentInstanceOf(TScrollContainer.class);
+        if (scrollContainer == null) {
+            return false;
+        }
+        var scroll = scrollContainer.getScrollAmount();
+        //noinspection RedundantIfStatement
+        if (this.getYT() - scroll < scrollContainer.getYT()
+                || this.getYT() + this.getSize().y - scroll > scrollContainer.getYT() + scrollContainer.height) {
+            return true;
+        }
+        return false;
+    }
 }

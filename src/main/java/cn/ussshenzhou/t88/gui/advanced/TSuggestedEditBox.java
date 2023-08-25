@@ -58,6 +58,14 @@ public class TSuggestedEditBox extends TPanel {
     }
 
     @Override
+    public void tickT() {
+        super.tickT();
+        if (this.isOutOfParentScrollContainerScissor()) {
+            suggestionList.setVisibleT(false);
+        }
+    }
+
+    @Override
     public void layout() {
         editBox.setBounds(0, 0, width, height);
         super.layout();
@@ -109,7 +117,8 @@ public class TSuggestedEditBox extends TPanel {
             suggestionList.addElement(texts);
             if (Minecraft.getInstance().screen != null) {
                 int listY;
-                if (y <= Minecraft.getInstance().screen.height / 2) {
+                int s = (int) this.getParentScrollAmountIfExist();
+                if (y - s <= Minecraft.getInstance().screen.height / 2) {
                     listY = y + height + 1;
                 } else {
                     listY = Math.max(0, y - texts.size() * suggestionList.getItemHeight() - 4 - 1);
@@ -119,8 +128,12 @@ public class TSuggestedEditBox extends TPanel {
                         calculateSuggestionX(width),
                         listY,
                         width,
-                        Math.min(texts.size() * suggestionList.getItemHeight() + 4, Minecraft.getInstance().screen.height - listY - 5)
+                        Math.min(texts.size() * suggestionList.getItemHeight() + 4, Minecraft.getInstance().screen.height - listY + s - 5)
                 );
+                //choose first
+                if (suggestionList.getSelected() == null) {
+                    suggestionList.setSelected(0);
+                }
             }
         } else {
             suggestionList.setVisibleT(false);
