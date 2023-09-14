@@ -34,6 +34,7 @@ public class TEditBox extends EditBox implements TWidget, TResponder<String> {
 
     public TEditBox(Component tipText) {
         super(Minecraft.getInstance().font, 0, 0, 0, 0, tipText);
+        this.setMaxLength(32500);
         MinecraftForge.EVENT_BUS.register(this);
         setResponder(this::respond);
         this.addResponder(s -> MinecraftForge.EVENT_BUS.post(new TWidgetContentUpdatedEvent(this)));
