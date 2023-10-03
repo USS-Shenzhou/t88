@@ -6,12 +6,16 @@ import cn.ussshenzhou.t88.gui.util.LayoutHelper;
 import cn.ussshenzhou.t88.gui.widegt.TButton;
 import cn.ussshenzhou.t88.gui.widegt.TComponent;
 import cn.ussshenzhou.t88.gui.widegt.TWidget;
+import com.google.common.collect.ImmutableList;
 import net.minecraft.client.gui.components.tabs.Tab;
 import org.joml.Vector2i;
 import cn.ussshenzhou.t88.gui.widegt.TPanel;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.network.chat.Component;
 
+import javax.annotation.Nullable;
+import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.LinkedList;
 
 /**
@@ -19,6 +23,7 @@ import java.util.LinkedList;
  */
 public class TTabPageContainer extends TPanel {
     protected TabContainer container = new TabContainer();
+    private Tab selectedTab = null;
 
     public TTabPageContainer() {
         super();
@@ -46,13 +51,38 @@ public class TTabPageContainer extends TPanel {
             t.setSelect(false);
         });
         tab.content.setVisibleT(true);
+        tab.setSelect(true);
+        selectedTab = tab;
+    }
+
+    public void selectTab(int index) {
+        selectTab(container.tabs.get(index));
     }
 
     public void removeTab(Tab tab) {
+        var next = container.tabs.indexOf(tab);
         this.remove(tab.content);
         container.remove(tab);
         container.tabs.remove(tab);
+        if (selectedTab == tab) {
+            selectedTab = null;
+        }
         this.layout();
+        if (container.tabs.isEmpty()) {
+            return;
+        }
+        if (next == container.tabs.size()) {
+            next--;
+        }
+        this.selectTab(next);
+    }
+
+    public @Nullable Tab getSelectedTab() {
+        return selectedTab;
+    }
+
+    public ImmutableList<Tab> getTabs() {
+        return ImmutableList.copyOf(container.tabs);
     }
 
     public class TabContainer extends TScrollContainer {
@@ -72,8 +102,22 @@ public class TTabPageContainer extends TPanel {
             return tab;
         }
 
+        protected void rearrangeTabs() {
+            ArrayList<Tab> tmp = new ArrayList<>();
+            Iterator<Tab> iterator = tabs.iterator();
+            while (iterator.hasNext()) {
+                Tab tab = iterator.next();
+                if (tab.keepFinal) {
+                    iterator.remove();
+                    tmp.add(tab);
+                }
+            }
+            tabs.addAll(tmp);
+        }
+
         @Override
         public void layout() {
+            rearrangeTabs();
             int prevRow = row;
             row = 0;
             boolean newRow = false;
@@ -114,11 +158,13 @@ public class TTabPageContainer extends TPanel {
         protected TWidget content;
         protected static final int HEIGHT = 14;
 
+        protected boolean closeable = true;
+        protected boolean keepFinal = false;
+
         public Tab(Component c, TWidget content) {
             super(c);
             this.button.setOnPress(pButton -> {
                 selectTab(this);
-                setSelect(true);
             });
             close = new TLabelButton(Component.literal("×"), pButton -> {
                 removeTab(this);
@@ -153,6 +199,27 @@ public class TTabPageContainer extends TPanel {
         public void layout() {
             close.setBounds(width - 12, 0, 12, HEIGHT);
             super.layout();
+        }
+
+        public Tab setCloseable(boolean closeable) {
+            this.closeable = closeable;
+            close.setVisibleT(closeable);
+            close.getButton().setVisibleT(closeable);
+            return this;
+        }
+
+        public Tab setKeepFinal(boolean keepFinal) {
+            this.keepFinal = keepFinal;
+            getParentInstanceOf(TTabPageContainer.class).layout();
+            return this;
+        }
+
+        public TLabelButton getCloseButton() {
+            return close;
+        }
+
+        public TWidget getContent() {
+            return content;
         }
 
         @Override

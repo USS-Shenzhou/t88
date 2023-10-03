@@ -107,29 +107,31 @@ public class TSuggestedEditBox extends TPanel {
     private void updateSuggestionList(List<Suggestion> list) {
         suggestionList.clearElement();
         if (!list.isEmpty()) {
+            var font = Minecraft.getInstance().font;
             suggestionList.setVisibleT(true);
             List<String> texts = new ArrayList<>();
-            String l = "";
+            int w = 0;
             for (Suggestion suggestion : list) {
                 texts.add(suggestion.getText());
-                l = suggestion.getText().length() > l.length() ? suggestion.getText() : l;
+                w = Math.max(w, font.width(suggestion.getText()));
             }
             suggestionList.addElement(texts);
             if (Minecraft.getInstance().screen != null) {
                 int listY;
                 int s = (int) this.getParentScrollAmountIfExist();
+                int h = //ideal
+                        texts.size() * suggestionList.getItemHeight() + 4;
                 if (y - s <= Minecraft.getInstance().screen.height / 2) {
+                    //start from upper half to screen bottom
                     listY = y + height + 1;
+                    h = Math.min(h, Minecraft.getInstance().screen.height - listY + s);
                 } else {
-                    listY = Math.max(0, y - texts.size() * suggestionList.getItemHeight() - 4 - 1);
+                    //start from lower half to screen top
+                    listY = Math.max(0, y - texts.size() * suggestionList.getItemHeight() - 4);
+                    h = Math.min(h, this.getYT() - s - 1);
                 }
-                int width = Minecraft.getInstance().font.width(l) + TSelectList.SCROLLBAR_WIDTH + 2;
-                suggestionList.setAbsBounds(
-                        calculateSuggestionX(width),
-                        listY,
-                        width,
-                        Math.min(texts.size() * suggestionList.getItemHeight() + 4, Minecraft.getInstance().screen.height - listY + s - 5)
-                );
+                w = w + suggestionList.getScrollbarGap() + TSelectList.SCROLLBAR_WIDTH + 2;
+                suggestionList.setAbsBounds(calculateSuggestionX(w), listY, w, h);
                 //choose first
                 if (suggestionList.getSelected() == null) {
                     suggestionList.setSelected(0);

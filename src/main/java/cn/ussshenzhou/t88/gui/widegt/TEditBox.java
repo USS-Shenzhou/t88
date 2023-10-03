@@ -5,6 +5,7 @@ import cn.ussshenzhou.t88.gui.event.TWidgetContentUpdatedEvent;
 import cn.ussshenzhou.t88.gui.screen.TScreen;
 import cn.ussshenzhou.t88.gui.util.AccessorProxy;
 import cn.ussshenzhou.t88.gui.util.VanillaWidget2TComponentHelper;
+import net.minecraft.SharedConstants;
 import org.joml.Vector2i;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Font;
@@ -26,9 +27,14 @@ public class TEditBox extends EditBox implements TWidget, TResponder<String> {
     TComponent parent = null;
     TScreen parentScreen = null;
     protected final LinkedList<Consumer<String>> responders = new LinkedList<>();
+    protected boolean checkInput = false;
 
     @SubscribeEvent
     public void onClick(ClearEditBoxFocusEvent event) {
+        onClearEditBoxFocusEvent(event);
+    }
+
+    protected void onClearEditBoxFocusEvent(ClearEditBoxFocusEvent event) {
         this.setFocused(false);
     }
 
@@ -38,6 +44,38 @@ public class TEditBox extends EditBox implements TWidget, TResponder<String> {
         MinecraftForge.EVENT_BUS.register(this);
         setResponder(this::respond);
         this.addResponder(s -> MinecraftForge.EVENT_BUS.post(new TWidgetContentUpdatedEvent(this)));
+    }
+
+    @Override
+    public void insertText(String pTextToWrite) {
+        int i = Math.min(this.cursorPos, this.highlightPos);
+        int j = Math.max(this.cursorPos, this.highlightPos);
+        int k = this.maxLength - this.value.length() - (i - j);
+        String s = pTextToWrite;
+        if (checkInput){
+            s = SharedConstants.filterText(pTextToWrite);
+        }
+        int l = s.length();
+        if (k < l) {
+            s = s.substring(0, k);
+            l = k;
+        }
+
+        String s1 = (new StringBuilder(this.value)).replace(i, j, s).toString();
+        if (this.filter.test(s1)) {
+            this.value = s1;
+            this.setCursorPosition(i + l);
+            this.setHighlightPos(this.cursorPos);
+            this.onValueChange(this.value);
+        }
+    }
+
+    public boolean isCheckInput() {
+        return checkInput;
+    }
+
+    public void setCheckInput(boolean checkInput) {
+        this.checkInput = checkInput;
     }
 
     @Override

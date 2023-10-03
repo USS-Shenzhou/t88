@@ -84,6 +84,17 @@ public interface TWidget extends Renderable, GuiEventListener {
         return null;
     }
 
+    default @Nullable TScreen getTopParentScreen() {
+        TWidget t = this;
+        while (t != null) {
+            if (t.getParentScreen() != null) {
+                return t.getParentScreen();
+            }
+            t = t.getParent();
+        }
+        return null;
+    }
+
     default double getParentScrollAmountIfExist() {
         TScrollContainer tScrollContainer = this.getParentInstanceOf(TScrollContainer.class);
         if (tScrollContainer != null) {

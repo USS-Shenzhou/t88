@@ -12,7 +12,9 @@ import net.minecraft.network.chat.Component;
 import net.minecraftforge.client.ForgeHooksClient;
 import net.minecraftforge.common.MinecraftForge;
 
+import java.util.Collection;
 import java.util.LinkedList;
+import java.util.stream.Stream;
 
 /**
  * @author USS_Shenzhou
@@ -71,6 +73,14 @@ public abstract class TScreen extends Screen {
         tWidget.setParentScreen(this);
     }
 
+    public void addAll(TWidget... children) {
+        Stream.of(children).forEach(this::add);
+    }
+
+    public void addAll(Collection<TWidget> children) {
+        children.forEach(this::add);
+    }
+
     public void remove(TWidget tWidget) {
         tChildren.remove(tWidget);
         tWidget.setParentScreen(null);
@@ -91,7 +101,7 @@ public abstract class TScreen extends Screen {
 
     @Override
     public boolean mouseClicked(double pMouseX, double pMouseY, int pButton) {
-        MinecraftForge.EVENT_BUS.post(new ClearEditBoxFocusEvent());
+        MinecraftForge.EVENT_BUS.post(new ClearEditBoxFocusEvent(pMouseX, pMouseY));
         for (TWidget tWidget : tChildren) {
             if (!tWidget.isVisibleT()) {
                 continue;

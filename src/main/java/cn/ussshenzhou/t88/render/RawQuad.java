@@ -14,6 +14,7 @@ import org.apache.commons.lang3.ArrayUtils;
 /**
  * @author USS_Shenzhou
  */
+@SuppressWarnings("AlibabaLowerCamelCaseVariableNaming")
 @OnlyIn(Dist.CLIENT)
 public class RawQuad {
     /*
@@ -35,12 +36,12 @@ public class RawQuad {
     static VertexFormat format = DefaultVertexFormat.BLOCK;
     static ImmutableList<VertexFormatElement> elements = format.getElements();
 
-    public RawQuad(int pTintIndex, Direction pDirection, TextureAtlasSprite pSprite, boolean pShade, Point... points) {
+    public RawQuad(int tintIndex, Direction direction, TextureAtlasSprite sprite, boolean shade, Point... points) {
         this.points = points;
-        this.tintIndex = pTintIndex;
-        this.direction = pDirection;
-        this.sprite = pSprite;
-        this.shade = pShade;
+        this.tintIndex = tintIndex;
+        this.direction = direction;
+        this.sprite = sprite;
+        this.shade = shade;
     }
 
     public RawQuad(BakedQuad bakedQuad) {
@@ -64,24 +65,51 @@ public class RawQuad {
         return points;
     }
 
+    public RawQuad shrink16(float fromUp, float fromDown, float fromLeft, float fromRight) {
+        return shrink(fromUp / 16, fromDown / 16, fromLeft / 16, fromRight / 16);
+    }
+
     public RawQuad shrink(float fromUp, float fromDown, float fromLeft, float fromRight) {
-        Point[] newPoints = new Point[4];
-        if (isXY()) {
-            int flip = direction == Direction.NORTH ? 1 : -1;
-            newPoints[0] = points[0].offset(-fromLeft / 16 * flip, -fromUp / 16, 0, fromLeft / 16 * URange(), fromUp / 16 * VRange());
-            newPoints[1] = points[1].offset(-fromLeft / 16 * flip, fromDown / 16, 0, fromLeft / 16 * URange(), -fromDown / 16 * VRange());
-            newPoints[2] = points[2].offset(fromRight / 16 * flip, fromDown / 16, 0, -fromRight / 16 * URange(), -fromDown / 16 * VRange());
-            newPoints[3] = points[3].offset(fromRight / 16 * flip, -fromUp / 16, 0, -fromRight / 16 * URange(), fromUp / 16 * VRange());
+        int flip;
+        float uRange = URange();
+        float vRange = VRange();
+        if (direction == Direction.UP || direction == Direction.DOWN) {
+            flip = direction == Direction.UP ? 1 : -1;
+            points[0].offset(fromLeft, 0, fromUp * flip, fromLeft * uRange, fromUp * vRange);
+            points[1].offset(fromLeft, 0, -fromDown * flip, fromLeft * uRange, -fromDown * vRange);
+            points[2].offset(-fromRight, 0, -fromDown * flip, -fromRight * uRange, -fromDown * vRange);
+            points[3].offset(-fromRight, 0, fromUp * flip, -fromRight * uRange, fromUp * vRange);
+        } else if (direction == Direction.NORTH || direction == Direction.SOUTH) {
+            flip = direction == Direction.NORTH ? 1 : -1;
+            points[0].offset(-fromLeft * flip, -fromUp, 0, fromLeft * uRange, fromUp * vRange);
+            points[1].offset(-fromLeft * flip, fromDown, 0, fromLeft * uRange, -fromDown * vRange);
+            points[2].offset(fromRight * flip, fromDown, 0, -fromRight * uRange, -fromDown * vRange);
+            points[3].offset(fromRight * flip, -fromUp, 0, -fromRight * uRange, fromUp * vRange);
         } else {
-            int flip = direction == Direction.WEST ? 1 : -1;
-            newPoints[0] = points[0].offset(0, -fromUp / 16, fromLeft / 16 * flip, fromLeft / 16 * URange(), fromUp / 16 * VRange());
-            newPoints[1] = points[1].offset(0, fromDown / 16, fromLeft / 16 * flip, fromLeft / 16 * URange(), -fromDown / 16 * VRange());
-            newPoints[2] = points[2].offset(0, fromDown / 16, -fromRight / 16 * flip, -fromRight / 16 * URange(), -fromDown / 16 * VRange());
-            newPoints[3] = points[3].offset(0, -fromUp / 16, -fromRight / 16 * flip, -fromRight / 16 * URange(), fromUp / 16 * VRange());
-            //newPoints[2] = points[2].offset(-fromRight / 16 * flip, fromDown / 16, 0, -fromRight / 16 * URange(), -fromDown / 16 * VRange());
-            //newPoints[3] = points[3].offset(-fromRight / 16 * flip, -fromUp / 16,0 , -fromRight / 16 * URange(), fromUp / 16 * VRange());
+            flip = direction == Direction.WEST ? 1 : -1;
+            points[0].offset(0, -fromUp, fromLeft * flip, fromLeft * uRange, fromUp * vRange);
+            points[1].offset(0, fromDown, fromLeft * flip, fromLeft * uRange, -fromDown * vRange);
+            points[2].offset(0, fromDown, -fromRight * flip, -fromRight * uRange, -fromDown * vRange);
+            points[3].offset(0, -fromUp, -fromRight * flip, -fromRight * uRange, fromUp * vRange);
         }
-        return new RawQuad(tintIndex, direction, sprite, shade, newPoints);
+        return this;
+    }
+
+    public RawQuad move(float x, float y, float z) {
+        for (Point p : points) {
+            p.move(x, y, z);
+        }
+        return this;
+    }
+
+    public RawQuad move16(float x, float y, float z) {
+        x /= 16;
+        y /= 16;
+        z /= 16;
+        for (Point p : points) {
+            p.move(x, y, z);
+        }
+        return this;
     }
 
     public BakedQuad bake() {
@@ -95,9 +123,13 @@ public class RawQuad {
         return new BakedQuad(packed, tintIndex, direction, sprite, shade);
     }
 
-    private boolean isXY() {
-        return points[0].x != points[1].x || points[0].x != points[2].x || points[0].x != points[3].x;
+    /*private boolean isXOY() {
+        return points[0].z == points[1].z && points[0].z == points[2].z && points[0].z == points[3].z;
     }
+
+    private boolean isXOZ() {
+        return points[0].y == points[1].y && points[0].y == points[2].y && points[0].y == points[3].y;
+    }*/
 
     public Point maxUV() {
         return points[2];
@@ -131,6 +163,15 @@ public class RawQuad {
         return maxUV().v0 - mimUV().v0;
     }
 
+    public Direction getDirection() {
+        return direction;
+    }
+
+    public RawQuad copy() {
+        return new RawQuad(tintIndex, direction, sprite, shade, points);
+    }
+
+    @SuppressWarnings("UnusedReturnValue")
     public static class Point {
         float x, y, z;
         float r, g, b, a;
@@ -165,13 +206,20 @@ public class RawQuad {
             return new Point(x, y, z, r, g, b, a, u0, v0, u2, v2, normalX, normalY, normalZ, padding);
         }
 
-        @Deprecated
-        public Point template(float x, float y, float z, float u0, float v0) {
-            return new Point(x, y, z, r, g, b, a, u0, v0, u2, v2, normalX, normalY, normalZ, padding);
+        public Point offset(float ax, float ay, float az, float au0, float av0) {
+            this.x += ax;
+            this.y += ay;
+            this.z += az;
+            this.u0 += au0;
+            this.v0 += av0;
+            return this;
         }
 
-        public Point offset(float ax, float ay, float az, float au0, float av0) {
-            return new Point(x + ax, y + ay, z + az, r, g, b, a, u0 + au0, v0 + av0, u2, v2, normalX, normalY, normalZ, padding);
+        public Point move(float x, float y, float z) {
+            this.x += x;
+            this.y += y;
+            this.z += z;
+            return this;
         }
 
         public float[] get(int index) {
@@ -187,10 +235,9 @@ public class RawQuad {
     }
 
     /**
-     * Copied from net.minecraftforge.client.model.pipeline.LightUtil during updating from 1.18.2 to 1.19.4 under LGPL-2.1-only
+     * Copied from net.minecraftforge.client.model.pipeline.LightUtil during updating from 1.18.2 to 1.19.4 under LGPL-2.1
      */
-    public static void unpack(int[] from, float[] to, VertexFormat formatFrom, int v, int e)
-    {
+    public static void unpack(int[] from, float[] to, VertexFormat formatFrom, int v, int e) {
         int length = 4 < to.length ? 4 : to.length;
         VertexFormatElement element = formatFrom.getElements().get(e);
         int vertexStart = v * formatFrom.getVertexSize() + formatFrom.getOffset(e);
@@ -199,86 +246,62 @@ public class RawQuad {
         VertexFormatElement.Usage usage = element.getUsage();
         int size = type.getSize();
         int mask = (256 << (8 * (size - 1))) - 1;
-        for(int i = 0; i < length; i++)
-        {
-            if(i < count)
-            {
+        for (int i = 0; i < length; i++) {
+            if (i < count) {
                 int pos = vertexStart + size * i;
                 int index = pos >> 2;
                 int offset = pos & 3;
                 int bits = from[index];
                 bits = bits >>> (offset * 8);
-                if((pos + size - 1) / 4 != index)
-                {
+                if ((pos + size - 1) / 4 != index) {
                     bits |= from[index + 1] << ((4 - offset) * 8);
                 }
                 bits &= mask;
-                if(type == VertexFormatElement.Type.FLOAT)
-                {
+                if (type == VertexFormatElement.Type.FLOAT) {
                     to[i] = Float.intBitsToFloat(bits);
+                } else if (type == VertexFormatElement.Type.UBYTE || type == VertexFormatElement.Type.USHORT) {
+                    to[i] = (float) bits / mask;
+                } else if (type == VertexFormatElement.Type.UINT) {
+                    to[i] = (float) ((double) (bits & 0xFFFFFFFFL) / 0xFFFFFFFFL);
+                } else if (type == VertexFormatElement.Type.BYTE) {
+                    to[i] = ((float) (byte) bits) / (mask >> 1);
+                } else if (type == VertexFormatElement.Type.SHORT) {
+                    to[i] = ((float) (short) bits) / (mask >> 1);
+                } else if (type == VertexFormatElement.Type.INT) {
+                    to[i] = (float) ((double) (bits & 0xFFFFFFFFL) / (0xFFFFFFFFL >> 1));
                 }
-                else if(type == VertexFormatElement.Type.UBYTE || type == VertexFormatElement.Type.USHORT)
-                {
-                    to[i] = (float)bits / mask;
-                }
-                else if(type == VertexFormatElement.Type.UINT)
-                {
-                    to[i] = (float)((double)(bits & 0xFFFFFFFFL) / 0xFFFFFFFFL);
-                }
-                else if(type == VertexFormatElement.Type.BYTE)
-                {
-                    to[i] = ((float)(byte)bits) / (mask >> 1);
-                }
-                else if(type == VertexFormatElement.Type.SHORT)
-                {
-                    to[i] = ((float)(short)bits) / (mask >> 1);
-                }
-                else if(type == VertexFormatElement.Type.INT)
-                {
-                    to[i] = (float)((double)(bits & 0xFFFFFFFFL) / (0xFFFFFFFFL >> 1));
-                }
-            }
-            else
-            {
+            } else {
                 to[i] = (i == 3 && usage == VertexFormatElement.Usage.POSITION) ? 1 : 0;
             }
         }
     }
 
     /**
-     * Copied from net.minecraftforge.client.model.pipeline.LightUtil during updating from 1.18.2 to 1.19.4 under LGPL-2.1-only
+     * Copied from net.minecraftforge.client.model.pipeline.LightUtil during updating from 1.18.2 to 1.19.4 under LGPL-2.1
      */
-    public static void pack(float[] from, int[] to, VertexFormat formatTo, int v, int e)
-    {
+    public static void pack(float[] from, int[] to, VertexFormat formatTo, int v, int e) {
         VertexFormatElement element = formatTo.getElements().get(e);
         int vertexStart = v * formatTo.getVertexSize() + formatTo.getOffset(e);
         int count = element.getElementCount();
         VertexFormatElement.Type type = element.getType();
         int size = type.getSize();
         int mask = (256 << (8 * (size - 1))) - 1;
-        for(int i = 0; i < 4; i++)
-        {
-            if(i < count)
-            {
+        for (int i = 0; i < 4; i++) {
+            if (i < count) {
                 int pos = vertexStart + size * i;
                 int index = pos >> 2;
                 int offset = pos & 3;
                 int bits = 0;
                 float f = i < from.length ? from[i] : 0;
-                if(type == VertexFormatElement.Type.FLOAT)
-                {
+                if (type == VertexFormatElement.Type.FLOAT) {
                     bits = Float.floatToRawIntBits(f);
-                }
-                else if(
+                } else if (
                         type == VertexFormatElement.Type.UBYTE ||
                                 type == VertexFormatElement.Type.USHORT ||
                                 type == VertexFormatElement.Type.UINT
-                )
-                {
+                ) {
                     bits = Math.round(f * mask);
-                }
-                else
-                {
+                } else {
                     bits = Math.round(f * (mask >> 1));
                 }
                 to[index] &= ~(mask << (offset * 8));
