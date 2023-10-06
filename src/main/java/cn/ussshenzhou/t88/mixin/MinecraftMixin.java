@@ -15,7 +15,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 public class MinecraftMixin {
 
     @Inject(method = "resizeDisplay",at = @At("RETURN"))
-    private void resizeHudT88(CallbackInfo ci){
+    private void t88ResizeHud(CallbackInfo ci){
         MinecraftForge.EVENT_BUS.post(new ResizeHudEvent());
     }
 }

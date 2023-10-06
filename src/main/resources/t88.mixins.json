@@ -10,10 +10,13 @@
   "client": [
     "AbstractSelectionListAccessor",
     "AbstractWidgetMixin",
+    "ChunkRenderDispatcher$RenderChunk$RebuildTaskMixin",
     "EditBoxAccessor",
     "GameRendererMixin",
     "GuiGraphicsMixin",
+    "LevelRendererMixin",
     "MinecraftMixin",
+    "RenderTypeMixin",
     "SliderButtonAccessor"
   ],
   "injectors": {
