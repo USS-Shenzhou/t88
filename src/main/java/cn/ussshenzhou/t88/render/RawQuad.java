@@ -30,9 +30,9 @@ public class RawQuad {
 
     Point[] points = new Point[4];
     private final int tintIndex;
-    private final Direction direction;
+    private Direction direction;
     private final TextureAtlasSprite sprite;
-    private final boolean shade;
+    private boolean shade;
     static VertexFormat format = DefaultVertexFormat.BLOCK;
     static ImmutableList<VertexFormatElement> elements = format.getElements();
 
@@ -163,8 +163,20 @@ public class RawQuad {
         return maxUV().v0 - mimUV().v0;
     }
 
+    public void setDirection(Direction direction) {
+        this.direction = direction;
+    }
+
+    public void setShade(boolean shade) {
+        this.shade = shade;
+    }
+
     public Direction getDirection() {
         return direction;
+    }
+
+    public boolean isShade() {
+        return shade;
     }
 
     public RawQuad copy() {
@@ -219,6 +231,13 @@ public class RawQuad {
             this.x += x;
             this.y += y;
             this.z += z;
+            return this;
+        }
+
+        public Point setNormal(float x, float y, float z) {
+            this.normalX = x;
+            this.normalY = y;
+            this.normalZ = z;
             return this;
         }
 

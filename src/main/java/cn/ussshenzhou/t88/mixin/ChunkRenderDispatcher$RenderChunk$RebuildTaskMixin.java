@@ -1,5 +1,6 @@
 package cn.ussshenzhou.t88.mixin;
 
+import cn.ussshenzhou.t88.render.ChunkCompileContext;
 import cn.ussshenzhou.t88.render.IFixedModelBlockEntity;
 import com.mojang.blaze3d.vertex.DefaultVertexFormat;
 import com.mojang.blaze3d.vertex.PoseStack;
@@ -16,6 +17,7 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraftforge.client.model.data.ModelData;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
@@ -36,9 +38,9 @@ public class ChunkRenderDispatcher$RenderChunk$RebuildTaskMixin {
             locals = LocalCapture.CAPTURE_FAILSOFT)
     private void t88CompileFixedBlockEntity(float pX, float pY, float pZ, ChunkBufferBuilderPack pChunkBufferBuilderPack,
                                             CallbackInfoReturnable<ChunkRenderDispatcher.RenderChunk.RebuildTask.CompileResults> cir,
-                                            ChunkRenderDispatcher.RenderChunk.RebuildTask.CompileResults compileResults, int i, BlockPos from, BlockPos to, VisGraph visgraph, RenderChunkRegion renderchunkregion, PoseStack posestack, Set<RenderType> renderTypes, RandomSource random, BlockRenderDispatcher blockDispatcher, Iterator<BlockPos> posIterator, BlockPos pos, BlockState state, BlockEntity entity) {
+                                            ChunkRenderDispatcher.RenderChunk.RebuildTask.CompileResults compileResults, int i, BlockPos from, BlockPos to, VisGraph visgraph, RenderChunkRegion renderchunkregion, PoseStack poseStack, Set<RenderType> renderTypes, RandomSource random, BlockRenderDispatcher blockDispatcher, Iterator<BlockPos> posIterator, BlockPos pos, BlockState state, BlockEntity entity) {
         if (entity instanceof IFixedModelBlockEntity fixedModelBlockEntity) {
-            var context = fixedModelBlockEntity.getCompileContext();
+            var context = fixedModelBlockEntity.handleCompileContext(new ChunkCompileContext(renderchunkregion, poseStack, blockDispatcher, pos, state, entity));
             if (context == null) {
                 return;
             }
@@ -48,23 +50,23 @@ public class ChunkRenderDispatcher$RenderChunk$RebuildTaskMixin {
                 builder.begin(VertexFormat.Mode.QUADS, DefaultVertexFormat.BLOCK);
             }
             if (context.bakedModel != null) {
-                posestack.pushPose();
-                posestack.translate((float) (pos.getX() & 15), (float) (pos.getY() & 15), (float) (pos.getZ() & 15));
+                poseStack.pushPose();
+                context.beforeBakedModel.accept(poseStack);
                 var model = context.bakedModel;
                 if (model != null) {
                     blockDispatcher.getModelRenderer().tesselateBlock(renderchunkregion, model,
                             context.bakedModelBlockState == null ? state : context.bakedModelBlockState,
-                            pos, posestack, builder, true, random, state.getSeed(pos), OverlayTexture.NO_OVERLAY,
+                            pos, poseStack, builder, true, random, state.getSeed(pos), OverlayTexture.NO_OVERLAY,
                             model.getModelData(renderchunkregion, pos, state, ((ChunkRenderDispatcher.RenderChunk.RebuildTask) (Object) this).getModelData(pos)),
                             renderType);
                 }
-                posestack.popPose();
+                poseStack.popPose();
             }
             if (context.needRenderAdditional) {
-                posestack.pushPose();
-                posestack.translate((float) (pos.getX() & 15), (float) (pos.getY() & 15), (float) (pos.getZ() & 15));
-                fixedModelBlockEntity.renderAdditional(renderTypes, pChunkBufferBuilderPack, posestack, OverlayTexture.NO_OVERLAY);
-                posestack.popPose();
+                poseStack.pushPose();
+                poseStack.translate(pos.getX(), pos.getY(), pos.getZ());
+                fixedModelBlockEntity.renderAdditional(renderTypes, pChunkBufferBuilderPack, poseStack, OverlayTexture.NO_OVERLAY);
+                poseStack.popPose();
             }
         }
     }

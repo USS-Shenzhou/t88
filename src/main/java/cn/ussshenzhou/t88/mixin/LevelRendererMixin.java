@@ -28,7 +28,7 @@ public abstract class LevelRendererMixin {
     @Final
     private Minecraft minecraft;
 
-    @Shadow
+    @Shadow(remap = false)
     public abstract Frustum getFrustum();
 
     @Inject(method = "renderChunkLayer", at = @At("RETURN"))

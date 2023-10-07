@@ -3,31 +3,26 @@ package cn.ussshenzhou.t88.render;
 import com.mojang.blaze3d.vertex.*;
 import net.minecraft.client.renderer.ChunkBufferBuilderPack;
 import net.minecraft.client.renderer.LevelRenderer;
-import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.RenderType;
-import net.minecraft.client.renderer.block.model.BakedQuad;
-import net.minecraft.client.resources.model.BakedModel;
+import net.minecraft.core.BlockPos;
 import net.minecraft.world.level.block.entity.BlockEntity;
-import net.minecraft.world.level.block.state.BlockState;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
-import org.apache.logging.log4j.core.config.plugins.validation.constraints.NotBlank;
-import org.jetbrains.annotations.ApiStatus;
 
+import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.util.Set;
 
 /**
  * @author USS_Shenzhou
  */
-@OnlyIn(Dist.CLIENT)
 public interface IFixedModelBlockEntity {
 
     private BlockEntity self() {
         return (BlockEntity) this;
     }
 
-    @Nullable ChunkCompileContext getCompileContext();
+    ChunkCompileContext handleCompileContext(ChunkCompileContext context);
 
     /**
      * Use {@link IFixedModelBlockEntity#getBuilder(Set, ChunkBufferBuilderPack, RenderType)} instead of {@link ChunkBufferBuilderPack#builder(RenderType)} .
@@ -64,39 +59,26 @@ public interface IFixedModelBlockEntity {
         return r;
     }
 
-    public static class ChunkCompileContext {
-        @ApiStatus.Internal
-        public RenderType renderType = RenderType.solid();
-        @ApiStatus.Internal
-        public BakedModel bakedModel = null;
-        @ApiStatus.Internal
-        public BlockState bakedModelBlockState = null;
-        @ApiStatus.Internal
-        public boolean needRenderAdditional = false;
+    static boolean isBasicRenderType(RenderType renderType) {
+        return renderType == RenderType.solid()
+                || renderType == RenderType.cutout()
+                || renderType == RenderType.translucent()
+                || renderType == RenderType.cutoutMipped()
+                || renderType == RenderType.tripwire();
+    }
 
-        public ChunkCompileContext() {
+    default void resetToBlock000(RenderType renderType, PoseStack poseStack) {
+        resetToBlock000(self().getBlockPos(), renderType, poseStack);
+    }
+
+    //TODO may need camera compensate
+    static void resetToBlock000(BlockPos pos, RenderType renderType, PoseStack poseStack) {
+        poseStack.setIdentity();
+        if (isBasicRenderType(renderType)) {
+            poseStack.translate(pos.getX() & 15, pos.getY() & 15, pos.getZ() & 15);
+        } else {
+            poseStack.translate(pos.getX(), pos.getY(), pos.getZ());
         }
-
-        public ChunkCompileContext withRenderType(RenderType renderType) {
-            this.renderType = renderType;
-            return this;
-        }
-
-        public ChunkCompileContext withBakedModel(BakedModel bakedModel) {
-            this.bakedModel = bakedModel;
-            return this;
-        }
-
-        public ChunkCompileContext withBlockState(BlockState bakedModelBlockState) {
-            this.bakedModelBlockState = bakedModelBlockState;
-            return this;
-        }
-
-        public ChunkCompileContext withAdditionalRender() {
-            this.needRenderAdditional = true;
-            return this;
-        }
-
     }
 
 }
