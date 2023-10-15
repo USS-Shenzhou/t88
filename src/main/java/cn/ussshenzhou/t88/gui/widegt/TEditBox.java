@@ -47,12 +47,27 @@ public class TEditBox extends EditBox implements TWidget, TResponder<String> {
     }
 
     @Override
+    public boolean charTyped(char pCodePoint, int pModifiers) {
+        if (!this.canConsumeInput()) {
+            return false;
+        }
+        if (isEditable()) {
+            boolean canInsert = !checkInput || SharedConstants.isAllowedChatCharacter(pCodePoint);
+            if (canInsert) {
+                this.insertText(Character.toString(pCodePoint));
+                return true;
+            }
+        }
+        return false;
+    }
+
+    @Override
     public void insertText(String pTextToWrite) {
         int i = Math.min(this.cursorPos, this.highlightPos);
         int j = Math.max(this.cursorPos, this.highlightPos);
         int k = this.maxLength - this.value.length() - (i - j);
         String s = pTextToWrite;
-        if (checkInput){
+        if (checkInput) {
             s = SharedConstants.filterText(pTextToWrite);
         }
         int l = s.length();

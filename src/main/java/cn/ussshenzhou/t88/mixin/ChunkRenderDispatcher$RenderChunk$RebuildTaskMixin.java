@@ -65,7 +65,7 @@ public class ChunkRenderDispatcher$RenderChunk$RebuildTaskMixin {
             if (context.needRenderAdditional) {
                 poseStack.pushPose();
                 poseStack.translate(pos.getX(), pos.getY(), pos.getZ());
-                fixedModelBlockEntity.renderAdditional(renderTypes, pChunkBufferBuilderPack, poseStack, OverlayTexture.NO_OVERLAY);
+                fixedModelBlockEntity.renderAdditional(context, renderTypes, pChunkBufferBuilderPack, poseStack, OverlayTexture.NO_OVERLAY);
                 poseStack.popPose();
             }
         }

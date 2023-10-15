@@ -10,11 +10,11 @@ import org.jetbrains.annotations.ApiStatus;
 import org.objectweb.asm.Type;
 
 import java.lang.reflect.Field;
-import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
-import java.lang.reflect.ParameterizedType;
-import java.util.*;
-import java.util.function.Consumer;
+import java.util.Comparator;
+import java.util.HashMap;
+import java.util.LinkedList;
+import java.util.PriorityQueue;
 
 /**
  * @author USS_Shenzhou
@@ -27,7 +27,10 @@ public class ChunkBufferRenderTypeHelper {
 
     public static LinkedList<RenderType> scan() {
         LinkedList<RenderType> types = new LinkedList<>();
-
+        if (ModList.get() == null) {
+            LogUtils.getLogger().error("Who loaded RenderType early again?");
+            LogUtils.getLogger().error("Just let the game crash. Report to mod's author if you can find the caller method from following stacktrace. Or you can report to USS_Shenzhou.");
+        }
         ModList.get().forEachModInOrder(modContainer -> {
             if (modContainer instanceof FMLModContainer mod) {
                 ModFileScanData scanResults;

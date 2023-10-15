@@ -27,7 +27,7 @@ public interface IFixedModelBlockEntity {
     /**
      * Use {@link IFixedModelBlockEntity#getBuilder(Set, ChunkBufferBuilderPack, RenderType)} instead of {@link ChunkBufferBuilderPack#builder(RenderType)} .
      */
-    default void renderAdditional(Set<RenderType> begunRenderTypes, ChunkBufferBuilderPack builderPack, PoseStack poseStack, int packedOverlay) {
+    default void renderAdditional(ChunkCompileContext context, Set<RenderType> begunRenderTypes, ChunkBufferBuilderPack builderPack, PoseStack poseStack, int packedOverlay) {
     }
 
     default int getPackedLight() {
