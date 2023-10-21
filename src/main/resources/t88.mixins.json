@@ -5,6 +5,7 @@
   "compatibilityLevel": "JAVA_8",
   "refmap": "t88.refmap.json",
   "mixins": [
+    "ConnectionMixin",
     "TextComponentAccessor"
   ],
   "client": [

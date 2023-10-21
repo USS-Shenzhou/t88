@@ -161,7 +161,7 @@ public class TSelectList<E> extends ObjectSelectionList<TSelectList<E>.Entry> im
 
     public void setSelected(int index) {
         int i = Mth.clamp(index, 0, this.children().size() - 1);
-        this.setSelected(this.getEntry(index));
+        this.setSelected(this.getEntry(i));
     }
 
     @Override
@@ -366,10 +366,6 @@ public class TSelectList<E> extends ObjectSelectionList<TSelectList<E>.Entry> im
         this.horizontalAlignment = horizontalAlignment;
     }
 
-    protected TSelectList<E> getThis() {
-        return this;
-    }
-
     public class Entry extends ObjectSelectionList.Entry<Entry> {
         E content;
         Consumer<TSelectList<E>> consumer;
@@ -401,7 +397,7 @@ public class TSelectList<E> extends ObjectSelectionList<TSelectList<E>.Entry> im
         public void render(GuiGraphics guigraphics, int pIndex, int pTop, int pLeft, int pWidth, int pHeight, int pMouseX, int pMouseY, boolean pIsMouseOver, float pPartialTick) {
             Font font = Minecraft.getInstance().font;
             int color = specialForeground == null ? (getSelected() == this ? selectedForeGround : foreground) : specialForeground;
-            TComponent.drawStringSingleLine(getThis(), guigraphics, font, getNarration(), horizontalAlignment, pLeft + 1, pLeft + width - 2, pTop + (pHeight - font.lineHeight) / 2, color);
+            TComponent.drawStringSingleLine(TSelectList.this, guigraphics, font, getNarration(), horizontalAlignment, pLeft + 1, pLeft + width - 2, pTop + (pHeight - font.lineHeight) / 2, color);
             /*switch (horizontalAlignment) {
                 case LEFT:
                     guigraphics.drawString(font, getNarration(), pLeft + 1, pTop + (pHeight - font.lineHeight) / 2, color);
@@ -420,7 +416,7 @@ public class TSelectList<E> extends ObjectSelectionList<TSelectList<E>.Entry> im
         }
 
         public void onSelected() {
-            consumer.accept(getThis());
+            consumer.accept(TSelectList.this);
         }
 
         public void setConsumer(Consumer<TSelectList<E>> consumer) {

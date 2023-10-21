@@ -27,7 +27,7 @@ public class ChunkBufferRenderTypeHelper {
 
     public static LinkedList<RenderType> scan() {
         LinkedList<RenderType> types = new LinkedList<>();
-        if (ModList.get() == null) {
+        /*if (ModList.get() == null) {
             LogUtils.getLogger().error("Who loaded RenderType early again?");
             LogUtils.getLogger().error("Just let the game crash. Report to mod's author if you can find the caller method from following stacktrace. Or you can report to USS_Shenzhou.");
         }
@@ -51,7 +51,7 @@ public class ChunkBufferRenderTypeHelper {
                     handleType(modClass, annotationData, types);
                 });
             }
-        });
+        });*/
         return types;
     }
 

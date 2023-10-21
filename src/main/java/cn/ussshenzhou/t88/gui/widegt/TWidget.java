@@ -10,6 +10,8 @@ import net.minecraft.resources.ResourceLocation;
 
 import javax.annotation.Nullable;
 
+import static cn.ussshenzhou.t88.T88.MOD_ID;
+
 
 /**
  * @author USS_Shenzhou
@@ -17,6 +19,7 @@ import javax.annotation.Nullable;
 @SuppressWarnings("AlibabaAbstractMethodOrInterfaceMethodMustUseJavadoc")
 public interface TWidget extends Renderable, GuiEventListener {
     public static final ResourceLocation BACKGROUND_LOCATION = new ResourceLocation("textures/gui/options_background.png");
+    public static final ResourceLocation PLACEHOLDER_IMAGE = new ResourceLocation(MOD_ID, "textures/gui/placeholder.png");
 
     boolean isVisibleT();
 

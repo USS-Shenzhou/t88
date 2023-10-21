@@ -3,5 +3,7 @@
   "key.categories.t88": "T88",
 
   "key.t88.open_analyzer": "Open Analyzer",
-  "key.t88.clear_recorder": "Clear Recorder"
+  "key.t88.clear_recorder": "Clear Analyzer Recorder",
+
+  "key.t88.open_watcher": "Open NetWork Watcher"
 }

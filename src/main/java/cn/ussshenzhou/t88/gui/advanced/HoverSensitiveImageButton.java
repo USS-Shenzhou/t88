@@ -7,6 +7,8 @@ import net.minecraft.client.gui.components.Button;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 
+import javax.annotation.Nullable;
+
 /**
  * @author USS_Shenzhou
  */
@@ -22,8 +24,14 @@ public class HoverSensitiveImageButton extends TPanel {
     private int transitionTimeMinus1 = 2;
     private float transitionTick = 0;
 
-    public HoverSensitiveImageButton(Component text1, Button.OnPress onPress, ResourceLocation backgroundImageLocation, ResourceLocation backgroundImageLocationHovered) {
+    public HoverSensitiveImageButton(Component text1, Button.OnPress onPress, @Nullable ResourceLocation backgroundImageLocation, @Nullable ResourceLocation backgroundImageLocationHovered) {
         super();
+        if (backgroundImageLocation == null) {
+            backgroundImageLocation = PLACEHOLDER_IMAGE;
+        }
+        if (backgroundImageLocationHovered == null) {
+            backgroundImageLocation = PLACEHOLDER_IMAGE;
+        }
         this.text = new TLabel(text1);
         this.text.setAutoScroll(false);
         this.button = new TButton(Component.literal(""), onPress) {

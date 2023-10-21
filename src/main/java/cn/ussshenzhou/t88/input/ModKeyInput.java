@@ -3,6 +3,7 @@ package cn.ussshenzhou.t88.input;
 import cn.ussshenzhou.t88.T88;
 import cn.ussshenzhou.t88.analyzer.back.T88AnalyzerClient;
 import cn.ussshenzhou.t88.analyzer.front.AnalyzerScreen;
+import cn.ussshenzhou.t88.analyzer.front.NetworkWatcherScreen;
 import cn.ussshenzhou.t88.gui.TestScreen;
 import cn.ussshenzhou.t88.gui.screen.TScreen;
 import com.mojang.blaze3d.platform.InputConstants;
@@ -30,11 +31,15 @@ public class ModKeyInput {
     );
     public static final KeyMapping OPEN_ANALYZER = new KeyMapping(
             "key.t88.open_analyzer", KeyConflictContext.IN_GAME, KeyModifier.ALT,
-            InputConstants.Type.KEYSYM, GLFW.GLFW_KEY_COMMA, "key.categories.t88"
+            InputConstants.Type.KEYSYM, GLFW.GLFW_KEY_A, "key.categories.t88"
     );
     public static final KeyMapping CLEAR_ANALYZER = new KeyMapping(
             "key.t88.clear_recorder", KeyConflictContext.IN_GAME, KeyModifier.CONTROL,
-            InputConstants.Type.KEYSYM, GLFW.GLFW_KEY_COMMA, "key.categories.t88"
+            InputConstants.Type.KEYSYM, GLFW.GLFW_KEY_A, "key.categories.t88"
+    );
+    public static final KeyMapping OPEN_WATCHER = new KeyMapping(
+            "key.t88.open_watcher", KeyConflictContext.IN_GAME, KeyModifier.ALT,
+            InputConstants.Type.KEYSYM, GLFW.GLFW_KEY_W, "key.categories.t88"
     );
 
     @SubscribeEvent
@@ -48,6 +53,8 @@ public class ModKeyInput {
             Minecraft.getInstance().setScreen(new AnalyzerScreen());
         } else if (CLEAR_ANALYZER.consumeClick()) {
             T88AnalyzerClient.RECORDERS.clear();
+        } else if (OPEN_WATCHER.consumeClick()) {
+            Minecraft.getInstance().setScreen(new NetworkWatcherScreen());
         }
     }
 
