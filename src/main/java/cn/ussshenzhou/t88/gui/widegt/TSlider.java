@@ -61,11 +61,11 @@ public class TSlider extends OptionInstance.OptionInstanceSliderButton<Double> i
         this.max = maxValue;
     }
 
-    public TSlider(String title, double minValue, double maxValue, BiFunction<Component, Double, Component> getLabelFromCaptionAndValue, @Nullable Component tipText) {
+    public TSlider(String title, double minValue, double maxValue, BiFunction<Component, Double, Component> textFromCaptionAndValue, @Nullable Component tipText) {
         super(Minecraft.getInstance().options, 0, 0, 0, 0,
                 new OptionInstance<>(title,
                         value -> null,
-                        getLabelFromCaptionAndValue::apply,
+                        textFromCaptionAndValue::apply,
                         new DoubleRange(minValue, maxValue),
                         maxValue,
                         d -> {

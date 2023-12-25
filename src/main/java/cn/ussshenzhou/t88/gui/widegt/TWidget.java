@@ -2,6 +2,8 @@ package cn.ussshenzhou.t88.gui.widegt;
 
 import cn.ussshenzhou.t88.gui.container.TScrollContainer;
 import cn.ussshenzhou.t88.gui.screen.TScreen;
+import com.mojang.logging.LogUtils;
+import net.minecraftforge.common.util.LazyOptional;
 import org.joml.Vector2i;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.Renderable;
@@ -41,6 +43,15 @@ public interface TWidget extends Renderable, GuiEventListener {
 
     @Nullable
     TComponent getParent();
+
+    default TComponent getParentLazy() {
+        var p = getParent();
+        if (p == null) {
+            LogUtils.getLogger().warn("Failed to get parent of {}. Things may not work well.", this);
+            return new TPanel();
+        }
+        return p;
+    }
 
     void setParentScreen(@Nullable TScreen parentScreen);
 

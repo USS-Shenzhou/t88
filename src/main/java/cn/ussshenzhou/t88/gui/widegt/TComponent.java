@@ -4,6 +4,7 @@ import cn.ussshenzhou.t88.gui.screen.TScreen;
 import cn.ussshenzhou.t88.gui.util.Border;
 import cn.ussshenzhou.t88.gui.util.ColorManager;
 import cn.ussshenzhou.t88.gui.util.HorizontalAlignment;
+import com.google.common.collect.ImmutableList;
 import net.minecraft.Util;
 import net.minecraft.client.gui.Font;
 import net.minecraft.network.chat.Component;
@@ -134,17 +135,24 @@ public abstract class TComponent implements TWidget {
         return new Vector2i(width, height);
     }
 
-    public void addAll(TWidget... children) {
+    public TComponent addAll(TWidget... children) {
         Stream.of(children).forEach(this::add);
+        return this;
     }
 
-    public void addAll(Collection<TWidget> children) {
+    public TComponent addAll(Collection<TWidget> children) {
         children.forEach(this::add);
+        return this;
     }
 
-    public void add(TWidget child) {
+    public TComponent add(TWidget child) {
         children.add(child);
         child.setParent(this);
+        return this;
+    }
+
+    public ImmutableList<TWidget> getChildren() {
+        return ImmutableList.copyOf(this.children);
     }
 
     @Override

@@ -1,7 +1,7 @@
 package cn.ussshenzhou.t88.gui.widegt;
 
 import cn.ussshenzhou.t88.gui.event.TWidgetContentUpdatedEvent;
-import cn.ussshenzhou.t88.gui.util.ToTranslatableString;
+import cn.ussshenzhou.t88.gui.util.ITranslatable;
 import net.minecraft.client.Minecraft;
 import net.minecraft.locale.Language;
 import net.minecraft.network.chat.Component;
@@ -12,7 +12,11 @@ import javax.annotation.Nullable;
 import java.util.Collection;
 import java.util.LinkedList;
 import java.util.function.Consumer;
+import java.util.function.Predicate;
 
+/**
+ * @author USS_Shenzhou
+ */
 public class TCycleButton<E> extends TButton {
     LinkedList<Entry> values = new LinkedList<>();
     int cycleIndex = 0;
@@ -46,9 +50,17 @@ public class TCycleButton<E> extends TButton {
         }
     }
 
+    public void removeElement(Entry e) {
+        this.values.remove(e);
+    }
+
     public void removeElement(E e) {
         //this.values.removeIf(entry -> entry.content.toString().equals(e.toString()));
-        this.values.remove(new Entry(e));
+        this.removeElement(new Entry(e));
+    }
+
+    public void removeElement(Predicate<Entry> predicate) {
+        this.values.stream().filter(predicate).findFirst().ifPresent(this::removeElement);
     }
 
     public int getSelectedIndex() {
@@ -86,6 +98,15 @@ public class TCycleButton<E> extends TButton {
         select(values.indexOf(new Entry(content)));
     }
 
+    public void select(Predicate<Entry> predicate) {
+        for (int i = 0; i < values.size(); i++) {
+            if (predicate.test(values.get(i))) {
+                select(i);
+                return;
+            }
+        }
+    }
+
     @Override
     public boolean mouseClicked(double pMouseX, double pMouseY, int pButton) {
         if (isInRange(pMouseX, pMouseY)) {
@@ -99,7 +120,7 @@ public class TCycleButton<E> extends TButton {
     }
 
     protected void cycleOnce(int i) {
-        if (values.size() != 0) {
+        if (!values.isEmpty()) {
             this.cycleIndex = cycleIndex + i;
             if (cycleIndex < 0) {
                 cycleIndex = values.size() - 1;
@@ -131,8 +152,8 @@ public class TCycleButton<E> extends TButton {
         public Component getNarration() {
             Language language = Language.getInstance();
             String s;
-            if (content instanceof ToTranslatableString translatable) {
-                s = translatable.toTranslateKey();
+            if (content instanceof ITranslatable translatable) {
+                s = translatable.translateKey();
             } else {
                 s = content.toString();
             }

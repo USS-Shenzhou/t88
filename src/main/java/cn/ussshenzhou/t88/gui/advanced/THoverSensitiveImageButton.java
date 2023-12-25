@@ -12,7 +12,7 @@ import javax.annotation.Nullable;
 /**
  * @author USS_Shenzhou
  */
-public class HoverSensitiveImageButton extends TPanel {
+public class THoverSensitiveImageButton extends TPanel {
     protected TImage backgroundImage;
     protected TImage backgroundImageHovered;
     protected TButton button;
@@ -24,7 +24,7 @@ public class HoverSensitiveImageButton extends TPanel {
     private int transitionTimeMinus1 = 2;
     private float transitionTick = 0;
 
-    public HoverSensitiveImageButton(Component text1, Button.OnPress onPress, @Nullable ResourceLocation backgroundImageLocation, @Nullable ResourceLocation backgroundImageLocationHovered) {
+    public THoverSensitiveImageButton(Component text1, Button.OnPress onPress, @Nullable ResourceLocation backgroundImageLocation, @Nullable ResourceLocation backgroundImageLocationHovered) {
         super();
         if (backgroundImageLocation == null) {
             backgroundImageLocation = PLACEHOLDER_IMAGE;

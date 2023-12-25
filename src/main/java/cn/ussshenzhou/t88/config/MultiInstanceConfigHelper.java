@@ -52,6 +52,7 @@ public class MultiInstanceConfigHelper {
             try {
                 TMultiInstanceConfig instance = GSON.fromJson(FileUtils.readFileToString(f, StandardCharsets.UTF_8), clazz);
                 putCache(instance);
+                saveConfig(instance);
             } catch (IOException ignored) {
                 LogUtils.getLogger().error("Failed to load config {}. Things may not work well.", f);
             }
