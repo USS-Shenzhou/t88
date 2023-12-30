@@ -11,7 +11,6 @@ import net.minecraft.client.resources.model.BakedModel;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.item.ItemDisplayContext;
 import net.minecraft.world.item.ItemStack;
-import net.neoforged.neoforge.registries.ForgeRegistries;
 import org.joml.Matrix4f;
 import org.joml.Vector2i;
 
@@ -50,33 +49,31 @@ public class TItem extends TPanel {
         graphics.pose().pushPose();
         graphics.pose().translate(x + itemSize / 2, y + itemSize / 2, 150);
         try {
-            graphics.pose().mulPoseMatrix((new Matrix4f()).scaling(1.0F, -1.0F, 1.0F));
+            graphics.pose().mulPoseMatrix(new Matrix4f().scaling(1.0F, -1.0F, 1.0F));
             graphics.pose().scale(16.0F, 16.0F, 16.0F);
-
-            float scale = itemSize / DEFAULT_SIZE;
-            graphics.pose().scale(scale, scale, scale);
-
             boolean flag = !bakedmodel.usesBlockLight();
             if (flag) {
                 Lighting.setupForFlatItems();
             }
-            mc.getItemRenderer().render(item, ItemDisplayContext.GUI, false, graphics.pose(), graphics.bufferSource(), 15728880, OverlayTexture.NO_OVERLAY, bakedmodel);
+            float scale = itemSize / DEFAULT_SIZE;
+            graphics.pose().scale(scale, scale, scale);
+            mc.getItemRenderer()
+                    .render(item, ItemDisplayContext.GUI, false, graphics.pose(), graphics.bufferSource(), 15728880, OverlayTexture.NO_OVERLAY, bakedmodel);
             graphics.flush();
             if (flag) {
                 Lighting.setupFor3DItems();
             }
-        } catch (Throwable var12) {
-            CrashReport crashreport = CrashReport.forThrowable(var12, "Rendering item");
+        } catch (Throwable throwable) {
+            CrashReport crashreport = CrashReport.forThrowable(throwable, "Rendering item");
             CrashReportCategory crashreportcategory = crashreport.addCategory("Item being rendered");
-            crashreportcategory.setDetail("Item Type", () -> String.valueOf(item.getItem()));
-            crashreportcategory.setDetail("Registry Name", () -> String.valueOf(ForgeRegistries.ITEMS.getKey(item.getItem())));
+            crashreportcategory.setDetail("Item Type / Registry Name", () -> String.valueOf(item.getItem()));
             crashreportcategory.setDetail("Item Damage", () -> String.valueOf(item.getDamageValue()));
             crashreportcategory.setDetail("Item NBT", () -> String.valueOf(item.getTag()));
             crashreportcategory.setDetail("Item Foil", () -> String.valueOf(item.hasFoil()));
             throw new ReportedException(crashreport);
         }
-        graphics.pose().popPose();
 
+        graphics.pose().popPose();
     }
 
     @Override

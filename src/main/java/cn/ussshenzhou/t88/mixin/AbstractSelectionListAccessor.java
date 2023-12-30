@@ -17,7 +17,4 @@ public interface AbstractSelectionListAccessor<E extends AbstractSelectionList.E
 
     @Accessor
     boolean isRenderBackground();
-
-    @Accessor
-    boolean isRenderTopAndBottom();
 }

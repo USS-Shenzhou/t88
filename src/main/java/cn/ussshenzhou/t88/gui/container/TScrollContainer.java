@@ -70,7 +70,7 @@ public class TScrollContainer extends TPanel {
     }
 
     protected void prepareTranslate(GuiGraphics guigraphics, float pPartialTick) {
-       guigraphics.pose().translate(0, Mth.lerp(pPartialTick, -prevScrollAmount, -scrollAmount), 0);
+        guigraphics.pose().translate(0, Mth.lerp(pPartialTick, -prevScrollAmount, -scrollAmount), 0);
     }
 
     protected void endTranslate(GuiGraphics guigraphics, float pPartialTick) {
@@ -153,10 +153,10 @@ public class TScrollContainer extends TPanel {
     }
 
     @Override
-    public boolean mouseScrolled(double pMouseX, double pMouseY, double pDelta) {
+    public boolean mouseScrolled(double pMouseX, double pMouseY, double deltaX, double deltaY) {
         if (isInRange(pMouseX, pMouseY)) {
-            if (!super.mouseScrolled(pMouseX, pMouseY, pDelta)) {
-                this.addScrollAmount(pDelta);
+            if (!super.mouseScrolled(pMouseX, pMouseY, deltaX, deltaY)) {
+                this.addScrollAmount(deltaY);
                 return true;
             }
         }

@@ -195,12 +195,12 @@ public abstract class TComponent implements TWidget {
     }
 
     @Override
-    public boolean mouseScrolled(double pMouseX, double pMouseY, double pDelta) {
+    public boolean mouseScrolled(double pMouseX, double pMouseY, double deltaX, double deltaY) {
         for (TWidget tWidget : children) {
             if (!tWidget.isVisibleT()) {
                 continue;
             }
-            if (tWidget.mouseScrolled(pMouseX, pMouseY, pDelta)) {
+            if (tWidget.mouseScrolled(pMouseX, pMouseY, deltaX, deltaY)) {
                 return true;
             }
         }

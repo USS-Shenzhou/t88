@@ -6,6 +6,7 @@ import cn.ussshenzhou.t88.gui.screen.TScreen;
 import cn.ussshenzhou.t88.gui.util.AccessorProxy;
 import cn.ussshenzhou.t88.gui.util.VanillaWidget2TComponentHelper;
 import net.minecraft.SharedConstants;
+import net.neoforged.bus.api.Event;
 import org.joml.Vector2i;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Font;
@@ -29,11 +30,6 @@ public class TEditBox extends EditBox implements TWidget, TResponder<String> {
     protected final LinkedList<Consumer<String>> responders = new LinkedList<>();
     protected boolean checkInput = false;
 
-    @SubscribeEvent
-    public void onClick(ClearEditBoxFocusEvent event) {
-        onClearEditBoxFocusEvent(event);
-    }
-
     protected void onClearEditBoxFocusEvent(ClearEditBoxFocusEvent event) {
         this.setFocused(false);
     }
@@ -41,7 +37,7 @@ public class TEditBox extends EditBox implements TWidget, TResponder<String> {
     public TEditBox(Component tipText) {
         super(Minecraft.getInstance().font, 0, 0, 0, 0, tipText);
         this.setMaxLength(32500);
-        NeoForge.EVENT_BUS.register(this);
+        NeoForge.EVENT_BUS.addListener(this::onClearEditBoxFocusEvent);
         setResponder(this::respond);
         this.addResponder(s -> NeoForge.EVENT_BUS.post(new TWidgetContentUpdatedEvent(this)));
     }
@@ -210,7 +206,6 @@ public class TEditBox extends EditBox implements TWidget, TResponder<String> {
 
     @Override
     public void tickT() {
-        this.tick();
     }
 
     @Override

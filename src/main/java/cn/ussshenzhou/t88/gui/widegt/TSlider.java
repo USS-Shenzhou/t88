@@ -159,7 +159,7 @@ public class TSlider extends OptionInstance.OptionInstanceSliderButton<Double> i
     protected float factor3 = 0.01f;
 
     @Override
-    public boolean mouseScrolled(double pMouseX, double pMouseY, double pDelta) {
+    public boolean mouseScrolled(double pMouseX, double pMouseY, double deltaX, double deltaY) {
         if (isInRange(pMouseX, pMouseY, 2, 2)) {
             if (Screen.hasControlDown()) {
                 if (Screen.hasShiftDown()) {

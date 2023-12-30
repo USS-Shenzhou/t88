@@ -1,7 +1,7 @@
 package cn.ussshenzhou.t88.render;
 
 import com.mojang.blaze3d.vertex.*;
-import net.minecraft.client.renderer.ChunkBufferBuilderPack;
+import net.minecraft.client.renderer.SectionBufferBuilderPack;
 import net.minecraft.client.renderer.LevelRenderer;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.core.BlockPos;
@@ -25,9 +25,9 @@ public interface IFixedModelBlockEntity {
     ChunkCompileContext handleCompileContext(ChunkCompileContext context);
 
     /**
-     * Use {@link IFixedModelBlockEntity#getBuilder(Set, ChunkBufferBuilderPack, RenderType)} instead of {@link ChunkBufferBuilderPack#builder(RenderType)} .
+     * Use {@link IFixedModelBlockEntity#getBuilder(Set, SectionBufferBuilderPack, RenderType)} instead of {@link SectionBufferBuilderPack#builder(RenderType)} .
      */
-    default void renderAdditional(ChunkCompileContext context, Set<RenderType> begunRenderTypes, ChunkBufferBuilderPack builderPack, PoseStack poseStack, int packedOverlay) {
+    default void renderAdditional(ChunkCompileContext context, Set<RenderType> begunRenderTypes, SectionBufferBuilderPack builderPack, PoseStack poseStack, int packedOverlay) {
     }
 
     default int getPackedLight() {
@@ -38,7 +38,7 @@ public interface IFixedModelBlockEntity {
         }
     }
 
-    default BufferBuilder getBuilder(Set<RenderType> begunRenderTypes, ChunkBufferBuilderPack bufferBuilderPack, RenderType type) {
+    default BufferBuilder getBuilder(Set<RenderType> begunRenderTypes, SectionBufferBuilderPack bufferBuilderPack, RenderType type) {
         var map = bufferBuilderPack.builders;
         var builder = map.get(type);
         if (builder == null) {
@@ -51,7 +51,7 @@ public interface IFixedModelBlockEntity {
         return builder;
     }
 
-    default SimpleMultiBufferSource getSimpleMultiBufferSource(Set<RenderType> begunRenderTypes, ChunkBufferBuilderPack bufferBuilderPack, RenderType... types) {
+    default SimpleMultiBufferSource getSimpleMultiBufferSource(Set<RenderType> begunRenderTypes, SectionBufferBuilderPack bufferBuilderPack, RenderType... types) {
         var r = SimpleMultiBufferSource.of(types[0], getBuilder(begunRenderTypes, bufferBuilderPack, types[0]));
         for (int i = 1; i < types.length; i++) {
             r.put(types[i], getBuilder(begunRenderTypes, bufferBuilderPack, types[i]));

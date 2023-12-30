@@ -31,7 +31,7 @@ public abstract class LevelRendererMixin {
     @Shadow(remap = false)
     public abstract Frustum getFrustum();
 
-    @Inject(method = "renderChunkLayer", at = @At("RETURN"))
+    @Inject(method = "renderSectionLayer", at = @At("RETURN"))
     private void t88FireT88RenderLevelStageEvent(RenderType renderType, PoseStack poseStack, double camX, double camY, double camZ, Matrix4f projectionMatrix, CallbackInfo ci) {
         NeoForge.EVENT_BUS.post(
                 new T88RenderLevelStageEvent(RenderLevelStageEvent.Stage.fromRenderType(renderType),

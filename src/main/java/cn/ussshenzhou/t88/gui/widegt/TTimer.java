@@ -1,10 +1,10 @@
 package cn.ussshenzhou.t88.gui.widegt;
 
 import cn.ussshenzhou.t88.gui.event.TimerCountdownReachEvent;
-import cn.ussshenzhou.t88.mixin.TextComponentAccessor;
+import cn.ussshenzhou.t88.mixin.MutableComponentAccessor;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.network.chat.Component;
-import net.minecraft.network.chat.contents.LiteralContents;
+import net.minecraft.network.chat.contents.PlainTextContents.LiteralContents;
 import net.neoforged.neoforge.common.NeoForge;
 
 /**
@@ -85,12 +85,12 @@ public class TTimer extends TLabel {
                     + getRequiredFormatMs(ms);
         }
         this.parseTextLines();
-        ((TextComponentAccessor) text).setContents(new LiteralContents(finalString));
+        ((MutableComponentAccessor) text).setContents(new LiteralContents(finalString));
     }
 
     private String getRequiredFormat1(int i) {
         String s = getRequiredFormat(i);
-        if (s.length() > 0) {
+        if (!s.isEmpty()) {
             return s + ":";
         }
         return s;
@@ -146,7 +146,7 @@ public class TTimer extends TLabel {
         }
         int ms = (int) (time % 1000);
         try {
-            ((TextComponentAccessor) text).setContents(new LiteralContents(finalString
+            ((MutableComponentAccessor) text).setContents(new LiteralContents(finalString
                     .substring(0, finalString.indexOf("."))
                     + getRequiredFormatMs(ms))
             );

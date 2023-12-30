@@ -60,12 +60,12 @@ public abstract class AbstractWidgetMixin {
         this.isHovered = value;
     }
 
-    @Redirect(method = "updateTooltip", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/InputType;isKeyboard()Z"))
+    /*@Redirect(method = "updateTooltip", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/InputType;isKeyboard()Z"))
     private boolean t88IgnoreTooltipRequireLastInput(InputType instance) {
         if (this instanceof TWidget) {
             return true;
         } else {
             return Minecraft.getInstance().getLastInputType().isKeyboard();
         }
-    }
+    }*/
 }

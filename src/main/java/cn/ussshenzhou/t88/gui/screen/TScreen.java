@@ -9,7 +9,7 @@ import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.Renderable;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.network.chat.Component;
-import net.neoforged.neoforge.client.ForgeHooksClient;
+import net.neoforged.neoforge.client.ClientHooks;
 import net.neoforged.neoforge.common.NeoForge;
 
 import java.util.Collection;
@@ -96,7 +96,7 @@ public abstract class TScreen extends Screen {
     }
 
     protected void renderBackGround(GuiGraphics graphics, int pMouseX, int pMouseY, float pPartialTick) {
-        renderBackground(graphics);
+        renderBackground(graphics, pMouseX, pMouseY, pPartialTick);
     }
 
     @Override
@@ -145,12 +145,12 @@ public abstract class TScreen extends Screen {
     }
 
     @Override
-    public boolean mouseScrolled(double pMouseX, double pMouseY, double pDelta) {
+    public boolean mouseScrolled(double pMouseX, double pMouseY, double deltaX, double deltaY) {
         for (TWidget tWidget : tChildren) {
             if (!tWidget.isVisibleT()) {
                 continue;
             }
-            if (tWidget.mouseScrolled(pMouseX, pMouseY, pDelta)) {
+            if (tWidget.mouseScrolled(pMouseX, pMouseY, deltaX, deltaY)) {
                 return true;
             }
         }
@@ -187,6 +187,6 @@ public abstract class TScreen extends Screen {
         if (isFinal) {
             tChildren.forEach(TWidget::onFinalClose);
         }
-        ForgeHooksClient.popGuiLayer(Minecraft.getInstance());
+        ClientHooks.popGuiLayer(Minecraft.getInstance());
     }
 }

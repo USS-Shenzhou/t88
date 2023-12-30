@@ -5,6 +5,7 @@ import net.minecraft.client.Camera;
 import net.minecraft.client.renderer.LevelRenderer;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.culling.Frustum;
+import net.neoforged.bus.api.ICancellableEvent;
 import net.neoforged.neoforge.client.event.RenderLevelStageEvent;
 import net.neoforged.bus.api.Event;
 import org.joml.Matrix4f;
@@ -12,7 +13,7 @@ import org.joml.Matrix4f;
 /**
  * @author USS_Shenzhou
  */
-public class T88RenderChunkBufferTypePrepareEvent extends Event {
+public class T88RenderChunkBufferTypePrepareEvent extends Event implements ICancellableEvent {
     public final RenderType renderType;
     public final LevelRenderer levelRenderer;
     public final PoseStack poseStack;

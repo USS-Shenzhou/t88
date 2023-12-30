@@ -4,6 +4,10 @@ import cn.ussshenzhou.t88.gui.screen.TScreen;
 import cn.ussshenzhou.t88.gui.util.AccessorProxy;
 import cn.ussshenzhou.t88.gui.util.HorizontalAlignment;
 import com.google.common.collect.ImmutableList;
+import net.minecraft.client.gui.components.AbstractSelectionList;
+import net.minecraft.client.gui.screens.Screen;
+import net.minecraft.client.renderer.RenderType;
+import net.minecraft.resources.ResourceLocation;
 import org.joml.Vector2i;
 import com.mojang.blaze3d.systems.RenderSystem;
 import net.minecraft.client.Minecraft;
@@ -17,6 +21,7 @@ import org.jetbrains.annotations.Nullable;
 import org.lwjgl.glfw.GLFW;
 
 import java.util.Collection;
+import java.util.Objects;
 import java.util.function.Consumer;
 
 /**
@@ -24,6 +29,7 @@ import java.util.function.Consumer;
  */
 public class TSelectList<E> extends ObjectSelectionList<TSelectList<E>.Entry> implements TWidget {
     public static final int SCROLLBAR_WIDTH = 6;
+    protected static final ResourceLocation SCROLLER_SPRITE = new ResourceLocation("widget/scroller");
     TComponent parent = null;
     TScreen parentScreen = null;
     int foreground = 0xffffffff;
@@ -32,11 +38,12 @@ public class TSelectList<E> extends ObjectSelectionList<TSelectList<E>.Entry> im
     boolean visible = true;
     int scrollbarGap = 0;
     protected HorizontalAlignment horizontalAlignment = HorizontalAlignment.CENTER;
+    int x1, y1;
 
     public TSelectList(int pItemHeight, int scrollbarGap) {
-        super(Minecraft.getInstance(), 0, 0, 0, 0, pItemHeight);
+        super(Minecraft.getInstance(), 0, 0, 0, pItemHeight);
         this.setRenderBackground(false);
-        this.setRenderTopAndBottom(false);
+        //this.setRenderTopAndBottom(false);
         this.setRenderHeader(false, 0);
         this.scrollbarGap = scrollbarGap;
     }
@@ -125,7 +132,7 @@ public class TSelectList<E> extends ObjectSelectionList<TSelectList<E>.Entry> im
                     return true;
                 }
             } else if (pButton == 0) {
-                this.clickedHeader((int) (pMouseX - (double) (this.x0 + this.width / 2 - this.getRowWidth() / 2)), (int) (pMouseY - (double) this.y0) + (int) this.getScrollAmount() - 4);
+                this.clickedHeader((int) (pMouseX - (double) (this.x + this.width / 2 - this.getRowWidth() / 2)), (int) (pMouseY - (double) this.y) + (int) this.getScrollAmount() - 4);
                 return true;
             }
         }
@@ -133,9 +140,9 @@ public class TSelectList<E> extends ObjectSelectionList<TSelectList<E>.Entry> im
     }
 
     @Override
-    public boolean mouseScrolled(double pMouseX, double pMouseY, double pDelta) {
+    public boolean mouseScrolled(double pMouseX, double pMouseY, double deltaX, double deltaY) {
         if (isInRange(pMouseX, pMouseY)) {
-            return super.mouseScrolled(pMouseX, pMouseY, pDelta);
+            return super.mouseScrolled(pMouseX, pMouseY, deltaX, deltaY);
         } else {
             return false;
         }
@@ -166,22 +173,21 @@ public class TSelectList<E> extends ObjectSelectionList<TSelectList<E>.Entry> im
 
     @Override
     protected int getScrollbarPosition() {
-        return width + x0 - 6;
+        return width + x - 6;
     }
 
     @Override
     public int getRowLeft() {
-        return x0;
+        return x;
     }
 
     @Override
     public int getRowWidth() {
-        return width - scrollbarGap - 6;
+        return width - scrollbarGap - SCROLLBAR_WIDTH;
     }
 
-    @Override
     protected void renderBackground(GuiGraphics guigraphics) {
-        guigraphics.fill(x0, y0, x0 + width - scrollbarGap - 6, y0 + height, background);
+        guigraphics.fill(x, y, x + width - scrollbarGap - 6, y + height, background);
     }
 
     @Override
@@ -197,24 +203,24 @@ public class TSelectList<E> extends ObjectSelectionList<TSelectList<E>.Entry> im
     @Override
     public void setBounds(int x, int y, int width, int height) {
         if (parent != null) {
-            this.x0 = x + parent.x;
-            this.y0 = y + parent.y;
+            this.x = x + parent.x;
+            this.y = y + parent.y;
         } else {
-            this.x0 = x;
-            this.y0 = y;
+            this.x = x;
+            this.y = y;
         }
-        this.x1 = x0 + width - scrollbarGap - 6;
-        this.y1 = y0 + height;
+        this.x1 = this.x + width - scrollbarGap - SCROLLBAR_WIDTH;
+        this.y1 = this.y + height;
         this.width = width;
         this.height = height;
     }
 
     @Override
     public void setAbsBounds(int x, int y, int width, int height) {
-        this.x0 = x;
-        this.y0 = y;
-        this.x1 = x0 + width - scrollbarGap - 6;
-        this.y1 = y0 + height;
+        this.x = x;
+        this.y = y;
+        this.x1 = this.x + width - scrollbarGap - SCROLLBAR_WIDTH;
+        this.y1 = this.y + height;
         this.width = width;
         this.height = height;
     }
@@ -222,49 +228,48 @@ public class TSelectList<E> extends ObjectSelectionList<TSelectList<E>.Entry> im
     /**
      * modified for compatibility with TScrollPanel
      *
-     * @see net.minecraft.client.gui.components.AbstractSelectionList#render(GuiGraphics, int, int, float)
+     * @see AbstractSelectionList#render(GuiGraphics, int, int, float)
      */
     @Override
     public void render(GuiGraphics guigraphics, int pMouseX, int pMouseY, float pPartialTick) {
-        this.renderBackground(guigraphics);
-        int i = this.getScrollbarPosition();
-        int j = i + 6;
+        renderBackground(guigraphics);
         AccessorProxy.AbstractSelectionListProxy.setHovered(this, this.isMouseOver(pMouseX, pMouseY) ? this.getEntryAtPosition(pMouseX, pMouseY) : null);
         if (AccessorProxy.AbstractSelectionListProxy.isRenderBackground(this)) {
-            RenderSystem.setShaderColor(0.125F, 0.125F, 0.125F, 1.0F);
-            guigraphics.blit(BACKGROUND_LOCATION, this.x0, this.y0, (float) this.x1, (float) (this.y1 + (int) this.getScrollAmount()), this.x1 - this.x0, this.y1 - this.y0, 32, 32);
-            RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, 1.0F);
+            guigraphics.setColor(0.125F, 0.125F, 0.125F, 1.0F);
+            guigraphics.blit(Screen.BACKGROUND_LOCATION,
+                    this.getX(), this.getY(), (float) this.getRight(), (float) (this.getBottom() + this.getScrollAmount()),
+                    this.width, this.height, 32, 32
+            );
+            guigraphics.setColor(1.0F, 1.0F, 1.0F, 1.0F);
         }
 
-        int l1 = this.getRowLeft();
-        int l = this.y0 + 4 - (int) this.getScrollAmount();
         this.enableScissor(guigraphics);
         if (AccessorProxy.AbstractSelectionListProxy.isRenderHeader(this)) {
-            this.renderHeader(guigraphics, l1, l);
+            int i1 = this.getRowLeft();
+            int j = this.getY() + 4 - (int) this.getScrollAmount();
+            this.renderHeader(guigraphics, i1, j);
         }
 
         this.renderList(guigraphics, pMouseX, pMouseY, pPartialTick);
         guigraphics.disableScissor();
-        if (AccessorProxy.AbstractSelectionListProxy.isRenderTopAndBottom(this)) {
-            RenderSystem.setShaderColor(0.25F, 0.25F, 0.25F, 1.0F);
-            guigraphics.blit(BACKGROUND_LOCATION, this.x0, 0, 0.0F, 0.0F, this.width, this.y0, 32, 32);
-            guigraphics.blit(BACKGROUND_LOCATION, this.x0, this.y1, 0.0F, (float) this.y1, this.width, this.height - this.y1, 32, 32);
-            RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, 1.0F);
-            guigraphics.fillGradient(this.x0, this.y0, this.x1, this.y0 + 4, -16777216, 0);
-            guigraphics.fillGradient(this.x0, this.y1 - 4, this.x1, this.y1, 0, -16777216);
+        if (AccessorProxy.AbstractSelectionListProxy.isRenderBackground(this)) {
+            int j1 = 4;
+            guigraphics.fillGradient(RenderType.guiOverlay(), this.getX(), this.getY(), this.getRight(), this.getY() + 4, -16777216, 0, 0);
+            guigraphics.fillGradient(RenderType.guiOverlay(), this.getX(), this.getBottom() - 4, this.getRight(), this.getBottom(), 0, -16777216, 0);
         }
 
-        int i2 = this.getMaxScroll();
-        if (i2 > 0) {
-            int j2 = (int) ((float) ((this.y1 - this.y0) * (this.y1 - this.y0)) / (float) this.getMaxPosition());
-            j2 = Mth.clamp(j2, 32, this.y1 - this.y0 - 8);
-            int k1 = (int) this.getScrollAmount() * (this.y1 - this.y0 - j2) / i2 + this.y0;
-            if (k1 < this.y0) {
-                k1 = this.y0;
+        int k1 = this.getMaxScroll();
+        if (k1 > 0) {
+            int l1 = this.getScrollbarPosition();
+            int k = (int) ((float) (this.height * this.height) / (float) this.getMaxPosition());
+            k = Mth.clamp(k, 32, this.height - 8);
+            int l = (int) this.getScrollAmount() * (this.height - k) / k1 + this.getY();
+            if (l < this.getY()) {
+                l = this.getY();
             }
-            guigraphics.fill(i, this.y0, j, +this.y1, -16777216);
-            guigraphics.fill(i, k1, j, k1 + j2, -8355712);
-            guigraphics.fill(i, k1, j - 1, k1 + j2 - 1, -4144960);
+
+            guigraphics.fill(l1, this.getY(), l1 + 6, this.getBottom(), -16777216);
+            guigraphics.blitSprite(SCROLLER_SPRITE, l1, l, 6, k);
         }
 
         this.renderDecorations(guigraphics, pMouseX, pMouseY);
@@ -273,26 +278,26 @@ public class TSelectList<E> extends ObjectSelectionList<TSelectList<E>.Entry> im
 
     @Override
     protected void enableScissor(GuiGraphics guigraphics) {
-        guigraphics.enableScissor(this.x0, (int) (this.y0 - this.getParentScrollAmountIfExist()), this.x1, (int) (this.y1 - this.getParentScrollAmountIfExist()));
+        guigraphics.enableScissor(this.x, (int) (this.y - this.getParentScrollAmountIfExist()), this.x1, (int) (this.y1 - this.getParentScrollAmountIfExist()));
     }
 
     @Override
     protected void renderSelection(GuiGraphics guigraphics, int pTop, int pWidth, int pHeight, int pOuterColor, int pInnerColor) {
         //modified due to scrollbarGap
-        int i = this.x0 + (this.width - pWidth - 6 - scrollbarGap) / 2;
-        int j = this.x0 + (this.width + pWidth - 6 - scrollbarGap) / 2;
+        int i = this.x + (this.width - pWidth - 6 - scrollbarGap) / 2;
+        int j = this.x + (this.width + pWidth - 6 - scrollbarGap) / 2;
         guigraphics.fill(i, pTop - 2, j, pTop + pHeight + 2, pOuterColor);
         guigraphics.fill(i + 1, pTop - 1, j - 1, pTop + pHeight + 1, pInnerColor);
     }
 
     @Override
     public int getXT() {
-        return x0;
+        return x;
     }
 
     @Override
     public int getYT() {
-        return y0;
+        return y;
     }
 
     public void setScrollbarGap(int scrollbarGap) {
@@ -397,7 +402,7 @@ public class TSelectList<E> extends ObjectSelectionList<TSelectList<E>.Entry> im
         public void render(GuiGraphics guigraphics, int pIndex, int pTop, int pLeft, int pWidth, int pHeight, int pMouseX, int pMouseY, boolean pIsMouseOver, float pPartialTick) {
             Font font = Minecraft.getInstance().font;
             int color = specialForeground == null ? (getSelected() == this ? selectedForeGround : foreground) : specialForeground;
-            TComponent.drawStringSingleLine(TSelectList.this, guigraphics, font, getNarration(), horizontalAlignment, pLeft + 1, pLeft + width - 2, pTop + (pHeight - font.lineHeight) / 2, color);
+            TComponent.drawStringSingleLine(TSelectList.this, guigraphics, font, getNarration(), horizontalAlignment, pLeft + 1, pLeft + pWidth - 1, pTop + (pHeight - font.lineHeight) / 2, color);
             /*switch (horizontalAlignment) {
                 case LEFT:
                     guigraphics.drawString(font, getNarration(), pLeft + 1, pTop + (pHeight - font.lineHeight) / 2, color);

@@ -37,11 +37,11 @@ public class ChunkBufferRenderListener {
 
     private static void renderChunkBufferType(T88RenderLevelStageEvent event, RenderType type) {
         event.poseStack.pushPose();
-        if (!NeoForge.EVENT_BUS.post(new T88RenderChunkBufferTypePrepareEvent(type, event))) {
+        if (!NeoForge.EVENT_BUS.post(new T88RenderChunkBufferTypePrepareEvent(type, event)).isCanceled()) {
             double x = event.camera.getPosition().x;
             double y = event.camera.getPosition().y;
             double z = event.camera.getPosition().z;
-            event.levelRenderer.renderChunkLayer(type, event.poseStack, x, y, z, event.projectionMatrix);
+            event.levelRenderer.renderSectionLayer(type, event.poseStack, x, y, z, event.projectionMatrix);
             event.levelRenderer.renderBuffers.bufferSource().endBatch(type);
         }
         event.poseStack.popPose();

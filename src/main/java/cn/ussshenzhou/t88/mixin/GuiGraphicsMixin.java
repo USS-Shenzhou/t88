@@ -15,11 +15,12 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 @Mixin(GuiGraphics.class)
 public class GuiGraphicsMixin {
 
-    @SuppressWarnings("AlibabaLowerCamelCaseVariableNaming")
+    //needtest
+    /*@SuppressWarnings("AlibabaLowerCamelCaseVariableNaming")
     @Inject(method = "slices", at = @At(value = "HEAD"), cancellable = true)
     private static void t88FixDividedByZeroWhenWidgetHasZeroWH(int a, int b, CallbackInfoReturnable<IntIterator> cir) {
         if (b == 0) {
             cir.setReturnValue(new Divisor(a, 0));
         }
-    }
+    }*/
 }

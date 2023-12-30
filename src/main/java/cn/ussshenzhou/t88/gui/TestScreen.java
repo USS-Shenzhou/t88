@@ -118,6 +118,7 @@ public class TestScreen extends TScreen {
         scrollPanel.add(editBox);
         scrollPanel.add(editBox2);
         scrollPanel.add(selectList);
+        //this.add(selectList);
         //this.add(cover);
         cover.setBorder(new Border(0xffff0000, 1));
         cover.setBackground(0x88aaaaaa);
@@ -129,6 +130,7 @@ public class TestScreen extends TScreen {
 
     @Override
     public void layout() {
+        //selectList.setBounds(10,10,50,100);
         title.setBounds(0, 0, title.getPreferredSize().x, title.getPreferredSize().y);
         linesTest.setBounds(50, 50, 80, 40);
         cover.setBounds(25, 25, 260, 180);

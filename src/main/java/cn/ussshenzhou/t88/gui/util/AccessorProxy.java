@@ -41,11 +41,6 @@ public class AccessorProxy {
         public static <E extends AbstractSelectionList.Entry<E>> boolean isRenderBackground(AbstractSelectionList<E> that) {
             return ((AbstractSelectionListAccessor<E>) that).isRenderBackground();
         }
-
-
-        public static <E extends AbstractSelectionList.Entry<E>> boolean isRenderTopAndBottom(AbstractSelectionList<E> that) {
-            return ((AbstractSelectionListAccessor<E>) that).isRenderTopAndBottom();
-        }
     }
 
     public static class SliderProxy {

@@ -173,7 +173,7 @@ public class TSuggestedEditBox extends TPanel {
                 } else {
                     editBox.setValue(s.substring(0, a + 1) + suggestion + s.substring(b));
                 }
-                editBox.moveCursorTo(a + 1 + suggestion.length());
+                editBox.moveCursorTo(a + 1 + suggestion.length(), true);
             }
         }
     }

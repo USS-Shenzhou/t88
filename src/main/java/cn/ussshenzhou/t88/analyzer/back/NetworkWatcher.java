@@ -1,14 +1,9 @@
 package cn.ussshenzhou.t88.analyzer.back;
 
-import io.netty.buffer.Unpooled;
-import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.network.protocol.Packet;
 import net.minecraft.resources.ResourceLocation;
-import net.neoforged.neoforge.network.ICustomPacket;
-import org.spongepowered.asm.mixin.Unique;
 
 import java.util.Map;
-import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ConcurrentHashMap;
 
 /**
@@ -20,7 +15,8 @@ public class NetworkWatcher {
     public static final Map<ResourceLocation, Integer> RECEIVED = new ConcurrentHashMap<>();
 
     public static void record(Packet<?> pPacket, TR dir) {
-        CompletableFuture.runAsync(() -> {
+        //TODO
+        /*CompletableFuture.runAsync(() -> {
             var map = dir == TR.T ? SENT : RECEIVED;
             if (pPacket instanceof ICustomPacket<?> customPacket) {
                 recordInternal(map, customPacket.getName(), customPacket.getInternalData() == null ? 0 : customPacket.getInternalData().readableBytes());
@@ -29,7 +25,7 @@ public class NetworkWatcher {
                 pPacket.write(buf);
                 recordInternal(map, new ResourceLocation("minecraft", pPacket.getClass().getSimpleName().toLowerCase()), buf.readableBytes());
             }
-        });
+        });*/
     }
 
     private static void recordInternal(Map<ResourceLocation, Integer> map, ResourceLocation key, int size) {

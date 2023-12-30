@@ -11,8 +11,8 @@ import org.spongepowered.asm.mixin.gen.Accessor;
  * @author USS_Shenzhou
  */
 @Mixin(MutableComponent.class)
-public interface TextComponentAccessor {
+public interface MutableComponentAccessor {
     @Mutable
     @Accessor
-    void setContents(ComponentContents text);
+    void setContents(ComponentContents contents);
 }

@@ -18,7 +18,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 public class ConnectionMixin {
 
     @Inject(method = "sendPacket", at = @At("HEAD"))
-    private void t88RecordSentByteSize(Packet<?> pPacket, PacketSendListener pSendListener, CallbackInfo ci) {
+    private void t88RecordSentByteSize(Packet<?> pPacket, PacketSendListener pSendListener, boolean flush, CallbackInfo ci) {
         NetworkWatcher.record(pPacket, NetworkWatcher.TR.T);
     }
 

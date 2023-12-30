@@ -18,7 +18,7 @@ public class T88 {
     public static final boolean TEST = GameTestHooks.isGametestEnabled();
 
     public T88(IEventBus modEventBus) {
-        NeoForge.EVENT_BUS.register(this);
+        //NeoForge.EVENT_BUS.register(this);
         modEventBus.addListener(this::setup);
     }
 

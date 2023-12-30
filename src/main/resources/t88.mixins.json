@@ -6,12 +6,12 @@
   "refmap": "t88.refmap.json",
   "mixins": [
     "ConnectionMixin",
-    "TextComponentAccessor"
+    "MutableComponentAccessor"
   ],
   "client": [
+    "SectionRenderDispatcher$RenderSection$RebuildTaskMixin",
     "AbstractSelectionListAccessor",
     "AbstractWidgetMixin",
-    "ChunkRenderDispatcher$RenderChunk$RebuildTaskMixin",
     "EditBoxAccessor",
     "GameRendererMixin",
     "GuiGraphicsMixin",
