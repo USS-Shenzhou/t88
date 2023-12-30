@@ -7,8 +7,8 @@ import com.mojang.blaze3d.vertex.VertexFormatElement;
 import net.minecraft.client.renderer.block.model.BakedQuad;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.core.Direction;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
+import net.neoforged.api.distmarker.Dist;
+import net.neoforged.api.distmarker.OnlyIn;
 import org.apache.commons.lang3.ArrayUtils;
 
 /**
@@ -254,7 +254,7 @@ public class RawQuad {
     }
 
     /**
-     * Copied from net.minecraftforge.client.model.pipeline.LightUtil during updating from 1.18.2 to 1.19.4 under LGPL-2.1
+     * Copied from net.neoforged.neoforge.client.model.pipeline.LightUtil during updating from 1.18.2 to 1.19.4 under LGPL-2.1
      */
     public static void unpack(int[] from, float[] to, VertexFormat formatFrom, int v, int e) {
         int length = 4 < to.length ? 4 : to.length;
@@ -296,7 +296,7 @@ public class RawQuad {
     }
 
     /**
-     * Copied from net.minecraftforge.client.model.pipeline.LightUtil during updating from 1.18.2 to 1.19.4 under LGPL-2.1
+     * Copied from net.neoforged.neoforge.client.model.pipeline.LightUtil during updating from 1.18.2 to 1.19.4 under LGPL-2.1
      */
     public static void pack(float[] from, int[] to, VertexFormat formatTo, int v, int e) {
         VertexFormatElement element = formatTo.getElements().get(e);

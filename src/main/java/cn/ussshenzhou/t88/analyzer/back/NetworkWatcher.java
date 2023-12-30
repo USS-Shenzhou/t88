@@ -4,7 +4,7 @@ import io.netty.buffer.Unpooled;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.network.protocol.Packet;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraftforge.network.ICustomPacket;
+import net.neoforged.neoforge.network.ICustomPacket;
 import org.spongepowered.asm.mixin.Unique;
 
 import java.util.Map;

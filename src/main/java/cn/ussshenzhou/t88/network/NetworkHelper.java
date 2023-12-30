@@ -2,8 +2,8 @@ package cn.ussshenzhou.t88.network;
 
 import com.mojang.logging.LogUtils;
 import net.minecraft.server.level.ServerPlayer;
-import net.minecraftforge.network.PacketDistributor;
-import net.minecraftforge.network.simple.SimpleChannel;
+import net.neoforged.neoforge.network.PacketDistributor;
+import net.neoforged.neoforge.network.simple.SimpleChannel;
 
 import java.util.HashMap;
 import java.util.Locale;

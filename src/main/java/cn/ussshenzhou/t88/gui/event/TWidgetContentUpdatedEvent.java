@@ -1,7 +1,7 @@
 package cn.ussshenzhou.t88.gui.event;
 
 import cn.ussshenzhou.t88.gui.widegt.TWidget;
-import net.minecraftforge.eventbus.api.Event;
+import net.neoforged.bus.api.Event;
 
 /**
  * @author Tony Yu

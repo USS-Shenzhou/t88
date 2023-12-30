@@ -9,8 +9,8 @@ import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.Renderable;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.network.chat.Component;
-import net.minecraftforge.client.ForgeHooksClient;
-import net.minecraftforge.common.MinecraftForge;
+import net.neoforged.neoforge.client.ForgeHooksClient;
+import net.neoforged.neoforge.common.NeoForge;
 
 import java.util.Collection;
 import java.util.LinkedList;
@@ -101,7 +101,7 @@ public abstract class TScreen extends Screen {
 
     @Override
     public boolean mouseClicked(double pMouseX, double pMouseY, int pButton) {
-        MinecraftForge.EVENT_BUS.post(new ClearEditBoxFocusEvent(pMouseX, pMouseY));
+        NeoForge.EVENT_BUS.post(new ClearEditBoxFocusEvent(pMouseX, pMouseY));
         for (TWidget tWidget : tChildren) {
             if (!tWidget.isVisibleT()) {
                 continue;

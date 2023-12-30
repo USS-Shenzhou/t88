@@ -5,7 +5,7 @@ import com.mojang.blaze3d.platform.Window;
 import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.renderer.GameRenderer;
-import net.minecraftforge.common.MinecraftForge;
+import net.neoforged.neoforge.common.NeoForge;
 import org.joml.Matrix4f;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
@@ -19,15 +19,16 @@ import org.spongepowered.asm.mixin.injection.callback.LocalCapture;
 @Mixin(GameRenderer.class)
 public class GameRendererMixin {
 
+    //FIXME
     @Inject(method = "render", at = @At(value = "INVOKE", target = "Lcom/mojang/blaze3d/vertex/PoseStack;popPose()V"), locals = LocalCapture.CAPTURE_FAILSOFT, require = 0)
     private void t88AfterGameRendererRendered(float pPartialTicks, long pNanoTime, boolean pRenderLevel, CallbackInfo ci, int i, int j, Window window, Matrix4f matrix4f, PoseStack posestack, GuiGraphics guigraphics) {
-        MinecraftForge.EVENT_BUS.post(new GameRendererRenderedEvent(pPartialTicks, guigraphics));
+        NeoForge.EVENT_BUS.post(new GameRendererRenderedEvent(pPartialTicks, guigraphics));
         guigraphics.flush();
     }
 
     @Inject(method = "render", at = @At(value = "INVOKE", target = "Lcom/mojang/blaze3d/vertex/PoseStack;popPose()V"), locals = LocalCapture.CAPTURE_FAILSOFT, require = 0, expect = 0)
     private void t88AfterGameRendererRendered$OptifineCompatibility(float pPartialTicks, long pNanoTime, boolean pRenderLevel, CallbackInfo ci, int i, int j, Window window, float guiFarPlane, Matrix4f matrix4f, PoseStack posestack, float guiOffsetZ, GuiGraphics guigraphics) {
-        MinecraftForge.EVENT_BUS.post(new GameRendererRenderedEvent(pPartialTicks, guigraphics));
+        NeoForge.EVENT_BUS.post(new GameRendererRenderedEvent(pPartialTicks, guigraphics));
         guigraphics.flush();
     }
 }

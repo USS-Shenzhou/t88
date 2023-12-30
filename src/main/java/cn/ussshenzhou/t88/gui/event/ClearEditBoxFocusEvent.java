@@ -1,6 +1,6 @@
 package cn.ussshenzhou.t88.gui.event;
 
-import net.minecraftforge.eventbus.api.Event;
+import net.neoforged.bus.api.Event;
 
 /**
  * @author USS_Shenzhou

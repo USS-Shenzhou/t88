@@ -1,9 +1,9 @@
 package cn.ussshenzhou.t88.analyzer.back;
 
 import net.minecraft.Util;
-import net.minecraftforge.event.TickEvent;
-import net.minecraftforge.eventbus.api.SubscribeEvent;
-import net.minecraftforge.fml.common.Mod;
+import net.neoforged.neoforge.event.TickEvent;
+import net.neoforged.bus.api.SubscribeEvent;
+import net.neoforged.fml.common.Mod;
 
 /**
  * @author USS_Shenzhou

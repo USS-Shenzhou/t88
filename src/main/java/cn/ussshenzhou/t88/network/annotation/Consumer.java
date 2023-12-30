@@ -1,6 +1,6 @@
 package cn.ussshenzhou.t88.network.annotation;
 
-import net.minecraftforge.network.NetworkEvent;
+import net.neoforged.neoforge.network.NetworkEvent;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;

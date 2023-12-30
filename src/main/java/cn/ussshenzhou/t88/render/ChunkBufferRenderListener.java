@@ -3,11 +3,11 @@ package cn.ussshenzhou.t88.render;
 import cn.ussshenzhou.t88.render.event.T88RenderChunkBufferTypePrepareEvent;
 import cn.ussshenzhou.t88.render.event.T88RenderLevelStageEvent;
 import net.minecraft.client.renderer.RenderType;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.client.event.RenderLevelStageEvent;
-import net.minecraftforge.common.MinecraftForge;
-import net.minecraftforge.eventbus.api.SubscribeEvent;
-import net.minecraftforge.fml.common.Mod;
+import net.neoforged.api.distmarker.Dist;
+import net.neoforged.neoforge.client.event.RenderLevelStageEvent;
+import net.neoforged.neoforge.common.NeoForge;
+import net.neoforged.bus.api.SubscribeEvent;
+import net.neoforged.fml.common.Mod;
 
 /**
  * @author USS_Shenzhou
@@ -23,7 +23,7 @@ public class ChunkBufferRenderListener {
                 || s == RenderLevelStageEvent.Stage.AFTER_BLOCK_ENTITIES
                 || s == RenderLevelStageEvent.Stage.AFTER_PARTICLES
                 || s == RenderLevelStageEvent.Stage.AFTER_WEATHER) {
-            MinecraftForge.EVENT_BUS.post(new T88RenderLevelStageEvent(event));
+            NeoForge.EVENT_BUS.post(new T88RenderLevelStageEvent(event));
         }
     }
 
@@ -37,7 +37,7 @@ public class ChunkBufferRenderListener {
 
     private static void renderChunkBufferType(T88RenderLevelStageEvent event, RenderType type) {
         event.poseStack.pushPose();
-        if (!MinecraftForge.EVENT_BUS.post(new T88RenderChunkBufferTypePrepareEvent(type, event))) {
+        if (!NeoForge.EVENT_BUS.post(new T88RenderChunkBufferTypePrepareEvent(type, event))) {
             double x = event.camera.getPosition().x;
             double y = event.camera.getPosition().y;
             double z = event.camera.getPosition().z;

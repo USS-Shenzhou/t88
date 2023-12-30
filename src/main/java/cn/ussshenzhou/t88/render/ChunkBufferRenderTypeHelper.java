@@ -2,10 +2,8 @@ package cn.ussshenzhou.t88.render;
 
 import com.mojang.logging.LogUtils;
 import net.minecraft.client.renderer.RenderType;
-import net.minecraftforge.client.event.RenderLevelStageEvent;
-import net.minecraftforge.fml.ModList;
-import net.minecraftforge.fml.javafmlmod.FMLModContainer;
-import net.minecraftforge.forgespi.language.ModFileScanData;
+import net.neoforged.neoforge.client.event.RenderLevelStageEvent;
+import net.neoforged.neoforgespi.language.ModFileScanData;
 import org.jetbrains.annotations.ApiStatus;
 import org.objectweb.asm.Type;
 

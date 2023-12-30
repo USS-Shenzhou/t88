@@ -13,8 +13,8 @@ import net.minecraft.client.gui.components.EditBox;
 import net.minecraft.locale.Language;
 import net.minecraft.network.chat.Component;
 import net.minecraft.util.Mth;
-import net.minecraftforge.common.MinecraftForge;
-import net.minecraftforge.eventbus.api.SubscribeEvent;
+import net.neoforged.neoforge.common.NeoForge;
+import net.neoforged.bus.api.SubscribeEvent;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.LinkedList;
@@ -41,9 +41,9 @@ public class TEditBox extends EditBox implements TWidget, TResponder<String> {
     public TEditBox(Component tipText) {
         super(Minecraft.getInstance().font, 0, 0, 0, 0, tipText);
         this.setMaxLength(32500);
-        MinecraftForge.EVENT_BUS.register(this);
+        NeoForge.EVENT_BUS.register(this);
         setResponder(this::respond);
-        this.addResponder(s -> MinecraftForge.EVENT_BUS.post(new TWidgetContentUpdatedEvent(this)));
+        this.addResponder(s -> NeoForge.EVENT_BUS.post(new TWidgetContentUpdatedEvent(this)));
     }
 
     @Override
@@ -95,7 +95,7 @@ public class TEditBox extends EditBox implements TWidget, TResponder<String> {
 
     @Override
     public void onFinalClose() {
-        MinecraftForge.EVENT_BUS.unregister(this);
+        NeoForge.EVENT_BUS.unregister(this);
         TWidget.super.onFinalClose();
     }
 

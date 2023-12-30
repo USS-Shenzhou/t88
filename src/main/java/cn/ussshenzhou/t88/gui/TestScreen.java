@@ -11,9 +11,10 @@ import cn.ussshenzhou.t88.gui.widegt.*;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Font;
 import net.minecraft.client.gui.GuiGraphics;
-import net.minecraft.client.gui.components.Tooltip;
 import net.minecraft.commands.Commands;
 import net.minecraft.network.chat.Component;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
 
 import java.util.concurrent.CompletableFuture;
 
@@ -39,7 +40,7 @@ public class TestScreen extends TScreen {
     private TSlider slider = new TSlider("Test", 2, 5);
     private TSelectList<String> selectList = new TSelectList<>();
     private TEditBox editBox = new TEditBox();
-    private TSuggestedEditBox editBox2 = new TSuggestedEditBox(d->{
+    private TSuggestedEditBox editBox2 = new TSuggestedEditBox(d -> {
         d.register(Commands.literal("ABCD"));
         d.register(Commands.literal("1df"));
         d.register(Commands.literal("2d"));
@@ -60,6 +61,7 @@ public class TestScreen extends TScreen {
     private TPanel cover = new TPanel();
     private TLabelButton labelButton = new TLabelButton(Component.literal("Label Button"), pButton -> {
     });
+    private TItem item = new TItem(new ItemStack(Items.GRASS_BLOCK), null, 32);
 
     public TestScreen() {
         super(Component.empty());
@@ -121,6 +123,8 @@ public class TestScreen extends TScreen {
         cover.setBackground(0x88aaaaaa);
         //editBox2.setTooltip(Tooltip.create(Component.literal("ABCDEFG")));
         this.add(labelButton);
+        this.add(item);
+        item.setBorder(new Border(0xffffffff, 1));
     }
 
     @Override
@@ -131,7 +135,8 @@ public class TestScreen extends TScreen {
         tTimer.setBounds(50, 100, 80, 20);
         LayoutHelper.BBottomOfA(slider, 10, tTimer);
         scrollPanel.setBounds(210, 20, 200, 100);
-        labelButton.setBounds(50,210,100,30);
+        labelButton.setBounds(50, 210, 100, 30);
+        LayoutHelper.BRightOfA(item, 4, tTimer, item.getPreferredSize());
         super.layout();
     }
 
