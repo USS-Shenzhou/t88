@@ -7,6 +7,7 @@ import cn.ussshenzhou.t88.gui.util.HorizontalAlignment;
 import com.google.common.collect.ImmutableList;
 import net.minecraft.Util;
 import net.minecraft.client.gui.Font;
+import net.minecraft.client.gui.components.Tooltip;
 import net.minecraft.network.chat.Component;
 import net.minecraft.util.Mth;
 import org.joml.Vector2i;
@@ -24,6 +25,7 @@ import java.util.stream.Stream;
 /**
  * @author USS_Shenzhou
  */
+@SuppressWarnings("UnusedReturnValue")
 public abstract class TComponent implements TWidget {
     protected int x, y, width, height;
     protected int relativeX, relativeY;
@@ -37,6 +39,8 @@ public abstract class TComponent implements TWidget {
     TScreen parentScreen = null;
     final int id = (int) (Math.random() * Integer.MAX_VALUE);
     protected boolean showHudEvenLoggedOut = false;
+    @Nullable
+    private Tooltip tooltip;
 
     @Override
     public void setBounds(int x, int y, int width, int height) {
@@ -80,6 +84,9 @@ public abstract class TComponent implements TWidget {
             renderBorder(graphics, pMouseX, pMouseY, pPartialTick);
         }
         renderChildren(graphics, pMouseX, pMouseY, pPartialTick);
+        if (this.tooltip != null) {
+            this.tooltip.refreshTooltipForNextRenderPass(this.isInRange(pMouseX, pMouseY), this.isFocused(), this.getRectangle());
+        }
     }
 
     protected void renderBorder(GuiGraphics graphics, int pMouseX, int pMouseY, float pPartialTick) {
@@ -112,6 +119,23 @@ public abstract class TComponent implements TWidget {
                 w.renderTop(graphics, pMouseX, pMouseY, pPartialTick);
             }
         }
+    }
+
+    public TComponent setTooltip(@Nullable Tooltip pTooltip) {
+        this.tooltip = pTooltip;
+        return this;
+    }
+
+    @Nullable
+    public Tooltip getTooltip() {
+        return this.tooltip;
+    }
+
+    public TComponent setTooltipDelay(int pTooltipMsDelay) {
+        if (this.tooltip != null) {
+            this.tooltip.setDelay(pTooltipMsDelay);
+        }
+        return this;
     }
 
     @Override
@@ -312,24 +336,27 @@ public abstract class TComponent implements TWidget {
         return background;
     }
 
-    public void setBackground(int background) {
+    public TComponent setBackground(int background) {
         this.background = background;
+        return this;
     }
 
     public int getForeground() {
         return foreground;
     }
 
-    public void setForeground(int foreground) {
+    public TComponent setForeground(int foreground) {
         this.foreground = foreground;
+        return this;
     }
 
     public boolean isShowHudEvenLoggedOut() {
         return showHudEvenLoggedOut;
     }
 
-    public void setShowHudEvenLoggedOut(boolean showHudEvenLoggedOut) {
+    public TComponent setShowHudEvenLoggedOut(boolean showHudEvenLoggedOut) {
         this.showHudEvenLoggedOut = showHudEvenLoggedOut;
+        return this;
     }
 
     @Override

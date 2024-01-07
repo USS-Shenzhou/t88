@@ -29,7 +29,7 @@ import java.util.function.Consumer;
  */
 public class TSelectList<E> extends ObjectSelectionList<TSelectList<E>.Entry> implements TWidget {
     public static final int SCROLLBAR_WIDTH = 6;
-    protected static final ResourceLocation SCROLLER_SPRITE = new ResourceLocation("widget/scroller");
+    public static final ResourceLocation SCROLLER_SPRITE = new ResourceLocation("widget/scroller");
     TComponent parent = null;
     TScreen parentScreen = null;
     int foreground = 0xffffffff;
@@ -351,8 +351,9 @@ public class TSelectList<E> extends ObjectSelectionList<TSelectList<E>.Entry> im
         return background;
     }
 
-    public void setBackground(int background) {
+    public TSelectList<E> setBackground(int background) {
         this.background = background;
+        return this;
     }
 
     public int getSelectedForeGround() {

@@ -16,6 +16,7 @@ import java.util.Arrays;
 import java.util.LinkedHashSet;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * @author USS_Shenzhou
@@ -36,6 +37,29 @@ public class HudManager {
 
     public static LinkedHashSet<TComponent> getChildren() {
         return CHILDREN;
+    }
+
+    public static void addIfSameClassNotExist(TComponent... tComponents) {
+        Arrays.stream(tComponents).forEach(component -> {
+            var o = CHILDREN.stream()
+                    .filter(t -> t.getClass() == component.getClass())
+                    .findFirst();
+            if (o.isEmpty()) {
+                add(component);
+            }
+        });
+    }
+
+    public static void addOrReplaceIfSameClassExist(TComponent... tComponents) {
+        Arrays.stream(tComponents).forEach(component -> {
+            var o = CHILDREN.stream()
+                    .filter(t -> t.getClass() == component.getClass())
+                    .findFirst();
+            if (o.isPresent()) {
+                remove(o.get());
+                add(component);
+            }
+        });
     }
 
     @SubscribeEvent

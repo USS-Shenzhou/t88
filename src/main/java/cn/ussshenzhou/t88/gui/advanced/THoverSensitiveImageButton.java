@@ -94,15 +94,15 @@ public class THoverSensitiveImageButton extends TPanel {
     protected void renderChildren(GuiGraphics graphics, int pMouseX, int pMouseY, float pPartialTick) {
         for (TWidget tWidget : children) {
             if (tWidget.isVisibleT()) {
-                if (tWidget == text && backgroundImageHovered.isVisibleT()) {
-                    renderText(graphics, pMouseX, pMouseY, pPartialTick);
-                    continue;
-                }
                 if (tWidget == backgroundImageHovered) {
                     renderBgImageHovered(graphics, pMouseX, pMouseY, pPartialTick);
                     continue;
                 }
                 tWidget.render(graphics, pMouseX, pMouseY, pPartialTick);
+                if (tWidget == text && backgroundImageHovered.isVisibleT()) {
+                    renderText(graphics, pMouseX, pMouseY, pPartialTick);
+                    continue;
+                }
             }
         }
     }

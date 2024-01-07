@@ -61,7 +61,7 @@ public class TestScreen extends TScreen {
     private TPanel cover = new TPanel();
     private TLabelButton labelButton = new TLabelButton(Component.literal("Label Button"), pButton -> {
     });
-    private TItem item = new TItem(new ItemStack(Items.GRASS_BLOCK), null, 32);
+    private TItem item = new TItem(new ItemStack(Items.GRASS_BLOCK,10), null, 32);
 
     public TestScreen() {
         super(Component.empty());

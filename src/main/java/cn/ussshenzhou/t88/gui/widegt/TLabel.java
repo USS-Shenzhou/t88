@@ -14,6 +14,7 @@ import java.util.stream.Stream;
 /**
  * @author USS_Shenzhou
  */
+@SuppressWarnings("UnusedReturnValue")
 public class TLabel extends TPanel {
     protected Component text;
     protected float fontSize = 7;
@@ -50,37 +51,42 @@ public class TLabel extends TPanel {
         return text;
     }
 
-    public void setText(Component text) {
+    public TLabel setText(Component text) {
         this.text = text;
         parseTextLines();
+        return this;
     }
 
     public float getFontSize() {
         return fontSize;
     }
 
-    public void setFontSize(float size) {
+    public TLabel setFontSize(float size) {
         this.fontSize = size;
+        return this;
     }
 
-    public void setHorizontalAlignment(HorizontalAlignment horizontalAlignment) {
+    public TLabel setHorizontalAlignment(HorizontalAlignment horizontalAlignment) {
         this.horizontalAlignment = horizontalAlignment;
+        return this;
     }
 
     public int getLineSpacing() {
         return lineSpacing;
     }
 
-    public void setLineSpacing(int lineSpacing) {
+    public TLabel setLineSpacing(int lineSpacing) {
         this.lineSpacing = lineSpacing;
+        return this;
     }
 
     public boolean isAutoScroll() {
         return autoScroll;
     }
 
-    public void setAutoScroll(boolean autoScroll) {
+    public TLabel setAutoScroll(boolean autoScroll) {
         this.autoScroll = autoScroll;
+        return this;
     }
 
     @Override

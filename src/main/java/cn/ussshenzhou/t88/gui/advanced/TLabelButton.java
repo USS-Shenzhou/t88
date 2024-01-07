@@ -64,16 +64,18 @@ public class TLabelButton extends TLabel {
         return normalBackGround;
     }
 
-    public void setNormalBackGround(int normalBackGround) {
+    public TLabelButton setNormalBackGround(int normalBackGround) {
         this.normalBackGround = normalBackGround;
+        return this;
     }
 
     public int getHoverBackGround() {
         return hoverBackGround;
     }
 
-    public void setHoverBackGround(int hoverBackGround) {
+    public TLabelButton setHoverBackGround(int hoverBackGround) {
         this.hoverBackGround = hoverBackGround;
+        return this;
     }
 
     public TButton getButton() {
