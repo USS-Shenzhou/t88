@@ -53,7 +53,7 @@ public abstract class TScreen extends Screen {
         RenderSystem.defaultBlendFunc();
         RenderSystem.enableDepthTest();
         renderBackGround(graphics, pMouseX, pMouseY, pPartialTick);
-        LinkedList<Renderable> renderTop = new LinkedList<>();
+        graphics.pose().pushPose();
         for (TWidget w : this.tChildren) {
             if (w.isVisibleT()) {
                 graphics.pose().translate(0, 0, 0.1);
@@ -66,6 +66,7 @@ public abstract class TScreen extends Screen {
                 w.renderTop(graphics, pMouseX, pMouseY, pPartialTick);
             }
         }
+        graphics.pose().pushPose();
     }
 
     public void add(TWidget tWidget) {

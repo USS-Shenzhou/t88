@@ -85,7 +85,7 @@ public abstract class TComponent implements TWidget {
         }
         renderChildren(graphics, pMouseX, pMouseY, pPartialTick);
         if (this.tooltip != null) {
-            this.tooltip.refreshTooltipForNextRenderPass(this.isInRange(pMouseX, pMouseY), this.isFocused(), this.getRectangle());
+            this.tooltip.refreshTooltipForNextRenderPass(this.isInRange(pMouseX, pMouseY + getParentScrollAmountIfExist()), this.isFocused(), this.getRectangle());
         }
     }
 

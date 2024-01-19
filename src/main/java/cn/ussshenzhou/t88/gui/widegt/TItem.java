@@ -64,15 +64,16 @@ public class TItem extends TPanel {
     @Override
     public void render(GuiGraphics graphics, int pMouseX, int pMouseY, float pPartialTick) {
         renderItem(graphics, pMouseX, pMouseY, pPartialTick);
+        float scale = itemSize / DEFAULT_SIZE;
         if (count.isVisibleT()) {
             graphics.pose().pushPose();
-            graphics.pose().translate(0, 0, 1);
+            graphics.pose().translate(0, 0, 1 * scale);
             count.render(graphics, pMouseX, pMouseY, pPartialTick);
             graphics.pose().popPose();
         }
         if (showTooltip && isInRange(pMouseX, pMouseY) && this.getTopParentScreen() != null) {
             graphics.pose().pushPose();
-            graphics.pose().translate(0, 0, 500);
+            graphics.pose().translate(0, 0, 500 * scale);
             RenderSystem.disableScissor();
             graphics.renderTooltip(Minecraft.getInstance().font, item.getTooltipLines(Minecraft.getInstance().player, TooltipFlag.NORMAL), item.getTooltipImage(), item, pMouseX, pMouseY);
             var rectangle = graphics.scissorStack.stack.peek();
@@ -80,11 +81,11 @@ public class TItem extends TPanel {
                 Window window = Minecraft.getInstance().getWindow();
                 int i = window.getHeight();
                 double d0 = window.getGuiScale();
-                double d1 = (double)rectangle.left() * d0;
-                double d2 = (double)i - (double)rectangle.bottom() * d0;
-                double d3 = (double)rectangle.width() * d0;
-                double d4 = (double)rectangle.height() * d0;
-                RenderSystem.enableScissor((int)d1, (int)d2, Math.max(0, (int)d3), Math.max(0, (int)d4));
+                double d1 = (double) rectangle.left() * d0;
+                double d2 = (double) i - (double) rectangle.bottom() * d0;
+                double d3 = (double) rectangle.width() * d0;
+                double d4 = (double) rectangle.height() * d0;
+                RenderSystem.enableScissor((int) d1, (int) d2, Math.max(0, (int) d3), Math.max(0, (int) d4));
             }
             graphics.pose().popPose();
         }
@@ -97,8 +98,9 @@ public class TItem extends TPanel {
         }
         var mc = Minecraft.getInstance();
         BakedModel bakedmodel = mc.getItemRenderer().getModel(item, mc.level, host, 42);
+        float scale = itemSize / DEFAULT_SIZE;
         graphics.pose().pushPose();
-        graphics.pose().translate(x + itemSize / 2, y + itemSize / 2, 0.01);
+        graphics.pose().translate(x + itemSize / 2, y + itemSize / 2, 0.01 * scale);
         try {
             graphics.pose().mulPoseMatrix(new Matrix4f().scaling(1.0F, -1.0F, 1.0F));
             graphics.pose().scale(16.0F, 16.0F, 16.0F);
@@ -106,7 +108,6 @@ public class TItem extends TPanel {
             if (flag) {
                 Lighting.setupForFlatItems();
             }
-            float scale = itemSize / DEFAULT_SIZE;
             graphics.pose().scale(scale, scale, scale);
             mc.getItemRenderer()
                     .render(item, ItemDisplayContext.GUI, false, graphics.pose(), graphics.bufferSource(), 15728880, OverlayTexture.NO_OVERLAY, bakedmodel);
