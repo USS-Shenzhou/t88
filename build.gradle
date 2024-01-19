@@ -14,6 +14,7 @@ buildscript {
 plugins {
     id 'idea'
     id 'net.minecraftforge.gradle' version '[6.0,6.2)'
+    id 'maven-publish'
 }
 
 apply plugin: 'org.spongepowered.mixin'
@@ -193,3 +194,13 @@ jar.finalizedBy('reobfJar')
 tasks.withType(JavaCompile).configureEach {
     options.encoding = 'UTF-8' // Use the UTF-8 charset for Java compilation
 }
+
+publishing {
+    publications {
+        t88(MavenPublication){
+            from components.java
+        }
+    }
+}
+
+build.finalizedBy(publishToMavenLocal)
