@@ -2,6 +2,7 @@ package cn.ussshenzhou.t88.mixin;
 
 import cn.ussshenzhou.t88.render.ChunkCompileContext;
 import cn.ussshenzhou.t88.render.IFixedModelBlockEntity;
+import com.llamalad7.mixinextras.sugar.Local;
 import com.mojang.blaze3d.vertex.DefaultVertexFormat;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexFormat;
@@ -34,11 +35,12 @@ import java.util.Set;
 public class ChunkRenderDispatcher$RenderChunk$RebuildTaskMixin {
 
     @Inject(method = "compile", at = @At(value = "INVOKE", shift = At.Shift.AFTER,
-            target = "Lnet/minecraft/client/renderer/chunk/ChunkRenderDispatcher$RenderChunk$RebuildTask;handleBlockEntity(Lnet/minecraft/client/renderer/chunk/ChunkRenderDispatcher$RenderChunk$RebuildTask$CompileResults;Lnet/minecraft/world/level/block/entity/BlockEntity;)V"),
-            locals = LocalCapture.CAPTURE_FAILSOFT)
+            target = "Lnet/minecraft/client/renderer/chunk/ChunkRenderDispatcher$RenderChunk$RebuildTask;handleBlockEntity(Lnet/minecraft/client/renderer/chunk/ChunkRenderDispatcher$RenderChunk$RebuildTask$CompileResults;Lnet/minecraft/world/level/block/entity/BlockEntity;)V"))
     private void t88CompileFixedBlockEntity(float pX, float pY, float pZ, ChunkBufferBuilderPack pChunkBufferBuilderPack,
                                             CallbackInfoReturnable<ChunkRenderDispatcher.RenderChunk.RebuildTask.CompileResults> cir,
-                                            ChunkRenderDispatcher.RenderChunk.RebuildTask.CompileResults compileResults, int i, BlockPos from, BlockPos to, VisGraph visgraph, RenderChunkRegion renderchunkregion, PoseStack poseStack, Set<RenderType> renderTypes, RandomSource random, BlockRenderDispatcher blockDispatcher, Iterator<BlockPos> posIterator, BlockPos pos, BlockState state, BlockEntity entity) {
+                                            @Local RenderChunkRegion renderchunkregion, @Local PoseStack poseStack, @Local Set<RenderType> renderTypes,
+                                            @Local RandomSource random, @Local BlockRenderDispatcher blockDispatcher, @Local(ordinal = 2) BlockPos pos,
+                                            @Local BlockState state, @Local BlockEntity entity) {
         if (entity instanceof IFixedModelBlockEntity fixedModelBlockEntity) {
             var context = fixedModelBlockEntity.handleCompileContext(new ChunkCompileContext(renderchunkregion, poseStack, blockDispatcher, pos, state, entity));
             if (context == null) {
