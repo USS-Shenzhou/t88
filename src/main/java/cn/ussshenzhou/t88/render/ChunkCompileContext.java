@@ -8,6 +8,7 @@ import net.minecraft.client.renderer.block.BlockRenderDispatcher;
 import net.minecraft.client.renderer.chunk.RenderChunkRegion;
 import net.minecraft.client.resources.model.BakedModel;
 import net.minecraft.core.BlockPos;
+import net.minecraft.world.level.BlockAndTintGetter;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 
@@ -18,7 +19,7 @@ import java.util.function.Consumer;
  * @author USS_Shenzhou
  */
 public class ChunkCompileContext {
-    public final RenderChunkRegion level;
+    public final BlockAndTintGetter level;
     public final PoseStack poseStack;
     public final BlockRenderDispatcher blockDispatcher;
     public final BlockPos pos;
@@ -41,7 +42,7 @@ public class ChunkCompileContext {
         return poseStack -> RenderUtil.rotateAroundBlockCenter(BlockUtil.justGetFacing(bakedModelBlockState, state), poseStack);
     }
 
-    public ChunkCompileContext(RenderChunkRegion level, PoseStack poseStack, BlockRenderDispatcher blockDispatcher, BlockPos pos, BlockState state, BlockEntity entity) {
+    public ChunkCompileContext(BlockAndTintGetter level, PoseStack poseStack, BlockRenderDispatcher blockDispatcher, BlockPos pos, BlockState state, BlockEntity entity) {
         this.level = level;
         this.poseStack = poseStack;
         this.blockDispatcher = blockDispatcher;
