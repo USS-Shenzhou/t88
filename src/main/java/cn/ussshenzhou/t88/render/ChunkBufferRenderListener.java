@@ -29,7 +29,7 @@ public class ChunkBufferRenderListener {
 
     @SubscribeEvent
     public static void renderChunkBufferRenderType(T88RenderLevelStageEvent event) {
-        var types = ChunkBufferRenderTypeHelper.renderTypes.get(event.stage);
+        var types = SectionBufferRenderTypeHelper.renderTypes.get(event.stage);
         if (types != null) {
             types.forEach(renderTypeWithPriority -> renderChunkBufferType(event, renderTypeWithPriority.renderType));
         }

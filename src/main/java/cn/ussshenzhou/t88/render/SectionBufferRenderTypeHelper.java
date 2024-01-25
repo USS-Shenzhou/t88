@@ -18,8 +18,8 @@ import java.util.PriorityQueue;
  * @author USS_Shenzhou
  */
 @ApiStatus.Internal
-public class ChunkBufferRenderTypeHelper {
-    private static final Type RENDER_TYPE = Type.getType(ChunkBufferRenderType.class);
+public class SectionBufferRenderTypeHelper {
+    private static final Type RENDER_TYPE = Type.getType(SectionBufferRenderType.class);
 
     public static HashMap<RenderLevelStageEvent.Stage, PriorityQueue<RenderTypeWithPriority>> renderTypes = new HashMap<>();
 
@@ -66,7 +66,7 @@ public class ChunkBufferRenderTypeHelper {
                 Object o = f.get(null);
                 if (o instanceof RenderType renderType) {
                     types.add(renderType);
-                    ChunkBufferRenderType anno = f.getAnnotation(ChunkBufferRenderType.class);
+                    SectionBufferRenderType anno = f.getAnnotation(SectionBufferRenderType.class);
                     renderTypes.computeIfAbsent(anno.value().get(), at -> new PriorityQueue<>(Comparator.comparingInt(r -> r.priority)))
                             .add(new RenderTypeWithPriority(anno.priority(), renderType));
                 } else {

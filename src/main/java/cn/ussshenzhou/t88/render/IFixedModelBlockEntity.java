@@ -6,11 +6,7 @@ import net.minecraft.client.renderer.LevelRenderer;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.level.block.entity.BlockEntity;
-import net.neoforged.api.distmarker.Dist;
-import net.neoforged.api.distmarker.OnlyIn;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
 import java.util.Set;
 
 /**
@@ -22,12 +18,12 @@ public interface IFixedModelBlockEntity {
         return (BlockEntity) this;
     }
 
-    ChunkCompileContext handleCompileContext(ChunkCompileContext context);
+    SectionCompileContext handleCompileContext(SectionCompileContext context);
 
     /**
      * Use {@link IFixedModelBlockEntity#getBuilder(Set, SectionBufferBuilderPack, RenderType)} instead of {@link SectionBufferBuilderPack#builder(RenderType)} .
      */
-    default void renderAdditional(ChunkCompileContext context, Set<RenderType> begunRenderTypes, SectionBufferBuilderPack builderPack, PoseStack poseStack, int packedOverlay) {
+    default void renderAdditional(SectionCompileContext context, Set<RenderType> begunRenderTypes, SectionBufferBuilderPack builderPack, PoseStack poseStack, int packedOverlay) {
     }
 
     default int getPackedLight() {

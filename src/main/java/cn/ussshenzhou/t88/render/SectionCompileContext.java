@@ -5,7 +5,6 @@ import cn.ussshenzhou.t88.util.RenderUtil;
 import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.block.BlockRenderDispatcher;
-import net.minecraft.client.renderer.chunk.RenderChunkRegion;
 import net.minecraft.client.resources.model.BakedModel;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.level.BlockAndTintGetter;
@@ -18,7 +17,7 @@ import java.util.function.Consumer;
 /**
  * @author USS_Shenzhou
  */
-public class ChunkCompileContext {
+public class SectionCompileContext {
     public final BlockAndTintGetter level;
     public final PoseStack poseStack;
     public final BlockRenderDispatcher blockDispatcher;
@@ -42,7 +41,7 @@ public class ChunkCompileContext {
         return poseStack -> RenderUtil.rotateAroundBlockCenter(BlockUtil.justGetFacing(bakedModelBlockState, state), poseStack);
     }
 
-    public ChunkCompileContext(BlockAndTintGetter level, PoseStack poseStack, BlockRenderDispatcher blockDispatcher, BlockPos pos, BlockState state, BlockEntity entity) {
+    public SectionCompileContext(BlockAndTintGetter level, PoseStack poseStack, BlockRenderDispatcher blockDispatcher, BlockPos pos, BlockState state, BlockEntity entity) {
         this.level = level;
         this.poseStack = poseStack;
         this.blockDispatcher = blockDispatcher;
@@ -51,27 +50,27 @@ public class ChunkCompileContext {
         this.entity = entity;
     }
 
-    public ChunkCompileContext withRenderType(RenderType renderType) {
+    public SectionCompileContext withRenderType(RenderType renderType) {
         this.renderType = renderType;
         return this;
     }
 
-    public ChunkCompileContext withBakedModel(BakedModel bakedModel) {
+    public SectionCompileContext withBakedModel(BakedModel bakedModel) {
         this.bakedModel = bakedModel;
         return this;
     }
 
-    public ChunkCompileContext withBlockState(BlockState bakedModelBlockState) {
+    public SectionCompileContext withBlockState(BlockState bakedModelBlockState) {
         this.bakedModelBlockState = bakedModelBlockState;
         return this;
     }
 
-    public ChunkCompileContext withAdditionalRender() {
+    public SectionCompileContext withAdditionalRender() {
         this.needRenderAdditional = true;
         return this;
     }
 
-    public ChunkCompileContext withPrepareBakedModelRender(Consumer<PoseStack> preparer) {
+    public SectionCompileContext withPrepareBakedModelRender(Consumer<PoseStack> preparer) {
         this.beforeBakedModel = preparer;
         return this;
     }

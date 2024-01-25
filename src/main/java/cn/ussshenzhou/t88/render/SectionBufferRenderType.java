@@ -12,7 +12,7 @@ import java.lang.annotation.Target;
  */
 @Target(ElementType.FIELD)
 @Retention(RetentionPolicy.RUNTIME)
-public @interface ChunkBufferRenderType {
+public @interface SectionBufferRenderType {
 
     At value() default At.AFTER_CUTOUT_BLOCKS;
 
