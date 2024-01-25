@@ -6,6 +6,8 @@ import net.neoforged.bus.api.Event;
 /**
  * @author USS_Shenzhou
  */
+@SuppressWarnings("DeprecatedIsStillUsed")
+@Deprecated
 public class GameRendererRenderedEvent extends Event {
     private final float partialTick;
     private final GuiGraphics graphics;
