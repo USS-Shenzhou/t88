@@ -17,6 +17,7 @@ import net.minecraft.util.RandomSource;
 import net.minecraft.world.level.BlockAndTintGetter;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
+import net.neoforged.neoforge.client.model.data.ModelData;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
@@ -27,6 +28,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 import org.spongepowered.asm.mixin.injection.callback.LocalCapture;
 
 import java.util.Iterator;
+import java.util.Objects;
 import java.util.Set;
 
 /**
@@ -36,6 +38,7 @@ import java.util.Set;
 public class SectionRenderDispatcher$RenderSection$RebuildTaskMixin {
 
 
+    //TODO check https://github.com/neoforged/NeoForge/pull/546
     @SuppressWarnings("MissingUnique")
     //needtest
     @Surrogate
@@ -89,11 +92,12 @@ public class SectionRenderDispatcher$RenderSection$RebuildTaskMixin {
             poseStack.pushPose();
             context.beforeBakedModel.accept(poseStack);
             var model = context.bakedModel;
+            var modelDataManager = renderSectionRegion.getModelDataManager();
             if (model != null) {
                 blockDispatcher.getModelRenderer().tesselateBlock(renderSectionRegion, model,
                         context.bakedModelBlockState == null ? state : context.bakedModelBlockState,
                         pos, poseStack, builder, true, random, state.getSeed(pos), OverlayTexture.NO_OVERLAY,
-                        model.getModelData(renderSectionRegion, pos, state, ((SectionRenderDispatcher.RenderSection.RebuildTask) (Object) this).getModelData(pos)),
+                        model.getModelData(renderSectionRegion, pos, state, modelDataManager == null ? ModelData.EMPTY : modelDataManager.getAtOrEmpty(pos)),
                         renderType);
             }
             poseStack.popPose();
