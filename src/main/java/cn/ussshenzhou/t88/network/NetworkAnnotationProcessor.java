@@ -157,9 +157,8 @@ public class NetworkAnnotationProcessor extends AbstractProcessor {
                                                     .client((payload, context) -> context.workHandler().submitAsync(() -> payload.%2$s(context)))
                                                     .server((payload, context) -> context.workHandler().submitAsync(() -> payload.%3$s(context)))
                                     );
-                                    cn.ussshenzhou.t88.network.NetworkHelper
+                                    cn.ussshenzhou.t88.network.NetworkHelper.register(Class.forName(""), Class.forName(""));
                             """, proxyClassName, clientHandlerName, serverHandlerName, registrarName, decoderName));
-
                 });
             });
             registryWriter.println("""
