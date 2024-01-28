@@ -100,6 +100,11 @@ public class NetworkAnnotationProcessor extends AbstractProcessor {
                     import net.neoforged.neoforge.network.event.RegisterPayloadHandlerEvent;
                     import net.neoforged.neoforge.network.registration.IPayloadRegistrar;
                     """, thisPackageName));
+            sources.forEach(element -> {
+                TypeElement sourceClass = (TypeElement) element;
+                var proxyClassName = sourceClass.getSimpleName().toString() + PROXY_CLASS_SUFFIX;
+                registryWriter.println("import " + processingEnv.getElementUtils().getPackageOf(sourceClass).getQualifiedName().toString() + GENERATED_PACKAGE_SUFFIX + "." + proxyClassName + ";");
+            });
             registryWriter.println("""
                                         
                     @Mod.EventBusSubscriber(bus = Mod.EventBusSubscriber.Bus.MOD)
@@ -150,7 +155,7 @@ public class NetworkAnnotationProcessor extends AbstractProcessor {
                     registryWriter.println(String.format("""
                                             %4$s.play(%1$s.ID, %1$s::%5$s,
                                                     handler -> handler
-                                                            .client((payload, context) -> context.workHandler().submitAsync(() -> payload.%2$s(context)))
+                                                            .client((payload, context) -> context.0.8workHandler().submitAsync(() -> payload.%2$s(context)))
                                                             .server((payload, context) -> context.workHandler().submitAsync(() -> payload.%3$s(context)))
                                             );
                                             try {
@@ -160,7 +165,7 @@ public class NetworkAnnotationProcessor extends AbstractProcessor {
                                                 throw new RuntimeException(e);
                                             }
                                     """,
-                            packageName + GENERATED_PACKAGE_SUFFIX + "." + proxyClassName,
+                            proxyClassName,
                             clientHandlerName,
                             serverHandlerName,
                             registrarName,
