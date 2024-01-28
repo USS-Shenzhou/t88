@@ -52,8 +52,14 @@ public class NetworkHelper {
         }
     }
 
-    public static <MSG, T extends CustomPacketPayload> void registerPair(Class<MSG> packet, Class<T> proxy) {
-        ORIGINAL_PROXY_CLASS.put(packet, proxy);
+    public static void register(Class<?> packet, Class<?> proxy) {
+        try {
+            //noinspection unchecked
+            ORIGINAL_PROXY_CLASS.put(packet, (Class<? extends CustomPacketPayload>) proxy);
+        } catch (ClassCastException e) {
+            LogUtils.getLogger().error("T88 Failed to cast {}. This should not happen.", proxy);
+            throw new RuntimeException(e);
+        }
     }
 
     public static <MSG> void sendToServer(MSG packet) {
