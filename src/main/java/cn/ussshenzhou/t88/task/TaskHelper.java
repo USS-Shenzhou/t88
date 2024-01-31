@@ -30,6 +30,10 @@ public class TaskHelper {
             CLIENT_TASKS.addAll(CLIENT_ADD);
             CLIENT_ADD.clear();
             for (Task task : CLIENT_TASKS) {
+                if (task == null) {
+                    REMOVE.add(null);
+                    continue;
+                }
                 task.tick();
                 if (task.shouldRemove()) {
                     REMOVE.add(task);
@@ -47,6 +51,10 @@ public class TaskHelper {
             SERVER_TASKS.addAll(SERVER_ADD);
             SERVER_ADD.clear();
             for (Task task : SERVER_TASKS) {
+                if (task == null) {
+                    REMOVE.add(null);
+                    continue;
+                }
                 task.tick();
                 if (task.shouldRemove()) {
                     REMOVE.add(task);

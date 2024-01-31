@@ -30,7 +30,7 @@ public class NetworkHelper {
         }
     }
 
-    public static <MSG, T extends CustomPacketPayload> T convert(MSG packet) {
+    public static <MSG, T extends CustomPacketPayload> CustomPacketPayload convert(MSG packet) {
         var proxyClass = ORIGINAL_PROXY_CLASS.get(packet.getClass());
         if (proxyClass == null) {
             LogUtils.getLogger().error("Cannot find the proxy class for {}.", packet);
@@ -41,13 +41,12 @@ public class NetworkHelper {
             T proxy = (T) UNSAFE.allocateInstance(proxyClass);
             for (Field field : packet.getClass().getDeclaredFields()) {
                 field.setAccessible(true);
-                var proxyField = proxyClass.getDeclaredField(field.getName());
-                proxyField.setAccessible(true);
-                proxyField.set(proxy, field.get(packet));
+                field.set(proxy, field.get(packet));
             }
             return proxy;
-        } catch (InstantiationException | NoSuchFieldException | IllegalAccessException e) {
-            LogUtils.getLogger().error("This should not happen.");
+        } catch (InstantiationException | IllegalAccessException e) {
+            LogUtils.getLogger().error("This should not happen. This packet will be abandoned.");
+            LogUtils.getLogger().error(e.getMessage());
             throw new RuntimeException(e);
         }
     }
@@ -63,14 +62,26 @@ public class NetworkHelper {
     }
 
     public static <MSG> void sendToServer(MSG packet) {
-        PacketDistributor.SERVER.noArg().send(convert(packet));
+        if (packet instanceof CustomPacketPayload c){
+            PacketDistributor.SERVER.noArg().send(c);
+        }else {
+            PacketDistributor.SERVER.noArg().send(convert(packet));
+        }
     }
 
     public static <MSG> void sendToPlayer(ServerPlayer target, MSG packet) {
-        PacketDistributor.PLAYER.with(target).send(convert(packet));
+        if (packet instanceof CustomPacketPayload c){
+            PacketDistributor.PLAYER.with(target).send(c);
+        }else {
+            PacketDistributor.PLAYER.with(target).send(convert(packet));
+        }
     }
 
     public static <MSG> void sendTo(PacketDistributor.PacketTarget target, MSG packet) {
-        target.send(convert(packet));
+        if (packet instanceof CustomPacketPayload c){
+            target.send(c);
+        }else {
+            target.send(convert(packet));
+        }
     }
 }

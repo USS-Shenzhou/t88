@@ -20,9 +20,10 @@ public abstract class TTitledComponent<T extends TWidget> extends TPanel {
     public TTitledComponent(Component titleText, T component) {
         widget = component;
         title.setText(titleText);
-        title.setHorizontalAlignment(HorizontalAlignment.LEFT);
+        title.setHorizontalAlignment(HorizontalAlignment.LEFT)
+                .setAutoScroll(false)
+                .setForeground(0xff9e9e9e);
         title.setBounds(0,0,0,labelHeight);
-        title.setForeground(0xff9e9e9e);
         this.add(title);
         this.add(widget);
     }

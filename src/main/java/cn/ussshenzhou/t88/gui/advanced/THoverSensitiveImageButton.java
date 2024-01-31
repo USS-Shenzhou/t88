@@ -1,5 +1,6 @@
 package cn.ussshenzhou.t88.gui.advanced;
 
+import cn.ussshenzhou.t88.gui.util.HorizontalAlignment;
 import cn.ussshenzhou.t88.gui.util.LayoutHelper;
 import cn.ussshenzhou.t88.gui.widegt.*;
 import net.minecraft.client.gui.GuiGraphics;
@@ -33,7 +34,8 @@ public class THoverSensitiveImageButton extends TPanel {
             backgroundImageLocation = PLACEHOLDER_IMAGE;
         }
         this.text = new TLabel(text1);
-        this.text.setAutoScroll(false);
+        this.text.setAutoScroll(false)
+                .setHorizontalAlignment(HorizontalAlignment.CENTER);
         this.button = new TButton(Component.literal(""), onPress) {
             @Override
             public void renderWidget(GuiGraphics graphics, int pMouseX, int pMouseY, float pPartialTick) {
@@ -94,15 +96,15 @@ public class THoverSensitiveImageButton extends TPanel {
     protected void renderChildren(GuiGraphics graphics, int pMouseX, int pMouseY, float pPartialTick) {
         for (TWidget tWidget : children) {
             if (tWidget.isVisibleT()) {
+                if (tWidget == text && backgroundImageHovered.isVisibleT()) {
+                    renderText(graphics, pMouseX, pMouseY, pPartialTick);
+                    continue;
+                }
                 if (tWidget == backgroundImageHovered) {
                     renderBgImageHovered(graphics, pMouseX, pMouseY, pPartialTick);
                     continue;
                 }
                 tWidget.render(graphics, pMouseX, pMouseY, pPartialTick);
-                if (tWidget == text && backgroundImageHovered.isVisibleT()) {
-                    renderText(graphics, pMouseX, pMouseY, pPartialTick);
-                    continue;
-                }
             }
         }
     }
@@ -180,15 +182,17 @@ public class THoverSensitiveImageButton extends TPanel {
         return padding;
     }
 
-    public void setPadding(int padding) {
+    public THoverSensitiveImageButton setPadding(int padding) {
         this.padding = padding;
+        return this;
     }
 
     public int getTransitionTimeMinus1() {
         return transitionTimeMinus1;
     }
 
-    public void setTransitionTimeMinus1(int transitionTimeMinus1) {
+    public THoverSensitiveImageButton setTransitionTimeMinus1(int transitionTimeMinus1) {
         this.transitionTimeMinus1 = transitionTimeMinus1;
+        return this;
     }
 }

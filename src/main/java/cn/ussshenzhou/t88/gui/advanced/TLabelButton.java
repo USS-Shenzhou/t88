@@ -27,7 +27,8 @@ public class TLabelButton extends TLabel {
         button.setSkipRenderAsBackend(true);
         this.add(button);
         this.setBorder(new Border(0xffffffff, -1));
-        this.setHorizontalAlignment(HorizontalAlignment.CENTER);
+        this.setHorizontalAlignment(HorizontalAlignment.CENTER)
+                .setAutoScroll(false);
     }
 
     public TLabelButton(Component s, Button.OnPress onPress, int normalBackGround, int hoverBackGround) {

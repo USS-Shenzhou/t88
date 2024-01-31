@@ -140,7 +140,8 @@ public class TOptionsPanel extends TPanel {
             this.add(this.title);
             this.controller = controller;
             this.add(controller);
-            this.title.setHorizontalAlignment(cn.ussshenzhou.t88.gui.util.HorizontalAlignment.RIGHT);
+            this.title.setHorizontalAlignment(cn.ussshenzhou.t88.gui.util.HorizontalAlignment.RIGHT)
+                    .setAutoScroll(false);
         }
 
         @Override

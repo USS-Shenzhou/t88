@@ -11,10 +11,10 @@ import javax.annotation.Nullable;
 /**
  * @author USS_Shenzhou
  */
-public class TFocusSensitiveImageSelectButtonT extends THoverSensitiveImageButton {
+public class TFocusSensitiveImageSelectButton extends THoverSensitiveImageButton {
     private boolean selected = false;
 
-    public TFocusSensitiveImageSelectButtonT(Component text1, Button.OnPress onPress, @Nullable ResourceLocation backgroundImageLocation, @Nullable ResourceLocation backgroundImageLocationFocused) {
+    public TFocusSensitiveImageSelectButton(Component text1, Button.OnPress onPress, @Nullable ResourceLocation backgroundImageLocation, @Nullable ResourceLocation backgroundImageLocationFocused) {
         super(text1, onPress, backgroundImageLocation, backgroundImageLocationFocused);
         this.remove(button);
         this.button = new TButton(Component.literal(""), onPress) {

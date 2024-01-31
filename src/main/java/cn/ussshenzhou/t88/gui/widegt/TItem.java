@@ -38,9 +38,10 @@ public class TItem extends TPanel {
         this.item = item;
         this.itemSize = itemSize;
         count = new TLabel(Component.literal(String.valueOf(item.getCount())))
-                .setHorizontalAlignment(HorizontalAlignment.RIGHT);
+                .setHorizontalAlignment(HorizontalAlignment.RIGHT)
+                .setFontSize(itemSize / DEFAULT_SIZE * TLabel.STD_FONT_SIZE)
+                .setAutoScroll(false);
         this.add(count);
-        count.setFontSize(itemSize / DEFAULT_SIZE * TLabel.STD_FONT_SIZE);
         if (item.getCount() <= 1) {
             count.setVisibleT(false);
         }

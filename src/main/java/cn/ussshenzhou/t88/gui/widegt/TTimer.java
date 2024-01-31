@@ -28,6 +28,7 @@ public class TTimer extends TLabel {
         super();
         prefix = "";
         this.text = Component.empty();
+        this.setAutoScroll(false);
     }
 
     public static TTimer newTimerAndStart() {
