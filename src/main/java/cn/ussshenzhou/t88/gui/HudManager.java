@@ -6,6 +6,7 @@ import cn.ussshenzhou.t88.gui.util.MouseHelper;
 import cn.ussshenzhou.t88.gui.widegt.TComponent;
 import net.minecraft.client.Minecraft;
 import net.neoforged.api.distmarker.Dist;
+import net.neoforged.neoforge.client.event.ClientPlayerNetworkEvent;
 import net.neoforged.neoforge.client.event.RenderGuiEvent;
 import net.neoforged.neoforge.event.TickEvent;
 import net.neoforged.neoforge.event.entity.player.PlayerEvent;
@@ -120,7 +121,7 @@ public class HudManager {
     }
 
     @SubscribeEvent
-    public static void onPlayerOut(PlayerEvent.PlayerLoggedOutEvent event) {
+    public static void onPlayerOut(ClientPlayerNetworkEvent.LoggingOut event) {
         synchronized (CHILDREN) {
             List<TComponent> l = CHILDREN.stream().filter(TComponent::isShowHudEvenLoggedOut).toList();
             CHILDREN.clear();

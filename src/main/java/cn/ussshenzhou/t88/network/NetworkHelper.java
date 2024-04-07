@@ -1,16 +1,15 @@
 package cn.ussshenzhou.t88.network;
 
-import cn.ussshenzhou.t88.T88;
 import com.mojang.logging.LogUtils;
 import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
 import net.minecraft.server.level.ServerPlayer;
 import net.neoforged.neoforge.network.PacketDistributor;
 import sun.misc.Unsafe;
 
-import java.lang.reflect.Constructor;
+import javax.annotation.Nullable;
 import java.lang.reflect.Field;
+import java.lang.reflect.Modifier;
 import java.util.HashMap;
-import java.util.Locale;
 
 /**
  * @author USS_Shenzhou
@@ -30,7 +29,7 @@ public class NetworkHelper {
         }
     }
 
-    public static <MSG, T extends CustomPacketPayload> CustomPacketPayload convert(MSG packet) {
+    public static @Nullable <MSG, T extends CustomPacketPayload> CustomPacketPayload convert(MSG packet) {
         var proxyClass = ORIGINAL_PROXY_CLASS.get(packet.getClass());
         if (proxyClass == null) {
             LogUtils.getLogger().error("Cannot find the proxy class for {}.", packet);
@@ -40,14 +39,22 @@ public class NetworkHelper {
             //noinspection unchecked
             T proxy = (T) UNSAFE.allocateInstance(proxyClass);
             for (Field field : packet.getClass().getDeclaredFields()) {
-                field.setAccessible(true);
-                field.set(proxy, field.get(packet));
+                if (Modifier.isFinal(field.getModifiers())) {
+                    try {
+                        field.setAccessible(true);
+                        field.set(proxy, field.get(packet));
+                    } catch (IllegalAccessException ignored) {
+                    }
+                } else {
+                    field.setAccessible(true);
+                    field.set(proxy, field.get(packet));
+                }
             }
             return proxy;
         } catch (InstantiationException | IllegalAccessException e) {
             LogUtils.getLogger().error("This should not happen. This packet will be abandoned.");
             LogUtils.getLogger().error(e.getMessage());
-            throw new RuntimeException(e);
+            return null;
         }
     }
 
@@ -62,26 +69,35 @@ public class NetworkHelper {
     }
 
     public static <MSG> void sendToServer(MSG packet) {
-        if (packet instanceof CustomPacketPayload c){
+        if (packet instanceof CustomPacketPayload c) {
             PacketDistributor.SERVER.noArg().send(c);
-        }else {
-            PacketDistributor.SERVER.noArg().send(convert(packet));
+        } else {
+            var p = convert(packet);
+            if (p != null) {
+                PacketDistributor.SERVER.noArg().send(p);
+            }
         }
     }
 
     public static <MSG> void sendToPlayer(ServerPlayer target, MSG packet) {
-        if (packet instanceof CustomPacketPayload c){
+        if (packet instanceof CustomPacketPayload c) {
             PacketDistributor.PLAYER.with(target).send(c);
-        }else {
-            PacketDistributor.PLAYER.with(target).send(convert(packet));
+        } else {
+            var p = convert(packet);
+            if (p != null) {
+                PacketDistributor.PLAYER.with(target).send(p);
+            }
         }
     }
 
     public static <MSG> void sendTo(PacketDistributor.PacketTarget target, MSG packet) {
-        if (packet instanceof CustomPacketPayload c){
+        if (packet instanceof CustomPacketPayload c) {
             target.send(c);
-        }else {
-            target.send(convert(packet));
+        } else {
+            var p = convert(packet);
+            if (p != null) {
+                target.send(p);
+            }
         }
     }
 }

@@ -3,17 +3,12 @@ package cn.ussshenzhou.t88.mixin;
 import cn.ussshenzhou.t88.gui.container.TScrollContainer;
 import cn.ussshenzhou.t88.gui.util.MouseHelper;
 import cn.ussshenzhou.t88.gui.widegt.TWidget;
-import net.minecraft.client.InputType;
-import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.components.AbstractWidget;
-import org.checkerframework.checker.units.qual.A;
 import org.objectweb.asm.Opcodes;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
-import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.Redirect;
-import org.spongepowered.asm.mixin.injection.callback.LocalCapture;
 
 /**
  * @author USS_Shenzhou

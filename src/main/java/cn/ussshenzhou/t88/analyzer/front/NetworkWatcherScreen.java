@@ -15,16 +15,16 @@ public class NetworkWatcherScreen extends TScreen {
     private TLabelButton client = new TLabelButton(Component.literal(""), pButton -> {
         //TODO
     });
-    private TLabelButton server = new TLabelButton(Component.literal(""), pButton -> {
+    /*private TLabelButton server = new TLabelButton(Component.literal(""), pButton -> {
         //TODO
-    });
+    });*/
 
     public NetworkWatcherScreen() {
         super(Component.literal("T88 Network Watcher"));
         this.add(client);
-        this.add(server);
+        //this.add(server);
         updateClient();
-        updateServer();
+        //updateServer();
     }
 
     private void updateClient() {
@@ -38,7 +38,7 @@ public class NetworkWatcherScreen extends TScreen {
         client.setText(Component.literal(s.toString()));
     }
 
-    private void updateServer() {
+    /*private void updateServer() {
         StringBuilder s = new StringBuilder("Server: ");
         if (Minecraft.getInstance().player.hasPermissions(2)) {
             if (!NetworkWatcher.fromServerUpdated) {
@@ -54,7 +54,7 @@ public class NetworkWatcherScreen extends TScreen {
             s.append("Permission Denied");
         }
         client.setText(Component.literal(s.toString()));
-    }
+    }*/
 
     private void getReadableSize(StringBuilder s, int bytes) {
         if (bytes < 1000) {
@@ -73,7 +73,7 @@ public class NetworkWatcherScreen extends TScreen {
         super.tick();
         if (t % 20 == 0) {
             updateClient();
-            updateServer();
+            //updateServer();
             layout();
         }
         t++;
@@ -83,8 +83,8 @@ public class NetworkWatcherScreen extends TScreen {
     public void layout() {
         super.layout();
         client.setBounds((int) (width * 0.05), (int) (height * 0.05), client.getPreferredSize().x + 10, 20);
-        var w = server.getPreferredSize().x + 10;
-        server.setBounds((int) (width * 0.95 - w), (int) (height * 0.05), w, 20);
+        //var w = server.getPreferredSize().x + 10;
+        //server.setBounds((int) (width * 0.95 - w), (int) (height * 0.05), w, 20);
     }
 
     @Override

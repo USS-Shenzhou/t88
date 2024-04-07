@@ -11,6 +11,7 @@ import net.neoforged.neoforge.common.NeoForge;
 import javax.annotation.Nullable;
 import java.util.Collection;
 import java.util.LinkedList;
+import java.util.Optional;
 import java.util.function.Consumer;
 import java.util.function.Predicate;
 
@@ -76,6 +77,13 @@ public class TCycleButton<E> extends TButton {
             return null;
         }
         return values.get(cycleIndex);
+    }
+
+    public Optional<Entry> getSelectedOptional() {
+        if (values.isEmpty()) {
+            return Optional.empty();
+        }
+        return Optional.of(values.get(cycleIndex));
     }
 
     public void select(int index) throws IndexOutOfBoundsException {

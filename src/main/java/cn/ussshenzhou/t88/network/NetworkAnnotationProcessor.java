@@ -162,11 +162,9 @@ public class NetworkAnnotationProcessor extends AbstractProcessor {
                             }
                         }
                     }
-                    if (clientHandlerName == null || serverHandlerName == null || decoderName == null) {
+                    if (decoderName == null) {
                         processingEnv.getMessager().printMessage(Diagnostic.Kind.ERROR,
                                 "Failed to get valid method name. @NetPacket class = " + sourceClassName
-                                        + ", @ClientHandler = " + clientHandlerName
-                                        + ", @ServerHandler = " + serverHandlerName
                                         + ", @Decoder = " + decoderName
                         );
                         return;
@@ -174,8 +172,8 @@ public class NetworkAnnotationProcessor extends AbstractProcessor {
                     registryWriter.println(String.format("""
                                             %4$s.play(%1$s.ID, %1$s::%5$s,
                                                     handler -> handler
-                                                            .client((payload, context) -> context.workHandler().submitAsync(() -> payload.%2$s(context)))
-                                                            .server((payload, context) -> context.workHandler().submitAsync(() -> payload.%3$s(context)))
+                                                            .client((payload, context) -> context.workHandler().submitAsync(() -> %2$s))
+                                                            .server((payload, context) -> context.workHandler().submitAsync(() -> %3$s))
                                             );
                                             try {
                                                 cn.ussshenzhou.t88.network.NetworkHelper.register(Class.forName("%6$s"), Class.forName("%7$s"));
@@ -185,8 +183,8 @@ public class NetworkAnnotationProcessor extends AbstractProcessor {
                                             }
                                     """,
                             proxyClassName,
-                            clientHandlerName,
-                            serverHandlerName,
+                            clientHandlerName == null ? "{}" : String.format("payload.%s(context)", clientHandlerName),
+                            serverHandlerName == null ? "{}" : String.format("payload.%s(context)", serverHandlerName),
                             registrarName,
                             decoderName,
                             packageName + "." + sourceClassName,

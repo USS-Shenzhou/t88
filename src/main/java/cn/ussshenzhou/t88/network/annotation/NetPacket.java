@@ -8,7 +8,7 @@ import java.lang.annotation.Target;
 /**
  * Annotate to generate registrations for a custom play-stage network packet/payload during RegisterPayloadHandlerEvent.
  * <p>Annotated class must have a proper constructor (for you to create and send the packet),
- * a {@link Decoder} (constructor) method, a {@link Encoder} method, a {@link ClientHandler} and a {@link ServerHandler} method.
+ * a {@link Decoder} (constructor) method(necessary), a {@link Encoder} method(necessary), a {@link ClientHandler}(unnecessary) and a {@link ServerHandler} method(unnecessary).
  * @author USS_Shenzhou
  */
 @Target(ElementType.TYPE)

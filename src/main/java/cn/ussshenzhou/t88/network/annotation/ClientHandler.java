@@ -9,7 +9,7 @@ import java.lang.annotation.Target;
 
 /**
  * Mark a method as a client-side handler of a packet.
- * <p>Marked method must take a Supplier of {@link PlayPayloadContext} as parameter.
+ * <p>Marked method must take a {@link PlayPayloadContext} as parameter.
  * @author USS_Shenzhou
  */
 @Target(ElementType.METHOD)

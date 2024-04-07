@@ -2,6 +2,8 @@ package cn.ussshenzhou.t88.render;
 
 import com.mojang.logging.LogUtils;
 import net.minecraft.client.renderer.RenderType;
+import net.neoforged.fml.ModList;
+import net.neoforged.fml.javafmlmod.FMLModContainer;
 import net.neoforged.neoforge.client.event.RenderLevelStageEvent;
 import net.neoforged.neoforgespi.language.ModFileScanData;
 import org.jetbrains.annotations.ApiStatus;
@@ -25,8 +27,8 @@ public class SectionBufferRenderTypeHelper {
 
     public static LinkedList<RenderType> scan() {
         LinkedList<RenderType> types = new LinkedList<>();
-        /*if (ModList.get() == null) {
-            LogUtils.getLogger().error("Who loaded RenderType early again?");
+        if (ModList.get() == null) {
+            LogUtils.getLogger().error("Who loaded RenderType early... again?");
             LogUtils.getLogger().error("Just let the game crash. Report to mod's author if you can find the caller method from following stacktrace. Or you can report to USS_Shenzhou.");
         }
         ModList.get().forEachModInOrder(modContainer -> {
@@ -49,7 +51,7 @@ public class SectionBufferRenderTypeHelper {
                     handleType(modClass, annotationData, types);
                 });
             }
-        });*/
+        });
         return types;
     }
 
