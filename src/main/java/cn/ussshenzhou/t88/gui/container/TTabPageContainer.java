@@ -31,6 +31,14 @@ public class TTabPageContainer extends TPanel {
     }
 
     @Override
+    public void tickT() {
+        if (getSelectedTab() == null && !container.tabs.isEmpty()) {
+            selectTab(0);
+        }
+        super.tickT();
+    }
+
+    @Override
     public void layout() {
         container.setBounds(0, 0, width, Math.min(height / 2, container.getPreferredSize().y));
         container.tabs.forEach(tab -> LayoutHelper.BBottomOfA(tab.content, 1, container, width, height - 1 - container.getHeight()));

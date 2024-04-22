@@ -84,18 +84,16 @@ public abstract class TComponent implements TWidget {
             renderBorder(graphics, pMouseX, pMouseY, pPartialTick);
         }
         renderChildren(graphics, pMouseX, pMouseY, pPartialTick);
-        if (this.tooltip != null) {
-            this.tooltip.refreshTooltipForNextRenderPass(this.isInRange(pMouseX, pMouseY + getParentScrollAmountIfExist()), this.isFocused(), this.getRectangle());
+        var t = this.getTooltip();
+        if (t != null) {
+            t.refreshTooltipForNextRenderPass(this.isInRange(pMouseX, pMouseY + getParentScrollAmountIfExist()), this.isFocused(), this.getRectangle());
         }
     }
 
     protected void renderBorder(GuiGraphics graphics, int pMouseX, int pMouseY, float pPartialTick) {
         int thickness = border.getThickness();
         int color = border.getColor();
-        graphics.fill(x - thickness, y - thickness, x + width + thickness, y, color);
-        graphics.fill(x - thickness, y + height, x + width + thickness, y + height + thickness, color);
-        graphics.fill(x - thickness, y, x, y + height, color);
-        graphics.fill(x + width, y, x + width + thickness, y + height, color);
+        Border.renderBorder(graphics, color, thickness, x, y, width, height);
     }
 
     protected void renderBackground(GuiGraphics graphics, int pMouseX, int pMouseY, float pPartialTick) {

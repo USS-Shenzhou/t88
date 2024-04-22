@@ -1,7 +1,6 @@
 package cn.ussshenzhou.t88.mixin;
 
-import cn.ussshenzhou.t88.analyzer.back.NetworkWatcher;
-import com.mojang.logging.LogUtils;
+import cn.ussshenzhou.t88.networkanalyzer.NetworkWatcher;
 import io.netty.channel.ChannelHandlerContext;
 import net.minecraft.network.Connection;
 import net.minecraft.network.PacketSendListener;

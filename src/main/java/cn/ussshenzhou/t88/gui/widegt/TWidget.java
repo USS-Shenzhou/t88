@@ -11,6 +11,8 @@ import org.joml.Vector2i;
 
 import javax.annotation.Nullable;
 
+import java.util.Optional;
+
 import static cn.ussshenzhou.t88.T88.MOD_ID;
 
 
@@ -97,6 +99,10 @@ public interface TWidget extends Renderable, GuiEventListener {
         return null;
     }
 
+    default <T extends TWidget> Optional<T> getParentInstanceOfOptional(Class<T> c) {
+        return Optional.ofNullable(getParentInstanceOf(c));
+    }
+
     default @Nullable TScreen getTopParentScreen() {
         TWidget t = this;
         while (t != null) {
@@ -106,6 +112,16 @@ public interface TWidget extends Renderable, GuiEventListener {
             t = t.getParent();
         }
         return null;
+    }
+
+    default Optional<TScreen> getTopParentScreenOptional() {
+        return Optional.ofNullable(getTopParentScreen());
+    }
+
+    default <T extends TScreen> Optional<T> getTopParentScreenAsOptional(Class<T> c) {
+        var s = getTopParentScreen();
+        //noinspection unchecked
+        return c.isInstance(s) ? Optional.of((T) s) : Optional.empty();
     }
 
     default double getParentScrollAmountIfExist() {

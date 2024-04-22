@@ -7,6 +7,7 @@ import net.neoforged.fml.javafmlmod.FMLModContainer;
 import net.neoforged.neoforge.client.event.RenderLevelStageEvent;
 import net.neoforged.neoforgespi.language.ModFileScanData;
 import org.jetbrains.annotations.ApiStatus;
+import org.jline.utils.Log;
 import org.objectweb.asm.Type;
 
 import java.lang.reflect.Field;
@@ -28,8 +29,16 @@ public class SectionBufferRenderTypeHelper {
     public static LinkedList<RenderType> scan() {
         LinkedList<RenderType> types = new LinkedList<>();
         if (ModList.get() == null) {
-            LogUtils.getLogger().error("Who loaded RenderType early... again?");
-            LogUtils.getLogger().error("Just let the game crash. Report to mod's author if you can find the caller method from following stacktrace. Or you can report to USS_Shenzhou.");
+            LogUtils.getLogger().error("""
+                    Who loads RenderType.class early... again?
+                    You can find the murderer in the log above, from "RenderType.class loaded by:".
+                    Just let the game crash. Report to mod's author if you can find the caller method from following stacktrace. Or you can report to USS_Shenzhou.""");
+            if (System.getProperty("t88.ignore_section_buffer_render_type") == null) {
+                LogUtils.getLogger().error("If you DO want to continue, you can add -Dt88.ignore_section_buffer_render_type=true to JVM options and reboot. This may cause crash in the future.");
+            } else {
+                LogUtils.getLogger().error("I see that you have added -Dt88.ignore_section_buffer_render_type=true to JVM options and reboot. We shall continue. This may cause crash in the future.");
+                return new LinkedList<>();
+            }
         }
         ModList.get().forEachModInOrder(modContainer -> {
             if (modContainer instanceof FMLModContainer mod) {

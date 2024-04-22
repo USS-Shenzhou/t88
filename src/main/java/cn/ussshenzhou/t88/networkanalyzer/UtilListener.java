@@ -1,4 +1,4 @@
-package cn.ussshenzhou.t88.analyzer.back;
+package cn.ussshenzhou.t88.networkanalyzer;
 
 import net.minecraft.Util;
 import net.neoforged.neoforge.event.TickEvent;

@@ -1,4 +1,4 @@
-package cn.ussshenzhou.t88.analyzer.back;
+package cn.ussshenzhou.t88.networkanalyzer;
 
 import com.mojang.logging.LogUtils;
 import io.netty.buffer.Unpooled;
@@ -24,9 +24,9 @@ import java.util.concurrent.ConcurrentHashMap;
  */
 public class NetworkWatcher {
 
-    //modId - classname - size
-    public static final Map<Tuple<String, String>, Integer> SENT = new ConcurrentHashMap<>();
-    public static final Map<Tuple<String, String>, Integer> RECEIVED = new ConcurrentHashMap<>();
+    //modId : classname - size
+    public static final Map<SenderInfo, SizeAndTimes> SENT = new ConcurrentHashMap<>();
+    public static final Map<SenderInfo, SizeAndTimes> RECEIVED = new ConcurrentHashMap<>();
     public static final Map<Class<?>, String> MOD_ID_CACHE = new ConcurrentHashMap<>();
 
     public static void record(Packet<?> packet, TR dir) {
@@ -34,15 +34,31 @@ public class NetworkWatcher {
             var map = dir == TR.T ? SENT : RECEIVED;
             var buf = new FriendlyByteBuf(Unpooled.buffer());
             packet.write(buf);
-            recordInternal(map, new Tuple<>(findModId(packet), packet.getClass().getSimpleName()), buf.readableBytes());
+            /*if (buf.readableBytes() > 1000_000) {
+                LogUtils.getLogger().warn("{}", buf.writerIndex());
+            }*/
+            recordInternal(map, getSenderInfo(packet), buf.writerIndex());
         });
+    }
+
+    public static SenderInfo getSenderInfo(Packet<?> packet) {
+        String clazz;
+        if (packet instanceof ClientboundCustomPayloadPacket p) {
+            clazz = p.payload().getClass().getSimpleName();
+        } else if (packet instanceof ServerboundCustomPayloadPacket p) {
+            clazz = p.payload().getClass().getSimpleName();
+        } else {
+            var s = packet.getClass().getName().split("\\.");
+            clazz = s[s.length - 1];
+        }
+        return new SenderInfo(findModId(packet), clazz);
     }
 
     public static String findModId(Packet<?> packet) {
         if (packet instanceof ClientboundCustomPayloadPacket p) {
-            return MOD_ID_CACHE.computeIfAbsent(packet.getClass(), c -> searchModId(p.payload()));
+            return MOD_ID_CACHE.computeIfAbsent(p.payload().getClass(), c -> searchModId(p.payload()));
         } else if (packet instanceof ServerboundCustomPayloadPacket p) {
-            return MOD_ID_CACHE.computeIfAbsent(packet.getClass(), c -> searchModId(p.payload()));
+            return MOD_ID_CACHE.computeIfAbsent(p.payload().getClass(), c -> searchModId(p.payload()));
         }
         return "minecraft";
     }
@@ -50,24 +66,26 @@ public class NetworkWatcher {
     public static String searchModId(CustomPacketPayload payload) {
         var clazz = payload.getClass();
         for (ModContainer mod : ModList.get().getSortedMods()) {
-            try {
-                Field s = FMLModContainer.class.getDeclaredField("scanResults");
-                s.setAccessible(true);
-                ModFileScanData scanResults = (ModFileScanData) s.get(mod);
-                for (ModFileScanData.ClassData classData : scanResults.getClasses()) {
-                    LogUtils.getLogger().warn("{}", classData);
-                    if (classData.clazz().getClassName().equals(clazz.getName())) {
-                        return mod.getModId();
+            if (mod instanceof FMLModContainer) {
+                try {
+                    Field s = FMLModContainer.class.getDeclaredField("scanResults");
+                    s.setAccessible(true);
+                    ModFileScanData scanResults = (ModFileScanData) s.get(mod);
+                    for (ModFileScanData.ClassData classData : scanResults.getClasses()) {
+                        if (classData.clazz().getClassName().equals(clazz.getName())) {
+                            return mod.getModId();
+                        }
                     }
+                } catch (NoSuchFieldException | IllegalAccessException ignored) {
+                    LogUtils.getLogger().warn(ignored.getMessage());
                 }
-            } catch (NoSuchFieldException | IllegalAccessException ignored) {
             }
         }
         return "unknown";
     }
 
-    private static void recordInternal(Map<Tuple<String, String>, Integer> map, Tuple<String, String> key, int size) {
-        map.compute(key, ((resourceLocation, integer) -> integer == null ? size : integer + size));
+    private static void recordInternal(Map<SenderInfo, SizeAndTimes> map, SenderInfo key, int size) {
+        map.compute(key, ((senderInfo, sizeAndTimes) -> sizeAndTimes == null ? new SizeAndTimes(size) : sizeAndTimes.increaseSize(size)));
     }
 
     protected static void clear() {

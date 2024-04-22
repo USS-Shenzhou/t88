@@ -3,9 +3,9 @@ package cn.ussshenzhou.t88.input;
 import cn.ussshenzhou.t88.T88;
 import cn.ussshenzhou.t88.analyzer.back.T88AnalyzerClient;
 import cn.ussshenzhou.t88.analyzer.front.AnalyzerScreen;
-import cn.ussshenzhou.t88.analyzer.front.NetworkWatcherScreen;
 import cn.ussshenzhou.t88.gui.TestScreen;
 import cn.ussshenzhou.t88.gui.screen.TScreen;
+import cn.ussshenzhou.t88.networkanalyzer.gui.NetworkWatcherScreen;
 import com.mojang.blaze3d.platform.InputConstants;
 import com.mojang.logging.LogUtils;
 import net.minecraft.client.KeyMapping;
@@ -55,6 +55,7 @@ public class ModKeyInput {
             T88AnalyzerClient.RECORDERS.clear();
         } else if (OPEN_WATCHER.consumeClick()) {
             Minecraft.getInstance().setScreen(new NetworkWatcherScreen());
+
         }
     }
 
