@@ -19,7 +19,7 @@ import java.util.*;
  * @author USS_Shenzhou
  */
 public class ChartPanel extends TPanel {
-    private float maxSize;
+    private double maxSize;
     private final LinkedList<Group> groups = new LinkedList<>();
     private static final int COLUMN = 30;
     private final NetworkWatcher.TR dir;
@@ -102,7 +102,10 @@ public class ChartPanel extends TPanel {
                     return modPacketInfoPanel;
                 });
             });
-            groupSize = (float) mods.values().stream().mapToDouble(panel -> Math.log(panel.totalSize + 1)).sum();
+            groupSize = (float) mods.values().stream().mapToDouble(panel -> {
+                var l = Math.log(panel.totalSize + 1);
+                return l * l * l;
+            }).sum();
         }
 
         @Override
@@ -110,7 +113,8 @@ public class ChartPanel extends TPanel {
             int i = 0;
             for (Map.Entry<String, ModPacketInfoPanel> entry : mods.entrySet()) {
                 var panel = entry.getValue();
-                int w = (int) (width * Math.log(panel.totalSize + 1) / maxSize);
+                var l = Math.log(panel.totalSize + 1);
+                int w = (int) (width * l * l * l / maxSize);
                 entry.getValue().setBounds(i, 0, w, height);
                 i += w;
             }
@@ -174,7 +178,7 @@ public class ChartPanel extends TPanel {
 
                 public static @NotNull List<FormattedCharSequence> splitTooltip(Minecraft pMinecraft, @NotNull Component pMessage) {
                     //needtest compatibility with modern ui
-                    return pMinecraft.font.split(pMessage, (int) (pMinecraft.getWindow().getGuiScaledWidth() * 0.4));
+                    return pMinecraft.font.split(pMessage, Math.max((int) (pMinecraft.getWindow().getGuiScaledWidth() * 0.4), 340));
                 }
             };
         }
