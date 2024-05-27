@@ -31,55 +31,55 @@ public class TOptionsPanel extends TPanel {
         return new Tuple<>(this, controller);
     }
 
-    public Tuple<TOptionsPanel, TSlider> addOptionSliderDouble(Component title, double minValue, double maxValue, @Nullable Component tipText, BiConsumer<TSlider, Double> setter) {
+    public Tuple<TOptionsPanel, TSlider> addOptionSliderDouble(Component title, double minValue, double maxValue, @Nullable Component tipText, BiConsumer<TSlider, Double> responder) {
         var slider = new TSlider("", minValue, maxValue, true, tipText);
-        slider.addResponder(d -> setter.accept(slider, d));
+        slider.addResponder(d -> responder.accept(slider, d));
         return addOption(title, slider);
     }
 
-    public Tuple<TOptionsPanel, TSlider> addOptionSliderDouble(Component title, double minValue, double maxValue, BiFunction<Component, Double, Component> textFromCaptionAndValue, @Nullable Component tipText, BiConsumer<TSlider, Double> setter) {
+    public Tuple<TOptionsPanel, TSlider> addOptionSliderDouble(Component title, double minValue, double maxValue, BiFunction<Component, Double, Component> textFromCaptionAndValue, @Nullable Component tipText, BiConsumer<TSlider, Double> responder) {
         var slider = new TSlider("", minValue, maxValue, textFromCaptionAndValue, tipText);
-        slider.addResponder(d -> setter.accept(slider, d));
+        slider.addResponder(d -> responder.accept(slider, d));
         return addOption(title, slider);
     }
 
-    public Tuple<TOptionsPanel, TSlider> addOptionSliderDoubleInit(Component title, double minValue, double maxValue, @Nullable Component tipText, BiConsumer<TSlider, Double> setter, double absValue) {
-        var r = addOptionSliderDouble(title, minValue, maxValue, tipText, setter);
-        r.getB().setAbsValue(absValue);
+    public Tuple<TOptionsPanel, TSlider> addOptionSliderDoubleInit(Component title, double minValue, double maxValue, @Nullable Component tipText, BiConsumer<TSlider, Double> responder, double initAbsValue) {
+        var r = addOptionSliderDouble(title, minValue, maxValue, tipText, responder);
+        r.getB().setAbsValue(initAbsValue);
         return r;
     }
 
-    public Tuple<TOptionsPanel, TSlider> addOptionSliderDoubleInit(Component title, double minValue, double maxValue, BiFunction<Component, Double, Component> textFromCaptionAndValue, @Nullable Component tipText, BiConsumer<TSlider, Double> setter, double absValue) {
-        var r = addOptionSliderDouble(title, minValue, maxValue, textFromCaptionAndValue, tipText, setter);
-        r.getB().setAbsValue(absValue);
+    public Tuple<TOptionsPanel, TSlider> addOptionSliderDoubleInit(Component title, double minValue, double maxValue, BiFunction<Component, Double, Component> textFromCaptionAndValue, @Nullable Component tipText, BiConsumer<TSlider, Double> responder, double initAbsValue) {
+        var r = addOptionSliderDouble(title, minValue, maxValue, textFromCaptionAndValue, tipText, responder);
+        r.getB().setAbsValue(initAbsValue);
         return r;
     }
 
-    public <E> Tuple<TOptionsPanel, TCycleButton<E>> addOptionCycleButton(Component title, List<E> entryTitles, List<Consumer<TCycleButton<E>>> entrySetters) {
-        if (entryTitles.size() != entrySetters.size()) {
-            throw new IllegalArgumentException(String.format("Collection %s with size %d must be the same size as collection %s with size %d.", entryTitles, entryTitles.size(), entrySetters, entrySetters.size()));
+    public <E> Tuple<TOptionsPanel, TCycleButton<E>> addOptionCycleButton(Component title, List<E> entryContents, List<Consumer<TCycleButton<E>>> responders) {
+        if (entryContents.size() != responders.size()) {
+            throw new IllegalArgumentException(String.format("Collection %s with size %d must be the same size as collection %s with size %d.", entryContents, entryContents.size(), responders, responders.size()));
         }
         var option = new HorizontalTitledOption<>(title, new TCycleButton<E>());
-        for (int i = 0; i < entryTitles.size(); i++) {
-            option.controller.addElement(entryTitles.get(i), entrySetters.get(i));
+        for (int i = 0; i < entryContents.size(); i++) {
+            option.controller.addElement(entryContents.get(i), responders.get(i));
         }
         container.add(option);
         return new Tuple<>(this, option.controller);
     }
 
-    public <E> Tuple<TOptionsPanel, TCycleButton<E>> addOptionCycleButton(Component title, List<E> entryTitles, Function<E, Consumer<TCycleButton<E>>> entrySetterGenerator) {
-        return addOptionCycleButton(title, entryTitles, entryTitles.stream().map(entrySetterGenerator).toList());
+    public <E> Tuple<TOptionsPanel, TCycleButton<E>> addOptionCycleButton(Component title, List<E> entryContents, Function<E, Consumer<TCycleButton<E>>> responderGenerator) {
+        return addOptionCycleButton(title, entryContents, entryContents.stream().map(responderGenerator).toList());
     }
 
-    public <E> Tuple<TOptionsPanel, TCycleButton<E>> addOptionCycleButtonInit(Component title, List<E> entryTitles, List<Consumer<TCycleButton<E>>> entrySetters, Predicate<TCycleButton<E>.Entry> predicate) {
-        var r = addOptionCycleButton(title, entryTitles, entrySetters);
-        r.getB().select(predicate);
+    public <E> Tuple<TOptionsPanel, TCycleButton<E>> addOptionCycleButtonInit(Component title, List<E> entryContents, List<Consumer<TCycleButton<E>>> responders, Predicate<TCycleButton<E>.Entry> initializer) {
+        var r = addOptionCycleButton(title, entryContents, responders);
+        r.getB().select(initializer);
         return r;
     }
 
-    public <E> Tuple<TOptionsPanel, TCycleButton<E>> addOptionCycleButtonInit(Component title, List<E> entryTitles, Function<E, Consumer<TCycleButton<E>>> entrySetterGenerator, Predicate<TCycleButton<E>.Entry> predicate) {
-        var r = addOptionCycleButton(title, entryTitles, entrySetterGenerator);
-        r.getB().select(predicate);
+    public <E> Tuple<TOptionsPanel, TCycleButton<E>> addOptionCycleButtonInit(Component title, List<E> entryContents, Function<E, Consumer<TCycleButton<E>>> responderGenerator, Predicate<TCycleButton<E>.Entry> initializer) {
+        var r = addOptionCycleButton(title, entryContents, responderGenerator);
+        r.getB().select(initializer);
         return r;
     }
 

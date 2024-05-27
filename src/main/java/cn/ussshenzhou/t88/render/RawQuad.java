@@ -95,21 +95,60 @@ public class RawQuad {
         return this;
     }
 
+    @Deprecated
     public RawQuad move(float x, float y, float z) {
+        return moveAbs(x, y, z);
+    }
+
+    @Deprecated
+    public RawQuad move16(float x, float y, float z) {
+        return moveAbs16(x, y, z);
+    }
+
+    public RawQuad moveAbs(float x, float y, float z) {
         for (Point p : points) {
             p.move(x, y, z);
         }
         return this;
     }
 
-    public RawQuad move16(float x, float y, float z) {
-        x /= 16;
-        y /= 16;
-        z /= 16;
-        for (Point p : points) {
-            p.move(x, y, z);
-        }
-        return this;
+    public RawQuad moveAbs16(float x, float y, float z) {
+        return moveAbs(x / 16, y / 16, z / 16);
+    }
+
+    /**
+     * Observe from opposite outside.
+     */
+    public RawQuad moveRel(float left, float up, float front) {
+        return moveRelWithDirection(left, up, front, direction);
+    }
+
+    /**
+     * Observe from opposite outside.
+     */
+    public RawQuad moveRel16(float left, float up, float front) {
+        return moveRel(left / 16, up / 16, front / 16);
+    }
+
+    /**
+     * Observe from opposite outside.
+     */
+    public RawQuad moveRelWithDirection(float left, float up, float front, Direction dir) {
+        return switch (dir) {
+            case NORTH -> moveAbs(left, up, front);
+            case SOUTH -> moveAbs(-left, up, -front);
+            case WEST -> moveAbs(front, up, -left);
+            case EAST -> moveAbs(-front, up, left);
+            case UP -> moveAbs(left, -front, up);
+            case DOWN -> moveAbs(-left, front, -up);
+        };
+    }
+
+    /**
+     * Observe from opposite outside.
+     */
+    public RawQuad moveRelWithDirection16(float left, float up, float front, Direction dir) {
+        return moveRelWithDirection(left / 16, up / 16, front / 16, dir);
     }
 
     public BakedQuad bake() {
@@ -122,14 +161,6 @@ public class RawQuad {
         }
         return new BakedQuad(packed, tintIndex, direction, sprite, shade);
     }
-
-    /*private boolean isXOY() {
-        return points[0].z == points[1].z && points[0].z == points[2].z && points[0].z == points[3].z;
-    }
-
-    private boolean isXOZ() {
-        return points[0].y == points[1].y && points[0].y == points[2].y && points[0].y == points[3].y;
-    }*/
 
     public Point maxUV() {
         return points[2];
