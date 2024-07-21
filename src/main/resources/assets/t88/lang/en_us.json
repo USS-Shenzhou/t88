@@ -11,7 +11,7 @@
   "gui.t88.net.options.unit": "Unit",
   "gui.t88.net.options.byte": "Byte",
   "gui.t88.net.options.bit": "Bit",
-  "gui.t88.net.options.general.tooltip": "Outbound/Inbound Network Traffic, excluding TCP headers and other overhead.",
+  "gui.t88.net.options.general.tooltip": "Outbound/Inbound Network Traffic, excluding layers' headers and other data.",
   "gui.t88.net.pause": "Pause",
   "gui.t88.net.resume": "Resume"
 }

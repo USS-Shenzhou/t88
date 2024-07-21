@@ -11,7 +11,7 @@
   "gui.t88.net.options.unit": "单位",
   "gui.t88.net.options.byte": "Byte",
   "gui.t88.net.options.bit": "Bit",
-  "gui.t88.net.options.general.tooltip": "出站/入站网络流量，不考虑TCP头等额外数据。",
+  "gui.t88.net.options.general.tooltip": "出站/入站网络流量，不考虑各层首部等额外数据。",
   "gui.t88.net.pause": "暂停",
   "gui.t88.net.resume": "继续"
 }

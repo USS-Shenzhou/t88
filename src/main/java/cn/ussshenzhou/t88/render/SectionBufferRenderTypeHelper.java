@@ -36,7 +36,7 @@ public class SectionBufferRenderTypeHelper {
             if (System.getProperty("t88.ignore_section_buffer_render_type") == null) {
                 LogUtils.getLogger().error("If you DO want to continue, you can add -Dt88.ignore_section_buffer_render_type=true to JVM options and reboot. This may cause crash in the future.");
             } else {
-                LogUtils.getLogger().error("I see that you have added -Dt88.ignore_section_buffer_render_type=true to JVM options and reboot. We shall continue. This may cause crash in the future.");
+                LogUtils.getLogger().error("...Wait, I see that you have added -Dt88.ignore_section_buffer_render_type=true to JVM options and reboot. We shall continue. This may cause crash in the future.");
                 return new LinkedList<>();
             }
         }
