@@ -2,19 +2,23 @@ package cn.ussshenzhou.t88.networkanalyzer;
 
 import com.mojang.logging.LogUtils;
 import io.netty.buffer.Unpooled;
+import net.minecraft.network.ConnectionProtocol;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.network.protocol.Packet;
+import net.minecraft.network.protocol.PacketFlow;
 import net.minecraft.network.protocol.common.ClientboundCustomPayloadPacket;
 import net.minecraft.network.protocol.common.ServerboundCustomPayloadPacket;
 import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.util.Tuple;
 import net.neoforged.fml.ModContainer;
 import net.neoforged.fml.ModList;
 import net.neoforged.fml.javafmlmod.FMLModContainer;
+import net.neoforged.neoforge.network.registration.NetworkRegistry;
 import net.neoforged.neoforgespi.language.ModFileScanData;
 
 import java.lang.reflect.Field;
+import java.lang.reflect.InvocationTargetException;
+import java.util.Arrays;
 import java.util.Map;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ConcurrentHashMap;
@@ -32,13 +36,62 @@ public class NetworkWatcher {
     public static void record(Packet<?> packet, TR dir) {
         CompletableFuture.runAsync(() -> {
             var map = dir == TR.T ? SENT : RECEIVED;
-            var buf = new FriendlyByteBuf(Unpooled.buffer());
-            packet.write(buf);
-            /*if (buf.readableBytes() > 1000_000) {
-                LogUtils.getLogger().warn("{}", buf.writerIndex());
-            }*/
-            recordInternal(map, getSenderInfo(packet), buf.writerIndex());
+            int size = 0;
+            if (packet instanceof ServerboundCustomPayloadPacket p) {
+                size = getCustomPacketSize(p);
+            } else if (packet instanceof ClientboundCustomPayloadPacket p) {
+                size = getCustomPacketSize(p);
+            } else {
+                size = getPacketSizeFromWrite(packet);
+            }
+            recordInternal(map, getSenderInfo(packet), size);
         });
+    }
+
+    private static int getPacketSizeFromWrite(Packet<?> packet) {
+        try {
+            var method = packet.getClass().getDeclaredMethod("write", FriendlyByteBuf.class);
+            method.setAccessible(true);
+            var buf = new FriendlyByteBuf(Unpooled.buffer());
+            method.invoke(packet,buf);
+            int size = buf.writerIndex();
+            buf.release();
+            return size;
+        } catch (NoSuchMethodException | IllegalAccessException | InvocationTargetException ignored) {
+        }
+        return 0;
+    }
+
+    private static int getCustomPacketSize(ServerboundCustomPayloadPacket packet) {
+        return getSizeFromCustomPacketPayload(packet.payload());
+    }
+
+    private static int getCustomPacketSize(ClientboundCustomPayloadPacket packet) {
+        return getSizeFromCustomPacketPayload(packet.payload());
+    }
+
+    @SuppressWarnings("UnstableApiUsage")
+    private static int getSizeFromCustomPacketPayload(CustomPacketPayload payload) {
+        var buf = new FriendlyByteBuf(Unpooled.buffer());
+        var codec = NetworkRegistry.getCodec(payload.type().id(), ConnectionProtocol.PLAY, PacketFlow.SERVERBOUND);
+        if (codec == null) {
+            codec = NetworkRegistry.getCodec(payload.type().id(), ConnectionProtocol.PLAY, PacketFlow.CLIENTBOUND);
+        }
+        if (codec == null) {
+            return 0;
+        }
+        net.minecraft.network.codec.StreamCodec<? super FriendlyByteBuf, ? extends CustomPacketPayload> finalCodec = codec;
+        Arrays.stream(codec.getClass().getMethods()).filter(method -> "encode".equals(method.getName())).findAny().ifPresent(method -> {
+            method.setAccessible(true);
+            try {
+                method.invoke(finalCodec, buf, payload);
+            } catch (IllegalAccessException | InvocationTargetException e) {
+                LogUtils.getLogger().warn(e.getMessage());
+            }
+        });
+        int size = buf.writerIndex();
+        buf.release();
+        return size;
     }
 
     public static SenderInfo getSenderInfo(Packet<?> packet) {

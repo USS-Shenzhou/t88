@@ -31,14 +31,14 @@ public class TSlider extends OptionInstance.OptionInstanceSliderButton<Double> i
 
     @Deprecated
     public TSlider(double minValue, double maxValue, float pSteps, Component tipText) {
-        this(tipText.getString(), minValue, maxValue, false, null);
+        this(tipText.getString(), minValue, maxValue, false, null, true);
     }
 
     public TSlider(String title, double minValue, double maxValue) {
-        this(title, minValue, maxValue, true, null);
+        this(title, minValue, maxValue, true, null, true);
     }
 
-    public TSlider(String title, double minValue, double maxValue, boolean showValueInTitle, @Nullable Component tipText) {
+    public TSlider(String title, double minValue, double maxValue, boolean showValueInTitle, @Nullable Component tipText, boolean applyValueImmediately) {
         super(Minecraft.getInstance().options, 0, 0, 0, 0,
                 new OptionInstance<>(title,
                         value -> null,
@@ -53,7 +53,8 @@ public class TSlider extends OptionInstance.OptionInstanceSliderButton<Double> i
                 new DoubleRange(minValue, maxValue),
                 value -> tipText == null ? null : Tooltip.create(tipText),
                 d -> {
-                }
+                },
+                applyValueImmediately
         );
         //AccessorProxy.SliderProxy.setOption(this, progressOption);
         this.updateMessage();
@@ -61,7 +62,7 @@ public class TSlider extends OptionInstance.OptionInstanceSliderButton<Double> i
         this.max = maxValue;
     }
 
-    public TSlider(String title, double minValue, double maxValue, BiFunction<Component, Double, Component> textFromCaptionAndValue, @Nullable Component tipText) {
+    public TSlider(String title, double minValue, double maxValue, BiFunction<Component, Double, Component> textFromCaptionAndValue, @Nullable Component tipText, boolean applyValueImmediately) {
         super(Minecraft.getInstance().options, 0, 0, 0, 0,
                 new OptionInstance<>(title,
                         value -> null,
@@ -74,7 +75,8 @@ public class TSlider extends OptionInstance.OptionInstanceSliderButton<Double> i
                 new DoubleRange(minValue, maxValue),
                 value -> tipText == null ? null : Tooltip.create(tipText),
                 d -> {
-                }
+                },
+                applyValueImmediately
         );
         //AccessorProxy.SliderProxy.setOption(this, progressOption);
         this.updateMessage();

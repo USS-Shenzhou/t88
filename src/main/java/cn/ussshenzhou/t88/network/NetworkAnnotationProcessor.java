@@ -126,7 +126,7 @@ public class NetworkAnnotationProcessor extends AbstractProcessor {
             });
             registryWriter.println("""
                                         
-                    @Mod.EventBusSubscriber(bus = Mod.EventBusSubscriber.Bus.MOD)
+                    @EventBusSubscriber(bus = EventBusSubscriber.Bus.MOD)
                     public class ModNetworkRegistry {
                         @SubscribeEvent
                         public static void networkPacketRegistry(RegisterPayloadHandlerEvent event) {

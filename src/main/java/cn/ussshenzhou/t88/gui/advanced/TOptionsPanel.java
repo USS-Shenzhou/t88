@@ -31,26 +31,26 @@ public class TOptionsPanel extends TPanel {
         return new Tuple<>(this, controller);
     }
 
-    public Tuple<TOptionsPanel, TSlider> addOptionSliderDouble(Component title, double minValue, double maxValue, @Nullable Component tipText, BiConsumer<TSlider, Double> responder) {
-        var slider = new TSlider("", minValue, maxValue, true, tipText);
+    public Tuple<TOptionsPanel, TSlider> addOptionSliderDouble(Component title, double minValue, double maxValue, @Nullable Component tipText, BiConsumer<TSlider, Double> responder, boolean applyValueImmediately) {
+        var slider = new TSlider("", minValue, maxValue, true, tipText, applyValueImmediately);
         slider.addResponder(d -> responder.accept(slider, d));
         return addOption(title, slider);
     }
 
-    public Tuple<TOptionsPanel, TSlider> addOptionSliderDouble(Component title, double minValue, double maxValue, BiFunction<Component, Double, Component> textFromCaptionAndValue, @Nullable Component tipText, BiConsumer<TSlider, Double> responder) {
-        var slider = new TSlider("", minValue, maxValue, textFromCaptionAndValue, tipText);
+    public Tuple<TOptionsPanel, TSlider> addOptionSliderDouble(Component title, double minValue, double maxValue, BiFunction<Component, Double, Component> textFromCaptionAndValue, @Nullable Component tipText, BiConsumer<TSlider, Double> responder, boolean applyValueImmediately) {
+        var slider = new TSlider("", minValue, maxValue, textFromCaptionAndValue, tipText, applyValueImmediately);
         slider.addResponder(d -> responder.accept(slider, d));
         return addOption(title, slider);
     }
 
-    public Tuple<TOptionsPanel, TSlider> addOptionSliderDoubleInit(Component title, double minValue, double maxValue, @Nullable Component tipText, BiConsumer<TSlider, Double> responder, double initAbsValue) {
-        var r = addOptionSliderDouble(title, minValue, maxValue, tipText, responder);
+    public Tuple<TOptionsPanel, TSlider> addOptionSliderDoubleInit(Component title, double minValue, double maxValue, @Nullable Component tipText, BiConsumer<TSlider, Double> responder, double initAbsValue, boolean applyValueImmediately) {
+        var r = addOptionSliderDouble(title, minValue, maxValue, tipText, responder, applyValueImmediately);
         r.getB().setAbsValue(initAbsValue);
         return r;
     }
 
-    public Tuple<TOptionsPanel, TSlider> addOptionSliderDoubleInit(Component title, double minValue, double maxValue, BiFunction<Component, Double, Component> textFromCaptionAndValue, @Nullable Component tipText, BiConsumer<TSlider, Double> responder, double initAbsValue) {
-        var r = addOptionSliderDouble(title, minValue, maxValue, textFromCaptionAndValue, tipText, responder);
+    public Tuple<TOptionsPanel, TSlider> addOptionSliderDoubleInit(Component title, double minValue, double maxValue, BiFunction<Component, Double, Component> textFromCaptionAndValue, @Nullable Component tipText, BiConsumer<TSlider, Double> responder, double initAbsValue, boolean applyValueImmediately) {
+        var r = addOptionSliderDouble(title, minValue, maxValue, textFromCaptionAndValue, tipText, responder, applyValueImmediately);
         r.getB().setAbsValue(initAbsValue);
         return r;
     }

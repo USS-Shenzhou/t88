@@ -28,11 +28,11 @@ public class TImage extends TPanel {
     }
 
     public TImage(String imageLocation) {
-        this(new ResourceLocation(imageLocation));
+        this(ResourceLocation.parse(imageLocation));
     }
 
     public TImage(String namespace, String imageLocation) {
-        this(new ResourceLocation(namespace, imageLocation));
+        this(ResourceLocation.fromNamespaceAndPath(namespace, imageLocation));
     }
 
     public ImageFit getImageFit() {

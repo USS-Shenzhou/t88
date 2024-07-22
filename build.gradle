@@ -3,7 +3,16 @@ plugins {
     id 'eclipse'
     id 'idea'
     id 'maven-publish'
-    id 'net.neoforged.gradle.userdev' version '7.0.76'
+    id 'net.neoforged.gradle.userdev' version '7.0.155'
+}
+
+tasks.named('wrapper', Wrapper).configure {
+    // Define wrapper values here so as to not have to always do so when updating gradlew.properties.
+    // Switching this to Wrapper.DistributionType.ALL will download the full gradle sources that comes with
+    // documentation attached on cursor hover of gradle classes and methods. However, this comes with increased
+    // file size for Gradle. If you do switch this to ALL, run the Gradle wrapper task twice afterwards.
+    // (Verify by checking gradle/wrapper/gradle-wrapper.properties to see if distributionUrl now points to `-all`)
+    distributionType = Wrapper.DistributionType.BIN
 }
 
 version = mod_version
@@ -18,14 +27,9 @@ base {
 }
 
 // Mojang ships Java 17 to end users in 1.18+, so your mod should target Java 17.
-java.toolchain.languageVersion = JavaLanguageVersion.of(17)
+java.toolchain.languageVersion = JavaLanguageVersion.of(21)
 
-
-minecraft {
-    accessTransformers {
-        file('src/main/resources/META-INF/accesstransformer.cfg')
-    }
-}
+minecraft.accessTransformers.file rootProject.file('src/main/resources/META-INF/accesstransformer.cfg')
 
 // Default run configurations.
 // These can be tweaked, removed, or duplicated as needed.
@@ -54,7 +58,6 @@ runs {
 
     server {
         systemProperty 'forge.enabledGameTestNamespaces', project.mod_id
-        programArgument '--nogui'
     }
 
     // This run config launches GameTestServer and runs all registered gametests, then exits.
@@ -108,41 +111,6 @@ dependencies {
     //annotationProcessor 'org.spongepowered:mixin:0.8.5:processor'
 }
 
-subsystems {
-    parchment {
-        // The Minecraft version for which the Parchment mappings were created.
-        // This does not necessarily need to match the Minecraft version your mod targets
-        // Defaults to the value of Gradle property neogradle.subsystems.parchment.minecraftVersion
-        //minecraftVersion = "1.20.2"
-
-        // The version of Parchment mappings to apply.
-        // See https://parchmentmc.org/docs/getting-started for a list.
-        // Defaults to the value of Gradle property neogradle.subsystems.parchment.mappingsVersion
-        //mappingsVersion = "2023.12.10"
-
-        // Overrides the full Maven coordinate of the Parchment artifact to use
-        // This is computed from the minecraftVersion and mappingsVersion properties by default.
-        // If you set this property explicitly, minecraftVersion and mappingsVersion will be ignored.
-        // The built-in default value can also be overriden using the Gradle property neogradle.subsystems.parchment.parchmentArtifact
-        parchmentArtifact = "org.parchmentmc.data:parchment-1.20.2:2023.12.10:checked@zip"
-
-        // Overrides the full Maven coordinate of the tool used to apply the Parchment mappings
-        // See https://github.com/neoforged/JavaSourceTransformer
-        // The built-in default value can also be overriden using the Gradle property neogradle.subsystems.parchment.toolArtifact
-        // toolArtifact = "net.neoforged.jst:jst-cli-bundle:1.0.30"
-
-        // Set this to false if you don't want the https://maven.parchmentmc.org/ repository to be added automatically when
-        // applying Parchment mappings is enabled
-        // The built-in default value can also be overriden using the Gradle property neogradle.subsystems.parchment.addRepository
-        // addRepository = true
-
-        // Can be used to explicitly disable this subsystem. By default, it will be enabled automatically as soon
-        // as parchmentArtifact or minecraftVersion and mappingsVersion are set.
-        // The built-in default value can also be overriden using the Gradle property neogradle.subsystems.parchment.enabled
-        // enabled = true
-    }
-}
-
 // This block of code expands all declared replace properties in the specified resource targets.
 // A missing property will result in an error. Properties are expanded using ${} Groovy notation.
 // When "copyIdeResources" is enabled, this will also run before the game launches in IDE environments.
@@ -163,9 +131,9 @@ tasks.withType(ProcessResources).configureEach {
     ]
     inputs.properties replaceProperties
 
-    /*filesMatching(['META-INF/mods.toml']) {
+    filesMatching(['META-INF/neoforge.mods.toml']) {
         expand replaceProperties + [project: project]
-    }*/
+    }
 }
 
 java {
@@ -196,5 +164,13 @@ tasks.named("build") {
         if (System.getProperty("idea.active")) {
             publishToMavenLocal
         }
+    }
+}
+
+// IDEA no longer automatically downloads sources/javadoc jars for dependencies, so we need to explicitly enable the behavior.
+idea {
+    module {
+        downloadSources = true
+        downloadJavadoc = true
     }
 }

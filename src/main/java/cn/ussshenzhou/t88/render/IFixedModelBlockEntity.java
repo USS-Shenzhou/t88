@@ -7,6 +7,7 @@ import net.minecraft.client.renderer.RenderType;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.level.block.entity.BlockEntity;
 
+import javax.annotation.Nullable;
 import java.util.Set;
 
 /**
@@ -18,12 +19,10 @@ public interface IFixedModelBlockEntity {
         return (BlockEntity) this;
     }
 
-    SectionCompileContext handleCompileContext(SectionCompileContext context);
+    @Nullable
+    SectionCompileContext handleCompileContext(SectionCompileContext rawContext);
 
-    /**
-     * Use {@link IFixedModelBlockEntity#getBuilder(Set, SectionBufferBuilderPack, RenderType)} instead of {@link SectionBufferBuilderPack#builder(RenderType)} .
-     */
-    default void renderAdditional(SectionCompileContext context, Set<RenderType> begunRenderTypes, SectionBufferBuilderPack builderPack, PoseStack poseStack, int packedOverlay) {
+    default void renderAdditionalAsync(SectionCompileContext context) {
     }
 
     default int getPackedLight() {
@@ -34,23 +33,14 @@ public interface IFixedModelBlockEntity {
         }
     }
 
-    default BufferBuilder getBuilder(Set<RenderType> begunRenderTypes, SectionBufferBuilderPack bufferBuilderPack, RenderType type) {
-        var map = bufferBuilderPack.builders;
-        var builder = map.get(type);
-        if (builder == null) {
-            builder = new BufferBuilder(type.bufferSize());
-            map.put(type, builder);
-        }
-        if (begunRenderTypes.add(type)) {
-            builder.begin(type.mode(), type.format());
-        }
-        return builder;
+    default BufferBuilder getBuilder(SectionCompileContext context, RenderType type) {
+        return context.sectionCompiler.getOrBeginLayer(context.bufferBuilders, context.sectionBufferBuilderPack, type);
     }
 
-    default SimpleMultiBufferSource getSimpleMultiBufferSource(Set<RenderType> begunRenderTypes, SectionBufferBuilderPack bufferBuilderPack, RenderType... types) {
-        var r = SimpleMultiBufferSource.of(types[0], getBuilder(begunRenderTypes, bufferBuilderPack, types[0]));
+    default SimpleMultiBufferSource getSimpleMultiBufferSource(SectionCompileContext context, RenderType... types) {
+        var r = SimpleMultiBufferSource.of(types[0], getBuilder(context, types[0]));
         for (int i = 1; i < types.length; i++) {
-            r.put(types[i], getBuilder(begunRenderTypes, bufferBuilderPack, types[i]));
+            r.put(types[i], getBuilder(context, types[i]));
         }
         return r;
     }

@@ -1,15 +1,23 @@
 package cn.ussshenzhou.t88.network;
 
 import com.mojang.logging.LogUtils;
+import net.minecraft.network.protocol.Packet;
 import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
+import net.minecraft.server.MinecraftServer;
+import net.minecraft.server.level.ServerChunkCache;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.level.ChunkPos;
 import net.neoforged.neoforge.network.PacketDistributor;
+import net.neoforged.neoforge.server.ServerLifecycleHooks;
 import sun.misc.Unsafe;
 
 import javax.annotation.Nullable;
 import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
 import java.util.HashMap;
+import java.util.Objects;
 
 /**
  * @author USS_Shenzhou
@@ -70,33 +78,88 @@ public class NetworkHelper {
 
     public static <MSG> void sendToServer(MSG packet) {
         if (packet instanceof CustomPacketPayload c) {
-            PacketDistributor.SERVER.noArg().send(c);
+            PacketDistributor.sendToServer(c);
         } else {
             var p = convert(packet);
             if (p != null) {
-                PacketDistributor.SERVER.noArg().send(p);
+                PacketDistributor.sendToServer(p);
             }
         }
     }
 
     public static <MSG> void sendToPlayer(ServerPlayer target, MSG packet) {
         if (packet instanceof CustomPacketPayload c) {
-            PacketDistributor.PLAYER.with(target).send(c);
+            PacketDistributor.sendToPlayer(target, c);
         } else {
             var p = convert(packet);
             if (p != null) {
-                PacketDistributor.PLAYER.with(target).send(p);
+                PacketDistributor.sendToPlayer(target, p);
             }
         }
     }
 
-    public static <MSG> void sendTo(PacketDistributor.PacketTarget target, MSG packet) {
+    public static <MSG> void sendToPlayersInDimension(ServerLevel level, MSG packet) {
         if (packet instanceof CustomPacketPayload c) {
-            target.send(c);
+            PacketDistributor.sendToPlayersInDimension(level, c);
         } else {
             var p = convert(packet);
             if (p != null) {
-                target.send(p);
+                PacketDistributor.sendToPlayersInDimension(level, p);
+            }
+        }
+    }
+
+    public static <MSG> void sendToPlayersNear(ServerLevel level, @Nullable ServerPlayer excluded, double x, double y, double z, double radius, MSG packet) {
+        if (packet instanceof CustomPacketPayload c) {
+            PacketDistributor.sendToPlayersNear(level, excluded, x, y, z, radius, c);
+        } else {
+            var p = convert(packet);
+            if (p != null) {
+                PacketDistributor.sendToPlayersNear(level, excluded, x, y, z, radius, p);
+            }
+        }
+    }
+
+    public static <MSG> void sendToAllPlayers(MSG packet) {
+        if (packet instanceof CustomPacketPayload c) {
+            PacketDistributor.sendToAllPlayers(c);
+        } else {
+            var p = convert(packet);
+            if (p != null) {
+                PacketDistributor.sendToAllPlayers(p);
+            }
+        }
+    }
+
+    public static <MSG> void sendToPlayersTrackingEntity(Entity entity, MSG packet) {
+        if (packet instanceof CustomPacketPayload c) {
+            PacketDistributor.sendToPlayersTrackingEntity(entity, c);
+        } else {
+            var p = convert(packet);
+            if (p != null) {
+                PacketDistributor.sendToPlayersTrackingEntity(entity, p);
+            }
+        }
+    }
+
+    public static <MSG> void sendToPlayersTrackingEntityAndSelf(Entity entity, MSG packet) {
+        if (packet instanceof CustomPacketPayload c) {
+            PacketDistributor.sendToPlayersTrackingEntityAndSelf(entity, c);
+        } else {
+            var p = convert(packet);
+            if (p != null) {
+                PacketDistributor.sendToPlayersTrackingEntityAndSelf(entity, p);
+            }
+        }
+    }
+
+    public static <MSG> void sendToPlayersTrackingChunk(ServerLevel level, ChunkPos chunkPos, MSG packet) {
+        if (packet instanceof CustomPacketPayload c) {
+            PacketDistributor.sendToPlayersTrackingChunk(level, chunkPos, c);
+        } else {
+            var p = convert(packet);
+            if (p != null) {
+                PacketDistributor.sendToPlayersTrackingChunk(level, chunkPos, p);
             }
         }
     }

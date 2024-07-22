@@ -1,20 +1,18 @@
 package cn.ussshenzhou.t88.task;
 
 import com.google.errorprone.annotations.DoNotCall;
-import net.neoforged.api.distmarker.Dist;
-import net.neoforged.api.distmarker.OnlyIn;
 import net.neoforged.bus.api.SubscribeEvent;
-import net.neoforged.fml.common.Mod;
-import net.neoforged.neoforge.event.TickEvent;
+import net.neoforged.fml.common.EventBusSubscriber;
+import net.neoforged.neoforge.client.event.ClientTickEvent;
+import net.neoforged.neoforge.event.tick.ServerTickEvent;
 
-import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.function.Consumer;
 
 /**
  * @author USS_Shenzhou
  */
-@Mod.EventBusSubscriber(bus = Mod.EventBusSubscriber.Bus.FORGE)
+@EventBusSubscriber(bus = EventBusSubscriber.Bus.GAME)
 public class TaskHelper {
     private static final LinkedList<Task> SERVER_ADD = new LinkedList<>();
     private static final LinkedList<Task> CLIENT_ADD = new LinkedList<>();
@@ -24,44 +22,40 @@ public class TaskHelper {
 
     @DoNotCall
     @SubscribeEvent
-    public static void clientTick(TickEvent.ClientTickEvent event) {
-        if (event.phase == TickEvent.Phase.START) {
-            REMOVE.clear();
-            CLIENT_TASKS.addAll(CLIENT_ADD);
-            CLIENT_ADD.clear();
-            for (Task task : CLIENT_TASKS) {
-                if (task == null) {
-                    REMOVE.add(null);
-                    continue;
-                }
-                task.tick();
-                if (task.shouldRemove()) {
-                    REMOVE.add(task);
-                }
+    public static void clientTick(ClientTickEvent.Pre event) {
+        REMOVE.clear();
+        CLIENT_TASKS.addAll(CLIENT_ADD);
+        CLIENT_ADD.clear();
+        for (Task task : CLIENT_TASKS) {
+            if (task == null) {
+                REMOVE.add(null);
+                continue;
             }
-            CLIENT_TASKS.removeAll(REMOVE);
+            task.tick();
+            if (task.shouldRemove()) {
+                REMOVE.add(task);
+            }
         }
+        CLIENT_TASKS.removeAll(REMOVE);
     }
 
     @DoNotCall
     @SubscribeEvent
-    public static void serverTick(TickEvent.ServerTickEvent event) {
-        if (event.phase == TickEvent.Phase.START) {
-            REMOVE.clear();
-            SERVER_TASKS.addAll(SERVER_ADD);
-            SERVER_ADD.clear();
-            for (Task task : SERVER_TASKS) {
-                if (task == null) {
-                    REMOVE.add(null);
-                    continue;
-                }
-                task.tick();
-                if (task.shouldRemove()) {
-                    REMOVE.add(task);
-                }
+    public static void serverTick(ServerTickEvent.Pre event) {
+        REMOVE.clear();
+        SERVER_TASKS.addAll(SERVER_ADD);
+        SERVER_ADD.clear();
+        for (Task task : SERVER_TASKS) {
+            if (task == null) {
+                REMOVE.add(null);
+                continue;
             }
-            SERVER_TASKS.removeAll(REMOVE);
+            task.tick();
+            if (task.shouldRemove()) {
+                REMOVE.add(task);
+            }
         }
+        SERVER_TASKS.removeAll(REMOVE);
     }
 
     public static Task addServerTask(Task task) {

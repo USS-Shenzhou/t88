@@ -29,7 +29,6 @@ import java.util.function.Consumer;
  */
 public class TSelectList<E> extends ObjectSelectionList<TSelectList<E>.Entry> implements TWidget {
     public static final int SCROLLBAR_WIDTH = 6;
-    public static final ResourceLocation SCROLLER_SPRITE = new ResourceLocation("widget/scroller");
     TComponent parent = null;
     TScreen parentScreen = null;
     int foreground = 0xffffffff;
@@ -42,7 +41,6 @@ public class TSelectList<E> extends ObjectSelectionList<TSelectList<E>.Entry> im
 
     public TSelectList(int pItemHeight, int scrollbarGap) {
         super(Minecraft.getInstance(), 0, 0, 0, pItemHeight);
-        this.setRenderBackground(false);
         //this.setRenderTopAndBottom(false);
         this.setRenderHeader(false, 0);
         this.scrollbarGap = scrollbarGap;
@@ -225,54 +223,36 @@ public class TSelectList<E> extends ObjectSelectionList<TSelectList<E>.Entry> im
         this.height = height;
     }
 
-    /**
-     * modified for compatibility with TScrollPanel
-     *
-     * @see AbstractSelectionList#render(GuiGraphics, int, int, float)
-     */
     @Override
-    public void render(GuiGraphics guigraphics, int pMouseX, int pMouseY, float pPartialTick) {
-        renderBackground(guigraphics);
-        AccessorProxy.AbstractSelectionListProxy.setHovered(this, this.isMouseOver(pMouseX, pMouseY) ? this.getEntryAtPosition(pMouseX, pMouseY) : null);
-        if (AccessorProxy.AbstractSelectionListProxy.isRenderBackground(this)) {
-            guigraphics.setColor(0.125F, 0.125F, 0.125F, 1.0F);
-            guigraphics.blit(Screen.BACKGROUND_LOCATION,
-                    this.getX(), this.getY(), (float) this.getRight(), (float) (this.getBottom() + this.getScrollAmount()),
-                    this.width, this.height, 32, 32
-            );
-            guigraphics.setColor(1.0F, 1.0F, 1.0F, 1.0F);
-        }
-
-        this.enableScissor(guigraphics);
+    public void renderWidget(GuiGraphics guiGraphics, int mouseX, int mouseY, float partialTick) {
+        AccessorProxy.AbstractSelectionListProxy.setHovered(this, this.isMouseOver(mouseX, mouseY) ? this.getEntryAtPosition(mouseX, mouseY) : null);
+        this.renderListBackground(guiGraphics);
+        this.enableScissor(guiGraphics);
         if (AccessorProxy.AbstractSelectionListProxy.isRenderHeader(this)) {
-            int i1 = this.getRowLeft();
-            int j = this.getY() + 4 - (int) this.getScrollAmount();
-            this.renderHeader(guigraphics, i1, j);
+            int i = this.getRowLeft();
+            int j = this.getY() + 4 - (int)this.getScrollAmount();
+            this.renderHeader(guiGraphics, i, j);
         }
 
-        this.renderList(guigraphics, pMouseX, pMouseY, pPartialTick);
-        guigraphics.disableScissor();
-        if (AccessorProxy.AbstractSelectionListProxy.isRenderBackground(this)) {
-            int j1 = 4;
-            guigraphics.fillGradient(RenderType.guiOverlay(), this.getX(), this.getY(), this.getRight(), this.getY() + 4, -16777216, 0, 0);
-            guigraphics.fillGradient(RenderType.guiOverlay(), this.getX(), this.getBottom() - 4, this.getRight(), this.getBottom(), 0, -16777216, 0);
-        }
-
-        int k1 = this.getMaxScroll();
-        if (k1 > 0) {
-            int l1 = this.getScrollbarPosition();
-            int k = (int) ((float) (this.height * this.height) / (float) this.getMaxPosition());
-            k = Mth.clamp(k, 32, this.height - 8);
-            int l = (int) this.getScrollAmount() * (this.height - k) / k1 + this.getY();
-            if (l < this.getY()) {
-                l = this.getY();
+        this.renderListItems(guiGraphics, mouseX, mouseY, partialTick);
+        guiGraphics.disableScissor();
+        this.renderListSeparators(guiGraphics);
+        if (this.scrollbarVisible()) {
+            int l = this.getScrollbarPosition();
+            int i1 = (int)((float)(this.height * this.height) / (float)this.getMaxPosition());
+            i1 = Mth.clamp(i1, 32, this.height - 8);
+            int k = (int)this.getScrollAmount() * (this.height - i1) / this.getMaxScroll() + this.getY();
+            if (k < this.getY()) {
+                k = this.getY();
             }
 
-            guigraphics.fill(l1, this.getY(), l1 + 6, this.getBottom(), -16777216);
-            guigraphics.blitSprite(SCROLLER_SPRITE, l1, l, 6, k);
+            RenderSystem.enableBlend();
+            guiGraphics.blitSprite(SCROLLER_BACKGROUND_SPRITE, l, this.getY(), 6, this.getHeight());
+            guiGraphics.blitSprite(SCROLLER_SPRITE, l, k, 6, i1);
+            RenderSystem.disableBlend();
         }
 
-        this.renderDecorations(guigraphics, pMouseX, pMouseY);
+        this.renderDecorations(guiGraphics, mouseX, mouseY);
         RenderSystem.disableBlend();
     }
 

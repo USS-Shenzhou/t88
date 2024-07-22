@@ -14,7 +14,4 @@ public interface AbstractSelectionListAccessor<E extends AbstractSelectionList.E
 
     @Accessor
     boolean isRenderHeader();
-
-    @Accessor
-    boolean isRenderBackground();
 }

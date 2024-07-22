@@ -16,25 +16,24 @@ import org.joml.Matrix4f;
 public class T88RenderChunkBufferTypePrepareEvent extends Event implements ICancellableEvent {
     public final RenderType renderType;
     public final LevelRenderer levelRenderer;
-    public final PoseStack poseStack;
+    public final Matrix4f frustumMatrix;
     public final Matrix4f projectionMatrix;
     public final int renderTick;
-    public final float partialTick;
     public final Camera camera;
     public final Frustum frustum;
 
-    public T88RenderChunkBufferTypePrepareEvent(RenderType renderType, LevelRenderer levelRenderer, PoseStack poseStack, Matrix4f projectionMatrix, int renderTick, float partialTick, Camera camera, Frustum frustum) {
+
+    public T88RenderChunkBufferTypePrepareEvent(RenderType renderType, LevelRenderer levelRenderer, Matrix4f frustumMatrix, Matrix4f projectionMatrix, int renderTick, Camera camera, Frustum frustum) {
         this.renderType = renderType;
         this.levelRenderer = levelRenderer;
-        this.poseStack = poseStack;
+        this.frustumMatrix = frustumMatrix;
         this.projectionMatrix = projectionMatrix;
         this.renderTick = renderTick;
-        this.partialTick = partialTick;
         this.camera = camera;
         this.frustum = frustum;
     }
 
     public T88RenderChunkBufferTypePrepareEvent(RenderType renderType, T88RenderLevelStageEvent event) {
-        this(renderType, event.levelRenderer, event.poseStack, event.projectionMatrix, event.renderTick, event.partialTick, event.camera, event.frustum);
+        this(renderType, event.levelRenderer, event.frustumMatrix, event.projectionMatrix, event.renderTick, event.camera, event.frustum);
     }
 }

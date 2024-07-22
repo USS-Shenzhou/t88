@@ -7,6 +7,7 @@ import cn.ussshenzhou.t88.networkanalyzer.SenderInfo;
 import cn.ussshenzhou.t88.networkanalyzer.SizeAndTimes;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.components.Tooltip;
+import net.minecraft.client.gui.components.WidgetTooltipHolder;
 import net.minecraft.network.chat.Component;
 import net.minecraft.util.FormattedCharSequence;
 import net.minecraft.util.Mth;
@@ -125,7 +126,7 @@ public class ChartPanel extends TPanel {
     public class ModPacketInfoPanel extends TPanel {
         private final String modId;
         private final Map<String, SizeAndTimes> packets = new HashMap<>();
-        private int totalSize;
+        private int totalSize = 1;
         private int totalPackets;
 
         public ModPacketInfoPanel(String modId) {
@@ -141,14 +142,14 @@ public class ChartPanel extends TPanel {
 
         @Nullable
         @Override
-        public Tooltip getTooltip() {
+        public WidgetTooltipHolder getTooltip() {
             if (super.getTooltip() == null) {
                 setTooltip(generateTooltip());
             }
             return super.getTooltip();
         }
 
-        private Tooltip generateTooltip() {
+        private WidgetTooltipHolder generateTooltip() {
             var s = new StringBuilder(modId);
             s.append("\n");
             getReadableSize(s, totalSize);
@@ -166,7 +167,8 @@ public class ChartPanel extends TPanel {
                 s.append(" §7packets§r");
             });
             var c = Component.literal(s.toString());
-            return new Tooltip(c, c) {
+            var widgetTooltipHolder = new WidgetTooltipHolder();
+            widgetTooltipHolder.set(new Tooltip(c, c) {
                 @Override
                 public @NotNull List<FormattedCharSequence> toCharSequence(@NotNull Minecraft pMinecraft) {
                     if (this.cachedTooltip == null) {
@@ -180,7 +182,8 @@ public class ChartPanel extends TPanel {
                     //needtest compatibility with modern ui
                     return pMinecraft.font.split(pMessage, Math.max((int) (pMinecraft.getWindow().getGuiScaledWidth() * 0.4), 340));
                 }
-            };
+            });
+            return widgetTooltipHolder;
         }
 
         private String getColorBySize(int size) {

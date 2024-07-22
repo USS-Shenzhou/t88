@@ -48,7 +48,7 @@ public class InventoryHelper {
 
     public static boolean consumeExact(Inventory inventory, ItemStack need) {
         var o = getAllAsStream(inventory)
-                .filter(itemStack -> ItemStack.isSameItemSameTags(itemStack, need))
+                .filter(itemStack -> ItemStack.isSameItemSameComponents(itemStack, need))
                 .findFirst();
         if (o.isPresent()) {
             o.get().setCount(0);

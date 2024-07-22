@@ -76,7 +76,7 @@ public class TItem extends TPanel {
             graphics.pose().pushPose();
             graphics.pose().translate(0, 0, 500 * scale);
             RenderSystem.disableScissor();
-            graphics.renderTooltip(Minecraft.getInstance().font, item.getTooltipLines(Minecraft.getInstance().player, TooltipFlag.NORMAL), item.getTooltipImage(), item, pMouseX, pMouseY);
+            graphics.renderTooltip(Minecraft.getInstance().font, item.getTooltipLines(Item.TooltipContext.of(Minecraft.getInstance().level), Minecraft.getInstance().player, TooltipFlag.NORMAL), item.getTooltipImage(), item, pMouseX, pMouseY);
             var rectangle = graphics.scissorStack.stack.peek();
             if (rectangle != null) {
                 Window window = Minecraft.getInstance().getWindow();
@@ -103,7 +103,7 @@ public class TItem extends TPanel {
         graphics.pose().pushPose();
         graphics.pose().translate(x + itemSize / 2, y + itemSize / 2, 0.01 * scale);
         try {
-            graphics.pose().mulPoseMatrix(new Matrix4f().scaling(1.0F, -1.0F, 1.0F));
+            graphics.pose().mulPose(new Matrix4f().scaling(1.0F, -1.0F, 1.0F));
             graphics.pose().scale(16.0F, 16.0F, 16.0F);
             boolean flag = !bakedmodel.usesBlockLight();
             if (flag) {
@@ -121,7 +121,7 @@ public class TItem extends TPanel {
             CrashReportCategory crashreportcategory = crashreport.addCategory("Item being rendered");
             crashreportcategory.setDetail("Item Type / Registry Name", () -> String.valueOf(item.getItem()));
             crashreportcategory.setDetail("Item Damage", () -> String.valueOf(item.getDamageValue()));
-            crashreportcategory.setDetail("Item NBT", () -> String.valueOf(item.getTag()));
+            crashreportcategory.setDetail("Item Components", () -> String.valueOf(item.getComponents()));
             crashreportcategory.setDetail("Item Foil", () -> String.valueOf(item.hasFoil()));
             throw new ReportedException(crashreport);
         }

@@ -1,5 +1,6 @@
 package cn.ussshenzhou.t88.gui.event;
 
+import net.minecraft.client.DeltaTracker;
 import net.minecraft.client.gui.GuiGraphics;
 import net.neoforged.bus.api.Event;
 
@@ -9,16 +10,16 @@ import net.neoforged.bus.api.Event;
 @SuppressWarnings("DeprecatedIsStillUsed")
 @Deprecated
 public class GameRendererRenderedEvent extends Event {
-    private final float partialTick;
+    private final DeltaTracker deltaTracker;
     private final GuiGraphics graphics;
 
-    public GameRendererRenderedEvent(float partialTick, GuiGraphics graphics) {
-        this.partialTick = partialTick;
+    public GameRendererRenderedEvent(DeltaTracker deltaTracker, GuiGraphics graphics) {
+        this.deltaTracker = deltaTracker;
         this.graphics = graphics;
     }
 
-    public float getPartialTick() {
-        return partialTick;
+    public DeltaTracker getDeltaTracker() {
+        return deltaTracker;
     }
 
     public GuiGraphics getGraphics() {

@@ -11,6 +11,7 @@ import com.mojang.logging.LogUtils;
 import net.minecraft.client.KeyMapping;
 import net.minecraft.client.Minecraft;
 import net.neoforged.api.distmarker.Dist;
+import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.neoforge.client.event.InputEvent;
 import net.neoforged.neoforge.client.settings.KeyConflictContext;
 import net.neoforged.neoforge.client.settings.KeyModifier;
@@ -23,7 +24,7 @@ import java.lang.reflect.InvocationTargetException;
 /**
  * @author USS_Shenzhou
  */
-@Mod.EventBusSubscriber(value = Dist.CLIENT)
+@EventBusSubscriber(value = Dist.CLIENT)
 public class ModKeyInput {
     public static final KeyMapping GUI_TEST = new KeyMapping(
             "key.t88.gui_test", KeyConflictContext.UNIVERSAL, KeyModifier.ALT,

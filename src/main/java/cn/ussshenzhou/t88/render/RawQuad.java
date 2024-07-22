@@ -11,6 +11,8 @@ import net.neoforged.api.distmarker.Dist;
 import net.neoforged.api.distmarker.OnlyIn;
 import org.apache.commons.lang3.ArrayUtils;
 
+import java.util.List;
+
 /**
  * @author USS_Shenzhou
  */
@@ -34,7 +36,7 @@ public class RawQuad {
     private final TextureAtlasSprite sprite;
     private boolean shade;
     static VertexFormat format = DefaultVertexFormat.BLOCK;
-    static ImmutableList<VertexFormatElement> elements = format.getElements();
+    static List<VertexFormatElement> elements = format.getElements();
 
     public RawQuad(int tintIndex, Direction direction, TextureAtlasSprite sprite, boolean shade, Point... points) {
         this.points = points;
@@ -48,7 +50,7 @@ public class RawQuad {
         for (int v = 0; v < 4; v++) {
             float[] buffer = new float[0];
             for (int e = 0; e < elements.size(); e++) {
-                float[] f = new float[elements.get(e).getElementCount()];
+                float[] f = new float[elements.get(e).count()];
                 unpack(bakedQuad.getVertices(), f, format, v, e);
                 buffer = ArrayUtils.addAll(buffer, f);
             }
@@ -152,7 +154,7 @@ public class RawQuad {
     }
 
     public BakedQuad bake() {
-        int[] packed = new int[format.getIntegerSize() * 4];
+        int[] packed = new int[format.getVertexSize()];
         for (int v = 0; v < 4; v++) {
             for (int e = 0; e < elements.size(); e++) {
                 //LightUtil.pack(unpackedData[v][e], packed, DefaultVertexFormat.BLOCK, v, e);
@@ -290,11 +292,11 @@ public class RawQuad {
     public static void unpack(int[] from, float[] to, VertexFormat formatFrom, int v, int e) {
         int length = 4 < to.length ? 4 : to.length;
         VertexFormatElement element = formatFrom.getElements().get(e);
-        int vertexStart = v * formatFrom.getVertexSize() + formatFrom.getOffset(e);
-        int count = element.getElementCount();
-        VertexFormatElement.Type type = element.getType();
-        VertexFormatElement.Usage usage = element.getUsage();
-        int size = type.getSize();
+        int vertexStart = v * formatFrom.getVertexSize() + formatFrom.getOffsetsByElement()[e];
+        int count = element.count();
+        VertexFormatElement.Type type = element.type();
+        VertexFormatElement.Usage usage = element.usage();
+        int size = type.size();
         int mask = (256 << (8 * (size - 1))) - 1;
         for (int i = 0; i < length; i++) {
             if (i < count) {
@@ -331,10 +333,10 @@ public class RawQuad {
      */
     public static void pack(float[] from, int[] to, VertexFormat formatTo, int v, int e) {
         VertexFormatElement element = formatTo.getElements().get(e);
-        int vertexStart = v * formatTo.getVertexSize() + formatTo.getOffset(e);
-        int count = element.getElementCount();
-        VertexFormatElement.Type type = element.getType();
-        int size = type.getSize();
+        int vertexStart = v * formatTo.getVertexSize() + formatTo.getOffsetsByElement()[e];
+        int count = element.count();
+        VertexFormatElement.Type type = element.type();
+        int size = type.size();
         int mask = (256 << (8 * (size - 1))) - 1;
         for (int i = 0; i < 4; i++) {
             if (i < count) {

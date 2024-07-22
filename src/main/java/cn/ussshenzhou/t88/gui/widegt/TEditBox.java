@@ -5,8 +5,7 @@ import cn.ussshenzhou.t88.gui.event.TWidgetContentUpdatedEvent;
 import cn.ussshenzhou.t88.gui.screen.TScreen;
 import cn.ussshenzhou.t88.gui.util.AccessorProxy;
 import cn.ussshenzhou.t88.gui.util.VanillaWidget2TComponentHelper;
-import net.minecraft.SharedConstants;
-import net.neoforged.bus.api.Event;
+import net.minecraft.util.StringUtil;
 import org.joml.Vector2i;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Font;
@@ -15,7 +14,6 @@ import net.minecraft.locale.Language;
 import net.minecraft.network.chat.Component;
 import net.minecraft.util.Mth;
 import net.neoforged.neoforge.common.NeoForge;
-import net.neoforged.bus.api.SubscribeEvent;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.LinkedList;
@@ -48,7 +46,7 @@ public class TEditBox extends EditBox implements TWidget, TResponder<String> {
             return false;
         }
         if (isEditable()) {
-            boolean canInsert = !checkInput || SharedConstants.isAllowedChatCharacter(pCodePoint);
+            boolean canInsert = !checkInput || StringUtil.isAllowedChatCharacter(pCodePoint);
             if (canInsert) {
                 this.insertText(Character.toString(pCodePoint));
                 return true;
@@ -64,7 +62,7 @@ public class TEditBox extends EditBox implements TWidget, TResponder<String> {
         int k = this.maxLength - this.value.length() - (i - j);
         String s = pTextToWrite;
         if (checkInput) {
-            s = SharedConstants.filterText(pTextToWrite);
+            s = StringUtil.filterText(pTextToWrite);
         }
         int l = s.length();
         if (k < l) {

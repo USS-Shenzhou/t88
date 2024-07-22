@@ -21,8 +21,8 @@ import static cn.ussshenzhou.t88.T88.MOD_ID;
  */
 @SuppressWarnings("AlibabaAbstractMethodOrInterfaceMethodMustUseJavadoc")
 public interface TWidget extends Renderable, GuiEventListener {
-    public static final ResourceLocation BACKGROUND_LOCATION = new ResourceLocation("textures/gui/options_background.png");
-    public static final ResourceLocation PLACEHOLDER_IMAGE = new ResourceLocation(MOD_ID, "textures/gui/placeholder.png");
+    public static final ResourceLocation BACKGROUND_LOCATION = ResourceLocation.parse("textures/gui/options_background.png");
+    public static final ResourceLocation PLACEHOLDER_IMAGE = ResourceLocation.fromNamespaceAndPath(MOD_ID, "textures/gui/placeholder.png");
 
     boolean isVisibleT();
 

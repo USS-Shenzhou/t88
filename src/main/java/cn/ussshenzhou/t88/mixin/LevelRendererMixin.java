@@ -32,12 +32,12 @@ public abstract class LevelRendererMixin {
     public abstract Frustum getFrustum();
 
     @Inject(method = "renderSectionLayer", at = @At("RETURN"))
-    private void t88FireT88RenderLevelStageEvent(RenderType renderType, PoseStack poseStack, double camX, double camY, double camZ, Matrix4f projectionMatrix, CallbackInfo ci) {
+    private void t88FireT88RenderLevelStageEvent(RenderType renderType, double x, double y, double z, Matrix4f frustrumMatrix, Matrix4f projectionMatrix, CallbackInfo ci) {
         NeoForge.EVENT_BUS.post(
                 new T88RenderLevelStageEvent(RenderLevelStageEvent.Stage.fromRenderType(renderType),
                         (LevelRenderer) (Object) this,
-                        poseStack, projectionMatrix, ticks,
-                        minecraft.getPartialTick(), minecraft.gameRenderer.getMainCamera(), getFrustum()
+                        frustrumMatrix, projectionMatrix, ticks,
+                        minecraft.gameRenderer.getMainCamera(), getFrustum()
                 )
         );
     }

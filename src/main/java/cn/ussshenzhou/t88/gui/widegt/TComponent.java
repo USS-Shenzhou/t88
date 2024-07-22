@@ -8,6 +8,7 @@ import com.google.common.collect.ImmutableList;
 import net.minecraft.Util;
 import net.minecraft.client.gui.Font;
 import net.minecraft.client.gui.components.Tooltip;
+import net.minecraft.client.gui.components.WidgetTooltipHolder;
 import net.minecraft.network.chat.Component;
 import net.minecraft.util.Mth;
 import org.joml.Vector2i;
@@ -18,6 +19,7 @@ import net.minecraft.client.renderer.GameRenderer;
 import org.joml.Matrix4f;
 
 import javax.annotation.Nullable;
+import java.time.Duration;
 import java.util.Collection;
 import java.util.LinkedList;
 import java.util.stream.Stream;
@@ -40,7 +42,7 @@ public abstract class TComponent implements TWidget {
     final int id = (int) (Math.random() * Integer.MAX_VALUE);
     protected boolean showHudEvenLoggedOut = false;
     @Nullable
-    private Tooltip tooltip;
+    private WidgetTooltipHolder tooltip;
 
     @Override
     public void setBounds(int x, int y, int width, int height) {
@@ -119,19 +121,25 @@ public abstract class TComponent implements TWidget {
         }
     }
 
-    public TComponent setTooltip(@Nullable Tooltip pTooltip) {
-        this.tooltip = pTooltip;
+    public TComponent setTooltip(@Nullable WidgetTooltipHolder tooltip) {
+        this.tooltip = tooltip;
         return this;
     }
 
+    public TComponent setTooltip(@Nullable Tooltip tooltip) {
+        var widgetTooltipHolder = new WidgetTooltipHolder();
+        widgetTooltipHolder.set(tooltip);
+        return setTooltip(widgetTooltipHolder);
+    }
+
     @Nullable
-    public Tooltip getTooltip() {
+    public WidgetTooltipHolder getTooltip() {
         return this.tooltip;
     }
 
     public TComponent setTooltipDelay(int pTooltipMsDelay) {
         if (this.tooltip != null) {
-            this.tooltip.setDelay(pTooltipMsDelay);
+            this.tooltip.setDelay(Duration.ofMillis(pTooltipMsDelay));
         }
         return this;
     }
@@ -398,13 +406,12 @@ public abstract class TComponent implements TWidget {
         RenderSystem.setShaderTexture(0, id);
         RenderSystem.setShader(GameRenderer::getPositionTexShader);
         Matrix4f matrix4f = graphics.pose().last().pose();
-        BufferBuilder bufferbuilder = Tesselator.getInstance().getBuilder();
-        bufferbuilder.begin(VertexFormat.Mode.QUADS, DefaultVertexFormat.POSITION_TEX);
-        bufferbuilder.vertex(matrix4f, (float) x0, (float) y0, (float) z).uv(minU, minV).endVertex();
-        bufferbuilder.vertex(matrix4f, (float) x0, (float) y1, (float) z).uv(minU, maxV).endVertex();
-        bufferbuilder.vertex(matrix4f, (float) x1, (float) y1, (float) z).uv(maxU, maxV).endVertex();
-        bufferbuilder.vertex(matrix4f, (float) x1, (float) y0, (float) z).uv(maxU, minV).endVertex();
-        BufferUploader.drawWithShader(bufferbuilder.end());
+        BufferBuilder bufferbuilder = Tesselator.getInstance().begin(VertexFormat.Mode.QUADS, DefaultVertexFormat.POSITION_TEX);
+        bufferbuilder.addVertex(matrix4f, (float) x0, (float) y0, (float) z).setUv(minU, minV);
+        bufferbuilder.addVertex(matrix4f, (float) x0, (float) y1, (float) z).setUv(minU, maxV);
+        bufferbuilder.addVertex(matrix4f, (float) x1, (float) y1, (float) z).setUv(maxU, maxV);
+        bufferbuilder.addVertex(matrix4f, (float) x1, (float) y0, (float) z).setUv(maxU, minV);
+        BufferUploader.drawWithShader(bufferbuilder.buildOrThrow());
     }
 
     public void drawStringSingleLine(GuiGraphics graphics, Font font, Component text, float fontSize, HorizontalAlignment align, int minX, int maxX, int minY, @SuppressWarnings("AlibabaLowerCamelCaseVariableNaming") int maxYOnlyForScissor, int color) {

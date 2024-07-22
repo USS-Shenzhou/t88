@@ -36,11 +36,6 @@ public class AccessorProxy {
         public static <E extends AbstractSelectionList.Entry<E>> boolean isRenderHeader(AbstractSelectionList<E> that) {
             return ((AbstractSelectionListAccessor<E>) that).isRenderHeader();
         }
-
-
-        public static <E extends AbstractSelectionList.Entry<E>> boolean isRenderBackground(AbstractSelectionList<E> that) {
-            return ((AbstractSelectionListAccessor<E>) that).isRenderBackground();
-        }
     }
 
     public static class SliderProxy {
