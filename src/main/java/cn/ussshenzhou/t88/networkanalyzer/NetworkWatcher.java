@@ -4,6 +4,7 @@ import com.mojang.logging.LogUtils;
 import io.netty.buffer.Unpooled;
 import net.minecraft.network.ConnectionProtocol;
 import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.protocol.Packet;
 import net.minecraft.network.protocol.PacketFlow;
 import net.minecraft.network.protocol.common.ClientboundCustomPayloadPacket;
@@ -13,6 +14,7 @@ import net.minecraft.resources.ResourceLocation;
 import net.neoforged.fml.ModContainer;
 import net.neoforged.fml.ModList;
 import net.neoforged.fml.javafmlmod.FMLModContainer;
+import net.neoforged.neoforge.network.connection.ConnectionType;
 import net.neoforged.neoforge.network.registration.NetworkRegistry;
 import net.neoforged.neoforgespi.language.ModFileScanData;
 
@@ -52,8 +54,8 @@ public class NetworkWatcher {
         try {
             var method = packet.getClass().getDeclaredMethod("write", FriendlyByteBuf.class);
             method.setAccessible(true);
-            var buf = new FriendlyByteBuf(Unpooled.buffer());
-            method.invoke(packet,buf);
+            var buf = new RegistryFriendlyByteBuf(Unpooled.buffer(), null, ConnectionType.NEOFORGE);
+            method.invoke(packet, buf);
             int size = buf.writerIndex();
             buf.release();
             return size;
@@ -72,7 +74,7 @@ public class NetworkWatcher {
 
     @SuppressWarnings("UnstableApiUsage")
     private static int getSizeFromCustomPacketPayload(CustomPacketPayload payload) {
-        var buf = new FriendlyByteBuf(Unpooled.buffer());
+        var buf = new RegistryFriendlyByteBuf(Unpooled.buffer(), null, ConnectionType.NEOFORGE);
         var codec = NetworkRegistry.getCodec(payload.type().id(), ConnectionProtocol.PLAY, PacketFlow.SERVERBOUND);
         if (codec == null) {
             codec = NetworkRegistry.getCodec(payload.type().id(), ConnectionProtocol.PLAY, PacketFlow.CLIENTBOUND);
