@@ -10,12 +10,10 @@ import org.jetbrains.annotations.ApiStatus;
 import org.jline.utils.Log;
 import org.objectweb.asm.Type;
 
+import java.lang.annotation.ElementType;
 import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
-import java.util.Comparator;
-import java.util.HashMap;
-import java.util.LinkedList;
-import java.util.PriorityQueue;
+import java.util.*;
 
 /**
  * @author USS_Shenzhou
@@ -36,57 +34,55 @@ public class SectionBufferRenderTypeHelper {
             if (System.getProperty("t88.ignore_section_buffer_render_type") == null) {
                 LogUtils.getLogger().error("If you DO want to continue, you can add -Dt88.ignore_section_buffer_render_type=true to JVM options and reboot. This may cause crash in the future.");
             } else {
-                LogUtils.getLogger().error("...Wait, I see that you have added -Dt88.ignore_section_buffer_render_type=true to JVM options and reboot. We shall continue. This may cause crash in the future.");
+                LogUtils.getLogger().warn("...Wait, I see that you have added -Dt88.ignore_section_buffer_render_type=true to JVM options and reboot. We shall continue. This may cause crash in the future.");
                 return new LinkedList<>();
             }
         }
         ModList.get().forEachModInOrder(modContainer -> {
             if (modContainer instanceof FMLModContainer mod) {
                 ModFileScanData scanResults;
-                Class<?> modClass;
+                List<Class<?>> modClasses;
                 try {
                     var s = FMLModContainer.class.getDeclaredField("scanResults");
                     s.setAccessible(true);
                     scanResults = (ModFileScanData) s.get(mod);
-                    var m = FMLModContainer.class.getDeclaredField("modClass");
+                    var m = FMLModContainer.class.getDeclaredField("modClasses");
                     m.setAccessible(true);
-                    modClass = (Class<?>) m.get(mod);
+                    //noinspection unchecked
+                    modClasses = (List<Class<?>>) m.get(mod);
                 } catch (IllegalAccessException | NoSuchFieldException e) {
                     LogUtils.getLogger().error("Failed to get scanResults.");
                     LogUtils.getLogger().error(e.getMessage());
                     return;
                 }
-                scanResults.getAnnotations().forEach(annotationData -> {
-                    handleType(modClass, annotationData, types);
-                });
+                scanResults.getAnnotatedBy(SectionBufferRenderType.class, ElementType.FIELD)
+                        .forEach(annotationData -> handleType(modClasses, annotationData, types));
             }
         });
         return types;
     }
 
-    private static void handleType(Class<?> modClass, ModFileScanData.AnnotationData annotationData, LinkedList<RenderType> types) {
-        if (annotationData.annotationType().equals(RENDER_TYPE)) {
-            try {
-                Class<?> c = Class.forName(annotationData.clazz().getClassName(), true, modClass.getClassLoader());
-                Field f = c.getDeclaredField(annotationData.memberName());
-                if (!Modifier.isStatic(f.getModifiers())) {
-                    LogUtils.getLogger().error("Field {} with @ChunkBufferRenderType in class {} must be static.", annotationData.memberName(), annotationData.clazz().getClassName());
-                    return;
-                }
-                f.setAccessible(true);
-                Object o = f.get(null);
-                if (o instanceof RenderType renderType) {
-                    types.add(renderType);
-                    SectionBufferRenderType anno = f.getAnnotation(SectionBufferRenderType.class);
-                    renderTypes.computeIfAbsent(anno.value().get(), at -> new PriorityQueue<>(Comparator.comparingInt(r -> r.priority)))
-                            .add(new RenderTypeWithPriority(anno.priority(), renderType));
-                } else {
-                    LogUtils.getLogger().error("Field {} with @ChunkBufferRenderType in class {} must extend RenderType.", annotationData.memberName(), annotationData.clazz().getClassName());
-                }
-            } catch (ClassNotFoundException | NoSuchFieldException | IllegalAccessException e) {
-                LogUtils.getLogger().error("Failed to handle annotationData {}", annotationData);
-                LogUtils.getLogger().error(e.getMessage());
+    private static void handleType(List<Class<?>> modClasses, ModFileScanData.AnnotationData annotationData, LinkedList<RenderType> types) {
+        try {
+            Field f = Class.forName(annotationData.clazz().getClassName()).getDeclaredField(annotationData.memberName());
+            if (!Modifier.isStatic(f.getModifiers()) || !Modifier.isFinal(f.getModifiers())) {
+                LogUtils.getLogger().error("Field {} with @ChunkBufferRenderType in class {} must be STATIC and FINAL.", annotationData.memberName(), annotationData.clazz().getClassName());
+                return;
             }
+            f.setAccessible(true);
+            Object o = f.get(null);
+            if (o instanceof RenderType renderType) {
+                types.add(renderType);
+                SectionBufferRenderType anno = f.getAnnotation(SectionBufferRenderType.class);
+                renderTypes.computeIfAbsent(anno.value().get(), at -> new PriorityQueue<>(Comparator.comparingInt(r -> r.priority)))
+                        .add(new RenderTypeWithPriority(anno.priority(), renderType));
+                LogUtils.getLogger().info("Successfully injected {} : {} into chunk buffer render-types.", annotationData.clazz().getClassName(), annotationData.memberName());
+            } else {
+                LogUtils.getLogger().error("Field {} with @ChunkBufferRenderType in class {} must extend RenderType.", annotationData.memberName(), annotationData.clazz().getClassName());
+            }
+        } catch (ClassNotFoundException | NoSuchFieldException | IllegalAccessException e) {
+            LogUtils.getLogger().error("Failed to handle annotationData {}", annotationData);
+            LogUtils.getLogger().error(e.getMessage());
         }
     }
 
