@@ -224,13 +224,45 @@ public class TSelectList<E> extends ObjectSelectionList<TSelectList<E>.Entry> im
     }
 
     @Override
+    protected void renderListBackground(GuiGraphics guiGraphics) {
+        RenderSystem.enableBlend();
+        ResourceLocation resourcelocation = this.minecraft.level == null ? MENU_LIST_BACKGROUND : INWORLD_MENU_LIST_BACKGROUND;
+        guiGraphics.blit(
+                resourcelocation,
+                this.getX(),
+                this.getY(),
+                (float) this.getRight(),
+                (float) (this.getBottom() + (int) this.getScrollAmount()),
+                this.scrollbarVisible() ? this.getWidth() : this.getRowWidth(),
+                this.getHeight(),
+                32,
+                32
+        );
+        RenderSystem.disableBlend();
+    }
+
+    @Override
+    protected void renderListSeparators(GuiGraphics guiGraphics) {
+        RenderSystem.enableBlend();
+        ResourceLocation resourcelocation = this.minecraft.level == null ? Screen.HEADER_SEPARATOR : Screen.INWORLD_HEADER_SEPARATOR;
+        ResourceLocation resourcelocation1 = this.minecraft.level == null ? Screen.FOOTER_SEPARATOR : Screen.INWORLD_FOOTER_SEPARATOR;
+        guiGraphics.blit(resourcelocation, this.getX(), this.getY() - 2, 0.0F, 0.0F,
+                this.scrollbarVisible() ? this.getWidth() : this.getRowWidth(),
+                2, 32, 2);
+        guiGraphics.blit(resourcelocation1, this.getX(), this.getBottom(), 0.0F, 0.0F,
+                this.scrollbarVisible() ? this.getWidth() : this.getRowWidth(),
+                2, 32, 2);
+        RenderSystem.disableBlend();
+    }
+
+    @Override
     public void renderWidget(GuiGraphics guiGraphics, int mouseX, int mouseY, float partialTick) {
         AccessorProxy.AbstractSelectionListProxy.setHovered(this, this.isMouseOver(mouseX, mouseY) ? this.getEntryAtPosition(mouseX, mouseY) : null);
         this.renderListBackground(guiGraphics);
         this.enableScissor(guiGraphics);
         if (AccessorProxy.AbstractSelectionListProxy.isRenderHeader(this)) {
             int i = this.getRowLeft();
-            int j = this.getY() + 4 - (int)this.getScrollAmount();
+            int j = this.getY() + 4 - (int) this.getScrollAmount();
             this.renderHeader(guiGraphics, i, j);
         }
 
@@ -239,9 +271,9 @@ public class TSelectList<E> extends ObjectSelectionList<TSelectList<E>.Entry> im
         this.renderListSeparators(guiGraphics);
         if (this.scrollbarVisible()) {
             int l = this.getScrollbarPosition();
-            int i1 = (int)((float)(this.height * this.height) / (float)this.getMaxPosition());
+            int i1 = (int) ((float) (this.height * this.height) / (float) this.getMaxPosition());
             i1 = Mth.clamp(i1, 32, this.height - 8);
-            int k = (int)this.getScrollAmount() * (this.height - i1) / this.getMaxScroll() + this.getY();
+            int k = (int) this.getScrollAmount() * (this.height - i1) / this.getMaxScroll() + this.getY();
             if (k < this.getY()) {
                 k = this.getY();
             }

@@ -22,9 +22,9 @@ import java.util.concurrent.CompletableFuture;
  * @author USS_Shenzhou
  */
 public class TestScreen extends TScreen {
-    private TLabel title = new TLabel(Component.literal("T88 Test Screen"));
+    private final TLabel title = new TLabel(Component.literal("T88 Test Screen"));
 
-    private TLabel linesTest = new TLabel(Component.literal("§6Test1 \nTest223456\n...")) {
+    private final TLabel linesTest = new TLabel(Component.literal("§6Test1 \nTest223456\n...")) {
         @Override
         public void render(GuiGraphics guigraphics, int pMouseX, int pMouseY, float pPartialTick) {
             //super.render(guigraphics, pMouseX, pMouseY, pPartialTick);
@@ -36,11 +36,12 @@ public class TestScreen extends TScreen {
             super.renderTop(guigraphics, pMouseX, pMouseY, pPartialTick);
         }
     };
-    private TTimer tTimer = TTimer.newTimerCountDown(30);
-    private TSlider slider = new TSlider("Test", 2, 5);
-    private TSelectList<String> selectList = new TSelectList<>();
-    private TEditBox editBox = new TEditBox();
-    private TSuggestedEditBox editBox2 = new TSuggestedEditBox(d -> {
+    private final TTimer tTimer = TTimer.newTimerCountDown(30);
+    private final TSlider slider = new TSlider("Test", 2, 5);
+    private final TSelectList<String> selectList0 = new TSelectList<>();
+    private final TSelectList<String> selectList = new TSelectList<>();
+    private final TEditBox editBox = new TEditBox();
+    private final TSuggestedEditBox editBox2 = new TSuggestedEditBox(d -> {
         d.register(Commands.literal("ABCD"));
         d.register(Commands.literal("1df"));
         d.register(Commands.literal("2d"));
@@ -49,19 +50,20 @@ public class TestScreen extends TScreen {
         d.register(Commands.literal("7v"));
         d.register(Commands.literal("41gtg"));
     });
-    private TScrollContainer scrollPanel = new TScrollContainer() {
+    private final TScrollContainer scrollPanel = new TScrollContainer() {
         @Override
         public void layout() {
             editBox.setBounds(10, 10, 50, 20);
             selectList.setBounds(10, 230, 50, 100);
+            LayoutHelper.BTopOfA(selectList0, 4, selectList);
             editBox2.setBounds(10, 350, 50, 20);
             super.layout();
         }
     };
-    private TPanel cover = new TPanel();
-    private TLabelButton labelButton = new TLabelButton(Component.literal("Label Button"), pButton -> {
+    private final TPanel cover = new TPanel();
+    private final TLabelButton labelButton = new TLabelButton(Component.literal("Label Button"), pButton -> {
     });
-    private TItem item = new TItem(new ItemStack(Items.GRASS_BLOCK,10), null, 32);
+    private final TItem item = new TItem(new ItemStack(Items.GRASS_BLOCK, 10), null, 32);
 
     public TestScreen() {
         super(Component.empty());
@@ -112,6 +114,8 @@ public class TestScreen extends TScreen {
         selectList.addElement("4");
         selectList.addElement("5");
 
+        selectList0.addElement("0000");
+        scrollPanel.add(selectList0);
         //this.add(editBox);
         //this.add(editBox2);
         this.add(scrollPanel);
