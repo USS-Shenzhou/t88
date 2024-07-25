@@ -71,11 +71,11 @@ public class ChartPanel extends TPanel {
         if (getTopParentScreenAsOptional(NetworkWatcherScreen.class).orElseThrow().getOptionsPanel().getUnit().getSelectedOptional().orElseThrow().getContent().contains("bit")) {
             bytes *= 8;
             if (bytes < 1000) {
-                s.append(bytes).append(" §7bp§r");
+                s.append(bytes).append(" §7b§r");
             } else if (bytes < 1000 * 1000) {
-                s.append(String.format("%.1f §7Kbp§r", bytes / 1024f));
+                s.append(String.format("%.1f §7Kb§r", bytes / 1024f));
             } else {
-                s.append(String.format("%.1f §7Mbp§r", bytes / 1024 * 1024f));
+                s.append(String.format("%.1f §7Mb§r", bytes / 1024 * 1024f));
             }
         } else {
             if (bytes < 1000) {

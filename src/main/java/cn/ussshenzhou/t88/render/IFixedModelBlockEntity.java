@@ -22,7 +22,7 @@ public interface IFixedModelBlockEntity {
     @Nullable
     SectionCompileContext handleCompileContext(SectionCompileContext rawContext);
 
-    default void renderAdditionalAsync(SectionCompileContext context) {
+    default void renderAdditionalAsync(SectionCompileContext context,PoseStack poseStack) {
     }
 
     default int getPackedLight() {

@@ -49,9 +49,10 @@ public class RawQuad {
     public RawQuad(BakedQuad bakedQuad) {
         for (int v = 0; v < 4; v++) {
             float[] buffer = new float[0];
-            for (int e = 0; e < elements.size(); e++) {
-                float[] f = new float[elements.get(e).count()];
-                unpack(bakedQuad.getVertices(), f, format, v, e);
+            for (var element : elements) {
+                var e = element.id();
+                float[] f = new float[element.count()];
+                unpack(bakedQuad.getVertices(), f, format, element, v, e);
                 buffer = ArrayUtils.addAll(buffer, f);
             }
             points[v] = new Point(buffer);
@@ -156,9 +157,10 @@ public class RawQuad {
     public BakedQuad bake() {
         int[] packed = new int[format.getVertexSize()];
         for (int v = 0; v < 4; v++) {
-            for (int e = 0; e < elements.size(); e++) {
+            for (var element : elements) {
+                var e = element.id();
                 //LightUtil.pack(unpackedData[v][e], packed, DefaultVertexFormat.BLOCK, v, e);
-                pack(points[v].get(e), packed, format, v, e);
+                pack(points[v].get(e), packed, format, element, v, e);
             }
         }
         return new BakedQuad(packed, tintIndex, direction, sprite, shade);
@@ -225,7 +227,7 @@ public class RawQuad {
         float normalX, normalY, normalZ;
         float padding;
 
-        public Point(float x, float y, float z, float r, float g, float b, float a, float u0, float v0, float u2, float v2, float normalX, float normalY, float normalZ, float padding) {
+        public Point(float x, float y, float z, float r, float g, float b, float a, float u0, float v0, float u2, float v2, float normalX, float normalY, float normalZ) {
             this.x = x;
             this.y = y;
             this.z = z;
@@ -240,15 +242,14 @@ public class RawQuad {
             this.normalX = normalX;
             this.normalY = normalY;
             this.normalZ = normalZ;
-            this.padding = padding;
         }
 
         public Point(float[] f) {
-            this(f[0], f[1], f[2], f[3], f[4], f[5], f[6], f[7], f[8], f[9], f[10], f[11], f[12], f[13], f[14]);
+            this(f[0], f[1], f[2], f[3], f[4], f[5], f[6], f[7], f[8], f[9], f[10], f[11], f[12], f[13]);
         }
 
         public Point copy() {
-            return new Point(x, y, z, r, g, b, a, u0, v0, u2, v2, normalX, normalY, normalZ, padding);
+            return new Point(x, y, z, r, g, b, a, u0, v0, u2, v2, normalX, normalY, normalZ);
         }
 
         public Point offset(float ax, float ay, float az, float au0, float av0) {
@@ -279,9 +280,9 @@ public class RawQuad {
                 case 0 -> new float[]{x, y, z};
                 case 1 -> new float[]{r, g, b, a};
                 case 2 -> new float[]{u0, v0};
-                case 3 -> new float[]{u2, v2};
-                case 4 -> new float[]{normalX, normalY, normalZ};
-                default -> new float[]{padding};
+                case 4 -> new float[]{u2, v2};
+                case 5 -> new float[]{normalX, normalY, normalZ};
+                default -> new float[]{};
             };
         }
     }
@@ -289,9 +290,8 @@ public class RawQuad {
     /**
      * Copied from net.neoforged.neoforge.client.model.pipeline.LightUtil during updating from 1.18.2 to 1.19.4 under LGPL-2.1
      */
-    public static void unpack(int[] from, float[] to, VertexFormat formatFrom, int v, int e) {
+    public static void unpack(int[] from, float[] to, VertexFormat formatFrom, VertexFormatElement element, int v, int e) {
         int length = 4 < to.length ? 4 : to.length;
-        VertexFormatElement element = formatFrom.getElements().get(e);
         int vertexStart = v * formatFrom.getVertexSize() + formatFrom.getOffsetsByElement()[e];
         int count = element.count();
         VertexFormatElement.Type type = element.type();
@@ -331,8 +331,7 @@ public class RawQuad {
     /**
      * Copied from net.neoforged.neoforge.client.model.pipeline.LightUtil during updating from 1.18.2 to 1.19.4 under LGPL-2.1
      */
-    public static void pack(float[] from, int[] to, VertexFormat formatTo, int v, int e) {
-        VertexFormatElement element = formatTo.getElements().get(e);
+    public static void pack(float[] from, int[] to, VertexFormat formatTo, VertexFormatElement element, int v, int e) {
         int vertexStart = v * formatTo.getVertexSize() + formatTo.getOffsetsByElement()[e];
         int count = element.count();
         VertexFormatElement.Type type = element.type();

@@ -14,22 +14,17 @@ import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.SectionPos;
 import net.minecraft.util.RandomSource;
-import net.minecraft.world.level.BlockAndTintGetter;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.neoforged.neoforge.client.event.AddSectionGeometryEvent;
-import net.neoforged.neoforge.client.model.data.ModelData;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
-import org.spongepowered.asm.mixin.Unique;
-import org.spongepowered.asm.mixin.injection.At;
-import org.spongepowered.asm.mixin.injection.Inject;
+import org.spongepowered.asm.mixin.injection.*;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 
 /**
  * @author USS_Shenzhou
@@ -46,7 +41,7 @@ public abstract class SectionCompilerMixin {
     private BlockEntityRenderDispatcher blockEntityRenderer;
 
     @Shadow
-    protected abstract BufferBuilder getOrBeginLayer(Map<RenderType, BufferBuilder> bufferLayers, SectionBufferBuilderPack sectionBufferBuilderPack, RenderType renderType);
+    public abstract BufferBuilder getOrBeginLayer(Map<RenderType, BufferBuilder> bufferLayers, SectionBufferBuilderPack sectionBufferBuilderPack, RenderType renderType);
 
     @Inject(
             method = "compile(Lnet/minecraft/core/SectionPos;Lnet/minecraft/client/renderer/chunk/RenderChunkRegion;Lcom/mojang/blaze3d/vertex/VertexSorting;Lnet/minecraft/client/renderer/SectionBufferBuilderPack;Ljava/util/List;)Lnet/minecraft/client/renderer/chunk/SectionCompiler$Results;",
@@ -81,9 +76,19 @@ public abstract class SectionCompilerMixin {
             if (context.needRenderAdditional) {
                 poseStack.pushPose();
                 poseStack.translate(pos.getX(), pos.getY(), pos.getZ());
-                fixedModelBlockEntity.renderAdditionalAsync(context);
+                fixedModelBlockEntity.renderAdditionalAsync(context, poseStack);
                 poseStack.popPose();
             }
         }
+    }
+
+    @Redirect(method = "getOrBeginLayer", at = @At(value = "FIELD", target = "Lcom/mojang/blaze3d/vertex/VertexFormat$Mode;QUADS:Lcom/mojang/blaze3d/vertex/VertexFormat$Mode;"))
+    private VertexFormat.Mode t88ModeDecidedByRenderType(@Local(argsOnly = true) RenderType renderType) {
+        return renderType.mode();
+    }
+
+    @Redirect(method = "getOrBeginLayer", at = @At(value = "FIELD", target = "Lcom/mojang/blaze3d/vertex/DefaultVertexFormat;BLOCK:Lcom/mojang/blaze3d/vertex/VertexFormat;"))
+    private VertexFormat t88FormatDecidedByRenderType(@Local(argsOnly = true) RenderType renderType) {
+        return renderType.format();
     }
 }
