@@ -31,14 +31,14 @@ import java.util.concurrent.ConcurrentHashMap;
 public class NetworkWatcher {
 
     //modId : classname - size
-    public static final Map<SenderInfo, SizeAndTimes> SENT = new ConcurrentHashMap<>();
-    public static final Map<SenderInfo, SizeAndTimes> RECEIVED = new ConcurrentHashMap<>();
-    public static final Map<Class<?>, String> MOD_ID_CACHE = new ConcurrentHashMap<>();
+    public static final ConcurrentHashMap<SenderInfo, SizeAndTimes> SENT = new ConcurrentHashMap<>();
+    public static final ConcurrentHashMap<SenderInfo, SizeAndTimes> RECEIVED = new ConcurrentHashMap<>();
+    public static final ConcurrentHashMap<Class<?>, String> MOD_ID_CACHE = new ConcurrentHashMap<>();
 
     public static void record(Packet<?> packet, TR dir) {
         CompletableFuture.runAsync(() -> {
             var map = dir == TR.T ? SENT : RECEIVED;
-            int size = 0;
+            int size;
             if (packet instanceof ServerboundCustomPayloadPacket p) {
                 size = getCustomPacketSize(p);
             } else if (packet instanceof ClientboundCustomPayloadPacket p) {
@@ -149,8 +149,8 @@ public class NetworkWatcher {
     }
 
     //TODO
-    public static final Map<ResourceLocation, Integer> FROM_SERVER_SENT = new ConcurrentHashMap<>();
-    public static final Map<ResourceLocation, Integer> FROM_SERVER_RECEIVED = new ConcurrentHashMap<>();
+    public static final ConcurrentHashMap<ResourceLocation, Integer> FROM_SERVER_SENT = new ConcurrentHashMap<>();
+    public static final ConcurrentHashMap<ResourceLocation, Integer> FROM_SERVER_RECEIVED = new ConcurrentHashMap<>();
     public static boolean fromServerUpdated = false;
 
     public enum TR {

@@ -2,6 +2,9 @@ package cn.ussshenzhou.t88.render;
 
 import cn.ussshenzhou.t88.render.event.T88RenderChunkBufferTypePrepareEvent;
 import cn.ussshenzhou.t88.render.event.T88RenderLevelStageEvent;
+import com.mojang.blaze3d.vertex.PoseStack;
+import com.mojang.math.Axis;
+import net.minecraft.client.Camera;
 import net.minecraft.client.renderer.RenderType;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.fml.common.EventBusSubscriber;
@@ -36,12 +39,21 @@ public class ChunkBufferRenderListener {
     }
 
     private static void renderChunkBufferType(T88RenderLevelStageEvent event, RenderType type) {
-        if (!NeoForge.EVENT_BUS.post(new T88RenderChunkBufferTypePrepareEvent(type, event)).isCanceled()) {
-            double x = event.camera.getPosition().x;
-            double y = event.camera.getPosition().y;
-            double z = event.camera.getPosition().z;
-            event.levelRenderer.renderSectionLayer(type, x, y, z, event.frustumMatrix, event.projectionMatrix);
+        var prepareEvent = new T88RenderChunkBufferTypePrepareEvent(type, event);
+        var poseStack = event.poseStack;
+        var camera = event.camera;
+        poseStack.pushPose();
+        poseStack.mulPose(Axis.ZP.rotationDegrees(camera.getRoll()));
+        poseStack.mulPose(Axis.XP.rotationDegrees(camera.getXRot()));
+        poseStack.mulPose(Axis.YP.rotationDegrees(camera.getYRot() + 180.0F));
+        if (!NeoForge.EVENT_BUS.post(prepareEvent).isCanceled()) {
+            double x = camera.getPosition().x;
+            double y = camera.getPosition().y;
+            double z = camera.getPosition().z;
+            poseStack.translate(-x, -y, -z);
+            event.levelRenderer.renderSectionLayer(type, x, y, z, poseStack.last().pose(), event.projectionMatrix);
             event.levelRenderer.renderBuffers.bufferSource().endBatch(type);
         }
+        poseStack.popPose();
     }
 }

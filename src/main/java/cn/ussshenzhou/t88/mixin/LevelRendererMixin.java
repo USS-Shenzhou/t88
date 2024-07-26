@@ -36,7 +36,7 @@ public abstract class LevelRendererMixin {
         NeoForge.EVENT_BUS.post(
                 new T88RenderLevelStageEvent(RenderLevelStageEvent.Stage.fromRenderType(renderType),
                         (LevelRenderer) (Object) this,
-                        new PoseStack(), frustrumMatrix, projectionMatrix, ticks,
+                        new PoseStack(), projectionMatrix, ticks,
                         minecraft.gameRenderer.getMainCamera(), getFrustum()
                 )
         );
