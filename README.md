@@ -32,6 +32,8 @@ a）当你作为游戏玩家，加载本程序于Minecraft并游玩时，本许�
 
 b）当你作为Minecraft模组开发者，在编写其他Minecraft模组并将本程序作为你的前置（依赖）时，调用，而不是继承、复制或修改，`cn.usssehnzhou.t88.network`包中的所有内容，则调用这部分内容不受GPL-3.0许可证中有关“传染性”的限制，但你仍然需要醒目地注明使用本程序作为前置（依赖）。
 
+c）尽管本许可证有着其他规定，如果您通过链接或结合[Sign Me Up](https://github.com/teaconmc/SignMeUp)来修改本程序，本许可证授予您额外的许可允许`Sign Me Up`在BSD 3-Clause许可证的条款下发布。此额外许可仅适用于具体描述的`Sign Me Up`，不延伸至`Sign Me Up`的任何衍生作品。
+
 ---
 
 This mod is free software; you can redistribute it and/or modify them under the terms of the GNU General Public License as published by the Free Software Foundation; either version 3 of the License, or (at your option) any later version.
@@ -45,3 +47,5 @@ This program is distributed in the hope that it will be useful, but WITHOUT ANY 
 a) As a game player, when you load and play this program in Minecraft, this license automatically grants you all rights necessary, which are not covered in the GPL-3.0 license, or are prohibited by the GPL-3.0 license, for the normal loading and playing of this program in Minecraft. In case of conflicts between the GPL-3.0 license and the Minecraft EULA or other Mojang/Microsoft terms, the latter shall prevail.
 
 b) As a Minecraft mod developer, when you write other Minecraft mods and use this program as your prerequisite (dependency), the calling, instead of extending, copying or modifying, of all content in the `cn.usssehnzhou.t88.network` package is not subject to the "infectious" restrictions of the GPL-3.0 license. However, you still need to prominently indicate the use of this program as a prerequisite (dependency).
+
+c) Notwithstanding other provisions of this License, if you modify this Program by linking or combining it with the [Sign Me Up](https://github.com/teaconmc/SignMeUp), this license grants you additional permission to allow `Sign Me Up` to be licensed under the terms of the BSD 3-Clause License. This additional permission applies only to `Sign Me Up` as it is specifically described, and does not extend to any derivative works of `Sign Me Up`.
