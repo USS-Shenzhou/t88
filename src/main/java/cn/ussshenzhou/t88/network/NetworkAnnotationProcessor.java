@@ -118,13 +118,15 @@ public class NetworkAnnotationProcessor extends AbstractProcessor {
              BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream))) {
             String line;
             while ((line = reader.readLine()) != null) {
+                if (line.startsWith("@NetPacket")){
+                    continue;
+                }
                 originalRecordContent.append(line).append("\n");
             }
         }
         StringBuilder proxyRecordContent = new StringBuilder(originalRecordContent.toString()
                 .replaceFirst(packageName, packageName + GENERATED_PACKAGE_SUFFIX)
                 .replace(originalClassName, originalClassName + PROXY_CLASS_SUFFIX)
-                .replace("@NetPacket","")
                 .replace("@Codec","")
                 .replace("@ClientHandler","")
                 .replace("@ServerHandler","")
