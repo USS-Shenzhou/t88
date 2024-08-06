@@ -74,11 +74,13 @@ public class ConfigHelper {
     }
 
     private static <T extends TConfig> void saveConfigInternal(T config, File configFile) {
-        try {
-            FileUtils.write(configFile, GSON.toJson(config), StandardCharsets.UTF_8);
-        } catch (IOException ignored) {
-            LogUtils.getLogger().error("Failed to save config {}. Things may not work well.", config.getClass());
-        }
+        Thread.startVirtualThread(()->{
+            try {
+                FileUtils.write(configFile, GSON.toJson(config), StandardCharsets.UTF_8);
+            } catch (IOException ignored) {
+                LogUtils.getLogger().error("Failed to save config {}. Things may not work well.", config.getClass());
+            }
+        });
     }
 
     public static class Universal extends ConfigHelper {

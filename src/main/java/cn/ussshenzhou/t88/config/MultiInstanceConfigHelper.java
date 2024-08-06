@@ -109,10 +109,12 @@ public class MultiInstanceConfigHelper {
 
     public static <T extends TMultiInstanceConfig> void saveConfig(T config) {
         File configFile = checkChildDir(config).toPath().resolve(config.getFileName() + ".json").toFile();
-        try {
-            FileUtils.write(configFile, GSON.toJson(config), StandardCharsets.UTF_8);
-        } catch (IOException ignored) {
-            LogUtils.getLogger().error("Failed to save config {}. Things may not work well.", config.getClass());
-        }
+        Thread.startVirtualThread(()->{
+            try {
+                FileUtils.write(configFile, GSON.toJson(config), StandardCharsets.UTF_8);
+            } catch (IOException ignored) {
+                LogUtils.getLogger().error("Failed to save config {}. Things may not work well.", config.getClass());
+            }
+        });
     }
 }
