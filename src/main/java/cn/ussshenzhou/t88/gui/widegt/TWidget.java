@@ -1,12 +1,14 @@
 package cn.ussshenzhou.t88.gui.widegt;
 
 import cn.ussshenzhou.t88.gui.container.TScrollContainer;
+import cn.ussshenzhou.t88.gui.container.TVerticalScrollContainer;
 import cn.ussshenzhou.t88.gui.screen.TScreen;
 import com.mojang.logging.LogUtils;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.Renderable;
 import net.minecraft.client.gui.components.events.GuiEventListener;
 import net.minecraft.resources.ResourceLocation;
+import org.joml.Vector2d;
 import org.joml.Vector2i;
 
 import javax.annotation.Nullable;
@@ -124,12 +126,14 @@ public interface TWidget extends Renderable, GuiEventListener {
         return c.isInstance(s) ? Optional.of((T) s) : Optional.empty();
     }
 
+    @Deprecated
     default double getParentScrollAmountIfExist() {
-        TScrollContainer tScrollContainer = this.getParentInstanceOf(TScrollContainer.class);
-        if (tScrollContainer != null) {
-            return tScrollContainer.getScrollAmount();
+        return getParentScroll().y;
+        /*TVerticalScrollContainer tVerticalScrollContainer = this.getParentInstanceOf(TVerticalScrollContainer.class);
+        if (tVerticalScrollContainer != null) {
+            return tVerticalScrollContainer.getScrollAmount();
         }
-        return 0;
+        return 0;*/
     }
 
     default boolean isOutOfParentScrollContainerScissor() {
@@ -137,12 +141,20 @@ public interface TWidget extends Renderable, GuiEventListener {
         if (scrollContainer == null) {
             return false;
         }
-        var scroll = scrollContainer.getScrollAmount();
+        var scroll = getParentScroll();
         //noinspection RedundantIfStatement
-        if (this.getYT() - scroll < scrollContainer.getYT()
-                || this.getYT() + this.getSize().y - scroll > scrollContainer.getYT() + scrollContainer.height) {
+        if (this.getYT() - scroll.y < scrollContainer.getYT()
+                || this.getYT() + this.getSize().y - scroll.y > scrollContainer.getYT() + scrollContainer.getSize().y
+                || this.getXT() - scroll.x < scrollContainer.getXT()
+                || this.getXT() + this.getSize().x - scroll.x > scrollContainer.getXT() + scrollContainer.getSize().x) {
             return true;
         }
         return false;
+    }
+
+    default Vector2d getParentScroll() {
+        Vector2d v = new Vector2d();
+        getParentInstanceOfOptional(TScrollContainer.class).ifPresent(tScrollContainer -> v.add(tScrollContainer.getScroll()));
+        return v;
     }
 }

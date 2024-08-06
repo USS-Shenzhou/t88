@@ -10,6 +10,7 @@ import java.io.File;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.util.HashMap;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.function.Consumer;
 
 /**
@@ -17,7 +18,7 @@ import java.util.function.Consumer;
  */
 public class MultiInstanceConfigHelper {
     private static final File CONFIG_DIR = FMLPaths.CONFIGDIR.relative().toFile();
-    private static final HashMap<Class<? extends TMultiInstanceConfig>, HashMap<String, TMultiInstanceConfig>> CACHE = new HashMap<>();
+    private static final ConcurrentHashMap<Class<? extends TMultiInstanceConfig>, ConcurrentHashMap<String, TMultiInstanceConfig>> CACHE = new ConcurrentHashMap<>();
     private static final Gson GSON = new GsonBuilder().setPrettyPrinting().disableHtmlEscaping().create();
 
     private static void checkDir(File dir) {
@@ -64,15 +65,15 @@ public class MultiInstanceConfigHelper {
         if (CACHE.containsKey(config.getClass())) {
             CACHE.get(config.getClass()).put(config.getFileName(), config);
         } else {
-            HashMap<String, TMultiInstanceConfig> children = new HashMap<>();
+            ConcurrentHashMap<String, TMultiInstanceConfig> children = new ConcurrentHashMap<>();
             children.put(config.getFileName(), config);
             CACHE.put(config.getClass(), children);
         }
     }
 
     @SuppressWarnings("unchecked")
-    public static <T extends TMultiInstanceConfig> HashMap<String, T> getConfigInstancesRead(Class<T> configClass) {
-        return (HashMap<String, T>) CACHE.get(configClass);
+    public static <T extends TMultiInstanceConfig> ConcurrentHashMap<String, T> getConfigInstancesRead(Class<T> configClass) {
+        return (ConcurrentHashMap<String, T>) CACHE.get(configClass);
     }
 
     @SuppressWarnings("unchecked")
@@ -81,8 +82,8 @@ public class MultiInstanceConfigHelper {
     }
 
     @SuppressWarnings("unchecked")
-    public static <T extends TMultiInstanceConfig> void getConfigInstancesWrite(Class<T> configClass, Consumer<HashMap<String, T>> setter) {
-        HashMap<String, T> configInstances = (HashMap<String, T>) CACHE.get(configClass);
+    public static <T extends TMultiInstanceConfig> void getConfigInstancesWrite(Class<T> configClass, Consumer<ConcurrentHashMap<String, T>> setter) {
+        ConcurrentHashMap<String, T> configInstances = (ConcurrentHashMap<String, T>) CACHE.get(configClass);
         setter.accept(configInstances);
         configInstances.values().forEach(MultiInstanceConfigHelper::saveConfig);
 

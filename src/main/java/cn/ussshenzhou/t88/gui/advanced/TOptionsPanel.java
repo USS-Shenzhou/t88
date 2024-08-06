@@ -1,6 +1,6 @@
 package cn.ussshenzhou.t88.gui.advanced;
 
-import cn.ussshenzhou.t88.gui.container.TScrollContainer;
+import cn.ussshenzhou.t88.gui.container.TVerticalScrollContainer;
 import cn.ussshenzhou.t88.gui.util.HorizontalAlignment;
 import cn.ussshenzhou.t88.gui.util.LayoutHelper;
 import cn.ussshenzhou.t88.gui.widegt.*;
@@ -16,12 +16,12 @@ import java.util.function.*;
  * @author USS_Shenzhou
  */
 public class TOptionsPanel extends TPanel {
-    private final OptionContainer container;
+    private final OptionContainerVertical container;
     protected int gapBetweenOptions = 4;
     protected HorizontalAlignment titleHorizontalAlignment = HorizontalAlignment.RIGHT;
 
     public TOptionsPanel() {
-        this.container = new OptionContainer();
+        this.container = new OptionContainerVertical();
         this.add(container);
     }
 
@@ -110,8 +110,8 @@ public class TOptionsPanel extends TPanel {
         super.layout();
     }
 
-    private static class OptionContainer extends TScrollContainer {
-        public OptionContainer() {
+    private static class OptionContainerVertical extends TVerticalScrollContainer {
+        public OptionContainerVertical() {
         }
 
         @Override

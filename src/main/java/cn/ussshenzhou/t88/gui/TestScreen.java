@@ -3,6 +3,8 @@ package cn.ussshenzhou.t88.gui;
 import cn.ussshenzhou.t88.gui.advanced.TLabelButton;
 import cn.ussshenzhou.t88.gui.advanced.TSuggestedEditBox;
 import cn.ussshenzhou.t88.gui.container.TScrollContainer;
+import cn.ussshenzhou.t88.gui.container.TVerticalAndHorizontalScrollContainer;
+import cn.ussshenzhou.t88.gui.container.TVerticalScrollContainer;
 import cn.ussshenzhou.t88.gui.screen.TScreen;
 import cn.ussshenzhou.t88.gui.util.Border;
 import cn.ussshenzhou.t88.gui.util.HorizontalAlignment;
@@ -50,13 +52,13 @@ public class TestScreen extends TScreen {
         d.register(Commands.literal("7v"));
         d.register(Commands.literal("41gtg"));
     });
-    private final TScrollContainer scrollPanel = new TScrollContainer() {
+    private final TVerticalAndHorizontalScrollContainer scrollPanel = new TVerticalAndHorizontalScrollContainer() {
         @Override
         public void layout() {
             editBox.setBounds(10, 10, 50, 20);
             selectList.setBounds(10, 230, 50, 100);
             LayoutHelper.BTopOfA(selectList0, 4, selectList);
-            editBox2.setBounds(10, 350, 50, 20);
+            editBox2.setBounds(500, 350, 50, 20);
             super.layout();
         }
     };

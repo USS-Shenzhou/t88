@@ -88,7 +88,8 @@ public abstract class TComponent implements TWidget {
         renderChildren(graphics, pMouseX, pMouseY, pPartialTick);
         var t = this.getTooltip();
         if (t != null) {
-            t.refreshTooltipForNextRenderPass(this.isInRange(pMouseX, pMouseY + getParentScrollAmountIfExist()), this.isFocused(), this.getRectangle());
+            var scroll = getParentScroll();
+            t.refreshTooltipForNextRenderPass(this.isInRange(pMouseX + scroll.x, pMouseY + scroll.y), this.isFocused(), this.getRectangle());
         }
     }
 
@@ -425,8 +426,8 @@ public abstract class TComponent implements TWidget {
         int available = maxX - minX;
         int extra = need - available;
         if (extra > 0) {
-            int scroll = (int) thiz.getParentScrollAmountIfExist();
-            graphics.enableScissor(minX, minY - scroll, maxX, maxYOnlyForScissor - scroll);
+            var scroll = thiz.getParentScroll();
+            graphics.enableScissor((int) (minX - scroll.x), (int) (minY - scroll.y), (int) (maxX - scroll.x), (int) (maxYOnlyForScissor - scroll.y));
             graphics.pose().scale(scaleFactor, scaleFactor, 1);
             minX = (int) (minX / scaleFactor);
             maxX = (int) (maxX / scaleFactor);

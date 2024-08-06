@@ -3,14 +3,10 @@ package cn.ussshenzhou.t88.gui.container;
 import cn.ussshenzhou.t88.gui.advanced.TLabelButton;
 import cn.ussshenzhou.t88.gui.util.Border;
 import cn.ussshenzhou.t88.gui.util.LayoutHelper;
-import cn.ussshenzhou.t88.gui.widegt.TButton;
-import cn.ussshenzhou.t88.gui.widegt.TComponent;
 import cn.ussshenzhou.t88.gui.widegt.TWidget;
 import com.google.common.collect.ImmutableList;
-import net.minecraft.client.gui.components.tabs.Tab;
 import org.joml.Vector2i;
 import cn.ussshenzhou.t88.gui.widegt.TPanel;
-import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.network.chat.Component;
 
 import javax.annotation.Nullable;
@@ -22,7 +18,7 @@ import java.util.LinkedList;
  * @author USS_Shenzhou
  */
 public class TTabPageContainer extends TPanel {
-    protected TabContainer container = new TabContainer();
+    protected TabContainerVertical container = new TabContainerVertical();
     private Tab selectedTab = null;
 
     public TTabPageContainer() {
@@ -93,11 +89,11 @@ public class TTabPageContainer extends TPanel {
         return ImmutableList.copyOf(container.tabs);
     }
 
-    public class TabContainer extends TScrollContainer {
+    public class TabContainerVertical extends TVerticalScrollContainer {
         protected LinkedList<Tab> tabs = new LinkedList<>();
         int row = 0;
 
-        public TabContainer() {
+        public TabContainerVertical() {
             super();
             this.bottomMargin = 0;
             this.setBorder(new Border(0x7f_ffffff, 1));

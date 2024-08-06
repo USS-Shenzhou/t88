@@ -11,6 +11,7 @@ import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Path;
 import java.util.HashMap;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.function.Consumer;
 
 /**
@@ -18,7 +19,7 @@ import java.util.function.Consumer;
  */
 public class ConfigHelper {
     private static final File CONFIG_DIR = FMLPaths.CONFIGDIR.relative().toFile();
-    private static final HashMap<Class<? extends TConfig>, TConfig> CACHE = new HashMap<>();
+    private static final ConcurrentHashMap<Class<? extends TConfig>, TConfig> CACHE = new ConcurrentHashMap<>();
     private static final Gson GSON = new GsonBuilder().setPrettyPrinting().disableHtmlEscaping().create();
     private static final File UNIVERSAL_CONFIG_DIR = FileUtils.getUserDirectory().toPath().resolve("MinecraftT88Config").toFile();
 

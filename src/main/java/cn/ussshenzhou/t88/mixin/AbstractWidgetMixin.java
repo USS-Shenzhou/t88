@@ -1,6 +1,6 @@
 package cn.ussshenzhou.t88.mixin;
 
-import cn.ussshenzhou.t88.gui.container.TScrollContainer;
+import cn.ussshenzhou.t88.gui.container.TVerticalScrollContainer;
 import cn.ussshenzhou.t88.gui.util.MouseHelper;
 import cn.ussshenzhou.t88.gui.widegt.TWidget;
 import net.minecraft.client.gui.components.AbstractWidget;
@@ -38,14 +38,14 @@ public abstract class AbstractWidgetMixin {
             var mouseX = MouseHelper.getMouseX();
             var mouseY = MouseHelper.getMouseY();
 
-            var scrollContainer = tWidget.getParentInstanceOf(TScrollContainer.class);
+            var scrollContainer = tWidget.getParentInstanceOf(TVerticalScrollContainer.class);
             if (scrollContainer != null) {
                 if (scrollContainer.isInRange(mouseX, mouseY)) {
-                    var scroll = tWidget.getParentScrollAmountIfExist();
-                    this.isHovered = mouseX >= this.getX()
-                            && mouseY >= this.getY() - scroll
-                            && mouseX < this.getX() + this.width
-                            && mouseY < this.getY() + this.height - scroll;
+                    var scroll = tWidget.getParentScroll();
+                    this.isHovered = mouseX >= this.getX() - scroll.x
+                            && mouseY >= this.getY() - scroll.y
+                            && mouseX < this.getX() + this.width - scroll.x
+                            && mouseY < this.getY() + this.height - scroll.y;
                 } else {
                     this.isHovered = false;
                 }
