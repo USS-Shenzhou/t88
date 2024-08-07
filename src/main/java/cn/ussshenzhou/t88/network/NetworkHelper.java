@@ -48,13 +48,16 @@ public class NetworkHelper {
             T proxy = (T) UNSAFE.allocateInstance(proxyClass);
             for (Field field : packet.getClass().getDeclaredFields()) {
                 if (Modifier.isFinal(field.getModifiers())) {
+                    field.setAccessible(true);
                     try {
-                        field.setAccessible(true);
+                        Field modifiers = Field.class.getDeclaredField("modifiers");
+                        modifiers.setAccessible(true);
+                        modifiers.setInt(field, field.getModifiers() & ~Modifier.FINAL);
+
                         field.set(proxy, field.get(packet));
-                    } catch (IllegalAccessException ignored) {
+                    } catch (IllegalAccessException | NoSuchFieldException ignored) {
                     }
                 } else {
-                    field.setAccessible(true);
                     field.set(proxy, field.get(packet));
                 }
             }
