@@ -15,7 +15,7 @@ public interface MutableDataComponent<T> {
 
     DataComponentType<T> componentType();
 
-    default <Field> void setFirst(ItemStack stack, Field value) {
+    default <F> void setFirst(ItemStack stack, F value) {
         try {
             @SuppressWarnings("OptionalGetWithoutIsPresent")
             var field = Arrays.stream(this.getClass().getDeclaredFields())
@@ -30,7 +30,7 @@ public interface MutableDataComponent<T> {
         stack.set(componentType(), (T) this);
     }
 
-    default <Field> void set(ItemStack stack, Field value, int ordinal) {
+    default <F> void set(ItemStack stack, F value, int ordinal) {
         try {
             var field = Arrays.stream(this.getClass().getDeclaredFields())
                     .filter(f -> f.getType() == value.getClass())
@@ -44,7 +44,7 @@ public interface MutableDataComponent<T> {
         stack.set(componentType(), (T) this);
     }
 
-    default <Field> void setByName(ItemStack stack, String fieldName, Field value) {
+    default <F> void setByName(ItemStack stack, String fieldName, F value) {
         try {
             @SuppressWarnings("OptionalGetWithoutIsPresent")
             var field = Arrays.stream(this.getClass().getDeclaredFields())
