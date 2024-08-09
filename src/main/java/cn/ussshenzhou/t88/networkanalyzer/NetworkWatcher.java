@@ -1,10 +1,15 @@
 package cn.ussshenzhou.t88.networkanalyzer;
 
+import com.google.common.cache.Cache;
+import com.google.common.cache.CacheBuilder;
+import com.google.common.collect.Collections2;
+import com.google.common.collect.ImmutableMap;
 import com.mojang.logging.LogUtils;
 import io.netty.buffer.Unpooled;
 import net.minecraft.network.ConnectionProtocol;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.network.RegistryFriendlyByteBuf;
+import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.network.protocol.Packet;
 import net.minecraft.network.protocol.PacketFlow;
 import net.minecraft.network.protocol.common.ClientboundCustomPayloadPacket;
@@ -15,6 +20,7 @@ import net.neoforged.fml.ModContainer;
 import net.neoforged.fml.ModList;
 import net.neoforged.fml.javafmlmod.FMLModContainer;
 import net.neoforged.neoforge.network.connection.ConnectionType;
+import net.neoforged.neoforge.network.payload.*;
 import net.neoforged.neoforge.network.registration.NetworkRegistry;
 import net.neoforged.neoforgespi.language.ModFileScanData;
 
@@ -31,8 +37,8 @@ import java.util.concurrent.ConcurrentHashMap;
 public class NetworkWatcher {
 
     //modId : classname - size
-    public static final ConcurrentHashMap<SenderInfo, SizeAndTimes> SENT = new ConcurrentHashMap<>();
-    public static final ConcurrentHashMap<SenderInfo, SizeAndTimes> RECEIVED = new ConcurrentHashMap<>();
+    public static final DelayedMap<SenderInfo, SizeAndTimes> SENT = new DelayedMap<>();
+    public static final DelayedMap<SenderInfo, SizeAndTimes> RECEIVED = new DelayedMap<>();
     public static final ConcurrentHashMap<Class<?>, String> MOD_ID_CACHE = new ConcurrentHashMap<>();
 
     public static void record(Packet<?> packet, TR dir) {
@@ -72,12 +78,23 @@ public class NetworkWatcher {
         return getSizeFromCustomPacketPayload(packet.payload());
     }
 
+    /**
+     * @see NetworkRegistry#BUILTIN_PAYLOADS
+     */
+    @SuppressWarnings("UnstableApiUsage")
+    private static final Map<ResourceLocation, StreamCodec<FriendlyByteBuf, ? extends CustomPacketPayload>> BUILTIN_PAYLOADS = ImmutableMap.of(
+            MinecraftRegisterPayload.ID, MinecraftRegisterPayload.STREAM_CODEC,
+            MinecraftUnregisterPayload.ID, MinecraftUnregisterPayload.STREAM_CODEC,
+            ModdedNetworkQueryPayload.ID, ModdedNetworkQueryPayload.STREAM_CODEC,
+            ModdedNetworkPayload.ID, ModdedNetworkPayload.STREAM_CODEC,
+            ModdedNetworkSetupFailedPayload.ID, ModdedNetworkSetupFailedPayload.STREAM_CODEC);
+
     @SuppressWarnings("UnstableApiUsage")
     private static int getSizeFromCustomPacketPayload(CustomPacketPayload payload) {
         var buf = new RegistryFriendlyByteBuf(Unpooled.buffer(), null, ConnectionType.NEOFORGE);
         var codec = NetworkRegistry.getCodec(payload.type().id(), ConnectionProtocol.PLAY, PacketFlow.SERVERBOUND);
         if (codec == null) {
-            codec = NetworkRegistry.getCodec(payload.type().id(), ConnectionProtocol.PLAY, PacketFlow.CLIENTBOUND);
+            codec = BUILTIN_PAYLOADS.get(payload.type().id());
         }
         if (codec == null) {
             return 0;
@@ -139,13 +156,13 @@ public class NetworkWatcher {
         return "unknown";
     }
 
-    private static void recordInternal(Map<SenderInfo, SizeAndTimes> map, SenderInfo key, int size) {
-        map.compute(key, ((senderInfo, sizeAndTimes) -> sizeAndTimes == null ? new SizeAndTimes(size) : sizeAndTimes.increaseSize(size)));
+    private static void recordInternal(DelayedMap<SenderInfo, SizeAndTimes> map, SenderInfo key, int size) {
+        map.get().compute(key, ((senderInfo, sizeAndTimes) -> sizeAndTimes == null ? new SizeAndTimes(size) : sizeAndTimes.increaseSize(size)));
     }
 
     protected static void clear() {
-        SENT.clear();
-        RECEIVED.clear();
+        SENT.switchAndClear();
+        RECEIVED.switchAndClear();
     }
 
     //TODO
@@ -155,5 +172,19 @@ public class NetworkWatcher {
 
     public enum TR {
         T, R
+    }
+
+    public static class DelayedMap<K, V> {
+        private final ConcurrentHashMap<K, V> a = new ConcurrentHashMap<>(), b = new ConcurrentHashMap<>();
+        private boolean usingA = true;
+
+        public ConcurrentHashMap<K, V> get() {
+            return usingA ? a : b;
+        }
+
+        public void switchAndClear() {
+            usingA = !usingA;
+            (usingA ? a : b).clear();
+        }
     }
 }

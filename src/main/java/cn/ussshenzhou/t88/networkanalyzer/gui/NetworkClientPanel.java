@@ -77,17 +77,17 @@ public class NetworkClientPanel extends TPanel {
 
     private Component getGeneralUpAndDown() {
         StringBuilder s = new StringBuilder();
-        int t = NetworkWatcher.SENT.values().stream().mapToInt(SizeAndTimes::getSize).sum();
-        int r = NetworkWatcher.RECEIVED.values().stream().mapToInt(SizeAndTimes::getSize).sum();
+        int t = NetworkWatcher.SENT.get().values().stream().mapToInt(SizeAndTimes::getSize).sum();
+        int r = NetworkWatcher.RECEIVED.get().values().stream().mapToInt(SizeAndTimes::getSize).sum();
         s.append("↑ ");
         getReadableSize(s, t);
         s.append(" ");
-        s.append(NetworkWatcher.SENT.values().stream().mapToInt(SizeAndTimes::getTimes).sum());
+        s.append(NetworkWatcher.SENT.get().values().stream().mapToInt(SizeAndTimes::getTimes).sum());
         s.append(" §7packets§r");
         s.append("  ↓ ");
         getReadableSize(s, r);
         s.append(" ");
-        s.append(NetworkWatcher.RECEIVED.values().stream().mapToInt(SizeAndTimes::getTimes).sum());
+        s.append(NetworkWatcher.RECEIVED.get().values().stream().mapToInt(SizeAndTimes::getTimes).sum());
         s.append(" §7packets§r");
         return Component.literal(s.toString());
     }

@@ -61,7 +61,7 @@ public class ChartPanel extends TPanel {
             this.remove(groups.poll());
         }
         var map = dir == NetworkWatcher.TR.T ? NetworkWatcher.SENT : NetworkWatcher.RECEIVED;
-        var newGroup = new Group(map);
+        var newGroup = new Group(map.get());
         groups.offer(newGroup);
         this.add(newGroup);
         maxSize = groups.stream().max(Comparator.comparingDouble(group -> group.groupSize)).orElseGet(() -> new Group(new HashMap<>())).groupSize;
