@@ -1,4 +1,4 @@
-package cn.ussshenzhou.t88.util;
+package cn.ussshenzhou.t88.magic;
 
 import cn.ussshenzhou.t88.T88;
 import com.mojang.logging.LogUtils;
@@ -7,7 +7,6 @@ import net.minecraft.world.item.ItemStack;
 
 import java.util.Arrays;
 import java.util.NoSuchElementException;
-import java.util.function.Supplier;
 
 /**
  * @author USS_Shenzhou

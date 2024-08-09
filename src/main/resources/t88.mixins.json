@@ -6,8 +6,7 @@
   "refmap": "t88.refmap.json",
   "mixins": [
     "ConnectionMixin",
-    "MutableComponentAccessor",
-    "SectionCompilerMixin"
+    "MutableComponentAccessor"
   ],
   "client": [
     "AbstractSelectionListAccessor",
@@ -18,6 +17,7 @@
     "LevelRendererMixin",
     "MinecraftMixin",
     "RenderTypeMixin",
+    "SectionCompilerMixin",
     "SliderButtonAccessor"
   ],
   "injectors": {

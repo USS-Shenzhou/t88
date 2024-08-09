@@ -1,41 +1,23 @@
 package cn.ussshenzhou.t88.network;
 
+import cn.ussshenzhou.t88.magic.MagicHelper;
 import com.mojang.logging.LogUtils;
-import net.minecraft.network.protocol.Packet;
 import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
-import net.minecraft.server.MinecraftServer;
-import net.minecraft.server.level.ServerChunkCache;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.level.ChunkPos;
 import net.neoforged.neoforge.network.PacketDistributor;
-import net.neoforged.neoforge.server.ServerLifecycleHooks;
-import sun.misc.Unsafe;
 
 import javax.annotation.Nullable;
 import java.lang.reflect.Field;
-import java.lang.reflect.Modifier;
 import java.util.HashMap;
-import java.util.Objects;
 
 /**
  * @author USS_Shenzhou
  */
 public class NetworkHelper {
     private static final HashMap<Class<?>, Class<? extends CustomPacketPayload>> ORIGINAL_PROXY_CLASS = new HashMap<>();
-    private static final Unsafe UNSAFE = getUnsafe();
-
-    private static Unsafe getUnsafe() {
-        try {
-            var field = Unsafe.class.getDeclaredField("theUnsafe");
-            field.setAccessible(true);
-            return (Unsafe) field.get(null);
-        } catch (IllegalAccessException | NoSuchFieldException e) {
-            LogUtils.getLogger().error("Failed to initialize UnSafe. This should not happen.");
-            throw new RuntimeException(e);
-        }
-    }
 
     public static @Nullable <MSG, T extends CustomPacketPayload> CustomPacketPayload convert(MSG packet) {
         var proxyClass = ORIGINAL_PROXY_CLASS.get(packet.getClass());
@@ -45,21 +27,18 @@ public class NetworkHelper {
         }
         try {
             //noinspection unchecked
-            T proxy = (T) UNSAFE.allocateInstance(proxyClass);
+            T proxy = (T) MagicHelper.UNSAFE.allocateInstance(proxyClass);
             for (Field field : packet.getClass().getDeclaredFields()) {
-                if (Modifier.isFinal(field.getModifiers())) {
-                    try {
-                        field.setAccessible(true);
-                        field.set(proxy, field.get(packet));
-                    } catch (IllegalAccessException ignored) {
-                    }
+                field.setAccessible(true);
+                if (proxyClass.isRecord()) {
+                    Field proxyField = proxyClass.getDeclaredField(field.getName());
+                    proxyField.set(proxy, field.get(packet));
                 } else {
-                    field.setAccessible(true);
                     field.set(proxy, field.get(packet));
                 }
             }
             return proxy;
-        } catch (InstantiationException | IllegalAccessException e) {
+        } catch (InstantiationException | IllegalAccessException | NoSuchFieldException e) {
             LogUtils.getLogger().error("This should not happen. This packet will be abandoned.");
             LogUtils.getLogger().error(e.getMessage());
             return null;

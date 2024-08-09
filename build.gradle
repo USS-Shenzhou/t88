@@ -140,12 +140,55 @@ java {
     withSourcesJar()
 }
 
-// Example configuration to allow publishing using the maven-publish plugin
+/*task generateFakeToml {
+    def outputDir = layout.buildDirectory.dir("generated/resources/META-INF").get().asFile
+    def outputFile = file("$outputDir/fake_neoforge.mods.toml")
+
+    doLast {
+        outputFile.parentFile.mkdirs()
+        outputFile.text = """
+modLoader="javafml"
+loaderVersion="${loader_version_range}"
+license="${mod_license}"
+[[mods]]
+modId="${mod_id+"_core"}"
+version="0.1.0"
+displayName="${mod_name+"Core"}"
+description=''
+"""
+    }
+}
+
+task coreJar(type: Jar) {
+    dependsOn generateFakeToml
+    archiveClassifier = 'core'
+
+    from sourceSets.main.allSource.matching {
+        include 'cn/ussshenzhou/t88/magic/core/**'
+    }
+
+    from sourceSets.main.resources.matching {
+        include 'META-INF/services/**'
+    }
+
+    from(layout.buildDirectory.dir("generated/resources/META-INF")) {
+        include 'fake_neoforge.mods.toml'
+        into 'META-INF'
+        rename { String fileName ->
+            fileName.replace("fake_neoforge.mods.toml", "neoforge.mods.toml")
+        }
+    }
+}*/
+
 publishing {
     publications {
         register('mavenJava', MavenPublication) {
             from components.java
         }
+
+        /*create('coreJava', MavenPublication) {
+            artifact coreJar
+        }*/
     }
     repositories {
         maven {

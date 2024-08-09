@@ -27,6 +27,7 @@ public class SectionBufferRenderTypeHelper {
     public static LinkedList<RenderType> scan() {
         LinkedList<RenderType> types = new LinkedList<>();
         if (ModList.get() == null) {
+            //TODO use FMLLoader.getLoadingModList() instead
             LogUtils.getLogger().error("""
                     Who loads RenderType.class early... again?
                     You can find the murderer in the log above, from "RenderType.class loaded by:".
