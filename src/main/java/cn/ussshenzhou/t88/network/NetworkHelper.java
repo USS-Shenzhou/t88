@@ -11,6 +11,7 @@ import net.neoforged.neoforge.network.PacketDistributor;
 
 import javax.annotation.Nullable;
 import java.lang.reflect.Field;
+import java.lang.reflect.InvocationTargetException;
 import java.util.HashMap;
 
 /**
@@ -32,13 +33,13 @@ public class NetworkHelper {
                 field.setAccessible(true);
                 if (proxyClass.isRecord()) {
                     Field proxyField = proxyClass.getDeclaredField(field.getName());
-                    proxyField.set(proxy, field.get(packet));
+                    MagicHelper.set((Record) proxy, proxyField, field.get(packet));
                 } else {
                     field.set(proxy, field.get(packet));
                 }
             }
             return proxy;
-        } catch (InstantiationException | IllegalAccessException | NoSuchFieldException e) {
+        } catch (InstantiationException | IllegalAccessException | NoSuchFieldException | InvocationTargetException e) {
             LogUtils.getLogger().error("This should not happen. This packet will be abandoned.");
             LogUtils.getLogger().error(e.getMessage());
             return null;

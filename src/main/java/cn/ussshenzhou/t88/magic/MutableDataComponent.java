@@ -5,6 +5,7 @@ import com.mojang.logging.LogUtils;
 import net.minecraft.core.component.DataComponentType;
 import net.minecraft.world.item.ItemStack;
 
+import java.lang.reflect.InvocationTargetException;
 import java.util.Arrays;
 import java.util.NoSuchElementException;
 
@@ -21,9 +22,9 @@ public interface MutableDataComponent<T> {
             var field = Arrays.stream(this.getClass().getDeclaredFields())
                     .filter(f -> f.getType() == value.getClass())
                     .findFirst().get();
-            field.setAccessible(true);
-            field.set(this, value);
-        } catch (IllegalAccessException | NoSuchElementException e) {
+            MagicHelper.set((Record) this, field, value);
+        } catch (NoSuchElementException | InvocationTargetException | InstantiationException |
+                 IllegalAccessException e) {
             handleException(e);
         }
         //noinspection unchecked
@@ -35,9 +36,9 @@ public interface MutableDataComponent<T> {
             var field = Arrays.stream(this.getClass().getDeclaredFields())
                     .filter(f -> f.getType() == value.getClass())
                     .toList().get(ordinal);
-            field.setAccessible(true);
-            field.set(this, value);
-        } catch (IllegalAccessException | IndexOutOfBoundsException e) {
+            MagicHelper.set((Record) this, field, value);
+        } catch (NoSuchElementException | InvocationTargetException | InstantiationException |
+                 IllegalAccessException e) {
             handleException(e);
         }
         //noinspection unchecked
@@ -50,9 +51,9 @@ public interface MutableDataComponent<T> {
             var field = Arrays.stream(this.getClass().getDeclaredFields())
                     .filter(f -> f.getName().equals(fieldName))
                     .findFirst().get();
-            field.setAccessible(true);
-            field.set(this, value);
-        } catch (IllegalAccessException | NoSuchElementException e) {
+            MagicHelper.set((Record) this, field, value);
+        } catch (NoSuchElementException | InvocationTargetException | InstantiationException |
+                 IllegalAccessException e) {
             handleException(e);
         }
         //noinspection unchecked

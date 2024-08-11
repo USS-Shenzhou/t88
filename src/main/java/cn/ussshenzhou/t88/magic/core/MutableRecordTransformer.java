@@ -16,13 +16,16 @@ import org.objectweb.asm.Type;
 import org.objectweb.asm.tree.ClassNode;
 
 import java.lang.annotation.ElementType;
+import java.lang.reflect.Field;
 import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 /**
  * @author USS_Shenzhou
+ * @deprecated Wait for FML guys to develop a improved java-based one. Before that, use {@link sun.misc.Unsafe#objectFieldOffset(Field)} instead.
  */
+@Deprecated
 public class MutableRecordTransformer implements ITransformer<ClassNode> {
     @Override
     public @NotNull ClassNode transform(ClassNode input, ITransformerVotingContext context) {
