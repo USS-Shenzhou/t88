@@ -6,8 +6,10 @@ import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.fml.event.lifecycle.FMLConstructModEvent;
 import sun.misc.Unsafe;
 
+import javax.annotation.CheckReturnValue;
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Modifier;
 import java.util.Arrays;
 
 /**
@@ -27,22 +29,25 @@ public class MagicHelper {
         }
     }
 
+    @CheckReturnValue
     public static <R extends Record> R set(R record, Field field, Object value) throws InvocationTargetException, InstantiationException, IllegalAccessException {
         var clazz = record.getClass();
         var constructor = clazz.getDeclaredConstructors()[0];
         constructor.setAccessible(true);
-        var parameters = Arrays.stream(clazz.getDeclaredFields()).map(f -> {
-            if (f.equals(field)) {
-                return value;
-            } else {
-                try {
-                    f.setAccessible(true);
-                    return f.get(record);
-                } catch (IllegalAccessException e) {
-                    throw new RuntimeException(e);
-                }
-            }
-        }).toArray();
+        var parameters = Arrays.stream(clazz.getDeclaredFields())
+                .filter(f -> !Modifier.isStatic(f.getModifiers()))
+                .map(f -> {
+                    if (f.equals(field)) {
+                        return value;
+                    } else {
+                        try {
+                            f.setAccessible(true);
+                            return f.get(record);
+                        } catch (IllegalAccessException e) {
+                            throw new RuntimeException(e);
+                        }
+                    }
+                }).toArray();
         //noinspection unchecked
         return (R) constructor.newInstance(parameters);
     }

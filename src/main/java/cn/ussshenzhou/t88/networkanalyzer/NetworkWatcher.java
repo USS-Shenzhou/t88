@@ -1,8 +1,5 @@
 package cn.ussshenzhou.t88.networkanalyzer;
 
-import com.google.common.cache.Cache;
-import com.google.common.cache.CacheBuilder;
-import com.google.common.collect.Collections2;
 import com.google.common.collect.ImmutableMap;
 import com.mojang.logging.LogUtils;
 import io.netty.buffer.Unpooled;
@@ -22,18 +19,21 @@ import net.neoforged.fml.javafmlmod.FMLModContainer;
 import net.neoforged.neoforge.network.connection.ConnectionType;
 import net.neoforged.neoforge.network.payload.*;
 import net.neoforged.neoforge.network.registration.NetworkRegistry;
+import net.neoforged.neoforge.network.registration.PayloadRegistration;
 import net.neoforged.neoforgespi.language.ModFileScanData;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.util.Arrays;
 import java.util.Map;
+import java.util.Optional;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * @author USS_Shenzhou
  */
+@SuppressWarnings("UnstableApiUsage")
 public class NetworkWatcher {
 
     //modId : classname - size
@@ -81,7 +81,6 @@ public class NetworkWatcher {
     /**
      * @see NetworkRegistry#BUILTIN_PAYLOADS
      */
-    @SuppressWarnings("UnstableApiUsage")
     private static final Map<ResourceLocation, StreamCodec<FriendlyByteBuf, ? extends CustomPacketPayload>> BUILTIN_PAYLOADS = ImmutableMap.of(
             MinecraftRegisterPayload.ID, MinecraftRegisterPayload.STREAM_CODEC,
             MinecraftUnregisterPayload.ID, MinecraftUnregisterPayload.STREAM_CODEC,
@@ -89,10 +88,27 @@ public class NetworkWatcher {
             ModdedNetworkPayload.ID, ModdedNetworkPayload.STREAM_CODEC,
             ModdedNetworkSetupFailedPayload.ID, ModdedNetworkSetupFailedPayload.STREAM_CODEC);
 
-    @SuppressWarnings("UnstableApiUsage")
+    private static final Map<ConnectionProtocol, Map<ResourceLocation, PayloadRegistration<?>>> PAYLOAD_REGISTRATIONS;
+
+    static {
+        try {
+            var f = NetworkRegistry.class.getDeclaredField("PAYLOAD_REGISTRATIONS");
+            f.setAccessible(true);
+            //noinspection unchecked
+            PAYLOAD_REGISTRATIONS = (Map<ConnectionProtocol, Map<ResourceLocation, PayloadRegistration<?>>>) f.get(null);
+        } catch (NoSuchFieldException | IllegalAccessException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
     private static int getSizeFromCustomPacketPayload(CustomPacketPayload payload) {
         var buf = new RegistryFriendlyByteBuf(Unpooled.buffer(), null, ConnectionType.NEOFORGE);
-        var codec = NetworkRegistry.getCodec(payload.type().id(), ConnectionProtocol.PLAY, PacketFlow.SERVERBOUND);
+        StreamCodec<? super FriendlyByteBuf, ? extends CustomPacketPayload> codec = null;
+        var reg = PAYLOAD_REGISTRATIONS.get(ConnectionProtocol.PLAY).get(payload.type().id());
+        if (reg != null) {
+            //noinspection unchecked
+            codec = (StreamCodec<? super FriendlyByteBuf, ? extends CustomPacketPayload>) reg.codec();
+        }
         if (codec == null) {
             codec = BUILTIN_PAYLOADS.get(payload.type().id());
         }

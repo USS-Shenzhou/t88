@@ -12,59 +12,46 @@ import java.util.NoSuchElementException;
 /**
  * @author USS_Shenzhou
  */
-public interface MutableDataComponent<T> {
+public interface MutableDataComponent<R extends Record> {
 
-    DataComponentType<T> componentType();
+    DataComponentType<R> componentType();
 
-    default <F> void setFirst(ItemStack stack, F value) {
+    @SuppressWarnings("unchecked")
+    default <F> MutableDataComponent<R> setFirst(ItemStack stack, F value) {
         try {
-            @SuppressWarnings("OptionalGetWithoutIsPresent")
-            var field = Arrays.stream(this.getClass().getDeclaredFields())
-                    .filter(f -> f.getType() == value.getClass())
-                    .findFirst().get();
-            MagicHelper.set((Record) this, field, value);
+            @SuppressWarnings("OptionalGetWithoutIsPresent") var field = Arrays.stream(this.getClass().getDeclaredFields()).filter(f -> f.getType() == value.getClass()).findFirst().get();
+            R r = (R) MagicHelper.set((Record) this, field, value);
+            stack.set(componentType(), r);
+            return (MutableDataComponent<R>) r;
         } catch (NoSuchElementException | InvocationTargetException | InstantiationException |
                  IllegalAccessException e) {
-            handleException(e);
-        }
-        //noinspection unchecked
-        stack.set(componentType(), (T) this);
-    }
-
-    default <F> void set(ItemStack stack, F value, int ordinal) {
-        try {
-            var field = Arrays.stream(this.getClass().getDeclaredFields())
-                    .filter(f -> f.getType() == value.getClass())
-                    .toList().get(ordinal);
-            MagicHelper.set((Record) this, field, value);
-        } catch (NoSuchElementException | InvocationTargetException | InstantiationException |
-                 IllegalAccessException e) {
-            handleException(e);
-        }
-        //noinspection unchecked
-        stack.set(componentType(), (T) this);
-    }
-
-    default <F> void setByName(ItemStack stack, String fieldName, F value) {
-        try {
-            @SuppressWarnings("OptionalGetWithoutIsPresent")
-            var field = Arrays.stream(this.getClass().getDeclaredFields())
-                    .filter(f -> f.getName().equals(fieldName))
-                    .findFirst().get();
-            MagicHelper.set((Record) this, field, value);
-        } catch (NoSuchElementException | InvocationTargetException | InstantiationException |
-                 IllegalAccessException e) {
-            handleException(e);
-        }
-        //noinspection unchecked
-        stack.set(componentType(), (T) this);
-    }
-
-    private static void handleException(Exception e) {
-        if (T88.TEST) {
             throw new RuntimeException(e);
-        } else {
-            LogUtils.getLogger().error(e.getMessage());
+        }
+    }
+
+    @SuppressWarnings("unchecked")
+    default <F> MutableDataComponent<R> set(ItemStack stack, F value, int ordinal) {
+        try {
+            var field = Arrays.stream(this.getClass().getDeclaredFields()).filter(f -> f.getType() == value.getClass()).toList().get(ordinal);
+            R r = (R) MagicHelper.set((Record) this, field, value);
+            stack.set(componentType(), r);
+            return (MutableDataComponent<R>) r;
+        } catch (NoSuchElementException | InvocationTargetException | InstantiationException |
+                 IllegalAccessException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    @SuppressWarnings("unchecked")
+    default <F> MutableDataComponent<R> setByName(ItemStack stack, String fieldName, F value) {
+        try {
+            @SuppressWarnings("OptionalGetWithoutIsPresent") var field = Arrays.stream(this.getClass().getDeclaredFields()).filter(f -> f.getName().equals(fieldName)).findFirst().get();
+            R r = (R) MagicHelper.set((Record) this, field, value);
+            stack.set(componentType(), r);
+            return (MutableDataComponent<R>) r;
+        } catch (NoSuchElementException | InvocationTargetException | InstantiationException |
+                 IllegalAccessException e) {
+            throw new RuntimeException(e);
         }
     }
 }
