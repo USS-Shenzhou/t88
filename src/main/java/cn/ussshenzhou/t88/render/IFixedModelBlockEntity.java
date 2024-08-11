@@ -6,6 +6,8 @@ import net.minecraft.client.renderer.LevelRenderer;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.level.block.entity.BlockEntity;
+import net.neoforged.api.distmarker.Dist;
+import net.neoforged.api.distmarker.OnlyIn;
 
 import javax.annotation.Nullable;
 import java.util.Set;
@@ -19,12 +21,15 @@ public interface IFixedModelBlockEntity {
         return (BlockEntity) this;
     }
 
+    @OnlyIn(Dist.CLIENT)
     @Nullable
     SectionCompileContext handleCompileContext(SectionCompileContext rawContext);
 
-    default void renderAdditionalAsync(SectionCompileContext context,PoseStack poseStack) {
+    @OnlyIn(Dist.CLIENT)
+    default void renderAdditionalAsync(SectionCompileContext context, PoseStack poseStack) {
     }
 
+    @OnlyIn(Dist.CLIENT)
     default int getPackedLight() {
         if (self().getLevel() != null) {
             return LevelRenderer.getLightColor(self().getLevel(), self().getBlockPos());
@@ -33,10 +38,12 @@ public interface IFixedModelBlockEntity {
         }
     }
 
+    @OnlyIn(Dist.CLIENT)
     default BufferBuilder getBuilder(SectionCompileContext context, RenderType type) {
         return context.sectionCompiler.getOrBeginLayer(context.bufferBuilders, context.sectionBufferBuilderPack, type);
     }
 
+    @OnlyIn(Dist.CLIENT)
     default SimpleMultiBufferSource getSimpleMultiBufferSource(SectionCompileContext context, RenderType... types) {
         var r = SimpleMultiBufferSource.of(types[0], getBuilder(context, types[0]));
         for (int i = 1; i < types.length; i++) {
@@ -45,6 +52,7 @@ public interface IFixedModelBlockEntity {
         return r;
     }
 
+    @OnlyIn(Dist.CLIENT)
     static boolean isBasicRenderType(RenderType renderType) {
         return renderType == RenderType.solid()
                 || renderType == RenderType.cutout()
@@ -53,11 +61,12 @@ public interface IFixedModelBlockEntity {
                 || renderType == RenderType.tripwire();
     }
 
+    @OnlyIn(Dist.CLIENT)
     default void resetToBlock000(RenderType renderType, PoseStack poseStack) {
         resetToBlock000(self().getBlockPos(), renderType, poseStack);
     }
 
-    //TODO may need camera compensate
+    @OnlyIn(Dist.CLIENT)
     static void resetToBlock000(BlockPos pos, RenderType renderType, PoseStack poseStack) {
         poseStack.setIdentity();
         if (isBasicRenderType(renderType)) {

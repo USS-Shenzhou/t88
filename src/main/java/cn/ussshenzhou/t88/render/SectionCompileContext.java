@@ -14,6 +14,8 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.world.level.BlockAndTintGetter;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
+import net.neoforged.api.distmarker.Dist;
+import net.neoforged.api.distmarker.OnlyIn;
 
 import javax.annotation.Nullable;
 import java.util.Map;
@@ -22,6 +24,7 @@ import java.util.function.Consumer;
 /**
  * @author USS_Shenzhou
  */
+@OnlyIn(Dist.CLIENT)
 public class SectionCompileContext {
     public final BlockAndTintGetter level;
     public final SectionCompiler sectionCompiler;
