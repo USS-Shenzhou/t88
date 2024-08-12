@@ -7,15 +7,19 @@ import cn.ussshenzhou.t88.gui.util.LayoutHelper;
 import cn.ussshenzhou.t88.gui.widegt.TLabel;
 import cn.ussshenzhou.t88.gui.widegt.TPanel;
 import cn.ussshenzhou.t88.networkanalyzer.NetworkWatcher;
+import cn.ussshenzhou.t88.networkanalyzer.SenderInfo;
 import cn.ussshenzhou.t88.networkanalyzer.SizeAndTimes;
 import net.minecraft.client.gui.components.Button;
 import net.minecraft.client.gui.components.Tooltip;
 import net.minecraft.network.chat.Component;
 
+import javax.annotation.Nonnull;
+import java.util.concurrent.ConcurrentHashMap;
+
 /**
  * @author USS_Shenzhou
  */
-public class NetworkClientPanel extends TPanel {
+public abstract class NetworkPanel extends TPanel {
 
     private final TLabel general = new TLabel();
     private final TTabPageContainer charts = new TTabPageContainer();
@@ -23,9 +27,9 @@ public class NetworkClientPanel extends TPanel {
 
     private boolean working = true;
 
-    public NetworkClientPanel() {
+    public NetworkPanel(Component tooltip) {
         this.add(general);
-        general.setTooltip(Tooltip.create(Component.translatable("gui.t88.net.options.general.tooltip")));
+        general.setTooltip(Tooltip.create(tooltip));
         this.add(charts);
         charts.newTab(Component.literal("Send"), new ChartPanel(NetworkWatcher.TR.T)).setCloseable(false);
         charts.newTab(Component.literal("Receive"), new ChartPanel(NetworkWatcher.TR.R)).setCloseable(false);
@@ -75,19 +79,25 @@ public class NetworkClientPanel extends TPanel {
         super.tickT();
     }
 
+    @Nonnull
+    public abstract ConcurrentHashMap<SenderInfo, SizeAndTimes> sent();
+
+    @Nonnull
+    public abstract ConcurrentHashMap<SenderInfo, SizeAndTimes> received();
+
     private Component getGeneralUpAndDown() {
         StringBuilder s = new StringBuilder();
-        int t = NetworkWatcher.SENT.get().values().stream().mapToInt(SizeAndTimes::getSize).sum();
-        int r = NetworkWatcher.RECEIVED.get().values().stream().mapToInt(SizeAndTimes::getSize).sum();
+        int t = sent().values().stream().mapToInt(SizeAndTimes::getSize).sum();
+        int r = received().values().stream().mapToInt(SizeAndTimes::getSize).sum();
         s.append("↑ ");
         getReadableSize(s, t);
         s.append(" ");
-        s.append(NetworkWatcher.SENT.get().values().stream().mapToInt(SizeAndTimes::getTimes).sum());
+        s.append(sent().values().stream().mapToInt(SizeAndTimes::getTimes).sum());
         s.append(" §7packets§r");
         s.append("  ↓ ");
         getReadableSize(s, r);
         s.append(" ");
-        s.append(NetworkWatcher.RECEIVED.get().values().stream().mapToInt(SizeAndTimes::getTimes).sum());
+        s.append(received().values().stream().mapToInt(SizeAndTimes::getTimes).sum());
         s.append(" §7packets§r");
         return Component.literal(s.toString());
     }

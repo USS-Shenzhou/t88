@@ -11,7 +11,8 @@
   "gui.t88.net.options.unit": "Unit",
   "gui.t88.net.options.byte": "Byte",
   "gui.t88.net.options.bit": "Bit",
-  "gui.t88.net.options.general.tooltip": "Outbound/Inbound Network Traffic.\nOnly record actual content transmitted during the PLAY phase through net.minecraft.network.Connection.",
+  "gui.t88.net.options.client.tooltip": "Outbound/Inbound Network Traffic.\nOnly record actual content transmitted during the PLAY phase through net.minecraft.network.Connection.",
+  "gui.t88.net.options.server.tooltip": "Outbound/Inbound Network Traffic.\nOnly record actual content transmitted during the PLAY phase through net.minecraft.network.Connection.\nAcquired from server, may be duplicate or lag.",
   "gui.t88.net.pause": "Pause",
   "gui.t88.net.resume": "Resume"
 }

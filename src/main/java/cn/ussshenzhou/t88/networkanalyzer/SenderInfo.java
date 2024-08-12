@@ -1,9 +1,21 @@
 package cn.ussshenzhou.t88.networkanalyzer;
 
+import io.netty.buffer.ByteBuf;
+import net.minecraft.network.codec.ByteBufCodecs;
+import net.minecraft.network.codec.StreamCodec;
+
 /**
  * @author USS_Shenzhou
  */
 public record SenderInfo(String modId, String clazz) {
+
+    public static final StreamCodec<ByteBuf, SenderInfo> STREAM_CODEC = StreamCodec.composite(
+            ByteBufCodecs.STRING_UTF8,
+            SenderInfo::modId,
+            ByteBufCodecs.STRING_UTF8,
+            SenderInfo::clazz,
+            SenderInfo::new
+    );
 
     @Override
     public boolean equals(Object obj) {

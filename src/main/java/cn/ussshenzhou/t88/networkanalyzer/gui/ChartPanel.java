@@ -1,6 +1,5 @@
 package cn.ussshenzhou.t88.networkanalyzer.gui;
 
-import cn.ussshenzhou.t88.gui.util.Border;
 import cn.ussshenzhou.t88.gui.widegt.TPanel;
 import cn.ussshenzhou.t88.networkanalyzer.NetworkWatcher;
 import cn.ussshenzhou.t88.networkanalyzer.SenderInfo;
@@ -10,7 +9,6 @@ import net.minecraft.client.gui.components.Tooltip;
 import net.minecraft.client.gui.components.WidgetTooltipHolder;
 import net.minecraft.network.chat.Component;
 import net.minecraft.util.FormattedCharSequence;
-import net.minecraft.util.Mth;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -33,8 +31,8 @@ public class ChartPanel extends TPanel {
 
     @Override
     public void tickT() {
-        getParentInstanceOfOptional(NetworkClientPanel.class).ifPresent(networkClientPanel -> {
-            if (networkClientPanel.isWorking()) {
+        getParentInstanceOfOptional(NetworkPanel.class).ifPresent(networkPanel -> {
+            if (networkPanel.isWorking()) {
                 if (t % 20 == 0) {
                     update();
                     layout();
@@ -60,8 +58,9 @@ public class ChartPanel extends TPanel {
         if (groups.size() == COLUMN) {
             this.remove(groups.poll());
         }
-        var map = dir == NetworkWatcher.TR.T ? NetworkWatcher.SENT : NetworkWatcher.RECEIVED;
-        var newGroup = new Group(map.get());
+        @SuppressWarnings("DataFlowIssue")
+        var map = dir == NetworkWatcher.TR.T ? getParentInstanceOf(NetworkPanel.class).sent() : getParentInstanceOf(NetworkPanel.class).received();
+        var newGroup = new Group(map);
         groups.offer(newGroup);
         this.add(newGroup);
         maxSize = groups.stream().max(Comparator.comparingDouble(group -> group.groupSize)).orElseGet(() -> new Group(new HashMap<>())).groupSize;
@@ -69,7 +68,7 @@ public class ChartPanel extends TPanel {
 
     private void getReadableSize(StringBuilder s, int bytes) {
         if (bytes == 0) {
-            s.append("0/Unknown");
+            s.append("0/Unknown §7Size§r");
             return;
         }
         if (getTopParentScreenAsOptional(NetworkWatcherScreen.class).orElseThrow().getOptionsPanel().getUnit().getSelectedOptional().orElseThrow().getContent().contains("bit")) {
@@ -93,7 +92,7 @@ public class ChartPanel extends TPanel {
     }
 
     public class Group extends TPanel {
-        private HashMap<String, ModPacketInfoPanel> mods = new HashMap<>();
+        private final HashMap<String, ModPacketInfoPanel> mods = new HashMap<>();
         float groupSize;
 
         public Group(Map<SenderInfo, SizeAndTimes> all) {

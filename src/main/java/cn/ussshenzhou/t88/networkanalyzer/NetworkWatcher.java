@@ -8,7 +8,6 @@ import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.network.protocol.Packet;
-import net.minecraft.network.protocol.PacketFlow;
 import net.minecraft.network.protocol.common.ClientboundCustomPayloadPacket;
 import net.minecraft.network.protocol.common.ServerboundCustomPayloadPacket;
 import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
@@ -26,7 +25,6 @@ import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.util.Arrays;
 import java.util.Map;
-import java.util.Optional;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -184,10 +182,8 @@ public class NetworkWatcher {
         RECEIVED.switchAndClear();
     }
 
-    //TODO
-    public static final ConcurrentHashMap<ResourceLocation, Integer> FROM_SERVER_SENT = new ConcurrentHashMap<>();
-    public static final ConcurrentHashMap<ResourceLocation, Integer> FROM_SERVER_RECEIVED = new ConcurrentHashMap<>();
-    public static boolean fromServerUpdated = false;
+    public static final ConcurrentHashMap<SenderInfo, SizeAndTimes> SERVER_SENT = new ConcurrentHashMap<>();
+    public static final ConcurrentHashMap<SenderInfo, SizeAndTimes> SERVER_RECEIVED = new ConcurrentHashMap<>();
 
     public enum TR {
         T, R
