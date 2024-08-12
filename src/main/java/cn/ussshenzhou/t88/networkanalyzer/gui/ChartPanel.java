@@ -68,6 +68,10 @@ public class ChartPanel extends TPanel {
     }
 
     private void getReadableSize(StringBuilder s, int bytes) {
+        if (bytes == 0) {
+            s.append("0/Unknown");
+            return;
+        }
         if (getTopParentScreenAsOptional(NetworkWatcherScreen.class).orElseThrow().getOptionsPanel().getUnit().getSelectedOptional().orElseThrow().getContent().contains("bit")) {
             bytes *= 8;
             if (bytes < 1000) {
@@ -104,7 +108,7 @@ public class ChartPanel extends TPanel {
                 });
             });
             groupSize = (float) mods.values().stream().mapToDouble(panel -> {
-                var l = Math.log(panel.totalSize + 1);
+                var l = Math.log(panel.totalSize + 3);
                 return l * l * l;
             }).sum();
         }
@@ -114,7 +118,7 @@ public class ChartPanel extends TPanel {
             int i = 0;
             for (Map.Entry<String, ModPacketInfoPanel> entry : mods.entrySet()) {
                 var panel = entry.getValue();
-                var l = Math.log(panel.totalSize + 1);
+                var l = Math.log(panel.totalSize + 3);
                 int w = (int) (width * l * l * l / maxSize);
                 entry.getValue().setBounds(i, 0, w, height);
                 i += w;
@@ -126,7 +130,7 @@ public class ChartPanel extends TPanel {
     public class ModPacketInfoPanel extends TPanel {
         private final String modId;
         private final Map<String, SizeAndTimes> packets = new HashMap<>();
-        private int totalSize = 1;
+        private int totalSize = 0;
         private int totalPackets;
 
         public ModPacketInfoPanel(String modId) {

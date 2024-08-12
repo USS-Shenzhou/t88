@@ -121,6 +121,8 @@ public class NetworkWatcher {
             try {
                 method.invoke(finalCodec, buf, payload);
             } catch (IllegalAccessException | InvocationTargetException e) {
+                LogUtils.getLogger().warn("Failed trying getting the size of CustomPacketPayload<{}> by invoke Codec<{}>. It will do no harm.",
+                        payload.type().id(), finalCodec);
                 LogUtils.getLogger().warn(e.getMessage());
             }
         });
@@ -164,8 +166,9 @@ public class NetworkWatcher {
                             return mod.getModId();
                         }
                     }
-                } catch (NoSuchFieldException | IllegalAccessException ignored) {
-                    LogUtils.getLogger().warn(ignored.getMessage());
+                } catch (NoSuchFieldException | IllegalAccessException e) {
+                    LogUtils.getLogger().warn("Failed to get the modID of CustomPacketPayload<{}>. It will do no harm.",payload.type().id());
+                    LogUtils.getLogger().warn(e.getMessage());
                 }
             }
         }
