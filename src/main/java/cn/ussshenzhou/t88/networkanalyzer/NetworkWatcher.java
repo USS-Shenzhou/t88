@@ -118,7 +118,7 @@ public class NetworkWatcher {
             method.setAccessible(true);
             try {
                 method.invoke(finalCodec, buf, payload);
-            } catch (IllegalAccessException | InvocationTargetException e) {
+            } catch (Exception e) {
                 LogUtils.getLogger().warn("Failed trying getting the size of CustomPacketPayload<{}> by invoke Codec<{}>. It will do no harm.",
                         payload.type().id(), finalCodec);
                 LogUtils.getLogger().warn(e.getMessage());
