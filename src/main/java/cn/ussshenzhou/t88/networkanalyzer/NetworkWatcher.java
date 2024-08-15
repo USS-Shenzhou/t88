@@ -20,10 +20,12 @@ import net.neoforged.neoforge.network.payload.*;
 import net.neoforged.neoforge.network.registration.NetworkRegistry;
 import net.neoforged.neoforge.network.registration.PayloadRegistration;
 import net.neoforged.neoforgespi.language.ModFileScanData;
+import org.checkerframework.checker.units.qual.N;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.util.Arrays;
+import java.util.HashSet;
 import java.util.Map;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ConcurrentHashMap;
@@ -38,6 +40,9 @@ public class NetworkWatcher {
     public static final DelayedMap<SenderInfo, SizeAndTimes> SENT = new DelayedMap<>();
     public static final DelayedMap<SenderInfo, SizeAndTimes> RECEIVED = new DelayedMap<>();
     public static final ConcurrentHashMap<Class<?>, String> MOD_ID_CACHE = new ConcurrentHashMap<>();
+    public static final ConcurrentHashMap<ResourceLocation, Object> SIZE_BLACKLIST = new ConcurrentHashMap<>();
+    public static final ConcurrentHashMap<ResourceLocation, Object> MOD_ID_BLACKLIST = new ConcurrentHashMap<>();
+    public static final Object NULL = new Object();
 
     public static void record(Packet<?> packet, TR dir) {
         CompletableFuture.runAsync(() -> {
@@ -119,9 +124,13 @@ public class NetworkWatcher {
             try {
                 method.invoke(finalCodec, buf, payload);
             } catch (Exception e) {
-                LogUtils.getLogger().warn("Failed trying getting the size of CustomPacketPayload<{}> by invoke Codec<{}>. It will do no harm.",
-                        payload.type().id(), finalCodec);
-                LogUtils.getLogger().warn(e.getMessage());
+                if (SIZE_BLACKLIST.put(payload.type().id(), NULL) == null) {
+                    LogUtils.getLogger().error("Failed trying getting the size of CustomPacketPayload<{}> by invoke Codec<{}>. It will do no harm.",
+                            payload.type().id(), finalCodec);
+                    LogUtils.getLogger().error("<{}> has been added to a temp blacklist to prevent filling the log.",
+                            payload.type().id());
+                    LogUtils.getLogger().error(e.getMessage());
+                }
             }
         });
         int size = buf.writerIndex();
@@ -165,8 +174,11 @@ public class NetworkWatcher {
                         }
                     }
                 } catch (NoSuchFieldException | IllegalAccessException e) {
-                    LogUtils.getLogger().warn("Failed to get the modID of CustomPacketPayload<{}>. It will do no harm.",payload.type().id());
-                    LogUtils.getLogger().warn(e.getMessage());
+                    if (MOD_ID_BLACKLIST.put(payload.type().id(), NULL) == null) {
+                        LogUtils.getLogger().warn("Failed to get the modID of CustomPacketPayload<{}>. It will do no harm.", payload.type().id());
+                        LogUtils.getLogger().error("<{}> has been added to a temp blacklist to prevent filling the log.", payload.type().id());
+                        LogUtils.getLogger().warn(e.getMessage());
+                    }
                 }
             }
         }
