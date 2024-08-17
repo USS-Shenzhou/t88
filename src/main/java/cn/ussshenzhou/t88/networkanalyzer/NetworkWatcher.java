@@ -3,6 +3,7 @@ package cn.ussshenzhou.t88.networkanalyzer;
 import com.google.common.collect.ImmutableMap;
 import com.mojang.logging.LogUtils;
 import io.netty.buffer.Unpooled;
+import net.minecraft.client.Minecraft;
 import net.minecraft.network.ConnectionProtocol;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.network.RegistryFriendlyByteBuf;
@@ -105,7 +106,13 @@ public class NetworkWatcher {
     }
 
     private static int getSizeFromCustomPacketPayload(CustomPacketPayload payload) {
-        var buf = new RegistryFriendlyByteBuf(Unpooled.buffer(), null, ConnectionType.NEOFORGE);
+        if (SIZE_BLACKLIST.containsKey(payload.type().id())) {
+            return 0;
+        }
+        @SuppressWarnings("DataFlowIssue")
+        var buf = new RegistryFriendlyByteBuf(Unpooled.buffer(),
+                Minecraft.getInstance().level == null ? null : Minecraft.getInstance().level.registryAccess(),
+                ConnectionType.NEOFORGE);
         StreamCodec<? super FriendlyByteBuf, ? extends CustomPacketPayload> codec = null;
         var reg = PAYLOAD_REGISTRATIONS.get(ConnectionProtocol.PLAY).get(payload.type().id());
         if (reg != null) {
@@ -124,13 +131,12 @@ public class NetworkWatcher {
             try {
                 method.invoke(finalCodec, buf, payload);
             } catch (Exception e) {
-                if (SIZE_BLACKLIST.put(payload.type().id(), NULL) == null) {
-                    LogUtils.getLogger().error("Failed trying getting the size of CustomPacketPayload<{}> by invoke Codec<{}>. It will do no harm.",
-                            payload.type().id(), finalCodec);
-                    LogUtils.getLogger().error("<{}> has been added to a temp blacklist to prevent filling the log.",
-                            payload.type().id());
-                    LogUtils.getLogger().error(e.getMessage());
-                }
+                SIZE_BLACKLIST.put(payload.type().id(), NULL);
+                LogUtils.getLogger().error("Failed trying getting the size of CustomPacketPayload<{}> by invoke <{} # {}>. It will do no harm.",
+                        payload.type().id(), finalCodec, method);
+                LogUtils.getLogger().error("<{}> has been added to a temp blacklist to prevent filling the log.",
+                        payload.type().id());
+                LogUtils.getLogger().error(e.getMessage());
             }
         });
         int size = buf.writerIndex();
@@ -161,6 +167,9 @@ public class NetworkWatcher {
     }
 
     public static String searchModId(CustomPacketPayload payload) {
+        if (MOD_ID_BLACKLIST.containsKey(payload.type().id())) {
+            return "unknown";
+        }
         var clazz = payload.getClass();
         for (ModContainer mod : ModList.get().getSortedMods()) {
             if (mod instanceof FMLModContainer) {
@@ -174,11 +183,9 @@ public class NetworkWatcher {
                         }
                     }
                 } catch (NoSuchFieldException | IllegalAccessException e) {
-                    if (MOD_ID_BLACKLIST.put(payload.type().id(), NULL) == null) {
-                        LogUtils.getLogger().warn("Failed to get the modID of CustomPacketPayload<{}>. It will do no harm.", payload.type().id());
-                        LogUtils.getLogger().error("<{}> has been added to a temp blacklist to prevent filling the log.", payload.type().id());
-                        LogUtils.getLogger().warn(e.getMessage());
-                    }
+                    LogUtils.getLogger().warn("Failed to get the modID of CustomPacketPayload<{}>. It will do no harm.", payload.type().id());
+                    LogUtils.getLogger().error("<{}> has been added to a temp blacklist to prevent filling the log.", payload.type().id());
+                    LogUtils.getLogger().warn(e.getMessage());
                 }
             }
         }

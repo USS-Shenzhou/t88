@@ -20,6 +20,16 @@ group = mod_group_id
 
 repositories {
     mavenLocal()
+    exclusiveContent {
+        forRepository {
+            maven {
+                url "https://cursemaven.com"
+            }
+        }
+        filter {
+            includeGroup "curse.maven"
+        }
+    }
 }
 
 base {
@@ -93,7 +103,7 @@ dependencies {
     // compileOnly "mezz.jei:jei-${mc_version}-common-api:${jei_version}"
     // compileOnly "mezz.jei:jei-${mc_version}-forge-api:${jei_version}"
     // runtimeOnly "mezz.jei:jei-${mc_version}-forge:${jei_version}"
-
+    implementation "curse.maven:the-one-probe-245211:5431197"
     // Example mod dependency using a mod jar from ./libs with a flat dir repository
     // This maps to ./libs/coolmod-${mc_version}-${coolmod_version}.jar
     // The group id is ignored when searching -- in this case, it is "blank"
@@ -140,46 +150,6 @@ java {
     withSourcesJar()
 }
 
-/*task generateFakeToml {
-    def outputDir = layout.buildDirectory.dir("generated/resources/META-INF").get().asFile
-    def outputFile = file("$outputDir/fake_neoforge.mods.toml")
-
-    doLast {
-        outputFile.parentFile.mkdirs()
-        outputFile.text = """
-modLoader="javafml"
-loaderVersion="${loader_version_range}"
-license="${mod_license}"
-[[mods]]
-modId="${mod_id+"_core"}"
-version="0.1.0"
-displayName="${mod_name+"Core"}"
-description=''
-"""
-    }
-}
-
-task coreJar(type: Jar) {
-    dependsOn generateFakeToml
-    archiveClassifier = 'core'
-
-    from sourceSets.main.allSource.matching {
-        include 'cn/ussshenzhou/t88/magic/core/**'
-    }
-
-    from sourceSets.main.resources.matching {
-        include 'META-INF/services/**'
-    }
-
-    from(layout.buildDirectory.dir("generated/resources/META-INF")) {
-        include 'fake_neoforge.mods.toml'
-        into 'META-INF'
-        rename { String fileName ->
-            fileName.replace("fake_neoforge.mods.toml", "neoforge.mods.toml")
-        }
-    }
-}*/
-
 publishing {
     publications {
         register('mavenJava', MavenPublication) {
@@ -216,4 +186,28 @@ idea {
         downloadSources = true
         downloadJavadoc = true
     }
+}
+
+tasks.register("runWithRenderDoc", Exec) {
+    def javaExecTask = tasks.withType(JavaExec).named("runClient").get()
+    def javaHome = javaExecTask.javaLauncher.get().metadata.installationPath.asFile.absolutePath
+
+    commandLine = [
+            "C:\\Program Files\\RenderDoc\\renderdoccmd.exe",
+            "capture",
+            "--opt-hook-children",
+            "--wait-for-exit",
+            "--working-dir",
+            ".",
+            "$javaHome\\bin\\java.exe",
+            "-agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=5005",
+            "-Xmx64m",
+            "-Xms64m",
+            "-Dorg.gradle.appname=gradlew",
+            "-Dorg.gradle.java.home=$javaHome",
+            "-classpath",
+            "gradle/wrapper/gradle-wrapper.jar",
+            "org.gradle.wrapper.GradleWrapperMain",
+            "runClient"
+    ]
 }

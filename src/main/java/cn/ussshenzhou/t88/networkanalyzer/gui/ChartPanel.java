@@ -119,6 +119,9 @@ public class ChartPanel extends TPanel {
                 var panel = entry.getValue();
                 var l = Math.log(panel.totalSize + 3);
                 int w = (int) (width * l * l * l / maxSize);
+                if (w < 5) {
+                    w += 1;
+                }
                 entry.getValue().setBounds(i, 0, w, height);
                 i += w;
             }
