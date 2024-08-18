@@ -53,6 +53,7 @@ public abstract class TScreen extends Screen {
         RenderSystem.defaultBlendFunc();
         RenderSystem.enableDepthTest();
         renderBackGround(graphics, pMouseX, pMouseY, pPartialTick);
+        graphics.pose().translate(0, 0, 500);
         graphics.pose().pushPose();
         for (TWidget w : this.tChildren) {
             if (w.isVisibleT()) {
@@ -98,7 +99,6 @@ public abstract class TScreen extends Screen {
 
     protected void renderBackGround(GuiGraphics graphics, int pMouseX, int pMouseY, float pPartialTick) {
         super.renderBackground(graphics, pMouseX, pMouseY, pPartialTick);
-        this.minecraft.getMainRenderTarget().bindWrite(false);
     }
 
     @Override
