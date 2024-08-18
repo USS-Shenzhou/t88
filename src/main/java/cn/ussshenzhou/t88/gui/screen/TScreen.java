@@ -97,7 +97,8 @@ public abstract class TScreen extends Screen {
     }
 
     protected void renderBackGround(GuiGraphics graphics, int pMouseX, int pMouseY, float pPartialTick) {
-        renderBackground(graphics, pMouseX, pMouseY, pPartialTick);
+        super.renderBackground(graphics, pMouseX, pMouseY, pPartialTick);
+        this.minecraft.getMainRenderTarget().bindWrite(false);
     }
 
     @Override
