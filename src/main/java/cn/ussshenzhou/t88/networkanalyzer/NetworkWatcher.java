@@ -4,6 +4,7 @@ import com.google.common.collect.ImmutableMap;
 import com.mojang.logging.LogUtils;
 import io.netty.buffer.Unpooled;
 import net.minecraft.client.Minecraft;
+import net.minecraft.core.RegistryAccess;
 import net.minecraft.network.ConnectionProtocol;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.network.RegistryFriendlyByteBuf;
@@ -13,15 +14,21 @@ import net.minecraft.network.protocol.common.ClientboundCustomPayloadPacket;
 import net.minecraft.network.protocol.common.ServerboundCustomPayloadPacket;
 import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.server.MinecraftServer;
+import net.neoforged.api.distmarker.Dist;
+import net.neoforged.fml.LogicalSide;
 import net.neoforged.fml.ModContainer;
 import net.neoforged.fml.ModList;
 import net.neoforged.fml.javafmlmod.FMLModContainer;
+import net.neoforged.fml.loading.FMLEnvironment;
+import net.neoforged.neoforge.common.util.LogicalSidedProvider;
 import net.neoforged.neoforge.network.connection.ConnectionType;
 import net.neoforged.neoforge.network.payload.*;
 import net.neoforged.neoforge.network.registration.NetworkRegistry;
 import net.neoforged.neoforge.network.registration.PayloadRegistration;
 import net.neoforged.neoforgespi.language.ModFileScanData;
 import org.checkerframework.checker.units.qual.N;
+import org.jetbrains.annotations.Nullable;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
@@ -110,9 +117,7 @@ public class NetworkWatcher {
             return 0;
         }
         @SuppressWarnings("DataFlowIssue")
-        var buf = new RegistryFriendlyByteBuf(Unpooled.buffer(),
-                Minecraft.getInstance().level == null ? null : Minecraft.getInstance().level.registryAccess(),
-                ConnectionType.NEOFORGE);
+        var buf = new RegistryFriendlyByteBuf(Unpooled.buffer(), getRegistryAccess(), ConnectionType.NEOFORGE);
         StreamCodec<? super FriendlyByteBuf, ? extends CustomPacketPayload> codec = null;
         var reg = PAYLOAD_REGISTRATIONS.get(ConnectionProtocol.PLAY).get(payload.type().id());
         if (reg != null) {
@@ -142,6 +147,14 @@ public class NetworkWatcher {
         int size = buf.writerIndex();
         buf.release();
         return size;
+    }
+
+    private static RegistryAccess getRegistryAccess() {
+        if (FMLEnvironment.dist == Dist.CLIENT) {
+            return Minecraft.getInstance().level == null ? null : Minecraft.getInstance().level.registryAccess();
+        } else {
+            return ((MinecraftServer) LogicalSidedProvider.WORKQUEUE.get(LogicalSide.SERVER)).registryAccess();
+        }
     }
 
     public static SenderInfo getSenderInfo(Packet<?> packet) {
@@ -210,13 +223,14 @@ public class NetworkWatcher {
 
     public static class DelayedMap<K, V> {
         private final ConcurrentHashMap<K, V> a = new ConcurrentHashMap<>(), b = new ConcurrentHashMap<>();
-        private boolean usingA = true;
+        private volatile boolean usingA = true;
 
         public ConcurrentHashMap<K, V> get() {
             return usingA ? a : b;
         }
 
         public void switchAndClear() {
+            //noinspection NonAtomicOperationOnVolatileField
             usingA = !usingA;
             (usingA ? a : b).clear();
         }
