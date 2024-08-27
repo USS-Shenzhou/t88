@@ -1,5 +1,7 @@
 package cn.ussshenzhou.t88;
 
+import cn.ussshenzhou.t88.config.ConfigHelper;
+import cn.ussshenzhou.t88.networkanalyzer.NetworkWatcherBlacklist;
 import com.mojang.logging.LogUtils;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.fml.common.Mod;
@@ -20,6 +22,7 @@ public class T88 {
     public T88(IEventBus modEventBus) {
         //NeoForge.EVENT_BUS.register(this);
         modEventBus.addListener(this::setup);
+        ConfigHelper.loadConfig(new NetworkWatcherBlacklist());
     }
 
     private void setup(final FMLCommonSetupEvent event) {

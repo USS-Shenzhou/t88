@@ -1,5 +1,6 @@
 package cn.ussshenzhou.t88.networkanalyzer;
 
+import cn.ussshenzhou.t88.config.ConfigHelper;
 import com.google.common.collect.ImmutableMap;
 import com.mojang.logging.LogUtils;
 import io.netty.buffer.Unpooled;
@@ -35,6 +36,7 @@ import java.lang.reflect.InvocationTargetException;
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Map;
+import java.util.Objects;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -45,12 +47,14 @@ import java.util.concurrent.ConcurrentHashMap;
 public class NetworkWatcher {
 
     //modId : classname - size
+    public static final Object NULL = new Object();
     public static final DelayedMap<SenderInfo, SizeAndTimes> SENT = new DelayedMap<>();
     public static final DelayedMap<SenderInfo, SizeAndTimes> RECEIVED = new DelayedMap<>();
     public static final ConcurrentHashMap<Class<?>, String> MOD_ID_CACHE = new ConcurrentHashMap<>();
-    public static final ConcurrentHashMap<ResourceLocation, Object> SIZE_BLACKLIST = new ConcurrentHashMap<>();
+    public static final ConcurrentHashMap<ResourceLocation, Object> SIZE_BLACKLIST = new ConcurrentHashMap<>() {{
+        ConfigHelper.getConfigRead(NetworkWatcherBlacklist.class).blacklist.forEach(resourceLocation -> put(resourceLocation, NULL));
+    }};
     public static final ConcurrentHashMap<ResourceLocation, Object> MOD_ID_BLACKLIST = new ConcurrentHashMap<>();
-    public static final Object NULL = new Object();
 
     public static void record(Packet<?> packet, TR dir) {
         CompletableFuture.runAsync(() -> {
