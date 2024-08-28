@@ -46,8 +46,8 @@ import java.util.concurrent.ConcurrentHashMap;
 @SuppressWarnings("UnstableApiUsage")
 public class NetworkWatcher {
 
-    //modId : classname - size
     public static final Object NULL = new Object();
+    //modId : classname - size
     public static final DelayedMap<SenderInfo, SizeAndTimes> SENT = new DelayedMap<>();
     public static final DelayedMap<SenderInfo, SizeAndTimes> RECEIVED = new DelayedMap<>();
     public static final ConcurrentHashMap<Class<?>, String> MOD_ID_CACHE = new ConcurrentHashMap<>();
@@ -75,7 +75,8 @@ public class NetworkWatcher {
         try {
             var method = packet.getClass().getDeclaredMethod("write", FriendlyByteBuf.class);
             method.setAccessible(true);
-            var buf = new RegistryFriendlyByteBuf(Unpooled.buffer(), null, ConnectionType.NEOFORGE);
+            @SuppressWarnings("DataFlowIssue")
+            var buf = new RegistryFriendlyByteBuf(Unpooled.buffer(), getRegistryAccess(), ConnectionType.NEOFORGE);
             method.invoke(packet, buf);
             int size = buf.writerIndex();
             buf.release();
