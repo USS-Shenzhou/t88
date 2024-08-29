@@ -1,5 +1,6 @@
 package cn.ussshenzhou.t88.mixin;
 
+import cn.ussshenzhou.t88.render.SectionBufferRenderType;
 import cn.ussshenzhou.t88.render.SectionBufferRenderTypeHelper;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Lists;
@@ -23,6 +24,8 @@ import java.util.List;
 public abstract class RenderTypeMixin {
 
     @Unique
+    private static ArrayList<RenderType> T88_ADDITIONAL_CHUNK_BUFFER_RENDER_TYPES;
+    @Unique
     private static ArrayList<RenderType> T88_EXTENDED_CHUNK_BUFFER_RENDER_TYPES;
 
     @Inject(method = "<clinit>", at = @At(value = "HEAD"))
@@ -38,8 +41,10 @@ public abstract class RenderTypeMixin {
 
     @Inject(method = "<clinit>", at = @At(value = "FIELD", target = "Lnet/minecraft/client/renderer/RenderType;CHUNK_BUFFER_LAYERS:Lcom/google/common/collect/ImmutableList;"))
     private static void t88InitExtendedChunkBufferRenderTypes(CallbackInfo ci) {
+        T88_ADDITIONAL_CHUNK_BUFFER_RENDER_TYPES = new ArrayList<>(SectionBufferRenderTypeHelper.scan());
+
         T88_EXTENDED_CHUNK_BUFFER_RENDER_TYPES = Lists.newArrayList(List.of(RenderType.solid(), RenderType.cutoutMipped(), RenderType.cutout(), RenderType.translucent(), RenderType.tripwire()));
-        T88_EXTENDED_CHUNK_BUFFER_RENDER_TYPES.addAll(SectionBufferRenderTypeHelper.scan());
+        T88_EXTENDED_CHUNK_BUFFER_RENDER_TYPES.addAll(T88_ADDITIONAL_CHUNK_BUFFER_RENDER_TYPES);
     }
 
     @ModifyReturnValue(method = "chunkBufferLayers",at = @At("RETURN"))
@@ -47,7 +52,7 @@ public abstract class RenderTypeMixin {
         if (original instanceof ImmutableList){
             return T88_EXTENDED_CHUNK_BUFFER_RENDER_TYPES;
         } else {
-            original.addAll(T88_EXTENDED_CHUNK_BUFFER_RENDER_TYPES);
+            original.addAll(T88_ADDITIONAL_CHUNK_BUFFER_RENDER_TYPES);
             return original;
         }
     }
