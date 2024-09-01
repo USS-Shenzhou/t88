@@ -51,7 +51,7 @@ public abstract class TScreen extends Screen {
         RenderSystem.setShaderColor(1, 1, 1, 1);
         RenderSystem.enableBlend();
         RenderSystem.defaultBlendFunc();
-        RenderSystem.enableDepthTest();
+        RenderSystem.disableDepthTest();
         renderBackGround(graphics, pMouseX, pMouseY, pPartialTick);
         graphics.pose().translate(0, 0, 500);
         graphics.pose().pushPose();
@@ -68,6 +68,7 @@ public abstract class TScreen extends Screen {
             }
         }
         graphics.pose().pushPose();
+        RenderSystem.enableDepthTest();
     }
 
     public void add(TWidget tWidget) {

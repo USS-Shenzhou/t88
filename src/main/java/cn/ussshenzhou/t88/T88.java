@@ -6,9 +6,10 @@ import com.mojang.logging.LogUtils;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.fml.common.Mod;
 import net.neoforged.fml.event.lifecycle.FMLCommonSetupEvent;
-import net.neoforged.neoforge.common.NeoForge;
 import net.neoforged.neoforge.gametest.GameTestHooks;
 import org.slf4j.Logger;
+
+import java.util.concurrent.ForkJoinPool;
 
 /**
  * @author USS_Shenzhou
@@ -23,6 +24,15 @@ public class T88 {
         //NeoForge.EVENT_BUS.register(this);
         modEventBus.addListener(this::setup);
         ConfigHelper.loadConfig(new NetworkWatcherBlacklist());
+        if (System.getProperty("t88.skip_parallelism_check") == null) {
+            if (ForkJoinPool.getCommonPoolParallelism() == 1) {
+                throw new RuntimeException("ForkJoinPool.getCommonPoolParallelism() should NOT be 1." +
+                        " This may cause serious performance problem in Network Watcher." +
+                        " If your machine has only 1 CPU core or running in a virtual environment," +
+                        " you can manually designate it to be bigger than 1 by using JVM argument -Djava.util.concurrent.ForkJoinPool.common.parallelism=2." +
+                        " You can also use -Dt88.skip_parallelism_check-true=true to skip this check.");
+            }
+        }
     }
 
     private void setup(final FMLCommonSetupEvent event) {
