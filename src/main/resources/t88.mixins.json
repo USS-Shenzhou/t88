@@ -6,6 +6,7 @@
   "refmap": "t88.refmap.json",
   "mixins": [
     "ConnectionMixin",
+    "IrisWorldRenderingPhaseMixin",
     "MutableComponentAccessor"
   ],
   "client": [
