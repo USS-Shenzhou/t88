@@ -112,6 +112,14 @@ public class TVerticalAndHorizontalScrollContainer extends TPanel implements TSc
         );
     }
 
+    protected ResourceLocation getScrollerVerticalTexture(){
+        return SCROLLER_VERTICAL;
+    }
+
+    protected ResourceLocation getScrollerHorizontalTexture(){
+        return SCROLLER_HORIZONTAL;
+    }
+
     protected void renderVerticalScrollBar(GuiGraphics guiGraphics) {
         int x1 = getScrollBarVerticalX();
         int k = (int) ((float) (this.height * this.height) / bottomY);
@@ -121,7 +129,7 @@ public class TVerticalAndHorizontalScrollContainer extends TPanel implements TSc
             l = this.getYT();
         }
         guiGraphics.fill(x1, this.getYT(), x1 + 6, this.getYT() + height, 0x80000000);
-        guiGraphics.blitSprite(SCROLLER_VERTICAL, x1, l, 6, k);
+        guiGraphics.blitSprite(getScrollerVerticalTexture(), x1, l, 6, k);
     }
 
     protected void renderHorizontalScrollBar(GuiGraphics guiGraphics) {
@@ -134,7 +142,7 @@ public class TVerticalAndHorizontalScrollContainer extends TPanel implements TSc
             l = this.getXT();
         }
         guiGraphics.fill(this.getXT(), y1, this.getXT() + w, y1 + 6, 0x80000000);
-        guiGraphics.blitSprite(SCROLLER_HORIZONTAL, l, y1, k, 6);
+        guiGraphics.blitSprite(getScrollerHorizontalTexture(), l, y1, k, 6);
     }
 
     protected int getScrollBarVerticalX() {
@@ -210,19 +218,19 @@ public class TVerticalAndHorizontalScrollContainer extends TPanel implements TSc
         return false;
     }
 
-    private boolean isScrollBarVisibleVertical() {
+    protected boolean isScrollBarVisibleVertical() {
         return getMaxScrollY() > 0 && showScrollBarVertical;
     }
 
-    private boolean isScrollBarVisibleHorizontal() {
+    protected boolean isScrollBarVisibleHorizontal() {
         return getMaxScrollX() > 0 && showScrollBarHorizontal;
     }
 
-    private int getMaxScrollY() {
+    protected int getMaxScrollY() {
         return Math.max(0, bottomY - getYT() - getHeight());
     }
 
-    private int getMaxScrollX() {
+    protected int getMaxScrollX() {
         return Math.max(0, bottomX - getXT() - getWidth());
     }
 
