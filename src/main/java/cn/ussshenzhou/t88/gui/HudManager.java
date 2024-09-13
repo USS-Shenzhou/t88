@@ -61,6 +61,10 @@ public class HudManager {
         });
     }
 
+    public static void removeInstanceOf(Class<? extends TComponent> clazz) {
+        needRemove.addAll(CHILDREN.stream().filter(clazz::isInstance).toList());
+    }
+
     @SubscribeEvent
     public static void onRenderHud(RenderGuiEvent.Post event) {
         var graphics = event.getGuiGraphics();

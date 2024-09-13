@@ -195,4 +195,9 @@ public class TVerticalScrollContainer extends TPanel implements TScrollContainer
     public void setScrollbarGap(int scrollbarGap) {
         this.scrollbarGap = scrollbarGap;
     }
+
+    public void setScrollAmountDirectly(double scrollAmount) {
+        this.prevScrollAmount = this.scrollAmount;
+        this.scrollAmount = scrollAmount;
+    }
 }

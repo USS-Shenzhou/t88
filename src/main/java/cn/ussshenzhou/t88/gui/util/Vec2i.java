@@ -4,8 +4,9 @@ import org.joml.Vector2i;
 
 /**
  * @author USS_Shenzhou
- * ONLY FOR CONSISTANCY AND COMPATABILITY.
+ * @deprecated  ONLY FOR CONSISTANCY AND COMPATABILITY.
  * DO NOT MODIFY BELOW.
  */
+@Deprecated
 public class Vec2i extends Vector2i{
 }

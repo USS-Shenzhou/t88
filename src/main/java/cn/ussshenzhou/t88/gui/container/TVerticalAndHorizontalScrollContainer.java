@@ -296,4 +296,14 @@ public class TVerticalAndHorizontalScrollContainer extends TPanel implements TSc
     public void setBottomMargin(int bottomMargin) {
         this.bottomMargin = bottomMargin;
     }
+
+    public void setScrollAmountXDirectly(double scrollAmountX) {
+        this.prevScrollAmountX = this.scrollAmountX;
+        this.scrollAmountX = scrollAmountX;
+    }
+
+    public void setScrollAmountYDirectly(double scrollAmountY) {
+        this.prevScrollAmountY = this.scrollAmountY;
+        this.scrollAmountY = scrollAmountY;
+    }
 }

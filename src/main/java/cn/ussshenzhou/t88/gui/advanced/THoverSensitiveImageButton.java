@@ -31,7 +31,7 @@ public class THoverSensitiveImageButton extends TPanel {
             backgroundImageLocation = PLACEHOLDER_IMAGE;
         }
         if (backgroundImageLocationHovered == null) {
-            backgroundImageLocation = PLACEHOLDER_IMAGE;
+            backgroundImageLocationHovered = PLACEHOLDER_IMAGE;
         }
         this.text = new TLabel(text1);
         this.text.setAutoScroll(false)

@@ -33,7 +33,8 @@ public class NetworkHelper {
                 field.setAccessible(true);
                 if (proxyClass.isRecord()) {
                     Field proxyField = proxyClass.getDeclaredField(field.getName());
-                    MagicHelper.set((Record) proxy, proxyField, field.get(packet));
+                    //noinspection unchecked
+                    proxy = (T) MagicHelper.set((Record) proxy, proxyField, field.get(packet));
                 } else {
                     field.set(proxy, field.get(packet));
                 }
