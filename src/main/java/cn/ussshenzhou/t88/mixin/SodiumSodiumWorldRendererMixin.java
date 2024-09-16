@@ -20,7 +20,7 @@ public class SodiumSodiumWorldRendererMixin {
     @Shadow
     private RenderSectionManager renderSectionManager;
 
-    @Inject(method = "drawChunkLayer", at = @At("RETURN"),require = 0)
+    @Inject(method = "drawChunkLayer", at = @At("RETURN"), require = 0)
     private void t88DrawChunkLayer(CallbackInfo ci,
                                    @Local(argsOnly = true) RenderType renderLayer, @Local(argsOnly = true) ChunkRenderMatrices matrices, @Local(argsOnly = true, ordinal = 0) double x, @Local(argsOnly = true, ordinal = 1) double y, @Local(argsOnly = true, ordinal = 2) double z) {
         if (SectionBufferRenderTypeHelper.T88_ADDITIONAL_CHUNK_BUFFER_RENDER_TYPES.contains(renderLayer)) {

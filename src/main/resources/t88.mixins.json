@@ -6,7 +6,6 @@
   "refmap": "t88.refmap.json",
   "mixins": [
     "ConnectionMixin",
-    "IrisWorldRenderingPhaseMixin",
     "MutableComponentAccessor"
   ],
   "client": [
@@ -22,7 +21,9 @@
     "SliderButtonAccessor",
     "SodiumChunkBuilderMeshingTaskMixin",
     "SodiumDefaultTerrainRenderPassesMixin",
-    "SodiumSodiumWorldRendererMixin"
+    "SodiumSodiumWorldRendererMixin",
+    "IrisSodiumProgramsMixin",
+    "IrisWorldRenderingPhaseMixin"
   ],
   "injectors": {
     "defaultRequire": 1
