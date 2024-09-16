@@ -1,14 +1,14 @@
-package cn.ussshenzhou.t88.render;
+package cn.ussshenzhou.t88.render.fixedblockentity;
 
 import com.mojang.logging.LogUtils;
+import net.caffeinemc.mods.sodium.client.render.chunk.terrain.TerrainRenderPass;
+import net.caffeinemc.mods.sodium.client.render.chunk.terrain.material.Material;
 import net.minecraft.client.renderer.RenderType;
 import net.neoforged.fml.ModList;
 import net.neoforged.fml.javafmlmod.FMLModContainer;
 import net.neoforged.neoforge.client.event.RenderLevelStageEvent;
 import net.neoforged.neoforgespi.language.ModFileScanData;
 import org.jetbrains.annotations.ApiStatus;
-import org.jline.utils.Log;
-import org.objectweb.asm.Type;
 
 import java.lang.annotation.ElementType;
 import java.lang.reflect.Field;
@@ -20,9 +20,9 @@ import java.util.*;
  */
 @ApiStatus.Internal
 public class SectionBufferRenderTypeHelper {
-    private static final Type RENDER_TYPE = Type.getType(SectionBufferRenderType.class);
-
     public static HashMap<RenderLevelStageEvent.Stage, PriorityQueue<RenderTypeWithPriority>> renderTypes = new HashMap<>();
+    public static ArrayList<RenderType> T88_ADDITIONAL_CHUNK_BUFFER_RENDER_TYPES;
+    public static ArrayList<RenderType> T88_EXTENDED_CHUNK_BUFFER_RENDER_TYPES;
 
     public static LinkedList<RenderType> scan() {
         LinkedList<RenderType> types = new LinkedList<>();
@@ -95,5 +95,10 @@ public class SectionBufferRenderTypeHelper {
             this.priority = priority;
             this.renderType = renderType;
         }
+    }
+
+    public static class Sodium {
+        public static final HashMap<RenderType, Material> SODIUM_MATERIALS = new HashMap<>();
+        public static final HashMap<RenderType, TerrainRenderPass> SODIUM_TERRAIN_RENDER_PASSES = new HashMap<>();
     }
 }

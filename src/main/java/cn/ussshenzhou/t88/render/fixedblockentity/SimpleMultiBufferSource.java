@@ -1,4 +1,4 @@
-package cn.ussshenzhou.t88.render;
+package cn.ussshenzhou.t88.render.fixedblockentity;
 
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import net.minecraft.client.renderer.MultiBufferSource;

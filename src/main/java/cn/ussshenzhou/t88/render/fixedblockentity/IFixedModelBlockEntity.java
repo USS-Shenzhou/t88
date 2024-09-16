@@ -1,7 +1,6 @@
-package cn.ussshenzhou.t88.render;
+package cn.ussshenzhou.t88.render.fixedblockentity;
 
 import com.mojang.blaze3d.vertex.*;
-import net.minecraft.client.renderer.SectionBufferBuilderPack;
 import net.minecraft.client.renderer.LevelRenderer;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.core.BlockPos;
@@ -10,7 +9,6 @@ import net.neoforged.api.distmarker.Dist;
 import net.neoforged.api.distmarker.OnlyIn;
 
 import javax.annotation.Nullable;
-import java.util.Set;
 
 /**
  * @author USS_Shenzhou
@@ -36,20 +34,6 @@ public interface IFixedModelBlockEntity {
         } else {
             return 0;
         }
-    }
-
-    @OnlyIn(Dist.CLIENT)
-    default BufferBuilder getBuilder(SectionCompileContext context, RenderType type) {
-        return context.sectionCompiler.getOrBeginLayer(context.bufferBuilders, context.sectionBufferBuilderPack, type);
-    }
-
-    @OnlyIn(Dist.CLIENT)
-    default SimpleMultiBufferSource getSimpleMultiBufferSource(SectionCompileContext context, RenderType... types) {
-        var r = SimpleMultiBufferSource.of(types[0], getBuilder(context, types[0]));
-        for (int i = 1; i < types.length; i++) {
-            r.put(types[i], getBuilder(context, types[i]));
-        }
-        return r;
     }
 
     @OnlyIn(Dist.CLIENT)

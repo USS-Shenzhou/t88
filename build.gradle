@@ -30,6 +30,12 @@ repositories {
             includeGroup "curse.maven"
         }
     }
+    flatDir {
+        dir 'libs'
+    }
+    maven {
+        url "https://maven.su5ed.dev/releases"
+    }
 }
 
 base {
@@ -108,6 +114,9 @@ dependencies {
     // This maps to ./libs/coolmod-${mc_version}-${coolmod_version}.jar
     // The group id is ignored when searching -- in this case, it is "blank"
     // implementation "blank:coolmod-${mc_version}:${coolmod_version}"
+    implementation files("libs/sodium-neoforge-0.6.0-beta.1+mc1.21.jar")
+    implementation(jarJar("org.sinytra.forgified-fabric-api:fabric-renderer-api-v1:3.3.0+e3455cb4d1"))
+
     implementation "curse.maven:irisshaders-455508:5663587"
     // Example mod dependency using a file as dependency
     // implementation files("libs/coolmod-${mc_version}-${coolmod_version}.jar")

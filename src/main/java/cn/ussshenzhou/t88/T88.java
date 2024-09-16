@@ -4,6 +4,7 @@ import cn.ussshenzhou.t88.config.ConfigHelper;
 import cn.ussshenzhou.t88.networkanalyzer.NetworkWatcherBlacklist;
 import com.mojang.logging.LogUtils;
 import net.neoforged.bus.api.IEventBus;
+import net.neoforged.fml.ModList;
 import net.neoforged.fml.common.Mod;
 import net.neoforged.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.neoforged.neoforge.gametest.GameTestHooks;
@@ -19,6 +20,7 @@ public class T88 {
     public static final String MOD_ID = "t88";
     private static final Logger LOGGER = LogUtils.getLogger();
     public static final boolean TEST = GameTestHooks.isGametestEnabled();
+    public static final boolean SODIUM_EXIST = ModList.get().isLoaded("sodium");
 
     public T88(IEventBus modEventBus) {
         //NeoForge.EVENT_BUS.register(this);

@@ -1,4 +1,4 @@
-package cn.ussshenzhou.t88.render;
+package cn.ussshenzhou.t88.render.fixedblockentity;
 
 import net.neoforged.neoforge.client.event.RenderLevelStageEvent;
 

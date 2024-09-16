@@ -1,7 +1,7 @@
 package cn.ussshenzhou.t88.mixin;
 
-import cn.ussshenzhou.t88.render.IFixedModelBlockEntity;
-import cn.ussshenzhou.t88.render.SectionCompileContext;
+import cn.ussshenzhou.t88.render.fixedblockentity.IFixedModelBlockEntity;
+import cn.ussshenzhou.t88.render.fixedblockentity.VanillaSectionCompileContext;
 import com.llamalad7.mixinextras.sugar.Local;
 import com.mojang.blaze3d.vertex.*;
 import net.minecraft.client.renderer.RenderType;
@@ -54,26 +54,24 @@ public abstract class SectionCompilerMixin {
     private void t88compileFixedBlockEntity(SectionPos sectionPos, RenderChunkRegion level, VertexSorting vertexSorting, SectionBufferBuilderPack sectionBufferBuilderPack, List<AddSectionGeometryEvent.AdditionalSectionRenderer> additionalRenderers, CallbackInfoReturnable<SectionCompiler.Results> cir,
                                             @Local BlockEntity blockentity, @Local PoseStack poseStack, @Local(ordinal = 2) BlockPos pos, @Local BlockState state, @Local Map<RenderType, BufferBuilder> bufferBuilders, @Local RandomSource randomsource) {
         if (blockentity instanceof IFixedModelBlockEntity fixedModelBlockEntity) {
-            var context = fixedModelBlockEntity.handleCompileContext(new SectionCompileContext(level, (SectionCompiler) (Object) this, bufferBuilders, sectionBufferBuilderPack, poseStack, blockRenderer, blockEntityRenderer, pos, state, blockentity));
+            var context = fixedModelBlockEntity.handleCompileContext(new VanillaSectionCompileContext((SectionCompiler) (Object) this, bufferBuilders, sectionBufferBuilderPack, pos, state));
             if (context == null) {
                 return;
             }
-            var renderType = context.renderType;
+            var renderType = context.getBakedModelRenderType();
             var builder = this.getOrBeginLayer(bufferBuilders, sectionBufferBuilderPack, renderType);
-            if (context.bakedModel != null) {
+            var model = context.getBakedModel();
+            if (model != null) {
                 poseStack.pushPose();
-                context.beforeBakedModel.accept(poseStack);
-                var model = context.bakedModel;
-                if (model != null) {
-                    blockRenderer.getModelRenderer().tesselateBlock(level, model,
-                            context.bakedModelBlockState == null ? state : context.bakedModelBlockState,
-                            pos, poseStack, builder, true, randomsource, state.getSeed(pos), OverlayTexture.NO_OVERLAY,
-                            model.getModelData(level, pos, state, level.getModelData(pos)),
-                            renderType);
-                }
+                context.getPreparer().accept(poseStack);
+                blockRenderer.getModelRenderer().tesselateBlock(level, model,
+                        context.getBakedModelBlockState() == null ? state : context.getBakedModelBlockState(),
+                        pos, poseStack, builder, true, randomsource, state.getSeed(pos), OverlayTexture.NO_OVERLAY,
+                        model.getModelData(level, pos, state, level.getModelData(pos)),
+                        renderType);
                 poseStack.popPose();
             }
-            if (context.needRenderAdditional) {
+            if (context.hasAdditionalRender()) {
                 poseStack.pushPose();
                 poseStack.translate(pos.getX(), pos.getY(), pos.getZ());
                 fixedModelBlockEntity.renderAdditionalAsync(context, poseStack);

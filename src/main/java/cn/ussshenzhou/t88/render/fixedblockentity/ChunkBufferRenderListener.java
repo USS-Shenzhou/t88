@@ -1,10 +1,8 @@
-package cn.ussshenzhou.t88.render;
+package cn.ussshenzhou.t88.render.fixedblockentity;
 
 import cn.ussshenzhou.t88.render.event.T88RenderChunkBufferTypePrepareEvent;
 import cn.ussshenzhou.t88.render.event.T88RenderLevelStageEvent;
-import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.math.Axis;
-import net.minecraft.client.Camera;
 import net.minecraft.client.renderer.RenderType;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.fml.common.EventBusSubscriber;
@@ -32,6 +30,7 @@ public class ChunkBufferRenderListener {
 
     @SubscribeEvent
     public static void renderChunkBufferRenderType(T88RenderLevelStageEvent event) {
+
         var types = SectionBufferRenderTypeHelper.renderTypes.get(event.stage);
         if (types != null) {
             types.forEach(renderTypeWithPriority -> renderChunkBufferType(event, renderTypeWithPriority.renderType));

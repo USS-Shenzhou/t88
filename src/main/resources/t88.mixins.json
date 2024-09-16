@@ -19,7 +19,10 @@
     "MinecraftMixin",
     "RenderTypeMixin",
     "SectionCompilerMixin",
-    "SliderButtonAccessor"
+    "SliderButtonAccessor",
+    "SodiumChunkBuilderMeshingTaskMixin",
+    "SodiumDefaultTerrainRenderPassesMixin",
+    "SodiumSodiumWorldRendererMixin"
   ],
   "injectors": {
     "defaultRequire": 1
