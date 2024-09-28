@@ -35,8 +35,8 @@ public class ModKeyInput {
             InputConstants.Type.KEYSYM, GLFW.GLFW_KEY_A, "key.categories.t88"
     );
     public static final KeyMapping CLEAR_ANALYZER = new KeyMapping(
-            "key.t88.clear_recorder", KeyConflictContext.IN_GAME, KeyModifier.CONTROL,
-            InputConstants.Type.KEYSYM, GLFW.GLFW_KEY_A, "key.categories.t88"
+            "key.t88.clear_recorder", KeyConflictContext.IN_GAME, KeyModifier.NONE,
+            InputConstants.Type.KEYSYM, GLFW.GLFW_KEY_UNKNOWN, "key.categories.t88"
     );
     public static final KeyMapping OPEN_WATCHER = new KeyMapping(
             "key.t88.open_watcher", KeyConflictContext.IN_GAME, KeyModifier.ALT,

@@ -85,7 +85,7 @@ public abstract class SectionCompilerMixin {
         return renderType.mode();
     }
 
-    @Redirect(method = "getOrBeginLayer", at = @At(value = "FIELD", target = "Lcom/mojang/blaze3d/vertex/DefaultVertexFormat;BLOCK:Lcom/mojang/blaze3d/vertex/VertexFormat;"))
+    @Redirect(method = "getOrBeginLayer", at = @At(value = "FIELD", target = "Lcom/mojang/blaze3d/vertex/DefaultVertexFormat;BLOCK:Lcom/mojang/blaze3d/vertex/VertexFormat;"), require = 0)
     private VertexFormat t88FormatDecidedByRenderType(@Local(argsOnly = true) RenderType renderType) {
         return renderType.format();
     }
