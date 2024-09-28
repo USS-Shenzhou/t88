@@ -2,6 +2,8 @@ package cn.ussshenzhou.t88.mixin;
 
 import cn.ussshenzhou.t88.render.fixedblockentity.IFixedModelBlockEntity;
 import cn.ussshenzhou.t88.render.fixedblockentity.VanillaSectionCompileContext;
+import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
+import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
 import com.llamalad7.mixinextras.sugar.Local;
 import com.mojang.blaze3d.vertex.*;
 import net.minecraft.client.renderer.RenderType;
@@ -85,8 +87,8 @@ public abstract class SectionCompilerMixin {
         return renderType.mode();
     }
 
-    @Redirect(method = "getOrBeginLayer", at = @At(value = "FIELD", target = "Lcom/mojang/blaze3d/vertex/DefaultVertexFormat;BLOCK:Lcom/mojang/blaze3d/vertex/VertexFormat;"), require = 0)
-    private VertexFormat t88FormatDecidedByRenderType(@Local(argsOnly = true) RenderType renderType) {
+    @WrapOperation(method = "getOrBeginLayer", at = @At(value = "FIELD", target = "Lcom/mojang/blaze3d/vertex/DefaultVertexFormat;BLOCK:Lcom/mojang/blaze3d/vertex/VertexFormat;"))
+    private VertexFormat t88FormatDecidedByRenderType(Operation<VertexFormat> original, @Local(argsOnly = true) RenderType renderType) {
         return renderType.format();
     }
 }
