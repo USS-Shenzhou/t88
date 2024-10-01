@@ -8,7 +8,10 @@ import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
 import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
 import com.mojang.logging.LogUtils;
 import net.minecraft.client.renderer.RenderType;
+import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
+import org.spongepowered.asm.mixin.Mutable;
+import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
@@ -32,6 +35,11 @@ public abstract class RenderTypeMixin {
         }
         LogUtils.getLogger().info("--------------------------------------------------------------------------------");
     }
+
+    @Mutable
+    @Shadow
+    @Final
+    public static ImmutableList<RenderType> CHUNK_BUFFER_LAYERS;
 
     @WrapOperation(method = "<clinit>", at = @At(value = "FIELD", target = "Lnet/minecraft/client/renderer/RenderType;CHUNK_BUFFER_LAYERS:Lcom/google/common/collect/ImmutableList;"))
     private static void t88InitExtendedChunkBufferRenderTypes(ImmutableList<RenderType> value, Operation<Void> original) {
