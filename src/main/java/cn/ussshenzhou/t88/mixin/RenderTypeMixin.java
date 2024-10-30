@@ -48,15 +48,4 @@ public abstract class RenderTypeMixin {
         SectionBufferRenderTypeHelper.T88_EXTENDED_CHUNK_BUFFER_RENDER_TYPES.addAll(SectionBufferRenderTypeHelper.T88_ADDITIONAL_CHUNK_BUFFER_RENDER_TYPES);
         original.call(ImmutableList.builder().addAll(value).addAll(SectionBufferRenderTypeHelper.T88_ADDITIONAL_CHUNK_BUFFER_RENDER_TYPES).build());
     }
-
-    @ModifyReturnValue(method = "chunkBufferLayers", at = @At("RETURN"))
-    private static List<RenderType> t88ExtendChunkBufferRenderType(List<RenderType> original) {
-        if (original instanceof ImmutableList) {
-            return SectionBufferRenderTypeHelper.T88_EXTENDED_CHUNK_BUFFER_RENDER_TYPES;
-        } else {
-            original.addAll(SectionBufferRenderTypeHelper.T88_ADDITIONAL_CHUNK_BUFFER_RENDER_TYPES);
-            return original;
-        }
-    }
-
 }
