@@ -2,6 +2,7 @@ package cn.ussshenzhou.t88.mixin;
 
 import cn.ussshenzhou.t88.render.event.T88RenderLevelStageEvent;
 import com.mojang.blaze3d.vertex.PoseStack;
+import com.mojang.logging.LogUtils;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.*;
 import net.minecraft.client.renderer.culling.Frustum;
@@ -33,12 +34,15 @@ public abstract class LevelRendererMixin {
 
     @Inject(method = "renderSectionLayer", at = @At("RETURN"))
     private void t88FireT88RenderLevelStageEvent(RenderType renderType, double x, double y, double z, Matrix4f frustrumMatrix, Matrix4f projectionMatrix, CallbackInfo ci) {
-        NeoForge.EVENT_BUS.post(
-                new T88RenderLevelStageEvent(RenderLevelStageEvent.Stage.fromRenderType(renderType),
-                        (LevelRenderer) (Object) this,
-                        new PoseStack(), projectionMatrix, ticks,
-                        minecraft.gameRenderer.getMainCamera(), getFrustum()
-                )
-        );
+        var stage = RenderLevelStageEvent.Stage.fromRenderType(renderType);
+        if (stage != null) {
+            NeoForge.EVENT_BUS.post(
+                    new T88RenderLevelStageEvent(stage,
+                            (LevelRenderer) (Object) this,
+                            new PoseStack(), projectionMatrix, ticks,
+                            minecraft.gameRenderer.getMainCamera(), getFrustum()
+                    )
+            );
+        }
     }
 }
