@@ -163,7 +163,7 @@ public class NetworkWatcher {
     }
 
     public static SenderInfo getSenderInfo(Packet<?> packet) {
-        String clazz;
+        /*String clazz;
         if (packet instanceof ClientboundCustomPayloadPacket p) {
             clazz = p.payload().getClass().getSimpleName();
         } else if (packet instanceof ServerboundCustomPayloadPacket p) {
@@ -171,8 +171,8 @@ public class NetworkWatcher {
         } else {
             var s = packet.getClass().getName().split("\\.");
             clazz = s[s.length - 1];
-        }
-        return new SenderInfo(findModId(packet), clazz);
+        }*/
+        return new SenderInfo(findModId(packet), packet.type().id().toString());
     }
 
     public static String findModId(Packet<?> packet) {
