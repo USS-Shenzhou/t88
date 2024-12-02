@@ -20,8 +20,7 @@ import org.joml.Matrix4f;
 
 import javax.annotation.Nullable;
 import java.time.Duration;
-import java.util.Collection;
-import java.util.LinkedList;
+import java.util.*;
 import java.util.stream.Stream;
 
 /**
@@ -186,9 +185,25 @@ public abstract class TComponent implements TWidget {
         return ImmutableList.copyOf(this.children);
     }
 
+    public static <T> Iterable<T> reversed(List<T> list) {
+        return () -> new Iterator<>() {
+            private final ListIterator<T> iter = list.listIterator(list.size());
+
+            @Override
+            public boolean hasNext() {
+                return iter.hasPrevious();
+            }
+
+            @Override
+            public T next() {
+                return iter.previous();
+            }
+        };
+    }
+
     @Override
     public boolean mouseClicked(double pMouseX, double pMouseY, int pButton) {
-        for (TWidget tWidget : children) {
+        for (TWidget tWidget : reversed(children)) {
             if (!tWidget.isVisibleT()) {
                 continue;
             }
@@ -201,7 +216,7 @@ public abstract class TComponent implements TWidget {
 
     @Override
     public boolean mouseReleased(double pMouseX, double pMouseY, int pButton) {
-        for (TWidget tWidget : children) {
+        for (TWidget tWidget : reversed(children)) {
             if (!tWidget.isVisibleT()) {
                 continue;
             }
@@ -214,7 +229,7 @@ public abstract class TComponent implements TWidget {
 
     @Override
     public boolean mouseDragged(double pMouseX, double pMouseY, int pButton, double pDragX, double pDragY) {
-        for (TWidget tWidget : children) {
+        for (TWidget tWidget : reversed(children)) {
             if (!tWidget.isVisibleT()) {
                 continue;
             }
@@ -227,7 +242,7 @@ public abstract class TComponent implements TWidget {
 
     @Override
     public boolean mouseScrolled(double pMouseX, double pMouseY, double deltaX, double deltaY) {
-        for (TWidget tWidget : children) {
+        for (TWidget tWidget : reversed(children)) {
             if (!tWidget.isVisibleT()) {
                 continue;
             }
@@ -240,7 +255,7 @@ public abstract class TComponent implements TWidget {
 
     @Override
     public boolean keyPressed(int pKeyCode, int pScanCode, int pModifiers) {
-        for (TWidget tWidget : children) {
+        for (TWidget tWidget : reversed(children)) {
             if (!tWidget.isVisibleT()) {
                 continue;
             }
@@ -253,7 +268,7 @@ public abstract class TComponent implements TWidget {
 
     @Override
     public boolean keyReleased(int pKeyCode, int pScanCode, int pModifiers) {
-        for (TWidget tWidget : children) {
+        for (TWidget tWidget : reversed(children)) {
             if (!tWidget.isVisibleT()) {
                 continue;
             }
@@ -266,7 +281,7 @@ public abstract class TComponent implements TWidget {
 
     @Override
     public boolean charTyped(char pCodePoint, int pModifiers) {
-        for (TWidget tWidget : children) {
+        for (TWidget tWidget : reversed(children)) {
             if (!tWidget.isVisibleT()) {
                 continue;
             }
@@ -279,7 +294,7 @@ public abstract class TComponent implements TWidget {
 
     @Override
     public void onFinalClose() {
-        children.forEach(TWidget::onFinalClose);
+        reversed(children).forEach(TWidget::onFinalClose);
     }
 
     @Override

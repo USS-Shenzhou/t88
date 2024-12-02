@@ -61,4 +61,24 @@ public class LayoutHelper {
     public static void BSameAsA(TWidget b, TWidget a) {
         b.setAbsBounds(a.getXT(), a.getYT(), a.getSize());
     }
+
+    public static TWidget moveUp(TWidget widget, int distance) {
+        widget.setAbsBounds(widget.getXT(), widget.getYT() - distance, widget.getSize());
+        return widget;
+    }
+
+    public static TWidget moveDown(TWidget widget, int distance) {
+        widget.setAbsBounds(widget.getXT(), widget.getYT() + distance, widget.getSize());
+        return widget;
+    }
+
+    public static TWidget moveLeft(TWidget widget, int distance) {
+        widget.setAbsBounds(widget.getXT() - distance, widget.getYT(), widget.getSize());
+        return widget;
+    }
+
+    public static TWidget moveRight(TWidget widget, int distance) {
+        widget.setAbsBounds(widget.getXT() + distance, widget.getYT(), widget.getSize());
+        return widget;
+    }
 }

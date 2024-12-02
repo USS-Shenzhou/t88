@@ -96,6 +96,7 @@ public class THoverSensitiveImageButton extends TPanel {
     protected void renderChildren(GuiGraphics graphics, int pMouseX, int pMouseY, float pPartialTick) {
         for (TWidget tWidget : children) {
             if (tWidget.isVisibleT()) {
+                graphics.pose().translate(0, 0, 0.1);
                 if (tWidget == text && backgroundImageHovered.isVisibleT()) {
                     renderText(graphics, pMouseX, pMouseY, pPartialTick);
                     continue;
@@ -151,7 +152,7 @@ public class THoverSensitiveImageButton extends TPanel {
     }
 
     public void renderTextInternal(GuiGraphics graphics, int pMouseX, int pMouseY, float pPartialTick, float scale, float maxScale) {
-        float compensationRelative = (1 - scale) / (maxScale - 1) * padding;
+        float compensationRelative = padding == 0 ? 0 : (1 - scale) / (maxScale - 1) * padding;
         graphics.pose().pushPose();
         graphics.pose().translate(
                 (1 - scale) * text.getXT() + compensationRelative,

@@ -12,8 +12,7 @@ import net.minecraft.network.chat.Component;
 import net.neoforged.neoforge.client.ClientHooks;
 import net.neoforged.neoforge.common.NeoForge;
 
-import java.util.Collection;
-import java.util.LinkedList;
+import java.util.*;
 import java.util.stream.Stream;
 
 /**
@@ -100,10 +99,26 @@ public abstract class TScreen extends Screen {
         super.renderBackground(graphics, pMouseX, pMouseY, pPartialTick);
     }
 
+    public static <T> Iterable<T> reversed(List<T> list) {
+        return () -> new Iterator<>() {
+            private final ListIterator<T> iter = list.listIterator(list.size());
+
+            @Override
+            public boolean hasNext() {
+                return iter.hasPrevious();
+            }
+
+            @Override
+            public T next() {
+                return iter.previous();
+            }
+        };
+    }
+
     @Override
     public boolean mouseClicked(double pMouseX, double pMouseY, int pButton) {
         NeoForge.EVENT_BUS.post(new ClearEditBoxFocusEvent(pMouseX, pMouseY));
-        for (TWidget tWidget : tChildren) {
+        for (TWidget tWidget : reversed(tChildren)) {
             if (!tWidget.isVisibleT()) {
                 continue;
             }
@@ -121,7 +136,7 @@ public abstract class TScreen extends Screen {
     @Override
     public boolean mouseReleased(double pMouseX, double pMouseY, int pButton) {
         this.setDragging(false);
-        for (TWidget tWidget : tChildren) {
+        for (TWidget tWidget : reversed(tChildren)) {
             if (!tWidget.isVisibleT()) {
                 continue;
             }
@@ -134,7 +149,7 @@ public abstract class TScreen extends Screen {
 
     @Override
     public boolean mouseDragged(double pMouseX, double pMouseY, int pButton, double pDragX, double pDragY) {
-        for (TWidget tWidget : tChildren) {
+        for (TWidget tWidget : reversed(tChildren)) {
             if (!tWidget.isVisibleT()) {
                 continue;
             }
@@ -147,7 +162,7 @@ public abstract class TScreen extends Screen {
 
     @Override
     public boolean mouseScrolled(double pMouseX, double pMouseY, double deltaX, double deltaY) {
-        for (TWidget tWidget : tChildren) {
+        for (TWidget tWidget : reversed(tChildren)) {
             if (!tWidget.isVisibleT()) {
                 continue;
             }
@@ -186,7 +201,7 @@ public abstract class TScreen extends Screen {
 
     public void onClose(boolean isFinal) {
         if (isFinal) {
-            tChildren.forEach(TWidget::onFinalClose);
+            reversed(tChildren).forEach(TWidget::onFinalClose);
         }
         ClientHooks.popGuiLayer(Minecraft.getInstance());
     }
