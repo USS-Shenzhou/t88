@@ -67,6 +67,9 @@ public class HudManager {
 
     @SubscribeEvent
     public static void onRenderHud(RenderGuiEvent.Post event) {
+        if (Minecraft.getInstance().options.hideGui) {
+            return;
+        }
         var graphics = event.getGuiGraphics();
         int mouseX = (int) MouseHelper.getMouseX();
         int mouseY = (int) MouseHelper.getMouseY();
@@ -82,6 +85,9 @@ public class HudManager {
     @SuppressWarnings("deprecation")
     @SubscribeEvent
     public static void renderHudAfterScreen(GameRendererRenderedEvent event) {
+        if (Minecraft.getInstance().options.hideGui) {
+            return;
+        }
         var graphics = event.getGraphics();
         int mouseX = (int) MouseHelper.getMouseX();
         int mouseY = (int) MouseHelper.getMouseY();

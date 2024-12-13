@@ -121,7 +121,7 @@ public class TVerticalScrollContainer extends TPanel implements TScrollContainer
     @Override
     public boolean mouseDragged(double pMouseX, double pMouseY, int pButton, double pDragX, double pDragY) {
         if (isInRange(pMouseX, pMouseY, scrollbarGap, scrollbarGap)) {
-            for (TWidget tWidget : children) {
+            for (TWidget tWidget : reversed(children)) {
                 if (tWidget.mouseDragged(pMouseX, pMouseY + scrollAmount, pButton, pDragX, pDragY)) {
                     return true;
                 }
@@ -133,10 +133,10 @@ public class TVerticalScrollContainer extends TPanel implements TScrollContainer
                 this.addScrollAmount(-pDragY * d1 / speedFactor);
             } else {
                 this.addScrollAmount(pDragY / speedFactor);
-                return true;
             }
+            return true;
         }
-        return super.mouseDragged(pMouseX, pMouseY, pButton, pDragX, pDragY);
+        return false;
     }
 
     @Override
