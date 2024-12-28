@@ -78,7 +78,7 @@ public class ChartPanel extends TPanel {
             } else if (bytes < 1000 * 1000) {
                 s.append(String.format("%.1f §7Kb§r", bytes / 1024f));
             } else {
-                s.append(String.format("%.1f §7Mb§r", bytes / (1024 * 1024f)));
+                s.append(String.format("%.2f §7Mb§r", bytes / (1024 * 1024f)));
             }
         } else {
             if (bytes < 1000) {
@@ -86,7 +86,7 @@ public class ChartPanel extends TPanel {
             } else if (bytes < 1000 * 1000) {
                 s.append(String.format("%.1f §7KiB§r", bytes / 1024f));
             } else {
-                s.append(String.format("%.1f §7MiB§r", bytes / (1024 * 1024f)));
+                s.append(String.format("%.2f §7MiB§r", bytes / (1024 * 1024f)));
             }
         }
     }

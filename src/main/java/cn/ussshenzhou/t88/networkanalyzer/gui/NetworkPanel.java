@@ -110,7 +110,7 @@ public abstract class NetworkPanel extends TPanel {
             } else if (bytes < 1000 * 1000) {
                 s.append(String.format("%.1f §7Kbps§r", bytes / 1024f));
             } else {
-                s.append(String.format("%.1f §7Mbps§r", bytes / 1024 * 1024f));
+                s.append(String.format("%.2f §7Mbps§r", bytes / (1024 * 1024f)));
             }
         } else {
             if (bytes < 1000) {
@@ -118,7 +118,7 @@ public abstract class NetworkPanel extends TPanel {
             } else if (bytes < 1000 * 1000) {
                 s.append(String.format("%.1f §7KiB/S§r", bytes / 1024f));
             } else {
-                s.append(String.format("%.1f §7MiB/S§r", bytes / 1024 * 1024f));
+                s.append(String.format("%.2f §7MiB/S§r", bytes / (1024 * 1024f)));
             }
         }
     }
