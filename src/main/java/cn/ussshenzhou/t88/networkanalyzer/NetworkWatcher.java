@@ -43,7 +43,6 @@ import java.util.concurrent.ConcurrentHashMap;
 /**
  * @author USS_Shenzhou
  */
-@SuppressWarnings("UnstableApiUsage")
 public class NetworkWatcher {
 
     public static final Object NULL = new Object();
@@ -56,110 +55,11 @@ public class NetworkWatcher {
     }};
     public static final ConcurrentHashMap<ResourceLocation, Object> MOD_ID_BLACKLIST = new ConcurrentHashMap<>();
 
-    public static void record(Packet<?> packet, TR dir) {
+    public static void record(Packet<?> packet, TR dir, int size) {
         CompletableFuture.runAsync(() -> {
             var map = dir == TR.T ? SENT : RECEIVED;
-            int size;
-            if (packet instanceof ServerboundCustomPayloadPacket p) {
-                size = getCustomPacketSize(p);
-            } else if (packet instanceof ClientboundCustomPayloadPacket p) {
-                size = getCustomPacketSize(p);
-            } else {
-                size = getPacketSizeFromWrite(packet);
-            }
             recordInternal(map, getSenderInfo(packet), size);
         });
-    }
-
-    private static int getPacketSizeFromWrite(Packet<?> packet) {
-        try {
-            var method = packet.getClass().getDeclaredMethod("write", FriendlyByteBuf.class);
-            method.setAccessible(true);
-            @SuppressWarnings("DataFlowIssue")
-            var buf = new RegistryFriendlyByteBuf(Unpooled.buffer(), getRegistryAccess(), ConnectionType.NEOFORGE);
-            method.invoke(packet, buf);
-            int size = buf.writerIndex();
-            buf.release();
-            return size;
-        } catch (NoSuchMethodException | IllegalAccessException | InvocationTargetException ignored) {
-        }
-        return 0;
-    }
-
-    private static int getCustomPacketSize(ServerboundCustomPayloadPacket packet) {
-        return getSizeFromCustomPacketPayload(packet.payload());
-    }
-
-    private static int getCustomPacketSize(ClientboundCustomPayloadPacket packet) {
-        return getSizeFromCustomPacketPayload(packet.payload());
-    }
-
-    /**
-     * @see NetworkRegistry#BUILTIN_PAYLOADS
-     */
-    private static final Map<ResourceLocation, StreamCodec<FriendlyByteBuf, ? extends CustomPacketPayload>> BUILTIN_PAYLOADS = ImmutableMap.of(
-            MinecraftRegisterPayload.ID, MinecraftRegisterPayload.STREAM_CODEC,
-            MinecraftUnregisterPayload.ID, MinecraftUnregisterPayload.STREAM_CODEC,
-            ModdedNetworkQueryPayload.ID, ModdedNetworkQueryPayload.STREAM_CODEC,
-            ModdedNetworkPayload.ID, ModdedNetworkPayload.STREAM_CODEC,
-            ModdedNetworkSetupFailedPayload.ID, ModdedNetworkSetupFailedPayload.STREAM_CODEC);
-
-    private static final Map<ConnectionProtocol, Map<ResourceLocation, PayloadRegistration<?>>> PAYLOAD_REGISTRATIONS;
-
-    static {
-        try {
-            var f = NetworkRegistry.class.getDeclaredField("PAYLOAD_REGISTRATIONS");
-            f.setAccessible(true);
-            //noinspection unchecked
-            PAYLOAD_REGISTRATIONS = (Map<ConnectionProtocol, Map<ResourceLocation, PayloadRegistration<?>>>) f.get(null);
-        } catch (NoSuchFieldException | IllegalAccessException e) {
-            throw new RuntimeException(e);
-        }
-    }
-
-    private static int getSizeFromCustomPacketPayload(CustomPacketPayload payload) {
-        if (SIZE_BLACKLIST.containsKey(payload.type().id())) {
-            return 0;
-        }
-        @SuppressWarnings("DataFlowIssue")
-        var buf = new RegistryFriendlyByteBuf(Unpooled.buffer(), getRegistryAccess(), ConnectionType.NEOFORGE);
-        StreamCodec<? super FriendlyByteBuf, ? extends CustomPacketPayload> codec = null;
-        var reg = PAYLOAD_REGISTRATIONS.get(ConnectionProtocol.PLAY).get(payload.type().id());
-        if (reg != null) {
-            //noinspection unchecked
-            codec = (StreamCodec<? super FriendlyByteBuf, ? extends CustomPacketPayload>) reg.codec();
-        }
-        if (codec == null) {
-            codec = BUILTIN_PAYLOADS.get(payload.type().id());
-        }
-        if (codec == null) {
-            return 0;
-        }
-        net.minecraft.network.codec.StreamCodec<? super FriendlyByteBuf, ? extends CustomPacketPayload> finalCodec = codec;
-        Arrays.stream(codec.getClass().getMethods()).filter(method -> "encode".equals(method.getName())).findAny().ifPresent(method -> {
-            method.setAccessible(true);
-            try {
-                method.invoke(finalCodec, buf, payload);
-            } catch (Exception e) {
-                SIZE_BLACKLIST.put(payload.type().id(), NULL);
-                LogUtils.getLogger().error("Failed trying getting the size of CustomPacketPayload<{}> by invoke <{} # {}>. It will do no harm.",
-                        payload.type().id(), finalCodec, method);
-                LogUtils.getLogger().error("<{}> has been added to a temp blacklist to prevent filling the log.",
-                        payload.type().id());
-                LogUtils.getLogger().error(e.getMessage());
-            }
-        });
-        int size = buf.writerIndex();
-        buf.release();
-        return size;
-    }
-
-    private static RegistryAccess getRegistryAccess() {
-        if (FMLEnvironment.dist == Dist.CLIENT) {
-            return Minecraft.getInstance().level == null ? null : Minecraft.getInstance().level.registryAccess();
-        } else {
-            return ((MinecraftServer) LogicalSidedProvider.WORKQUEUE.get(LogicalSide.SERVER)).registryAccess();
-        }
     }
 
     public static SenderInfo getSenderInfo(Packet<?> packet) {

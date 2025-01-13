@@ -5,8 +5,9 @@
   "compatibilityLevel": "JAVA_8",
   "refmap": "t88.refmap.json",
   "mixins": [
-    "ConnectionMixin",
-    "MutableComponentAccessor"
+    "MutableComponentAccessor",
+    "PacketDecoderMixin",
+    "PacketEncoderMixin"
   ],
   "client": [
     "AbstractSelectionListAccessor",
@@ -14,6 +15,8 @@
     "EditBoxAccessor",
     "GameRendererMixin",
     "GuiGraphicsMixin",
+    "IrisSodiumProgramsMixin",
+    "IrisWorldRenderingPhaseMixin",
     "LevelRendererMixin",
     "MinecraftMixin",
     "RenderTypeMixin",
@@ -21,9 +24,7 @@
     "SliderButtonAccessor",
     "SodiumChunkBuilderMeshingTaskMixin",
     "SodiumDefaultTerrainRenderPassesMixin",
-    "SodiumSodiumWorldRendererMixin",
-    "IrisSodiumProgramsMixin",
-    "IrisWorldRenderingPhaseMixin"
+    "SodiumSodiumWorldRendererMixin"
   ],
   "injectors": {
     "defaultRequire": 1

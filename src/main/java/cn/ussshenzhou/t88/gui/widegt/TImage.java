@@ -70,8 +70,7 @@ public class TImage extends TPanel {
 
     @SuppressWarnings("AlibabaLowerCamelCaseVariableNaming")
     protected void loadImageWH() {
-        try {
-            NativeImage n = NativeImage.read(Minecraft.getInstance().getResourceManager().getResource(imageLocation).get().open());
+        try (NativeImage n = NativeImage.read(Minecraft.getInstance().getResourceManager().getResource(imageLocation).get().open())) {
             imageWidth = n.getWidth();
             imageHeight = n.getHeight();
         } catch (IOException | NoSuchElementException e) {

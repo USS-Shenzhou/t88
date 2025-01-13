@@ -11,8 +11,8 @@
   "gui.t88.net.options.unit": "单位",
   "gui.t88.net.options.byte": "Byte",
   "gui.t88.net.options.bit": "Bit",
-  "gui.t88.net.options.client.tooltip": "出站/入站网络流量。\n仅记录通过net.minecraft.network.Connection传输的PLAY阶段有效内容。",
-  "gui.t88.net.options.server.tooltip": "出站/入站网络流量。\n仅记录通过net.minecraft.network.Connection传输的PLAY阶段有效内容。\n从服务器获取，可能存在延迟或重复。",
+  "gui.t88.net.options.client.tooltip": "出站/入站网络流量。\n不考虑网络包压缩和加密。",
+  "gui.t88.net.options.server.tooltip": "出站/入站网络流量。\n不考虑网络包压缩和加密。\n从服务器获取，可能存在延迟或重复。",
   "gui.t88.net.pause": "暂停",
   "gui.t88.net.resume": "继续"
 }
