@@ -21,6 +21,6 @@ public class PacketDecoderMixin {
 
     @Inject(method = "decode", at = @At(value = "INVOKE", target = "Lnet/minecraft/util/profiling/jfr/JvmProfiler;onPacketReceived(Lnet/minecraft/network/ConnectionProtocol;Lnet/minecraft/network/protocol/PacketType;Ljava/net/SocketAddress;I)V"))
     private void t88RecordReceive(ChannelHandlerContext context, ByteBuf in, List<Object> out, CallbackInfo ci, @Local int size, @Local Packet<?> packet) {
-        NetworkWatcher.record(packet, NetworkWatcher.TR.T, size);
+        NetworkWatcher.record(packet, NetworkWatcher.TR.R, size);
     }
 }
