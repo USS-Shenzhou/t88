@@ -4,8 +4,10 @@ import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.item.ItemStack;
 
 import java.util.Arrays;
+import java.util.Iterator;
 import java.util.List;
 import java.util.stream.Stream;
+import java.util.stream.StreamSupport;
 
 /**
  * @author USS_Shenzhou
@@ -13,15 +15,11 @@ import java.util.stream.Stream;
 public class InventoryHelper {
 
     public static List<ItemStack> getAllAsList(Inventory inventory) {
-        return Stream.of(inventory.items, inventory.armor, inventory.offhand)
-                .flatMap(List::stream)
-                .filter(itemStack -> !itemStack.isEmpty())
-                .toList();
+        return getAllAsStream(inventory).toList();
     }
 
     public static Stream<ItemStack> getAllAsStream(Inventory inventory) {
-        return Stream.of(inventory.items, inventory.armor, inventory.offhand)
-                .flatMap(List::stream)
+        return StreamSupport.stream(inventory.spliterator(),false)
                 .filter(itemStack -> !itemStack.isEmpty());
     }
 

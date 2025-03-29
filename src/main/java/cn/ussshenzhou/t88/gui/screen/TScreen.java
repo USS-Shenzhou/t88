@@ -48,8 +48,6 @@ public abstract class TScreen extends Screen {
     @Override
     public void render(GuiGraphics graphics, int pMouseX, int pMouseY, float pPartialTick) {
         RenderSystem.setShaderColor(1, 1, 1, 1);
-        RenderSystem.enableBlend();
-        RenderSystem.defaultBlendFunc();
         renderBackGround(graphics, pMouseX, pMouseY, pPartialTick);
         graphics.pose().translate(0, 0, 500);
         graphics.pose().pushPose();

@@ -4,7 +4,12 @@ import com.mojang.brigadier.CommandDispatcher;
 import com.mojang.brigadier.ParseResults;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import net.minecraft.client.Minecraft;
+import net.minecraft.commands.CommandSource;
 import net.minecraft.commands.CommandSourceStack;
+import net.minecraft.network.chat.Component;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.level.GameRules;
+import net.neoforged.neoforge.client.ClientCommandHandler;
 
 import java.util.Map;
 import java.util.Optional;
@@ -32,7 +37,7 @@ public class TCommandConstrainedEditBox extends TConstrainedEditBox {
         if (value.startsWith("/")) {
             value = value.replaceFirst("/", "");
         }
-        CommandSourceStack sourceStack = Minecraft.getInstance().player.createCommandSourceStack();
+        var sourceStack = ClientCommandHandler.getSource();
         ParseResults<CommandSourceStack> parseResults = dispatcher.parse(value, sourceStack);
         Map<?, CommandSyntaxException> map = parseResults.getExceptions();
         if ((!map.isEmpty()) || parseResults.getContext().build(value).getNodes().isEmpty()) {

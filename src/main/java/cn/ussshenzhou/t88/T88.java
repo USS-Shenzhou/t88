@@ -31,7 +31,7 @@ public class T88 {
                 throw new RuntimeException("ForkJoinPool.getCommonPoolParallelism() should NOT be 1." +
                         " This may cause serious performance problem in Network Watcher." +
                         " If your machine has only 1 CPU core or running in a virtual environment," +
-                        " you can manually designate it to be bigger than 1 by using JVM argument -Djava.util.concurrent.ForkJoinPool.common.parallelism=2." +
+                        " you can manually designate it to be bigger than 1 by using JVM argument -Djava.util.concurrent.ForkJoinPool.common.parallelism=2. (8 is recommended)" +
                         " You can also use -Dt88.skip_parallelism_check=true to skip this check.");
             }
         }

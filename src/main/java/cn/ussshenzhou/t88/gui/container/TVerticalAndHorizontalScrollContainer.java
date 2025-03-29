@@ -6,6 +6,7 @@ import cn.ussshenzhou.t88.gui.widegt.TSelectList;
 import cn.ussshenzhou.t88.gui.widegt.TWidget;
 import com.mojang.blaze3d.systems.RenderSystem;
 import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.renderer.RenderType;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.Mth;
 import org.joml.Vector2d;
@@ -63,14 +64,12 @@ public class TVerticalAndHorizontalScrollContainer extends TPanel implements TSc
 
     @Override
     public void render(GuiGraphics guigraphics, int pMouseX, int pMouseY, float pPartialTick) {
-        RenderSystem.enableBlend();
         if (isScrollBarVisibleVertical()) {
             renderVerticalScrollBar(guigraphics);
         }
         if (isScrollBarVisibleHorizontal()) {
             renderHorizontalScrollBar(guigraphics);
         }
-        RenderSystem.disableBlend();
         super.render(guigraphics, pMouseX, pMouseY, pPartialTick);
     }
 
@@ -112,11 +111,11 @@ public class TVerticalAndHorizontalScrollContainer extends TPanel implements TSc
         );
     }
 
-    protected ResourceLocation getScrollerVerticalTexture(){
+    protected ResourceLocation getScrollerVerticalTexture() {
         return SCROLLER_VERTICAL;
     }
 
-    protected ResourceLocation getScrollerHorizontalTexture(){
+    protected ResourceLocation getScrollerHorizontalTexture() {
         return SCROLLER_HORIZONTAL;
     }
 
@@ -129,7 +128,7 @@ public class TVerticalAndHorizontalScrollContainer extends TPanel implements TSc
             l = this.getYT();
         }
         guiGraphics.fill(x1, this.getYT(), x1 + 6, this.getYT() + height, 0x80000000);
-        guiGraphics.blitSprite(getScrollerVerticalTexture(), x1, l, 6, k);
+        guiGraphics.blitSprite(RenderType::guiTextured, getScrollerVerticalTexture(), x1, l, 6, k);
     }
 
     protected void renderHorizontalScrollBar(GuiGraphics guiGraphics) {
@@ -142,7 +141,7 @@ public class TVerticalAndHorizontalScrollContainer extends TPanel implements TSc
             l = this.getXT();
         }
         guiGraphics.fill(this.getXT(), y1, this.getXT() + w, y1 + 6, 0x80000000);
-        guiGraphics.blitSprite(getScrollerHorizontalTexture(), l, y1, k, 6);
+        guiGraphics.blitSprite(RenderType::guiTextured, getScrollerHorizontalTexture(), l, y1, k, 6);
     }
 
     protected int getScrollBarVerticalX() {

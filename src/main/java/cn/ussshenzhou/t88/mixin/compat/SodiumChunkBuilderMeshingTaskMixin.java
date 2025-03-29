@@ -1,4 +1,4 @@
-package cn.ussshenzhou.t88.mixin;
+package cn.ussshenzhou.t88.mixin.compat;
 
 import cn.ussshenzhou.t88.render.fixedblockentity.IFixedModelBlockEntity;
 import cn.ussshenzhou.t88.render.fixedblockentity.SodiumSectionCompileContext;

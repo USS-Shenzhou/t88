@@ -6,6 +6,7 @@ import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.logging.LogUtils;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.renderer.RenderType;
 import net.minecraft.resources.ResourceLocation;
 
 import java.io.IOException;
@@ -85,21 +86,18 @@ public class TImage extends TPanel {
     public void render(GuiGraphics guigraphics, int pMouseX, int pMouseY, float pPartialTick) {
         if (imageLocation != null) {
             RenderSystem.setShaderColor(1, 1, 1, alpha);
-            RenderSystem.enableBlend();
-            RenderSystem.defaultBlendFunc();
-            RenderSystem.enableDepthTest();
             switch (imageFit) {
                 case FILL -> {
                     float panelWHRatio = width / (float) height;
                     float imageWHRatio = imageWidth / (float) imageHeight;
                     if (panelWHRatio > imageWHRatio) {
-                        guigraphics.blit(imageLocation, this.x, this.y, width, height,
-                                0, (imageHeight - imageWidth / panelWHRatio) / 2,
+                        guigraphics.blit(RenderType::guiTextured, imageLocation, this.x, this.y, width, height,
+                                0, (int) ((imageHeight - imageWidth / panelWHRatio) / 2),
                                 imageWidth, (int) (imageWidth / panelWHRatio),
                                 (int) (imageWidth * scale), (int) (imageHeight * scale));
                     } else {
-                        guigraphics.blit(imageLocation, this.x, this.y, width, height,
-                                (imageWidth - imageHeight * panelWHRatio) / 2, 0,
+                        guigraphics.blit(RenderType::guiTextured, imageLocation, this.x, this.y, width, height,
+                                (int) ((imageWidth - imageHeight * panelWHRatio) / 2), 0,
                                 (int) (imageHeight * panelWHRatio), imageHeight,
                                 (int) (imageWidth * scale), (int) (imageHeight * scale));
                     }
@@ -108,13 +106,13 @@ public class TImage extends TPanel {
                     float panelWHRatio = width / (float) height;
                     float imageWHRatio = imageWidth / (float) imageHeight;
                     if (panelWHRatio > imageWHRatio) {
-                        guigraphics.blit(imageLocation, (int) (this.x + (width - height * imageWHRatio) / 2), this.y,
+                        guigraphics.blit(RenderType::guiTextured, imageLocation, (int) (this.x + (width - height * imageWHRatio) / 2), this.y,
                                 (int) (height * imageWHRatio), height,
                                 0, 0,
                                 imageWidth, imageHeight,
                                 (int) (imageWidth * scale), (int) (imageHeight * scale));
                     } else {
-                        guigraphics.blit(imageLocation, this.x, (int) (this.y + (height - width / imageWHRatio) / 2),
+                        guigraphics.blit(RenderType::guiTextured, imageLocation, this.x, (int) (this.y + (height - width / imageWHRatio) / 2),
                                 width, (int) (width / imageWHRatio),
                                 0, 0,
                                 imageWidth, imageHeight,
@@ -122,9 +120,9 @@ public class TImage extends TPanel {
                     }
                 }
                 case STRETCH ->
-                        guigraphics.blit(imageLocation, this.x, this.y, width, height, 0, 0, imageWidth, imageHeight, (int) (imageWidth * scale), (int) (imageHeight * scale));
+                        guigraphics.blit(RenderType::guiTextured, imageLocation, this.x, this.y, width, height, 0, 0, imageWidth, imageHeight, (int) (imageWidth * scale), (int) (imageHeight * scale));
                 case TILE ->
-                        guigraphics.blit(imageLocation, this.x, this.y, width, height, 0, 0, width, height, (int) (imageWidth * scale), (int) (imageHeight * scale));
+                        guigraphics.blit(RenderType::guiTextured, imageLocation, this.x, this.y, width, height, 0, 0, width, height, (int) (imageWidth * scale), (int) (imageHeight * scale));
             }
             RenderSystem.setShaderColor(1, 1, 1, 1);
         }

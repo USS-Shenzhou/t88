@@ -15,16 +15,9 @@
     "EditBoxAccessor",
     "GameRendererMixin",
     "GuiGraphicsMixin",
-    "IrisSodiumProgramsMixin",
-    "IrisWorldRenderingPhaseMixin",
-    "LevelRendererMixin",
     "MinecraftMixin",
-    "RenderTypeMixin",
-    "SectionCompilerMixin",
-    "SliderButtonAccessor",
-    "SodiumChunkBuilderMeshingTaskMixin",
-    "SodiumDefaultTerrainRenderPassesMixin",
-    "SodiumSodiumWorldRendererMixin"
+    "SliderButtonAccessor"
+    CLASS_FOR_COMPAT
   ],
   "injectors": {
     "defaultRequire": 1

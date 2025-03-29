@@ -410,26 +410,6 @@ public abstract class TComponent implements TWidget {
         return false;
     }
 
-    public static void blitById(GuiGraphics graphics, int id, int x, int y, int width, int height, float uOffset, float vOffset, int uWidth, int vHeight, int textureWidth, int textureHeight) {
-        blitById(graphics, id, x, x + width, y, y + height, 0, uWidth, vHeight, uOffset, vOffset, textureWidth, textureHeight);
-    }
-
-    public static void blitById(GuiGraphics graphics, int id, int x0, int x1, int y0, int y1, int z, int uWidth, int vHeight, float uOffset, float vOffset, int textureWidth, int textureHeight) {
-        innerBlitById(graphics, id, x0, x1, y0, y1, z, (uOffset + 0.0F) / (float) textureWidth, (uOffset + (float) uWidth) / (float) textureWidth, (vOffset + 0.0F) / (float) textureHeight, (vOffset + (float) vHeight) / (float) textureHeight);
-    }
-
-    public static void innerBlitById(GuiGraphics graphics, int id, int x0, int x1, int y0, int y1, int z, float minU, float maxU, float minV, float maxV) {
-        RenderSystem.setShaderTexture(0, id);
-        RenderSystem.setShader(GameRenderer::getPositionTexShader);
-        Matrix4f matrix4f = graphics.pose().last().pose();
-        BufferBuilder bufferbuilder = Tesselator.getInstance().begin(VertexFormat.Mode.QUADS, DefaultVertexFormat.POSITION_TEX);
-        bufferbuilder.addVertex(matrix4f, (float) x0, (float) y0, (float) z).setUv(minU, minV);
-        bufferbuilder.addVertex(matrix4f, (float) x0, (float) y1, (float) z).setUv(minU, maxV);
-        bufferbuilder.addVertex(matrix4f, (float) x1, (float) y1, (float) z).setUv(maxU, maxV);
-        bufferbuilder.addVertex(matrix4f, (float) x1, (float) y0, (float) z).setUv(maxU, minV);
-        BufferUploader.drawWithShader(bufferbuilder.buildOrThrow());
-    }
-
     public void drawStringSingleLine(GuiGraphics graphics, Font font, Component text, float fontSize, HorizontalAlignment align, int minX, int maxX, int minY, @SuppressWarnings("AlibabaLowerCamelCaseVariableNaming") int maxYOnlyForScissor, int color) {
         drawStringSingleLine(this, graphics, font, text, fontSize, align, minX, maxX, minY, maxYOnlyForScissor, color);
     }

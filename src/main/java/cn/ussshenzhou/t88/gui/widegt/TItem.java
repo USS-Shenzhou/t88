@@ -11,7 +11,7 @@ import net.minecraft.ReportedException;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.renderer.texture.OverlayTexture;
-import net.minecraft.client.resources.model.BakedModel;
+import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.item.Item;
@@ -98,24 +98,14 @@ public class TItem extends TPanel {
             return;
         }
         var mc = Minecraft.getInstance();
-        BakedModel bakedmodel = mc.getItemRenderer().getModel(item, mc.level, host, 42);
         float scale = itemSize / DEFAULT_SIZE;
         graphics.pose().pushPose();
         graphics.pose().translate(x + itemSize / 2, y + itemSize / 2, 0.01 * scale);
         try {
             graphics.pose().mulPose(new Matrix4f().scaling(1.0F, -1.0F, 1.0F));
             graphics.pose().scale(16.0F, 16.0F, 16.0F);
-            boolean flag = !bakedmodel.usesBlockLight();
-            if (flag) {
-                Lighting.setupForFlatItems();
-            }
             graphics.pose().scale(scale, scale, scale);
-            mc.getItemRenderer()
-                    .render(item, ItemDisplayContext.GUI, false, graphics.pose(), graphics.bufferSource(), 15728880, OverlayTexture.NO_OVERLAY, bakedmodel);
-            graphics.flush();
-            if (flag) {
-                Lighting.setupFor3DItems();
-            }
+            graphics.renderItem(item, 0, 0);
         } catch (Throwable throwable) {
             CrashReport crashreport = CrashReport.forThrowable(throwable, "Rendering item");
             CrashReportCategory crashreportcategory = crashreport.addCategory("Item being rendered");

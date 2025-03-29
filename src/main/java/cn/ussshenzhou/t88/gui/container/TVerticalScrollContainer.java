@@ -4,13 +4,16 @@ import cn.ussshenzhou.t88.gui.widegt.TPanel;
 import cn.ussshenzhou.t88.gui.widegt.TSelectList;
 import cn.ussshenzhou.t88.gui.widegt.TWidget;
 import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.renderer.RenderType;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.Mth;
 import org.joml.Vector2d;
 
 /**
  * @author USS_Shenzhou
  */
-public class TVerticalScrollContainer extends TPanel implements TScrollContainer{
+public class TVerticalScrollContainer extends TPanel implements TScrollContainer {
+    private static final ResourceLocation SCROLLER_SPRITE = ResourceLocation.withDefaultNamespace("widget/scroller");
     protected double scrollAmount = 0;
     protected double prevScrollAmount = 0;
     protected int bottomY = 0;
@@ -59,7 +62,8 @@ public class TVerticalScrollContainer extends TPanel implements TScrollContainer
                 (int) (this.x - scroll.x),
                 (int) (this.y - scroll.y),
                 (int) (this.x + width - scroll.x),
-                (int) (this.y + height - scroll.y));prepareTranslate(guigraphics, pPartialTick);
+                (int) (this.y + height - scroll.y));
+        prepareTranslate(guigraphics, pPartialTick);
         super.renderChildren(guigraphics, pMouseX, pMouseY, pPartialTick);
         endTranslate(guigraphics, pPartialTick);
         guigraphics.disableScissor();
@@ -106,7 +110,7 @@ public class TVerticalScrollContainer extends TPanel implements TScrollContainer
             }
 
             guiGraphics.fill(l1, this.getYT(), l1 + 6, this.getYT() + height, -16777216);
-            guiGraphics.blitSprite(TSelectList.SCROLLER_SPRITE, l1, l, 6, k);
+            guiGraphics.blitSprite(RenderType::guiTextured, SCROLLER_SPRITE, l1, l, 6, k);
         }
     }
 
@@ -175,7 +179,7 @@ public class TVerticalScrollContainer extends TPanel implements TScrollContainer
     }
 
     @Override
-    public Vector2d getScroll(){
+    public Vector2d getScroll() {
         return new Vector2d(0, scrollAmount);
     }
 

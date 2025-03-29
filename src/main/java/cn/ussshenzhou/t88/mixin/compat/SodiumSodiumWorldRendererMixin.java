@@ -1,4 +1,4 @@
-package cn.ussshenzhou.t88.mixin;
+package cn.ussshenzhou.t88.mixin.compat;
 
 import cn.ussshenzhou.t88.render.fixedblockentity.SectionBufferRenderTypeHelper;
 import com.llamalad7.mixinextras.sugar.Local;

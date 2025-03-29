@@ -10,6 +10,7 @@ import com.mojang.brigadier.suggestion.Suggestions;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.commands.CommandSourceStack;
+import net.neoforged.neoforge.client.ClientCommandHandler;
 import org.lwjgl.glfw.GLFW;
 
 import java.util.ArrayList;
@@ -87,7 +88,7 @@ public class TSuggestedEditBox extends TPanel {
     }
 
     public void updateSuggestion(String value) {
-        CommandSourceStack sourceStack = Minecraft.getInstance().player.createCommandSourceStack();
+        CommandSourceStack sourceStack = ClientCommandHandler.getSource();
         ParseResults<CommandSourceStack> parseResults = editBox.dispatcher.parse(value, sourceStack);
         try {
             CompletableFuture<Suggestions> suggestions = editBox.dispatcher.getCompletionSuggestions(parseResults, editBox.getCursorPosition());

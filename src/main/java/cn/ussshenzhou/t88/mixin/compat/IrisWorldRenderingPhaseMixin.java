@@ -1,4 +1,4 @@
-package cn.ussshenzhou.t88.mixin;
+package cn.ussshenzhou.t88.mixin.compat;
 
 import net.irisshaders.iris.pipeline.WorldRenderingPhase;
 import net.minecraft.client.renderer.RenderType;

@@ -162,7 +162,7 @@ public class TestScreen extends TScreen {
     @Override
     public void render(GuiGraphics graphics, int pMouseX, int pMouseY, float pPartialTick) {
         //graphics.drawString(Minecraft.getInstance().font, "ABCDE", 30, 30, 0xff000000);
-        Minecraft.getInstance().font.drawInBatch("ABCDE", 30, 30, 0xffff0000, false, graphics.pose().last().pose(), graphics.bufferSource(), Font.DisplayMode.NORMAL, 0, 15728880);
+        Minecraft.getInstance().font.drawInBatch("ABCDE", 30, 30, 0xffff0000, false, graphics.pose().last().pose(), graphics.bufferSource, Font.DisplayMode.NORMAL, 0, 15728880);
         super.render(graphics, pMouseX, pMouseY, pPartialTick);
     }
 }

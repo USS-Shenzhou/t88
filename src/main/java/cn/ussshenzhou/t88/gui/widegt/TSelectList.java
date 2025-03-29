@@ -28,6 +28,8 @@ import java.util.function.Consumer;
  * @author USS_Shenzhou
  */
 public class TSelectList<E> extends ObjectSelectionList<TSelectList<E>.Entry> implements TWidget {
+    private static final ResourceLocation SCROLLER_SPRITE = ResourceLocation.withDefaultNamespace("widget/scroller");
+    private static final ResourceLocation SCROLLER_BACKGROUND_SPRITE = ResourceLocation.withDefaultNamespace("widget/scroller_background");
     public static final int SCROLLBAR_WIDTH = 6;
     TComponent parent = null;
     TScreen parentScreen = null;
@@ -41,8 +43,7 @@ public class TSelectList<E> extends ObjectSelectionList<TSelectList<E>.Entry> im
 
     public TSelectList(int pItemHeight, int scrollbarGap) {
         super(Minecraft.getInstance(), 0, 0, 0, pItemHeight);
-        //this.setRenderTopAndBottom(false);
-        this.setRenderHeader(false, 0);
+        this.renderHeader = false;
         this.scrollbarGap = scrollbarGap;
     }
 
@@ -117,7 +118,7 @@ public class TSelectList<E> extends ObjectSelectionList<TSelectList<E>.Entry> im
 
     @Override
     public boolean mouseClicked(double pMouseX, double pMouseY, int pButton) {
-        this.updateScrollingState(pMouseX, pMouseY, pButton);
+        this.updateScrolling(pMouseX, pMouseY, pButton);
         if (!this.isMouseOver(pMouseX, pMouseY)) {
             this.setFocused(false);
         } else {
@@ -129,9 +130,6 @@ public class TSelectList<E> extends ObjectSelectionList<TSelectList<E>.Entry> im
                     this.setSelected(e);
                     return true;
                 }
-            } else if (pButton == 0) {
-                this.clickedHeader((int) (pMouseX - (double) (this.x + this.width / 2 - this.getRowWidth() / 2)), (int) (pMouseY - (double) this.y) + (int) this.getScrollAmount() - 4);
-                return true;
             }
         }
         return false;
@@ -169,7 +167,6 @@ public class TSelectList<E> extends ObjectSelectionList<TSelectList<E>.Entry> im
         this.setSelected(this.getEntry(i));
     }
 
-    @Override
     protected int getScrollbarPosition() {
         return width + x - 6;
     }
@@ -225,34 +222,31 @@ public class TSelectList<E> extends ObjectSelectionList<TSelectList<E>.Entry> im
 
     @Override
     protected void renderListBackground(GuiGraphics guiGraphics) {
-        RenderSystem.enableBlend();
         ResourceLocation resourcelocation = this.minecraft.level == null ? MENU_LIST_BACKGROUND : INWORLD_MENU_LIST_BACKGROUND;
         guiGraphics.blit(
+                RenderType::guiTextured,
                 resourcelocation,
                 this.getX(),
                 this.getY(),
                 (float) this.getRight(),
-                (float) (this.getBottom() + (int) this.getScrollAmount()),
+                (float) (this.getBottom() + (int) this.scrollAmount()),
                 this.scrollbarVisible() ? this.getWidth() : this.getRowWidth(),
                 this.getHeight(),
                 32,
                 32
         );
-        RenderSystem.disableBlend();
     }
 
     @Override
     protected void renderListSeparators(GuiGraphics guiGraphics) {
-        RenderSystem.enableBlend();
         ResourceLocation resourcelocation = this.minecraft.level == null ? Screen.HEADER_SEPARATOR : Screen.INWORLD_HEADER_SEPARATOR;
         ResourceLocation resourcelocation1 = this.minecraft.level == null ? Screen.FOOTER_SEPARATOR : Screen.INWORLD_FOOTER_SEPARATOR;
-        guiGraphics.blit(resourcelocation, this.getX(), this.getY() - 2, 0.0F, 0.0F,
+        guiGraphics.blit(RenderType::guiTextured, resourcelocation, this.getX(), this.getY() - 2, 0.0F, 0.0F,
                 this.scrollbarVisible() ? this.getWidth() : this.getRowWidth(),
                 2, 32, 2);
-        guiGraphics.blit(resourcelocation1, this.getX(), this.getBottom(), 0.0F, 0.0F,
+        guiGraphics.blit(RenderType::guiTextured, resourcelocation1, this.getX(), this.getBottom(), 0.0F, 0.0F,
                 this.scrollbarVisible() ? this.getWidth() : this.getRowWidth(),
                 2, 32, 2);
-        RenderSystem.disableBlend();
     }
 
     @Override
@@ -262,7 +256,7 @@ public class TSelectList<E> extends ObjectSelectionList<TSelectList<E>.Entry> im
         this.enableScissor(guiGraphics);
         if (AccessorProxy.AbstractSelectionListProxy.isRenderHeader(this)) {
             int i = this.getRowLeft();
-            int j = this.getY() + 4 - (int) this.getScrollAmount();
+            int j = this.getY() + 4 - (int) this.scrollAmount();
             this.renderHeader(guiGraphics, i, j);
         }
 
@@ -270,22 +264,13 @@ public class TSelectList<E> extends ObjectSelectionList<TSelectList<E>.Entry> im
         guiGraphics.disableScissor();
         this.renderListSeparators(guiGraphics);
         if (this.scrollbarVisible()) {
-            int l = this.getScrollbarPosition();
-            int i1 = (int) ((float) (this.height * this.height) / (float) this.getMaxPosition());
-            i1 = Mth.clamp(i1, 32, this.height - 8);
-            int k = (int) this.getScrollAmount() * (this.height - i1) / this.getMaxScroll() + this.getY();
-            if (k < this.getY()) {
-                k = this.getY();
-            }
-
-            RenderSystem.enableBlend();
-            guiGraphics.blitSprite(SCROLLER_BACKGROUND_SPRITE, l, this.getY(), 6, this.getHeight());
-            guiGraphics.blitSprite(SCROLLER_SPRITE, l, k, 6, i1);
-            RenderSystem.disableBlend();
+            int i = this.scrollBarX();
+            int j = this.scrollerHeight();
+            int k = this.scrollBarY();
+            guiGraphics.blitSprite(RenderType::guiTextured, SCROLLER_BACKGROUND_SPRITE, i, this.getY(), 6, this.getHeight());
+            guiGraphics.blitSprite(RenderType::guiTextured, SCROLLER_SPRITE, i, k, 6, j);
         }
-
         this.renderDecorations(guiGraphics, mouseX, mouseY);
-        RenderSystem.disableBlend();
     }
 
     @Override
