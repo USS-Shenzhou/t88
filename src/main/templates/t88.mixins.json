@@ -16,8 +16,9 @@
     "GameRendererMixin",
     "GuiGraphicsMixin",
     "MinecraftMixin",
-    "SliderButtonAccessor"
-    CLASS_FOR_COMPAT
+    "SliderButtonAccessor",
+    "AbstractContainerWidgetMixin",
+    "CLASS_FOR_COMPAT"
   ],
   "injectors": {
     "defaultRequire": 1

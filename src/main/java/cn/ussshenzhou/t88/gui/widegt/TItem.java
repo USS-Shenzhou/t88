@@ -64,16 +64,14 @@ public class TItem extends TPanel {
 
     @Override
     public void render(GuiGraphics graphics, int pMouseX, int pMouseY, float pPartialTick) {
+        graphics.pose().pushPose();
         renderItem(graphics, pMouseX, pMouseY, pPartialTick);
         float scale = itemSize / DEFAULT_SIZE;
         if (count.isVisibleT()) {
-            graphics.pose().pushPose();
-            graphics.pose().translate(0, 0, 1 * scale);
+            graphics.pose().translate(0, 0, 100 * scale);
             count.render(graphics, pMouseX, pMouseY, pPartialTick);
-            graphics.pose().popPose();
         }
         if (showTooltip && isInRange(pMouseX, pMouseY) && this.getTopParentScreen() != null) {
-            graphics.pose().pushPose();
             graphics.pose().translate(0, 0, 500 * scale);
             RenderSystem.disableScissor();
             graphics.renderTooltip(Minecraft.getInstance().font, item.getTooltipLines(Item.TooltipContext.of(Minecraft.getInstance().level), Minecraft.getInstance().player, TooltipFlag.NORMAL), item.getTooltipImage(), item, pMouseX, pMouseY);
@@ -88,34 +86,20 @@ public class TItem extends TPanel {
                 double d4 = (double) rectangle.height() * d0;
                 RenderSystem.enableScissor((int) d1, (int) d2, Math.max(0, (int) d3), Math.max(0, (int) d4));
             }
-            graphics.pose().popPose();
         }
         super.render(graphics, pMouseX, pMouseY, pPartialTick);
+        graphics.pose().popPose();
     }
 
     protected void renderItem(GuiGraphics graphics, int mouseX, int mouseY, float partialTick) {
         if (item.isEmpty()) {
             return;
         }
-        var mc = Minecraft.getInstance();
         float scale = itemSize / DEFAULT_SIZE;
         graphics.pose().pushPose();
-        graphics.pose().translate(x + itemSize / 2, y + itemSize / 2, 0.01 * scale);
-        try {
-            graphics.pose().mulPose(new Matrix4f().scaling(1.0F, -1.0F, 1.0F));
-            graphics.pose().scale(16.0F, 16.0F, 16.0F);
-            graphics.pose().scale(scale, scale, scale);
-            graphics.renderItem(item, 0, 0);
-        } catch (Throwable throwable) {
-            CrashReport crashreport = CrashReport.forThrowable(throwable, "Rendering item");
-            CrashReportCategory crashreportcategory = crashreport.addCategory("Item being rendered");
-            crashreportcategory.setDetail("Item Type / Registry Name", () -> String.valueOf(item.getItem()));
-            crashreportcategory.setDetail("Item Damage", () -> String.valueOf(item.getDamageValue()));
-            crashreportcategory.setDetail("Item Components", () -> String.valueOf(item.getComponents()));
-            crashreportcategory.setDetail("Item Foil", () -> String.valueOf(item.hasFoil()));
-            throw new ReportedException(crashreport);
-        }
-
+        graphics.pose().translate(x, y, 10 * scale);
+        graphics.pose().scale(scale, scale, 1);
+        graphics.renderItem(item, 0, 0);
         graphics.pose().popPose();
     }
 
