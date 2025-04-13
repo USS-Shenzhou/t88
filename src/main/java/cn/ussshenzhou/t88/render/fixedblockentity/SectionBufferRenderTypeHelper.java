@@ -26,7 +26,7 @@ public class SectionBufferRenderTypeHelper {
 
     public static LinkedList<RenderType> scan() {
         LinkedList<RenderType> types = new LinkedList<>();
-        if (ModList.get() == null) {
+        /*if (ModList.get() == null) {
             //TODO use FMLLoader.getLoadingModList() instead
             LogUtils.getLogger().error("""
                     Who loads RenderType.class early... again?
@@ -59,7 +59,7 @@ public class SectionBufferRenderTypeHelper {
                 scanResults.getAnnotatedBy(SectionBufferRenderType.class, ElementType.FIELD)
                         .forEach(annotationData -> handleType(modClasses, annotationData, types));
             }
-        });
+        });*/
         return types;
     }
 
