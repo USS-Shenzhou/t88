@@ -54,10 +54,8 @@ public class HudManager {
             var o = CHILDREN.stream()
                     .filter(t -> t.getClass() == component.getClass())
                     .findFirst();
-            if (o.isPresent()) {
-                remove(o.get());
-                add(component);
-            }
+            o.ifPresent(HudManager::remove);
+            add(component);
         });
     }
 

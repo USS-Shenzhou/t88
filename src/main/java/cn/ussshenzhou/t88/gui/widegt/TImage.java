@@ -57,6 +57,9 @@ public class TImage extends TPanel {
     }
 
     public void setImageLocation(ResourceLocation imageLocation) {
+        if (this.imageLocation.equals(imageLocation)) {
+            return;
+        }
         this.imageLocation = imageLocation;
         loadImageWH();
     }

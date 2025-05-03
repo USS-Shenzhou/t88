@@ -67,6 +67,8 @@ public class TestScreen extends TScreen {
     });
     private final TItem item = new TItem(new ItemStack(Items.GRASS_BLOCK, 10), null, 32);
 
+    private final TProgressBar progressBar = new TProgressBar();
+
     public TestScreen() {
         super(Component.empty());
         this.add(title);
@@ -132,6 +134,10 @@ public class TestScreen extends TScreen {
         this.add(labelButton);
         this.add(item);
         item.setBorder(new Border(0xffffffff, 1));
+
+        this.add(progressBar);
+        progressBar.setValue(0.35);
+        progressBar.setTextMode(TProgressBar.TextMode.PERCENTAGE);
     }
 
     @Override
@@ -145,6 +151,7 @@ public class TestScreen extends TScreen {
         scrollPanel.setBounds(210, 20, 200, 100);
         labelButton.setBounds(50, 210, 100, 30);
         LayoutHelper.BRightOfA(item, 4, tTimer, item.getPreferredSize());
+        progressBar.setBounds(10, (int) (height * 0.8), 200, 10);
         super.layout();
     }
 
