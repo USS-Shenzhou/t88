@@ -407,6 +407,9 @@ public class TSelectList<E> extends ObjectSelectionList<TSelectList<E>.Entry> im
 
         @Override
         public Component getNarration() {
+            if (content instanceof Component c) {
+                return c;
+            }
             Language language = Language.getInstance();
             String s = content.toString();
             if (language.has(s)) {

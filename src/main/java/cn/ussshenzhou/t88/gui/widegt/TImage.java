@@ -56,6 +56,9 @@ public class TImage extends TPanel {
     }
 
     public void setImageLocation(ResourceLocation imageLocation) {
+        if (this.imageLocation.equals(imageLocation)) {
+            return;
+        }
         this.imageLocation = imageLocation;
         loadImageWH();
     }
@@ -123,8 +126,7 @@ public class TImage extends TPanel {
                 }
                 case STRETCH ->
                         guigraphics.blit(imageLocation, this.x, this.y, width, height, 0, 0, imageWidth, imageHeight, (int) (imageWidth * scale), (int) (imageHeight * scale));
-                case TILE ->
-                        guigraphics.blit(imageLocation, this.x, this.y, width, height, 0, 0, width, height, (int) (imageWidth * scale), (int) (imageHeight * scale));
+                case TILE -> guigraphics.blit(imageLocation, this.x, this.y, width, height, 0, 0, width, height, (int) (imageWidth * scale), (int) (imageHeight * scale));
             }
             RenderSystem.setShaderColor(1, 1, 1, 1);
         }

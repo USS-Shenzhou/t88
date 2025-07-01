@@ -1,5 +1,6 @@
 package cn.ussshenzhou.t88.gui.widegt;
 
+import cn.ussshenzhou.t88.gui.container.TScrollContainer;
 import cn.ussshenzhou.t88.gui.screen.TScreen;
 import cn.ussshenzhou.t88.gui.util.Border;
 import cn.ussshenzhou.t88.gui.util.ColorManager;
@@ -88,7 +89,11 @@ public abstract class TComponent implements TWidget {
         var t = this.getTooltip();
         if (t != null) {
             var scroll = getParentScroll();
-            t.refreshTooltipForNextRenderPass(this.isInRange(pMouseX + scroll.x, pMouseY + scroll.y), this.isFocused(), this.getRectangle());
+            //FIXME multi-scroller
+            var inRange = getParentInstanceOfOptional(TScrollContainer.class)
+                    .map(tScrollContainer -> tScrollContainer.isInRange(pMouseX, pMouseY))
+                    .orElse(true) && this.isInRange(pMouseX + scroll.x, pMouseY + scroll.y);
+            t.refreshTooltipForNextRenderPass(inRange, this.isFocused(), this.getRectangle());
         }
     }
 

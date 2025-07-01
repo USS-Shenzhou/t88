@@ -64,11 +64,13 @@ public class TItem extends TPanel {
 
     @Override
     public void render(GuiGraphics graphics, int pMouseX, int pMouseY, float pPartialTick) {
+        graphics.pose().pushPose();
+        graphics.pose().translate(0, 0, 100);
         renderItem(graphics, pMouseX, pMouseY, pPartialTick);
         float scale = itemSize / DEFAULT_SIZE;
         if (count.isVisibleT()) {
             graphics.pose().pushPose();
-            graphics.pose().translate(0, 0, 1 * scale);
+            graphics.pose().translate(0, 0, 100 * scale);
             count.render(graphics, pMouseX, pMouseY, pPartialTick);
             graphics.pose().popPose();
         }
@@ -90,6 +92,7 @@ public class TItem extends TPanel {
             }
             graphics.pose().popPose();
         }
+        graphics.pose().popPose();
         super.render(graphics, pMouseX, pMouseY, pPartialTick);
     }
 
