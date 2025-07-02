@@ -12,7 +12,7 @@ import java.util.List;
 /**
  * @author USS_Shenzhou
  */
-@EventBusSubscriber(bus = EventBusSubscriber.Bus.MOD, value = Dist.CLIENT)
+@EventBusSubscriber(value = Dist.CLIENT)
 public class ModKeyMappingRegistry {
     @SubscribeEvent
     public static void onRegisterKey(RegisterKeyMappingsEvent event) {

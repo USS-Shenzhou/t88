@@ -12,7 +12,7 @@ import java.util.function.Consumer;
 /**
  * @author USS_Shenzhou
  */
-@EventBusSubscriber(bus = EventBusSubscriber.Bus.GAME)
+@EventBusSubscriber
 public class TaskHelper {
     private static final LinkedList<Task> SERVER_ADD = new LinkedList<>();
     private static final LinkedList<Task> CLIENT_ADD = new LinkedList<>();

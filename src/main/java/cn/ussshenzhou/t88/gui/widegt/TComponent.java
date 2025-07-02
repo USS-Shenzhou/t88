@@ -93,7 +93,7 @@ public abstract class TComponent implements TWidget {
             var inRange = getParentInstanceOfOptional(TScrollContainer.class)
                     .map(tScrollContainer -> tScrollContainer.isInRange(pMouseX, pMouseY))
                     .orElse(true) && this.isInRange(pMouseX + scroll.x, pMouseY + scroll.y);
-            t.refreshTooltipForNextRenderPass(inRange, this.isFocused(), this.getRectangle());
+            t.refreshTooltipForNextRenderPass(graphics, pMouseX, pMouseY, inRange, this.isFocused(), this.getRectangle());
         }
     }
 
@@ -110,7 +110,7 @@ public abstract class TComponent implements TWidget {
     protected void renderChildren(GuiGraphics graphics, int pMouseX, int pMouseY, float pPartialTick) {
         for (TWidget tWidget : children) {
             if (tWidget.isVisibleT()) {
-                graphics.pose().translate(0, 0, 0.1);
+                
                 tWidget.render(graphics, pMouseX, pMouseY, pPartialTick);
             }
         }
@@ -120,7 +120,7 @@ public abstract class TComponent implements TWidget {
     public void renderTop(GuiGraphics graphics, int pMouseX, int pMouseY, float pPartialTick) {
         for (TWidget w : children) {
             if (w.isVisibleT()) {
-                graphics.pose().translate(0, 0, 0.1);
+                
                 w.renderTop(graphics, pMouseX, pMouseY, pPartialTick);
             }
         }
@@ -420,7 +420,7 @@ public abstract class TComponent implements TWidget {
     }
 
     public static void drawStringSingleLine(TWidget thiz, GuiGraphics graphics, Font font, Component text, float fontSize, HorizontalAlignment align, int minX, int maxX, int minY, @SuppressWarnings("AlibabaLowerCamelCaseVariableNaming") int maxYOnlyForScissor, int color) {
-        graphics.pose().pushPose();
+        graphics.pose().pushMatrix();
         float scaleFactor = fontSize / TLabel.STD_FONT_SIZE;
         int need = font.width(text);
         int available = maxX - minX;
@@ -428,7 +428,7 @@ public abstract class TComponent implements TWidget {
         if (extra > 0) {
             var scroll = thiz.getParentScroll();
             graphics.enableScissor((int) (minX - scroll.x), (int) (minY - scroll.y), (int) (maxX - scroll.x), (int) (maxYOnlyForScissor - scroll.y));
-            graphics.pose().scale(scaleFactor, scaleFactor, 1);
+            graphics.pose().scale(scaleFactor, scaleFactor);
             minX = (int) (minX / scaleFactor);
             maxX = (int) (maxX / scaleFactor);
             minY = (int) (minY / scaleFactor);
@@ -436,7 +436,7 @@ public abstract class TComponent implements TWidget {
             renderScrollingString(extra, graphics, font, text, minX, maxX, minY, maxYOnlyForScissor, color);
             graphics.disableScissor();
         } else {
-            graphics.pose().scale(scaleFactor, scaleFactor, 1);
+            graphics.pose().scale(scaleFactor, scaleFactor);
             minX = (int) (minX / scaleFactor);
             minY = (int) (minY / scaleFactor);
             switch (align) {
@@ -445,7 +445,7 @@ public abstract class TComponent implements TWidget {
                 case RIGHT -> graphics.drawString(font, text, minX - extra, minY, color);
             }
         }
-        graphics.pose().popPose();
+        graphics.pose().popMatrix();
     }
 
     public static void drawStringSingleLine(TWidget thiz, GuiGraphics graphics, Font font, Component text, HorizontalAlignment align, int minX, int maxX, int minY, int color) {

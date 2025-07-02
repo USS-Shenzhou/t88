@@ -96,22 +96,22 @@ public class TLabel extends TPanel {
     }
 
     protected void renderText(GuiGraphics guigraphics, int pMouseX, int pMouseY, float pPartialTick) {
-        guigraphics.pose().pushPose();
+        guigraphics.pose().pushMatrix();
         float y0 = Mth.ceil((y + (height - (fontSize + lineSpacing) * textLines.size()) / 2));
         for (Component line : textLines) {
             if (autoScroll) {
                 drawStringSingleLine(guigraphics, font, line, fontSize, horizontalAlignment, x, (x + width), (int) y0, (int) (y0 + fontSize + lineSpacing), foreground);
             } else {
-                guigraphics.pose().pushPose();
+                guigraphics.pose().pushMatrix();
                 int x0 = getAlignedX(line);
                 float scaleFactor = fontSize / (float) STD_FONT_SIZE;
-                guigraphics.pose().scale(scaleFactor, scaleFactor, 1);
+                guigraphics.pose().scale(scaleFactor, scaleFactor);
                 guigraphics.drawString(font, line, (int) (x0 / scaleFactor), (int) (y0 / scaleFactor), foreground);
-                guigraphics.pose().popPose();
+                guigraphics.pose().popMatrix();
             }
             y0 += (fontSize + lineSpacing);
         }
-        guigraphics.pose().popPose();
+        guigraphics.pose().popMatrix();
     }
 
     protected int getAlignedX(Component line) {

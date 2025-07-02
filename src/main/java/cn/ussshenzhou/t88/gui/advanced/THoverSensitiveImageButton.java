@@ -96,7 +96,7 @@ public class THoverSensitiveImageButton extends TPanel {
     protected void renderChildren(GuiGraphics graphics, int pMouseX, int pMouseY, float pPartialTick) {
         for (TWidget tWidget : children) {
             if (tWidget.isVisibleT()) {
-                graphics.pose().translate(0, 0, 0.1);
+                graphics.pose().translate(0, 0);
                 if (tWidget == text && backgroundImageHovered.isVisibleT()) {
                     renderText(graphics, pMouseX, pMouseY, pPartialTick);
                     continue;
@@ -121,15 +121,14 @@ public class THoverSensitiveImageButton extends TPanel {
             float scaleY = minScaleY + transitionTick / transitionTimeMinus1 * (1 - minScaleY);
             float compensationRelativeX = (1 - scaleX) / (1 - minScaleX) * padding;
             float compensationRelativeY = (1 - scaleY) / (1 - minScaleY) * padding;
-            graphics.pose().pushPose();
+            graphics.pose().pushMatrix();
             //scale compensation = absolute + relative
             graphics.pose().translate(
                     (1 - scaleX) * backgroundImageHovered.getXT() + compensationRelativeX,
-                    (1 - scaleY) * backgroundImageHovered.getYT() + compensationRelativeY,
-                    0);
-            graphics.pose().scale(scaleX, scaleY, 1);
+                    (1 - scaleY) * backgroundImageHovered.getYT() + compensationRelativeY);
+            graphics.pose().scale(scaleX, scaleY);
             backgroundImageHovered.render(graphics, pMouseX, pMouseY, pPartialTick);
-            graphics.pose().popPose();
+            graphics.pose().popMatrix();
             transitionTick += pPartialTick;
         } else {
             backgroundImageHovered.render(graphics, pMouseX, pMouseY, pPartialTick);
@@ -153,14 +152,13 @@ public class THoverSensitiveImageButton extends TPanel {
 
     public void renderTextInternal(GuiGraphics graphics, int pMouseX, int pMouseY, float pPartialTick, float scale, float maxScale) {
         float compensationRelative = padding == 0 ? 0 : (1 - scale) / (maxScale - 1) * padding;
-        graphics.pose().pushPose();
+        graphics.pose().pushMatrix();
         graphics.pose().translate(
                 (1 - scale) * text.getXT() + compensationRelative,
-                (1 - scale) * text.getYT() + compensationRelative,
-                0);
-        graphics.pose().scale(scale, scale, 1);
+                (1 - scale) * text.getYT() + compensationRelative);
+        graphics.pose().scale(scale, scale);
         text.render(graphics, pMouseX, pMouseY, pPartialTick);
-        graphics.pose().popPose();
+        graphics.pose().popMatrix();
     }
 
     public TImage getBackgroundImage() {

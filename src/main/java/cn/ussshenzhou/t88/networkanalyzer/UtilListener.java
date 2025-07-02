@@ -12,7 +12,7 @@ import net.neoforged.neoforge.event.tick.ServerTickEvent;
 /**
  * @author USS_Shenzhou
  */
-@EventBusSubscriber(bus = EventBusSubscriber.Bus.GAME)
+@EventBusSubscriber
 public class UtilListener {
     static long lastUpdateC, lastUpdateS;
 

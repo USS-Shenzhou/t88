@@ -4,6 +4,7 @@ import cn.ussshenzhou.t88.gui.widegt.TPanel;
 import cn.ussshenzhou.t88.gui.widegt.TSelectList;
 import cn.ussshenzhou.t88.gui.widegt.TWidget;
 import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.renderer.RenderPipelines;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.Mth;
@@ -77,11 +78,11 @@ public class TVerticalScrollContainer extends TPanel implements TScrollContainer
     }
 
     protected void prepareTranslate(GuiGraphics guigraphics, float pPartialTick) {
-        guigraphics.pose().translate(0, Mth.lerp(pPartialTick, -prevScrollAmount, -scrollAmount), 0);
+        guigraphics.pose().translate(0, (float) Mth.lerp(pPartialTick, -prevScrollAmount, -scrollAmount));
     }
 
     protected void endTranslate(GuiGraphics guigraphics, float pPartialTick) {
-        guigraphics.pose().translate(0, -Mth.lerp(pPartialTick, -prevScrollAmount, -scrollAmount), 0);
+        guigraphics.pose().translate(0, (float) -Mth.lerp(pPartialTick, -prevScrollAmount, -scrollAmount));
     }
 
     @Override
@@ -110,7 +111,7 @@ public class TVerticalScrollContainer extends TPanel implements TScrollContainer
             }
 
             guiGraphics.fill(l1, this.getYT(), l1 + 6, this.getYT() + height, -16777216);
-            guiGraphics.blitSprite(RenderType::guiTextured, SCROLLER_SPRITE, l1, l, 6, k);
+            guiGraphics.blitSprite(RenderPipelines.GUI_TEXTURED, SCROLLER_SPRITE, l1, l, 6, k);
         }
     }
 

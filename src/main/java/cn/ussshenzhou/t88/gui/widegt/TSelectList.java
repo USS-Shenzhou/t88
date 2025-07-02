@@ -6,6 +6,7 @@ import cn.ussshenzhou.t88.gui.util.HorizontalAlignment;
 import com.google.common.collect.ImmutableList;
 import net.minecraft.client.gui.components.AbstractSelectionList;
 import net.minecraft.client.gui.screens.Screen;
+import net.minecraft.client.renderer.RenderPipelines;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.resources.ResourceLocation;
 import org.joml.Vector2i;
@@ -224,7 +225,7 @@ public class TSelectList<E> extends ObjectSelectionList<TSelectList<E>.Entry> im
     protected void renderListBackground(GuiGraphics guiGraphics) {
         ResourceLocation resourcelocation = this.minecraft.level == null ? MENU_LIST_BACKGROUND : INWORLD_MENU_LIST_BACKGROUND;
         guiGraphics.blit(
-                RenderType::guiTextured,
+                RenderPipelines.GUI_TEXTURED,
                 resourcelocation,
                 this.getX(),
                 this.getY(),
@@ -241,10 +242,10 @@ public class TSelectList<E> extends ObjectSelectionList<TSelectList<E>.Entry> im
     protected void renderListSeparators(GuiGraphics guiGraphics) {
         ResourceLocation resourcelocation = this.minecraft.level == null ? Screen.HEADER_SEPARATOR : Screen.INWORLD_HEADER_SEPARATOR;
         ResourceLocation resourcelocation1 = this.minecraft.level == null ? Screen.FOOTER_SEPARATOR : Screen.INWORLD_FOOTER_SEPARATOR;
-        guiGraphics.blit(RenderType::guiTextured, resourcelocation, this.getX(), this.getY() - 2, 0.0F, 0.0F,
+        guiGraphics.blit(RenderPipelines.GUI_TEXTURED, resourcelocation, this.getX(), this.getY() - 2, 0.0F, 0.0F,
                 this.scrollbarVisible() ? this.getWidth() : this.getRowWidth(),
                 2, 32, 2);
-        guiGraphics.blit(RenderType::guiTextured, resourcelocation1, this.getX(), this.getBottom(), 0.0F, 0.0F,
+        guiGraphics.blit(RenderPipelines.GUI_TEXTURED, resourcelocation1, this.getX(), this.getBottom(), 0.0F, 0.0F,
                 this.scrollbarVisible() ? this.getWidth() : this.getRowWidth(),
                 2, 32, 2);
     }
@@ -267,8 +268,8 @@ public class TSelectList<E> extends ObjectSelectionList<TSelectList<E>.Entry> im
             int i = this.scrollBarX();
             int j = this.scrollerHeight();
             int k = this.scrollBarY();
-            guiGraphics.blitSprite(RenderType::guiTextured, SCROLLER_BACKGROUND_SPRITE, i, this.getY(), 6, this.getHeight());
-            guiGraphics.blitSprite(RenderType::guiTextured, SCROLLER_SPRITE, i, k, 6, j);
+            guiGraphics.blitSprite(RenderPipelines.GUI_TEXTURED, SCROLLER_BACKGROUND_SPRITE, i, this.getY(), 6, this.getHeight());
+            guiGraphics.blitSprite(RenderPipelines.GUI_TEXTURED, SCROLLER_SPRITE, i, k, 6, j);
         }
         this.renderDecorations(guiGraphics, mouseX, mouseY);
     }

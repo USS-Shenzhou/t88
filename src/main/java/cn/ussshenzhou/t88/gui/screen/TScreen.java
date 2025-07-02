@@ -47,23 +47,18 @@ public abstract class TScreen extends Screen {
 
     @Override
     public void render(GuiGraphics graphics, int pMouseX, int pMouseY, float pPartialTick) {
-        RenderSystem.setShaderColor(1, 1, 1, 1);
-        renderBackGround(graphics, pMouseX, pMouseY, pPartialTick);
-        graphics.pose().translate(0, 0, 500);
-        graphics.pose().pushPose();
+        graphics.pose().pushMatrix();
         for (TWidget w : this.tChildren) {
             if (w.isVisibleT()) {
-                graphics.pose().translate(0, 0, 0.1);
                 w.render(graphics, pMouseX, pMouseY, pPartialTick);
             }
         }
         for (TWidget w : this.tChildren) {
             if (w.isVisibleT()) {
-                graphics.pose().translate(0, 0, 0.1);
                 w.renderTop(graphics, pMouseX, pMouseY, pPartialTick);
             }
         }
-        graphics.pose().pushPose();
+        graphics.pose().pushMatrix();
     }
 
     public void add(TWidget tWidget) {
@@ -91,10 +86,6 @@ public abstract class TScreen extends Screen {
                 t.layout();
             }
         }
-    }
-
-    protected void renderBackGround(GuiGraphics graphics, int pMouseX, int pMouseY, float pPartialTick) {
-        super.renderBackground(graphics, pMouseX, pMouseY, pPartialTick);
     }
 
     public static <T> Iterable<T> reversed(List<T> list) {

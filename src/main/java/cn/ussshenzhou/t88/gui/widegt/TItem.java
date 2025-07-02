@@ -10,7 +10,9 @@ import net.minecraft.CrashReportCategory;
 import net.minecraft.ReportedException;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.client.renderer.texture.OverlayTexture;
+import net.minecraft.core.component.DataComponents;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.entity.LivingEntity;
@@ -64,17 +66,23 @@ public class TItem extends TPanel {
 
     @Override
     public void render(GuiGraphics graphics, int pMouseX, int pMouseY, float pPartialTick) {
-        graphics.pose().pushPose();
+        graphics.pose().pushMatrix();
         renderItem(graphics, pMouseX, pMouseY, pPartialTick);
         float scale = itemSize / DEFAULT_SIZE;
         if (count.isVisibleT()) {
-            graphics.pose().translate(0, 0, 100 * scale);
             count.render(graphics, pMouseX, pMouseY, pPartialTick);
         }
         if (showTooltip && isInRange(pMouseX, pMouseY) && this.getTopParentScreen() != null) {
-            graphics.pose().translate(0, 0, 500 * scale);
-            RenderSystem.disableScissor();
-            graphics.renderTooltip(Minecraft.getInstance().font, item.getTooltipLines(Item.TooltipContext.of(Minecraft.getInstance().level), Minecraft.getInstance().player, TooltipFlag.NORMAL), item.getTooltipImage(), item, pMouseX, pMouseY);
+            graphics.disableScissor();
+            graphics.setTooltipForNextFrame(
+                    Minecraft.getInstance().font,
+                    Screen.getTooltipFromItem(Minecraft.getInstance(), item),
+                    item.getTooltipImage(),
+                    item,
+                    x,
+                    y,
+                    item.get(DataComponents.TOOLTIP_STYLE)
+            );
             var rectangle = graphics.scissorStack.stack.peek();
             if (rectangle != null) {
                 Window window = Minecraft.getInstance().getWindow();
@@ -84,23 +92,21 @@ public class TItem extends TPanel {
                 double d2 = (double) i - (double) rectangle.bottom() * d0;
                 double d3 = (double) rectangle.width() * d0;
                 double d4 = (double) rectangle.height() * d0;
-                RenderSystem.enableScissor((int) d1, (int) d2, Math.max(0, (int) d3), Math.max(0, (int) d4));
+                graphics.enableScissor((int) d1, (int) d2, Math.max(0, (int) d3), Math.max(0, (int) d4));
             }
         }
         super.render(graphics, pMouseX, pMouseY, pPartialTick);
-        graphics.pose().popPose();
+        graphics.pose().popMatrix();
     }
 
     protected void renderItem(GuiGraphics graphics, int mouseX, int mouseY, float partialTick) {
         if (item.isEmpty()) {
             return;
         }
-        float scale = itemSize / DEFAULT_SIZE;
-        graphics.pose().pushPose();
-        graphics.pose().translate(x, y, 10 * scale);
-        graphics.pose().scale(scale, scale, 1);
+        graphics.pose().pushMatrix();
+        graphics.pose().translate(x, y);
         graphics.renderItem(item, 0, 0);
-        graphics.pose().popPose();
+        graphics.pose().popMatrix();
     }
 
     @Override

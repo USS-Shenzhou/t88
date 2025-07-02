@@ -6,6 +6,7 @@ import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.logging.LogUtils;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.renderer.RenderPipelines;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.resources.ResourceLocation;
 
@@ -88,46 +89,45 @@ public class TImage extends TPanel {
     @Override
     public void render(GuiGraphics guigraphics, int pMouseX, int pMouseY, float pPartialTick) {
         if (imageLocation != null) {
-            RenderSystem.setShaderColor(1, 1, 1, alpha);
+            int color = (((int) alpha * 255) << 24) | 0xffffff;
             switch (imageFit) {
                 case FILL -> {
                     float panelWHRatio = width / (float) height;
                     float imageWHRatio = imageWidth / (float) imageHeight;
                     if (panelWHRatio > imageWHRatio) {
-                        guigraphics.blit(RenderType::guiTextured, imageLocation, this.x, this.y, width, height,
+                        guigraphics.blit(RenderPipelines.GUI_TEXTURED, imageLocation, this.x, this.y, width, height,
                                 0, (int) ((imageHeight - imageWidth / panelWHRatio) / 2),
                                 imageWidth, (int) (imageWidth / panelWHRatio),
-                                (int) (imageWidth * scale), (int) (imageHeight * scale));
+                                (int) (imageWidth * scale), (int) (imageHeight * scale), color);
                     } else {
-                        guigraphics.blit(RenderType::guiTextured, imageLocation, this.x, this.y, width, height,
+                        guigraphics.blit(RenderPipelines.GUI_TEXTURED, imageLocation, this.x, this.y, width, height,
                                 (int) ((imageWidth - imageHeight * panelWHRatio) / 2), 0,
                                 (int) (imageHeight * panelWHRatio), imageHeight,
-                                (int) (imageWidth * scale), (int) (imageHeight * scale));
+                                (int) (imageWidth * scale), (int) (imageHeight * scale), color);
                     }
                 }
                 case FIT -> {
                     float panelWHRatio = width / (float) height;
                     float imageWHRatio = imageWidth / (float) imageHeight;
                     if (panelWHRatio > imageWHRatio) {
-                        guigraphics.blit(RenderType::guiTextured, imageLocation, (int) (this.x + (width - height * imageWHRatio) / 2), this.y,
+                        guigraphics.blit(RenderPipelines.GUI_TEXTURED, imageLocation, (int) (this.x + (width - height * imageWHRatio) / 2), this.y,
                                 (int) (height * imageWHRatio), height,
                                 0, 0,
                                 imageWidth, imageHeight,
-                                (int) (imageWidth * scale), (int) (imageHeight * scale));
+                                (int) (imageWidth * scale), (int) (imageHeight * scale), color);
                     } else {
-                        guigraphics.blit(RenderType::guiTextured, imageLocation, this.x, (int) (this.y + (height - width / imageWHRatio) / 2),
+                        guigraphics.blit(RenderPipelines.GUI_TEXTURED, imageLocation, this.x, (int) (this.y + (height - width / imageWHRatio) / 2),
                                 width, (int) (width / imageWHRatio),
                                 0, 0,
                                 imageWidth, imageHeight,
-                                (int) (imageWidth * scale), (int) (imageHeight * scale));
+                                (int) (imageWidth * scale), (int) (imageHeight * scale), color);
                     }
                 }
                 case STRETCH ->
-                        guigraphics.blit(RenderType::guiTextured, imageLocation, this.x, this.y, width, height, 0, 0, imageWidth, imageHeight, (int) (imageWidth * scale), (int) (imageHeight * scale));
+                        guigraphics.blit(RenderPipelines.GUI_TEXTURED, imageLocation, this.x, this.y, width, height, 0, 0, imageWidth, imageHeight, (int) (imageWidth * scale), (int) (imageHeight * scale));
                 case TILE ->
-                        guigraphics.blit(RenderType::guiTextured, imageLocation, this.x, this.y, width, height, 0, 0, width, height, (int) (imageWidth * scale), (int) (imageHeight * scale));
+                        guigraphics.blit(RenderPipelines.GUI_TEXTURED, imageLocation, this.x, this.y, width, height, 0, 0, width, height, (int) (imageWidth * scale), (int) (imageHeight * scale));
             }
-            RenderSystem.setShaderColor(1, 1, 1, 1);
         }
         super.render(guigraphics, pMouseX, pMouseY, pPartialTick);
     }

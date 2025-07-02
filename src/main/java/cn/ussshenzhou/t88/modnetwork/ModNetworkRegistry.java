@@ -9,7 +9,7 @@ import net.neoforged.neoforge.network.handling.DirectionalPayloadHandler;
 /**
  * @author USS_Shenzhou
  */
-@EventBusSubscriber(bus = EventBusSubscriber.Bus.MOD)
+@EventBusSubscriber
 public class ModNetworkRegistry {
 
     @SubscribeEvent

@@ -1,6 +1,5 @@
 package cn.ussshenzhou.t88.gui;
 
-import cn.ussshenzhou.t88.gui.event.GameRendererRenderedEvent;
 import cn.ussshenzhou.t88.gui.event.ResizeHudEvent;
 import cn.ussshenzhou.t88.gui.util.MouseHelper;
 import cn.ussshenzhou.t88.gui.widegt.TComponent;
@@ -20,7 +19,7 @@ import java.util.List;
 /**
  * @author USS_Shenzhou
  */
-@EventBusSubscriber(bus = EventBusSubscriber.Bus.GAME, value = Dist.CLIENT)
+@EventBusSubscriber(value = Dist.CLIENT)
 public class HudManager {
     private static final LinkedHashSet<TComponent> CHILDREN = new LinkedHashSet<>();
     private static final LinkedList<TComponent> needAdd = new LinkedList<>();
@@ -74,30 +73,14 @@ public class HudManager {
         var partialTick = event.getPartialTick();
         CHILDREN.forEach((tComponent) -> {
             if (tComponent.isVisibleT()) {
-                graphics.pose().translate(0, 0, 0.1);
                 tComponent.render(graphics, mouseX, mouseY, partialTick.getRealtimeDeltaTicks());
             }
         });
-    }
-
-    @SuppressWarnings("deprecation")
-    @SubscribeEvent
-    public static void renderHudAfterScreen(GameRendererRenderedEvent event) {
-        if (Minecraft.getInstance().options.hideGui) {
-            return;
-        }
-        var graphics = event.getGraphics();
-        int mouseX = (int) MouseHelper.getMouseX();
-        int mouseY = (int) MouseHelper.getMouseY();
-        float partialTick = event.getDeltaTracker().getRealtimeDeltaTicks();
-        graphics.pose().translate(0, 0, 1000);
         CHILDREN.forEach((tComponent) -> {
             if (tComponent.isVisibleT()) {
-                graphics.pose().translate(0, 0, 0.1);
-                tComponent.renderTop(graphics, mouseX, mouseY, partialTick);
+                tComponent.renderTop(graphics, mouseX, mouseY, partialTick.getRealtimeDeltaTicks());
             }
         });
-        graphics.pose().translate(0, 0, -1000);
     }
 
     @SubscribeEvent
