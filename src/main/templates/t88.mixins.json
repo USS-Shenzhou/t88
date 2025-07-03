@@ -17,7 +17,9 @@
     "MinecraftMixin",
     "SliderButtonAccessor",
     "AbstractContainerWidgetMixin",
-    "CLASS_FOR_COMPAT"
+    "GuiSpriteManagerMixin",
+    "TextureManagerMixin"
+    //CLASS_FOR_COMPAT
   ],
   "injectors": {
     "defaultRequire": 1
