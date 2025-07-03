@@ -1,6 +1,8 @@
 package cn.ussshenzhou.t88.mixin;
 
 import cn.ussshenzhou.t88.T88;
+import cn.ussshenzhou.t88.config.ConfigHelper;
+import cn.ussshenzhou.t88.util.T88Config;
 import net.minecraft.client.renderer.texture.AbstractTexture;
 import net.minecraft.client.renderer.texture.ReloadableTexture;
 import net.minecraft.client.renderer.texture.SimpleTexture;
@@ -30,7 +32,7 @@ public abstract class TextureManagerMixin {
 
     @Inject(method = "getTexture", at = @At("HEAD"), cancellable = true)
     public void t88ReplaceStyle(ResourceLocation originalLocation, CallbackInfoReturnable<AbstractTexture> cir) {
-        if (!ResourceLocation.DEFAULT_NAMESPACE.equals(originalLocation.getNamespace())) {
+        if (!ResourceLocation.DEFAULT_NAMESPACE.equals(originalLocation.getNamespace()) || !ConfigHelper.getConfigRead(T88Config.class).replaceStyle) {
             return;
         }
         var replacedLocation = ResourceLocation.fromNamespaceAndPath(T88.MOD_ID, originalLocation.getPath().replace("/gui/", "/t88_style/"));

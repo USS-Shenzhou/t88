@@ -1,9 +1,11 @@
 package cn.ussshenzhou.t88.networkanalyzer.gui;
 
+import cn.ussshenzhou.t88.config.ConfigHelper;
 import cn.ussshenzhou.t88.gui.widegt.TPanel;
 import cn.ussshenzhou.t88.networkanalyzer.NetworkWatcher;
 import cn.ussshenzhou.t88.networkanalyzer.SenderInfo;
 import cn.ussshenzhou.t88.networkanalyzer.SizeAndTimes;
+import cn.ussshenzhou.t88.util.T88Config;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.components.Tooltip;
 import net.minecraft.client.gui.components.WidgetTooltipHolder;
@@ -71,7 +73,7 @@ public class ChartPanel extends TPanel {
             s.append("0/Unknown §7Size§r");
             return;
         }
-        if (getTopParentScreenAsOptional(NetworkWatcherScreen.class).orElseThrow().getOptionsPanel().getUnit().getSelectedOptional().orElseThrow().getContent().contains("bit")) {
+        if (ConfigHelper.getConfigRead(T88Config.class).networkUnit == T88Config.NetworkUnit.BIT) {
             bytes *= 8;
             if (bytes < 1000) {
                 s.append(bytes).append(" §7b§r");

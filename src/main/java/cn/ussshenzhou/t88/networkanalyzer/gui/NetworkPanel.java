@@ -1,5 +1,6 @@
 package cn.ussshenzhou.t88.networkanalyzer.gui;
 
+import cn.ussshenzhou.t88.config.ConfigHelper;
 import cn.ussshenzhou.t88.gui.advanced.TLabelButton;
 import cn.ussshenzhou.t88.gui.container.TTabPageContainer;
 import cn.ussshenzhou.t88.gui.util.Border;
@@ -9,6 +10,7 @@ import cn.ussshenzhou.t88.gui.widegt.TPanel;
 import cn.ussshenzhou.t88.networkanalyzer.NetworkWatcher;
 import cn.ussshenzhou.t88.networkanalyzer.SenderInfo;
 import cn.ussshenzhou.t88.networkanalyzer.SizeAndTimes;
+import cn.ussshenzhou.t88.util.T88Config;
 import net.minecraft.client.gui.components.Button;
 import net.minecraft.client.gui.components.Tooltip;
 import net.minecraft.network.chat.Component;
@@ -103,7 +105,7 @@ public abstract class NetworkPanel extends TPanel {
     }
 
     private void getReadableSize(StringBuilder s, int bytes) {
-        if (getTopParentScreenAsOptional(NetworkWatcherScreen.class).orElseThrow().getOptionsPanel().getUnit().getSelectedOptional().orElseThrow().getContent().contains("bit")) {
+        if (ConfigHelper.getConfigRead(T88Config.class).networkUnit == T88Config.NetworkUnit.BIT) {
             bytes *= 8;
             if (bytes < 1000) {
                 s.append(bytes).append(" §7bps§r");

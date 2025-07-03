@@ -5,14 +5,18 @@
   "key.t88.open_analyzer": "打开分析器",
   "key.t88.clear_recorder": "清空分析器",
   "key.t88.open_watcher": "打开网络监视器",
+  "key.t88.open_cfg": "打开配置界面",
 
   "gui.t88.net.options": "选项",
-  "gui.t88.net.options.general": "  通用",
+  "gui.t88.net.options.net": "  网络监视器",
   "gui.t88.net.options.unit": "单位",
   "gui.t88.net.options.byte": "Byte",
   "gui.t88.net.options.bit": "Bit",
   "gui.t88.net.options.client.tooltip": "出站/入站网络流量。\n不考虑网络包压缩和加密。",
   "gui.t88.net.options.server.tooltip": "出站/入站网络流量。\n不考虑网络包压缩和加密。\n从服务器获取，可能存在延迟或重复。",
   "gui.t88.net.pause": "暂停",
-  "gui.t88.net.resume": "继续"
+  "gui.t88.net.resume": "继续",
+
+  "gui.t88.net.options.general": "  通用",
+  "gui.t88.net.options.style": "使用T88风格的界面"
 }

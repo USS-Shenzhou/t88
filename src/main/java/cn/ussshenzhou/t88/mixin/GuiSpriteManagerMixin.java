@@ -1,6 +1,8 @@
 package cn.ussshenzhou.t88.mixin;
 
 import cn.ussshenzhou.t88.T88;
+import cn.ussshenzhou.t88.config.ConfigHelper;
+import cn.ussshenzhou.t88.util.T88Config;
 import com.llamalad7.mixinextras.sugar.Local;
 import net.minecraft.client.gui.GuiSpriteManager;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
@@ -24,7 +26,7 @@ public abstract class GuiSpriteManagerMixin extends TextureAtlasHolder {
 
     @Inject(method = "getSprite", at = @At("HEAD"), cancellable = true)
     private void t88ReplaceStyle(CallbackInfoReturnable<TextureAtlasSprite> cir, @Local(argsOnly = true) ResourceLocation originalLocation) {
-        if (!ResourceLocation.DEFAULT_NAMESPACE.equals(originalLocation.getNamespace())) {
+        if (!ResourceLocation.DEFAULT_NAMESPACE.equals(originalLocation.getNamespace()) || !ConfigHelper.getConfigRead(T88Config.class).replaceStyle) {
             return;
         }
         var path = originalLocation.getPath();

@@ -6,6 +6,7 @@ import cn.ussshenzhou.t88.analyzer.front.AnalyzerScreen;
 import cn.ussshenzhou.t88.gui.TestScreen;
 import cn.ussshenzhou.t88.gui.screen.TScreen;
 import cn.ussshenzhou.t88.networkanalyzer.gui.NetworkWatcherScreen;
+import cn.ussshenzhou.t88.util.ConfigScreen;
 import com.mojang.blaze3d.platform.InputConstants;
 import com.mojang.logging.LogUtils;
 import net.minecraft.client.KeyMapping;
@@ -13,6 +14,7 @@ import net.minecraft.client.Minecraft;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.neoforge.client.event.InputEvent;
+import net.neoforged.neoforge.client.event.RegisterKeyMappingsEvent;
 import net.neoforged.neoforge.client.settings.KeyConflictContext;
 import net.neoforged.neoforge.client.settings.KeyModifier;
 import net.neoforged.bus.api.SubscribeEvent;
@@ -20,6 +22,7 @@ import net.neoforged.fml.common.Mod;
 import org.lwjgl.glfw.GLFW;
 
 import java.lang.reflect.InvocationTargetException;
+import java.util.List;
 
 /**
  * @author USS_Shenzhou
@@ -42,6 +45,22 @@ public class ModKeyInput {
             "key.t88.open_watcher", KeyConflictContext.IN_GAME, KeyModifier.ALT,
             InputConstants.Type.KEYSYM, GLFW.GLFW_KEY_W, "key.categories.t88"
     );
+    public static final KeyMapping OPEN_CONFIG = new KeyMapping(
+            "key.t88.open_cfg", KeyConflictContext.IN_GAME, KeyModifier.ALT,
+            InputConstants.Type.KEYSYM, GLFW.GLFW_KEY_8, "key.categories.t88"
+    );
+
+    @SubscribeEvent
+    public static void onRegisterKey(RegisterKeyMappingsEvent event) {
+        if (T88.TEST) {
+            event.register(ModKeyInput.GUI_TEST);
+        }
+        List.of(ModKeyInput.OPEN_ANALYZER,
+                ModKeyInput.CLEAR_ANALYZER,
+                ModKeyInput.OPEN_WATCHER,
+                ModKeyInput.OPEN_CONFIG
+        ).forEach(event::register);
+    }
 
     @SubscribeEvent
     public static void onKeyInput(InputEvent.Key event) {
@@ -56,7 +75,8 @@ public class ModKeyInput {
             T88AnalyzerClient.RECORDERS.clear();
         } else if (OPEN_WATCHER.consumeClick()) {
             Minecraft.getInstance().setScreen(new NetworkWatcherScreen());
-
+        } else if (OPEN_CONFIG.consumeClick()) {
+            Minecraft.getInstance().setScreen(new ConfigScreen());
         }
     }
 

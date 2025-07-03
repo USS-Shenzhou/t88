@@ -2,10 +2,12 @@ package cn.ussshenzhou.t88;
 
 import cn.ussshenzhou.t88.config.ConfigHelper;
 import cn.ussshenzhou.t88.networkanalyzer.NetworkWatcherBlacklist;
+import cn.ussshenzhou.t88.util.T88Config;
 import com.mojang.logging.LogUtils;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.fml.ModList;
 import net.neoforged.fml.common.Mod;
+import net.neoforged.fml.event.lifecycle.FMLClientSetupEvent;
 import net.neoforged.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.neoforged.neoforge.gametest.GameTestHooks;
 import org.slf4j.Logger;
@@ -25,6 +27,7 @@ public class T88 {
     public T88(IEventBus modEventBus) {
         //NeoForge.EVENT_BUS.register(this);
         modEventBus.addListener(this::setup);
+        modEventBus.addListener(this::clientSetup);
         ConfigHelper.loadConfig(new NetworkWatcherBlacklist());
         if (System.getProperty("t88.skip_parallelism_check") == null) {
             if (ForkJoinPool.getCommonPoolParallelism() == 1) {
@@ -39,5 +42,9 @@ public class T88 {
 
     private void setup(final FMLCommonSetupEvent event) {
         LOGGER.info("Welcome aboard the USS Vancouver!");
+    }
+
+    private void clientSetup(FMLClientSetupEvent event) {
+        ConfigHelper.loadConfig(new T88Config());
     }
 }

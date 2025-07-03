@@ -5,14 +5,18 @@
   "key.t88.open_analyzer": "Open Analyzer",
   "key.t88.clear_recorder": "Clear Analyzer Recorder",
   "key.t88.open_watcher": "Open NetWork Watcher",
+  "key.t88.open_cfg": "Open Config Screen",
 
   "gui.t88.net.options": "Options",
-  "gui.t88.net.options.general": "  General",
+  "gui.t88.net.options.net": "  Network Analyzer",
   "gui.t88.net.options.unit": "Unit",
   "gui.t88.net.options.byte": "Byte",
   "gui.t88.net.options.bit": "Bit",
   "gui.t88.net.options.client.tooltip": "Outbound/Inbound Network Traffic.\nDoes not take into account packet compression and encryption.",
   "gui.t88.net.options.server.tooltip": "Outbound/Inbound Network Traffic.\nDoes not take into account packet compression and encryption.\nAcquired from server, may be duplicate or lag.",
   "gui.t88.net.pause": "Pause",
-  "gui.t88.net.resume": "Resume"
+  "gui.t88.net.resume": "Resume",
+
+  "gui.t88.net.options.general": "  General",
+  "gui.t88.net.options.style": "Use T88-Style GUI"
 }

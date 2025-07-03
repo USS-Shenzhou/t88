@@ -51,7 +51,6 @@ public class NetworkWatcherScreen extends TScreen {
                 return NetworkWatcher.SERVER_RECEIVED;
             }
         }).setCloseable(false);
-        container.newTab(Component.translatable("gui.t88.net.options"), new OptionsPanel()).setCloseable(false);
     }
 
     @Override
@@ -63,14 +62,5 @@ public class NetworkWatcherScreen extends TScreen {
     @Override
     public boolean isPauseScreen() {
         return false;
-    }
-
-    public OptionsPanel getOptionsPanel() {
-        return (OptionsPanel) container.getTabs()
-                .stream()
-                .filter(tab -> tab.getContent() instanceof OptionsPanel)
-                .findFirst()
-                .orElseThrow()
-                .getContent();
     }
 }
