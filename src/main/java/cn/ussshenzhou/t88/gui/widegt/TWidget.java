@@ -73,6 +73,8 @@ public interface TWidget extends Renderable, GuiEventListener {
 
     void tickT();
 
+    void layout();
+
     default void renderTop(GuiGraphics graphics, int pMouseX, int pMouseY, float pPartialTick) {
     }
 

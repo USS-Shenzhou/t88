@@ -139,6 +139,11 @@ public class TButton extends Button implements TWidget {
     }
 
     @Override
+    public void layout() {
+
+    }
+
+    @Override
     public boolean keyPressed(int pKeyCode, int pScanCode, int pModifiers) {
         if (isInRange(MouseHelper.getMouseX(), MouseHelper.getMouseY())) {
             return super.keyPressed(pKeyCode, pScanCode, pModifiers);

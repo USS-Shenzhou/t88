@@ -67,11 +67,10 @@ public abstract class TComponent implements TWidget {
         this.height = height;
     }
 
+    @Override
     public void layout() {
-        for (TWidget tWidget : children) {
-            if (tWidget instanceof TComponent tComponent) {
-                tComponent.layout();
-            }
+        for (TWidget widget : children) {
+            widget.layout();
         }
     }
 
@@ -110,7 +109,7 @@ public abstract class TComponent implements TWidget {
     protected void renderChildren(GuiGraphics graphics, int pMouseX, int pMouseY, float pPartialTick) {
         for (TWidget tWidget : children) {
             if (tWidget.isVisibleT()) {
-                
+
                 tWidget.render(graphics, pMouseX, pMouseY, pPartialTick);
             }
         }
@@ -120,7 +119,7 @@ public abstract class TComponent implements TWidget {
     public void renderTop(GuiGraphics graphics, int pMouseX, int pMouseY, float pPartialTick) {
         for (TWidget w : children) {
             if (w.isVisibleT()) {
-                
+
                 w.renderTop(graphics, pMouseX, pMouseY, pPartialTick);
             }
         }

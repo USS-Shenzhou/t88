@@ -116,6 +116,15 @@ public class TSelectList<E> extends ObjectSelectionList<TSelectList<E>.Entry> im
     public void tickT() {
     }
 
+    @Override
+    public void layout() {
+        for (var entry : this.children) {
+            if (entry instanceof TWidget widget) {
+                widget.layout();
+            }
+        }
+    }
+
 
     @Override
     public boolean mouseClicked(double pMouseX, double pMouseY, int pButton) {
@@ -279,8 +288,8 @@ public class TSelectList<E> extends ObjectSelectionList<TSelectList<E>.Entry> im
         var scroll = this.getParentScroll();
         guigraphics.enableScissor(
                 (int) (this.x),
-                (int) (this.y ),
-                (int) (this.x1 + width ),
+                (int) (this.y),
+                (int) (this.x1 + width),
                 (int) (this.y1 + height));
     }
 

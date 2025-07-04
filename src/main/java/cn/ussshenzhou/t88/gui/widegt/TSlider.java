@@ -263,6 +263,11 @@ public class TSlider extends OptionInstance.OptionInstanceSliderButton<Double> i
     }
 
     @Override
+    public void layout() {
+
+    }
+
+    @Override
     public void respond(Double value) {
         responders.forEach(consumer -> consumer.accept(value));
     }
