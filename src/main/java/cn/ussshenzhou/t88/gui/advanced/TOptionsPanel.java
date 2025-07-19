@@ -73,13 +73,13 @@ public class TOptionsPanel extends TPanel {
 
     public <E> Tuple<TOptionsPanel, TCycleButton<E>> addOptionCycleButtonInit(Component title, List<E> entryContents, List<Consumer<TCycleButton<E>>> responders, Predicate<TCycleButton<E>.Entry> initializer) {
         var r = addOptionCycleButton(title, entryContents, responders);
-        r.getB().select(initializer);
+        r.getB().selectWithoutRespond(initializer);
         return r;
     }
 
     public <E> Tuple<TOptionsPanel, TCycleButton<E>> addOptionCycleButtonInit(Component title, List<E> entryContents, Function<E, Consumer<TCycleButton<E>>> responderGenerator, Predicate<TCycleButton<E>.Entry> initializer) {
         var r = addOptionCycleButton(title, entryContents, responderGenerator);
-        r.getB().select(initializer);
+        r.getB().selectWithoutRespond(initializer);
         return r;
     }
 

@@ -98,6 +98,14 @@ public class TCycleButton<E> extends TButton {
         NeoForge.EVENT_BUS.post(new TWidgetContentUpdatedEvent(this));
     }
 
+    public void selectWithoutRespond(int index) throws IndexOutOfBoundsException {
+        //if (index > 0 && index <= values.size() - 1) {
+        index = Mth.clamp(index, 0, values.size() - 1);
+        this.cycleIndex = index;
+        this.setMessage(values.get(cycleIndex).getNarration());
+        NeoForge.EVENT_BUS.post(new TWidgetContentUpdatedEvent(this));
+    }
+
     public void select(Entry entry) {
         select(values.indexOf(entry));
     }
@@ -110,6 +118,23 @@ public class TCycleButton<E> extends TButton {
         for (int i = 0; i < values.size(); i++) {
             if (predicate.test(values.get(i))) {
                 select(i);
+                return;
+            }
+        }
+    }
+
+    public void selectWithoutRespond(Entry entry) {
+        selectWithoutRespond(values.indexOf(entry));
+    }
+
+    public void selectWithoutRespond(E content) {
+        selectWithoutRespond(values.indexOf(new Entry(content)));
+    }
+
+    public void selectWithoutRespond(Predicate<Entry> predicate) {
+        for (int i = 0; i < values.size(); i++) {
+            if (predicate.test(values.get(i))) {
+                selectWithoutRespond(i);
                 return;
             }
         }

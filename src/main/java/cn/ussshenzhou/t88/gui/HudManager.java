@@ -3,7 +3,10 @@ package cn.ussshenzhou.t88.gui;
 import cn.ussshenzhou.t88.gui.event.ResizeHudEvent;
 import cn.ussshenzhou.t88.gui.util.MouseHelper;
 import cn.ussshenzhou.t88.gui.widegt.TComponent;
+import com.llamalad7.mixinextras.sugar.Local;
+import net.minecraft.client.DeltaTracker;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.GuiGraphics;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.neoforge.client.event.ClientPlayerNetworkEvent;
@@ -62,15 +65,10 @@ public class HudManager {
         needRemove.addAll(CHILDREN.stream().filter(clazz::isInstance).toList());
     }
 
-    @SubscribeEvent
-    public static void onRenderHud(RenderGuiEvent.Post event) {
+    public static void renderHud(GuiGraphics graphics, int mouseX, int mouseY, DeltaTracker partialTick) {
         if (Minecraft.getInstance().options.hideGui) {
             return;
         }
-        var graphics = event.getGuiGraphics();
-        int mouseX = (int) MouseHelper.getMouseX();
-        int mouseY = (int) MouseHelper.getMouseY();
-        var partialTick = event.getPartialTick();
         CHILDREN.forEach((tComponent) -> {
             if (tComponent.isVisibleT()) {
                 tComponent.render(graphics, mouseX, mouseY, partialTick.getRealtimeDeltaTicks());

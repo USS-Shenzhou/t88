@@ -18,7 +18,8 @@
     "SliderButtonAccessor",
     "AbstractContainerWidgetMixin",
     "GuiSpriteManagerMixin",
-    "TextureManagerMixin"
+    "TextureManagerMixin",
+    "GameRendererMixin"
     //CLASS_FOR_COMPAT
   ],
   "injectors": {

@@ -5,6 +5,7 @@ import cn.ussshenzhou.t88.gui.advanced.TSuggestedEditBox;
 import cn.ussshenzhou.t88.gui.container.TScrollContainer;
 import cn.ussshenzhou.t88.gui.container.TVerticalAndHorizontalScrollContainer;
 import cn.ussshenzhou.t88.gui.container.TVerticalScrollContainer;
+import cn.ussshenzhou.t88.gui.notification.TSimpleNotification;
 import cn.ussshenzhou.t88.gui.screen.TScreen;
 import cn.ussshenzhou.t88.gui.util.Border;
 import cn.ussshenzhou.t88.gui.util.HorizontalAlignment;
@@ -138,6 +139,8 @@ public class TestScreen extends TScreen {
         this.add(progressBar);
         progressBar.setValue(0.35);
         progressBar.setTextMode(TProgressBar.TextMode.PERCENTAGE);
+
+        TSimpleNotification.fire(Component.literal("Test Test"),10, TSimpleNotification.Severity.ERROR);
     }
 
     @Override
