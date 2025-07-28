@@ -15,4 +15,6 @@ import java.lang.annotation.Target;
 @Retention(RetentionPolicy.SOURCE)
 public @interface NetPacket {
     String modid() default "t88";
+
+    boolean handleOnNetwork() default false;
 }

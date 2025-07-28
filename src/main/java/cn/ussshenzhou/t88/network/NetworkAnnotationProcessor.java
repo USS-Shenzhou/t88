@@ -205,7 +205,7 @@ public class NetworkAnnotationProcessor extends AbstractProcessor {
                     String clientHandlerName = getNamedOf(sourceClass, ClientHandler.class);
                     String serverHandlerName = getNamedOf(sourceClass, ServerHandler.class);
                     if (sourceClass.getKind() == ElementKind.RECORD) {
-                        generateForRecord(sourceClass, registryWriter, proxyClassName, clientHandlerName, serverHandlerName, registrarName, packageName, sourceClassName);
+                        generateForRecord(sourceClass, registryWriter, proxyClassName, clientHandlerName, serverHandlerName, registrarName, packageName, sourceClassName, sourceClass.getAnnotation(NetPacket.class).handleOnNetwork());
                     } else if (sourceClass.getKind() == ElementKind.CLASS) {
                         generateForTraditionalClass(sourceClass, registryWriter, proxyClassName, clientHandlerName, serverHandlerName, registrarName, packageName, sourceClassName);
                     }
@@ -222,7 +222,7 @@ public class NetworkAnnotationProcessor extends AbstractProcessor {
         }
     }
 
-    private void generateForRecord(TypeElement sourceClass, PrintWriter registryWriter, String proxyClassName, String clientHandlerName, String serverHandlerName, String registrarName, String packageName, String sourceClassName) {
+    private void generateForRecord(TypeElement sourceClass, PrintWriter registryWriter, String proxyClassName, String clientHandlerName, String serverHandlerName, String registrarName, String packageName, String sourceClassName, boolean runOnNetworkThread) {
         String codecName = getNamedOf(sourceClass, Codec.class);
         if (codecName == null) {
             processingEnv.getMessager().printMessage(Diagnostic.Kind.ERROR,
@@ -235,7 +235,7 @@ public class NetworkAnnotationProcessor extends AbstractProcessor {
                                 %4$s.playBidirectional(%1$s.TYPE, %1$s.%5$s, new DirectionalPayloadHandler<>(
                                         (payload, context) -> %2$s,
                                         (payload, context) -> %3$s
-                                ));
+                                ))%8$s;
                                 try {
                                     cn.ussshenzhou.t88.network.NetworkHelper.register(Class.forName("%6$s"), Class.forName("%7$s"));
                                 } catch (ClassNotFoundException e) {
@@ -249,7 +249,8 @@ public class NetworkAnnotationProcessor extends AbstractProcessor {
                 registrarName,
                 codecName,
                 packageName + "." + sourceClassName,
-                packageName + GENERATED_PACKAGE_SUFFIX + "." + proxyClassName
+                packageName + GENERATED_PACKAGE_SUFFIX + "." + proxyClassName,
+                runOnNetworkThread ? ".executesOn(HandlerThread.NETWORK)" : ""
         ));
     }
 

@@ -16,7 +16,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 @Mixin(GameRenderer.class)
 public class GameRendererMixin {
 
-    @Inject(method = "render", at = @At(value = "INVOKE", target = "Lnet/neoforged/neoforge/client/ClientHooks;drawScreen(Lnet/minecraft/client/gui/screens/Screen;Lnet/minecraft/client/gui/GuiGraphics;IIF)V", shift = At.Shift.AFTER))
+    @Inject(method = "render", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/components/toasts/ToastManager;render(Lnet/minecraft/client/gui/GuiGraphics;)V"))
     public void t88RenderHud(CallbackInfo info, @Local GuiGraphics guiGraphics, @Local(ordinal = 0) int mouseX, @Local(ordinal = 1) int mouseY, @Local(argsOnly = true) DeltaTracker deltaTracker) {
         HudManager.renderHud(guiGraphics, mouseX, mouseY, deltaTracker);
     }
