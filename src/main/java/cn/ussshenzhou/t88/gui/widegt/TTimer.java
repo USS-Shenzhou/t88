@@ -53,13 +53,13 @@ public class TTimer extends TLabel {
     @Override
     public void tickT() {
         super.tickT();
-        if (!updateGui) {
-            return;
-        }
         updateText();
     }
 
     private void updateText() {
+        if (!updateGui) {
+            return;
+        }
         int ms = (int) (time % 1000);
         int s = (int) (time / 1000 % 60);
         int min = (int) (time / 1000 / 60 % 60);
