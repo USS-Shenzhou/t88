@@ -2,7 +2,7 @@ plugins {
     id 'java-library'
     id 'maven-publish'
     id 'idea'
-    id 'net.neoforged.moddev' version '2.0.80'
+    id 'net.neoforged.moddev' version '2.0.105'
 }
 
 version = mod_version
@@ -197,6 +197,10 @@ publishing {
             url "file://${project.projectDir}/repo"
         }
     }
+}
+
+java {
+    withSourcesJar()
 }
 
 // IDEA no longer automatically downloads sources/javadoc jars for dependencies, so we need to explicitly enable the behavior.

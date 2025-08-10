@@ -97,7 +97,7 @@ public class NetworkAnnotationProcessor extends AbstractProcessor {
                 packageName,
                 originalClassName,
                 netPacket.modid(),
-                originalClassName.toLowerCase(),
+                netPacket.id().isEmpty() ? originalClassName.toLowerCase() : netPacket.id().toLowerCase(),
                 encoderName
         );
         registryWriter.println(proxyClassCode);
@@ -148,7 +148,7 @@ public class NetworkAnnotationProcessor extends AbstractProcessor {
                             }
                         """,
                 netPacket.modid(),
-                originalClassName.toLowerCase(),
+                netPacket.id().isEmpty() ? originalClassName.toLowerCase() : netPacket.id().toLowerCase(),
                 originalClassName + PROXY_CLASS_SUFFIX
         ));
         registryWriter.println(proxyRecordContent);

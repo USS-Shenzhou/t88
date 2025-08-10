@@ -4,11 +4,13 @@ import cn.ussshenzhou.t88.gui.container.TVerticalScrollContainer;
 import cn.ussshenzhou.t88.gui.util.HorizontalAlignment;
 import cn.ussshenzhou.t88.gui.util.LayoutHelper;
 import cn.ussshenzhou.t88.gui.widegt.*;
+import cn.ussshenzhou.t88.util.Util;
 import net.minecraft.network.chat.Component;
 import net.minecraft.util.Tuple;
 import org.joml.Vector2i;
 
 import javax.annotation.Nullable;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.function.*;
 
@@ -16,7 +18,7 @@ import java.util.function.*;
  * @author USS_Shenzhou
  */
 public class TOptionsPanel extends TPanel {
-    private final OptionContainerVertical container;
+    public final OptionContainerVertical container;
     protected int gapBetweenOptions = 4;
     protected HorizontalAlignment titleHorizontalAlignment = HorizontalAlignment.RIGHT;
 
@@ -45,13 +47,13 @@ public class TOptionsPanel extends TPanel {
 
     public Tuple<TOptionsPanel, TSlider> addOptionSliderDoubleInit(Component title, double minValue, double maxValue, @Nullable Component tipText, BiConsumer<TSlider, Double> responder, double initAbsValue, boolean applyValueImmediately) {
         var r = addOptionSliderDouble(title, minValue, maxValue, tipText, responder, applyValueImmediately);
-        r.getB().setAbsValue(initAbsValue);
+        r.getB().setAbsValueWithoutRespond(initAbsValue);
         return r;
     }
 
     public Tuple<TOptionsPanel, TSlider> addOptionSliderDoubleInit(Component title, double minValue, double maxValue, BiFunction<Component, Double, Component> textFromCaptionAndValue, @Nullable Component tipText, BiConsumer<TSlider, Double> responder, double initAbsValue, boolean applyValueImmediately) {
         var r = addOptionSliderDouble(title, minValue, maxValue, textFromCaptionAndValue, tipText, responder, applyValueImmediately);
-        r.getB().setAbsValue(initAbsValue);
+        r.getB().setAbsValueWithoutRespond(initAbsValue);
         return r;
     }
 
@@ -110,27 +112,32 @@ public class TOptionsPanel extends TPanel {
         super.layout();
     }
 
-    private static class OptionContainerVertical extends TVerticalScrollContainer {
+    public static class OptionContainerVertical extends TVerticalScrollContainer {
         public OptionContainerVertical() {
         }
 
         @Override
         public void layout() {
-            int i = 0;
+            int count = 0;
             int gapBetweenOptions = ((TOptionsPanel) this.getParentLazy()).gapBetweenOptions;
-            for (TWidget tWidget : this.children) {
-                if (i == 0) {
+            for (int i = 0; i < this.children.size(); i++) {
+                TWidget tWidget = this.children.get(i);
+                if (!tWidget.isVisibleT()) {
+                    continue;
+                }
+                if (count == 0) {
                     tWidget.setBounds(gapBetweenOptions, gapBetweenOptions, getUsableWidth() - 2 * gapBetweenOptions, tWidget.getPreferredSize().y);
                 } else {
-                    LayoutHelper.BBottomOfA(tWidget, gapBetweenOptions, this.children.get(i - 1));
+                    //noinspection DataFlowIssue
+                    LayoutHelper.BBottomOfA(tWidget, gapBetweenOptions, Util.findBefore(children, i, TWidget::isVisibleT), getUsableWidth() - 2 * gapBetweenOptions, tWidget.getPreferredSize().y);
                 }
-                i++;
+                count++;
             }
             super.layout();
         }
     }
 
-    private static class HorizontalTitledOption<T extends TWidget> extends TPanel {
+    public static class HorizontalTitledOption<T extends TWidget> extends TPanel {
         protected final TLabel title;
         protected final T controller;
 

@@ -16,5 +16,7 @@ import java.lang.annotation.Target;
 public @interface NetPacket {
     String modid() default "t88";
 
+    String id() default "";
+
     boolean handleOnNetwork() default false;
 }

@@ -11,9 +11,9 @@ import java.util.function.Consumer;
  */
 public abstract class TConstrainedEditBox extends TEditBox {
     protected final LinkedList<Consumer<String>> passedResponders = new LinkedList<>();
-    public static final int RED_TEXT_COLOR = 0xfc5454;
+    public static final int RED_TEXT_COLOR = 0xfffc5454;
     public static final int WHITE_TEXT_COLOR = DEFAULT_TEXT_COLOR;
-    public static final int BLUE_TEXT_COLOR = 0x37e2ff;
+    public static final int BLUE_TEXT_COLOR = 0xff37e2ff;
 
     public TConstrainedEditBox() {
         super();

@@ -105,6 +105,7 @@ public class TItem extends TPanel {
         }
         graphics.pose().pushMatrix();
         graphics.pose().translate(x, y);
+        graphics.pose().scale(itemSize / DEFAULT_SIZE);
         graphics.renderItem(item, 0, 0);
         graphics.pose().popMatrix();
     }

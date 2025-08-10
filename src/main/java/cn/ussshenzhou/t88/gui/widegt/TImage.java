@@ -95,13 +95,15 @@ public class TImage extends TPanel {
                     float panelWHRatio = width / (float) height;
                     float imageWHRatio = imageWidth / (float) imageHeight;
                     if (panelWHRatio > imageWHRatio) {
-                        guigraphics.blit(RenderPipelines.GUI_TEXTURED, imageLocation, this.x, this.y, width, height,
+                        guigraphics.blit(RenderPipelines.GUI_TEXTURED, imageLocation, this.x, this.y,
                                 0, (int) ((imageHeight - imageWidth / panelWHRatio) / 2),
+                                width, height,
                                 imageWidth, (int) (imageWidth / panelWHRatio),
                                 (int) (imageWidth * scale), (int) (imageHeight * scale), color);
                     } else {
-                        guigraphics.blit(RenderPipelines.GUI_TEXTURED, imageLocation, this.x, this.y, width, height,
+                        guigraphics.blit(RenderPipelines.GUI_TEXTURED, imageLocation, this.x, this.y,
                                 (int) ((imageWidth - imageHeight * panelWHRatio) / 2), 0,
+                                width, height,
                                 (int) (imageHeight * panelWHRatio), imageHeight,
                                 (int) (imageWidth * scale), (int) (imageHeight * scale), color);
                     }
@@ -111,22 +113,22 @@ public class TImage extends TPanel {
                     float imageWHRatio = imageWidth / (float) imageHeight;
                     if (panelWHRatio > imageWHRatio) {
                         guigraphics.blit(RenderPipelines.GUI_TEXTURED, imageLocation, (int) (this.x + (width - height * imageWHRatio) / 2), this.y,
-                                (int) (height * imageWHRatio), height,
                                 0, 0,
+                                (int) (height * imageWHRatio), height,
                                 imageWidth, imageHeight,
                                 (int) (imageWidth * scale), (int) (imageHeight * scale), color);
                     } else {
                         guigraphics.blit(RenderPipelines.GUI_TEXTURED, imageLocation, this.x, (int) (this.y + (height - width / imageWHRatio) / 2),
-                                width, (int) (width / imageWHRatio),
                                 0, 0,
+                                width, (int) (width / imageWHRatio),
                                 imageWidth, imageHeight,
                                 (int) (imageWidth * scale), (int) (imageHeight * scale), color);
                     }
                 }
                 case STRETCH ->
-                        guigraphics.blit(RenderPipelines.GUI_TEXTURED, imageLocation, this.x, this.y, width, height, 0, 0, imageWidth, imageHeight, (int) (imageWidth * scale), (int) (imageHeight * scale));
+                        guigraphics.blit(RenderPipelines.GUI_TEXTURED, imageLocation, this.x, this.y, 0, 0, width, height, imageWidth, imageHeight, (int) (imageWidth * scale), (int) (imageHeight * scale));
                 case TILE ->
-                        guigraphics.blit(RenderPipelines.GUI_TEXTURED, imageLocation, this.x, this.y, width, height, 0, 0, width, height, (int) (imageWidth * scale), (int) (imageHeight * scale));
+                        guigraphics.blit(RenderPipelines.GUI_TEXTURED, imageLocation, this.x, this.y, 0, 0, width, height, width, height, (int) (imageWidth * scale), (int) (imageHeight * scale));
             }
         }
         super.render(guigraphics, pMouseX, pMouseY, pPartialTick);

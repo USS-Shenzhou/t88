@@ -3,6 +3,7 @@ package cn.ussshenzhou.t88.mixin;
 import cn.ussshenzhou.t88.gui.container.TVerticalScrollContainer;
 import cn.ussshenzhou.t88.gui.util.MouseHelper;
 import cn.ussshenzhou.t88.gui.widegt.TWidget;
+import com.llamalad7.mixinextras.sugar.Local;
 import net.minecraft.client.gui.components.AbstractWidget;
 import org.objectweb.asm.Opcodes;
 import org.spongepowered.asm.mixin.Mixin;
@@ -33,24 +34,11 @@ public abstract class AbstractWidgetMixin {
 
     @SuppressWarnings("AlibabaLowerCamelCaseVariableNaming")
     @Redirect(method = "render", at = @At(value = "FIELD", target = "Lnet/minecraft/client/gui/components/AbstractWidget;isHovered:Z", opcode = Opcodes.PUTFIELD))
-    private void t88TScrollPanelCompatability(AbstractWidget instance, boolean value) {
+    private void t88TScrollPanelCompatability(AbstractWidget instance, boolean value, @Local(argsOnly = true, ordinal = 0) int x, @Local(argsOnly = true, ordinal = 1) int y) {
         if (instance instanceof TWidget tWidget) {
-            var mouseX = MouseHelper.getMouseX();
-            var mouseY = MouseHelper.getMouseY();
-
-            var scrollContainer = tWidget.getParentInstanceOf(TVerticalScrollContainer.class);
-            if (scrollContainer != null) {
-                if (scrollContainer.isInRange(mouseX, mouseY)) {
-                    var scroll = tWidget.getParentScroll();
-                    this.isHovered = mouseX >= this.getX() - scroll.x
-                            && mouseY >= this.getY() - scroll.y
-                            && mouseX < this.getX() + this.width - scroll.x
-                            && mouseY < this.getY() + this.height - scroll.y;
-                } else {
-                    this.isHovered = false;
-                }
-                return;
-            }
+            var scroll = tWidget.getParentScroll();
+            this.isHovered = tWidget.isInRange(x + scroll.x, y + scroll.y);
+            return;
         }
         this.isHovered = value;
     }

@@ -1,5 +1,6 @@
 package cn.ussshenzhou.t88.gui;
 
+import cn.ussshenzhou.t88.T88;
 import cn.ussshenzhou.t88.gui.advanced.TLabelButton;
 import cn.ussshenzhou.t88.gui.advanced.TSuggestedEditBox;
 import cn.ussshenzhou.t88.gui.container.TScrollContainer;
@@ -16,6 +17,7 @@ import net.minecraft.client.gui.Font;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.commands.Commands;
 import net.minecraft.network.chat.Component;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 
@@ -69,6 +71,7 @@ public class TestScreen extends TScreen {
     private final TItem item = new TItem(new ItemStack(Items.GRASS_BLOCK, 10), null, 32);
 
     private final TProgressBar progressBar = new TProgressBar();
+    private final TImage image = new TImage(ResourceLocation.fromNamespaceAndPath(T88.MOD_ID, "textures/gui/t88.png"));
 
     public TestScreen() {
         super(Component.empty());
@@ -137,10 +140,12 @@ public class TestScreen extends TScreen {
         item.setBorder(new Border(0xffffffff, 1));
 
         this.add(progressBar);
-        progressBar.setValue(0.35);
+        progressBar.setValue(0.79);
         progressBar.setTextMode(TProgressBar.TextMode.PERCENTAGE);
+        progressBar.setProgressBarColorGradient(0xff00ff00, 0xffff0000);
 
-        TSimpleNotification.fire(Component.literal("Test Test"),10, TSimpleNotification.Severity.ERROR);
+        TSimpleNotification.fire(Component.literal("Test Test"), 10, TSimpleNotification.Severity.ERROR);
+        this.add(image);
     }
 
     @Override
@@ -155,6 +160,7 @@ public class TestScreen extends TScreen {
         labelButton.setBounds(50, 210, 100, 30);
         LayoutHelper.BRightOfA(item, 4, tTimer, item.getPreferredSize());
         progressBar.setBounds(10, (int) (height * 0.8), 200, 10);
+        image.setBounds(100, 0, 40, 40);
         super.layout();
     }
 

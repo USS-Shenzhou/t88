@@ -5,13 +5,18 @@ import cn.ussshenzhou.t88.gui.screen.TScreen;
 import cn.ussshenzhou.t88.gui.util.Border;
 import cn.ussshenzhou.t88.gui.util.ColorManager;
 import cn.ussshenzhou.t88.gui.util.HorizontalAlignment;
+import cn.ussshenzhou.t88.gui.util.HorizontalColoredRectangleRenderState;
 import com.google.common.collect.ImmutableList;
 import net.minecraft.Util;
 import net.minecraft.client.gui.Font;
 import net.minecraft.client.gui.components.Tooltip;
 import net.minecraft.client.gui.components.WidgetTooltipHolder;
+import net.minecraft.client.gui.render.TextureSetup;
+import net.minecraft.client.gui.render.state.ColoredRectangleRenderState;
+import net.minecraft.client.renderer.RenderPipelines;
 import net.minecraft.network.chat.Component;
 import net.minecraft.util.Mth;
+import org.joml.Matrix3x2f;
 import org.joml.Vector2i;
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.*;
@@ -35,7 +40,7 @@ public abstract class TComponent implements TWidget {
     //argb
     protected int background = 0x00000000;
     protected int foreground = ColorManager.get().defaultForeground();
-    protected LinkedList<TWidget> children = new LinkedList<>();
+    protected ArrayList<TWidget> children = new ArrayList<>();
     protected Border border = null;
     TComponent parent = null;
     TScreen parentScreen = null;
@@ -477,5 +482,21 @@ public abstract class TComponent implements TWidget {
         double d2 = Math.sin((Math.PI / 2D) * Math.cos((Math.PI * 2D) * d0 / d1)) / 2.0D + 0.5D;
         double d3 = Mth.lerp(d2, 0.0D, extra);
         graphics.drawString(font, text, minX - (int) d3, minY, color);
+    }
+
+    public void fillGradientHorizontal(GuiGraphics graphics, int minX, int minY, int maxX, int maxY, int colorFrom, int colorTo) {
+        graphics.guiRenderState.submitGuiElement(
+                new HorizontalColoredRectangleRenderState(
+                        RenderPipelines.GUI, TextureSetup.noTexture(),
+                        new Matrix3x2f(graphics.pose()),
+                        minX,
+                        minY,
+                        maxX,
+                        maxY,
+                        colorFrom,
+                        colorTo,
+                        graphics.scissorStack.peek()
+                )
+        );
     }
 }
