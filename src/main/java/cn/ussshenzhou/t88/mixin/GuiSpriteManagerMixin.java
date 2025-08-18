@@ -26,7 +26,7 @@ public abstract class GuiSpriteManagerMixin extends TextureAtlasHolder {
 
     @Inject(method = "getSprite", at = @At("HEAD"), cancellable = true)
     private void t88ReplaceStyle(CallbackInfoReturnable<TextureAtlasSprite> cir, @Local(argsOnly = true) ResourceLocation originalLocation) {
-        if (!ResourceLocation.DEFAULT_NAMESPACE.equals(originalLocation.getNamespace()) || !ConfigHelper.getConfigRead(T88Config.class).replaceStyle) {
+        if (!ResourceLocation.DEFAULT_NAMESPACE.equals(originalLocation.getNamespace()) || (ConfigHelper.getConfigRead(T88Config.class) != null && !ConfigHelper.getConfigRead(T88Config.class).replaceStyle)) {
             return;
         }
         var path = originalLocation.getPath();

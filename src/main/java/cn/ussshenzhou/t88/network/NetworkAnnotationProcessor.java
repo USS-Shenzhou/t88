@@ -206,7 +206,7 @@ public class NetworkAnnotationProcessor extends AbstractProcessor {
                     if (sourceClass.getKind() == ElementKind.RECORD) {
                         generateForRecord(sourceClass, registryWriter, proxyClassName, clientHandlerName, serverHandlerName, registrarName, packageName, sourceClassName, sourceClass.getAnnotation(NetPacket.class).handleOnNetwork());
                     } else if (sourceClass.getKind() == ElementKind.CLASS) {
-                        generateForTraditionalClass(sourceClass, registryWriter, proxyClassName, clientHandlerName, serverHandlerName, registrarName, packageName, sourceClassName);
+                        generateForTraditionalClass(sourceClass, registryWriter, proxyClassName, clientHandlerName, serverHandlerName, registrarName, packageName, sourceClassName, sourceClass.getAnnotation(NetPacket.class).handleOnNetwork());
                     }
                 });
             });
@@ -253,7 +253,7 @@ public class NetworkAnnotationProcessor extends AbstractProcessor {
         ));
     }
 
-    private void generateForTraditionalClass(TypeElement sourceClass, PrintWriter registryWriter, String proxyClassName, String clientHandlerName, String serverHandlerName, String registrarName, String packageName, String sourceClassName) {
+    private void generateForTraditionalClass(TypeElement sourceClass, PrintWriter registryWriter, String proxyClassName, String clientHandlerName, String serverHandlerName, String registrarName, String packageName, String sourceClassName, boolean runOnNetworkThread) {
         String decoderName = getNamedOf(sourceClass, Decoder.class);
         if (decoderName == null) {
             processingEnv.getMessager().printMessage(Diagnostic.Kind.ERROR,
@@ -266,10 +266,10 @@ public class NetworkAnnotationProcessor extends AbstractProcessor {
             decoderName = "new";
         }
         registryWriter.println(String.format("""
-                                %4$s.playBidirectional(%1$s.TYPE, StreamCodec.ofMember(%1$s::write,%1$s::%5$s), new DirectionalPayloadHandler<>(
+                                %4$s.playBidirectional(%1$s.TYPE, StreamCodec.ofMember(%1$s::write,%1$s::%5$s),
                                         (payload, context) -> %2$s,
                                         (payload, context) -> %3$s
-                                ));
+                                )%8$s;
                                 try {
                                     cn.ussshenzhou.t88.network.NetworkHelper.register(Class.forName("%6$s"), Class.forName("%7$s"));
                                 } catch (ClassNotFoundException e) {
@@ -283,7 +283,8 @@ public class NetworkAnnotationProcessor extends AbstractProcessor {
                 registrarName,
                 decoderName,
                 packageName + "." + sourceClassName,
-                packageName + GENERATED_PACKAGE_SUFFIX + "." + proxyClassName
+                packageName + GENERATED_PACKAGE_SUFFIX + "." + proxyClassName,
+                runOnNetworkThread ? ".executesOn(HandlerThread.NETWORK)" : ""
         ));
     }
 

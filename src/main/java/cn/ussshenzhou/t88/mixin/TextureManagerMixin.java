@@ -32,7 +32,7 @@ public abstract class TextureManagerMixin {
 
     @Inject(method = "getTexture", at = @At("HEAD"), cancellable = true)
     public void t88ReplaceStyle(ResourceLocation originalLocation, CallbackInfoReturnable<AbstractTexture> cir) {
-        if (!ResourceLocation.DEFAULT_NAMESPACE.equals(originalLocation.getNamespace()) || !ConfigHelper.getConfigRead(T88Config.class).replaceStyle) {
+        if (!ResourceLocation.DEFAULT_NAMESPACE.equals(originalLocation.getNamespace()) || (ConfigHelper.getConfigRead(T88Config.class) != null && !ConfigHelper.getConfigRead(T88Config.class).replaceStyle)) {
             return;
         }
         var replacedLocation = ResourceLocation.fromNamespaceAndPath(T88.MOD_ID, originalLocation.getPath().replace("/gui/", "/t88_style/"));
