@@ -7,6 +7,7 @@ import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.level.ChunkPos;
+import net.neoforged.neoforge.client.network.ClientPacketDistributor;
 import net.neoforged.neoforge.network.PacketDistributor;
 
 import javax.annotation.Nullable;
@@ -59,11 +60,11 @@ public class NetworkHelper {
 
     public static <MSG> void sendToServer(MSG packet) {
         if (packet instanceof CustomPacketPayload c) {
-            PacketDistributor.sendToServer(c);
+            ClientPacketDistributor.sendToServer(c);
         } else {
             var p = convert(packet);
             if (p != null) {
-                PacketDistributor.sendToServer(p);
+                ClientPacketDistributor.sendToServer(p);
             }
         }
     }

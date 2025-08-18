@@ -7,6 +7,7 @@ import cn.ussshenzhou.t88.networkanalyzer.NetworkWatcher;
 import cn.ussshenzhou.t88.networkanalyzer.SenderInfo;
 import cn.ussshenzhou.t88.networkanalyzer.SizeAndTimes;
 import net.minecraft.network.chat.Component;
+import net.neoforged.neoforge.client.network.ClientPacketDistributor;
 import net.neoforged.neoforge.network.PacketDistributor;
 import org.jetbrains.annotations.NotNull;
 
@@ -37,7 +38,7 @@ public class NetworkWatcherScreen extends TScreen {
             public void tickT() {
                 super.tickT();
                 if (this.isVisibleT() && this.isWorking()) {
-                    PacketDistributor.sendToServer(new ClientRequestServerNetworkDataPacket());
+                    ClientPacketDistributor.sendToServer(new ClientRequestServerNetworkDataPacket());
                 }
             }
 

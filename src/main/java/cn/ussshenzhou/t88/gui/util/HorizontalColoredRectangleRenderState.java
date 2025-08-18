@@ -5,13 +5,10 @@ import com.mojang.blaze3d.vertex.VertexConsumer;
 import net.minecraft.client.gui.navigation.ScreenRectangle;
 import net.minecraft.client.gui.render.TextureSetup;
 import net.minecraft.client.gui.render.state.GuiElementRenderState;
-import net.neoforged.api.distmarker.Dist;
-import net.neoforged.api.distmarker.OnlyIn;
 import org.joml.Matrix3x2f;
 
 import javax.annotation.Nullable;
 
-@OnlyIn(Dist.CLIENT)
 public record HorizontalColoredRectangleRenderState(
         RenderPipeline pipeline,
         TextureSetup textureSetup,

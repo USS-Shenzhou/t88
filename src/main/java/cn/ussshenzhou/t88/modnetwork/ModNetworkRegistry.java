@@ -4,7 +4,6 @@ import cn.ussshenzhou.t88.T88;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.neoforge.network.event.RegisterPayloadHandlersEvent;
-import net.neoforged.neoforge.network.handling.DirectionalPayloadHandler;
 
 /**
  * @author USS_Shenzhou
@@ -16,16 +15,16 @@ public class ModNetworkRegistry {
     public static void networkPacketRegistry(RegisterPayloadHandlersEvent event) {
         var registrar = event.registrar(T88.MOD_ID);
 
-        registrar.commonBidirectional(ServerNetworkDataPacket.TYPE, ServerNetworkDataPacket.STREAM_CODEC, new DirectionalPayloadHandler<>(
+        registrar.commonBidirectional(ServerNetworkDataPacket.TYPE, ServerNetworkDataPacket.STREAM_CODEC,
                 ServerNetworkDataPacket::clientHandler,
                 (payload, context) -> {
                 }
-        ));
+        );
 
-        registrar.commonBidirectional(ClientRequestServerNetworkDataPacket.TYPE, ClientRequestServerNetworkDataPacket.STREAM_CODEC, new DirectionalPayloadHandler<>(
+        registrar.commonBidirectional(ClientRequestServerNetworkDataPacket.TYPE, ClientRequestServerNetworkDataPacket.STREAM_CODEC,
                 (payload, context) -> {
                 },
                 ClientRequestServerNetworkDataPacket::serverHandler
-        ));
+        );
     }
 }
