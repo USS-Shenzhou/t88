@@ -2,6 +2,7 @@ package cn.ussshenzhou.t88.gui.advanced;
 
 import cn.ussshenzhou.t88.gui.util.Border;
 import cn.ussshenzhou.t88.gui.util.HorizontalAlignment;
+import cn.ussshenzhou.t88.gui.widegt.TComponent;
 import org.joml.Vector2i;
 import cn.ussshenzhou.t88.gui.widegt.TButton;
 import cn.ussshenzhou.t88.gui.widegt.TLabel;
@@ -81,5 +82,17 @@ public class TLabelButton extends TLabel {
 
     public TButton getButton() {
         return button;
+    }
+
+    @Override
+    @Deprecated
+    public TComponent setBackground(int background) {
+        return super.setBackground(background);
+    }
+
+    @Override
+    @Deprecated
+    public int getBackground() {
+        return super.getBackground();
     }
 }
