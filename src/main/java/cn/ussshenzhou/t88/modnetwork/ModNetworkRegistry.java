@@ -16,15 +16,15 @@ public class ModNetworkRegistry {
         var registrar = event.registrar(T88.MOD_ID);
 
         registrar.commonBidirectional(ServerNetworkDataPacket.TYPE, ServerNetworkDataPacket.STREAM_CODEC,
-                ServerNetworkDataPacket::clientHandler,
                 (payload, context) -> {
-                }
+                },
+                ServerNetworkDataPacket::clientHandler
         );
 
         registrar.commonBidirectional(ClientRequestServerNetworkDataPacket.TYPE, ClientRequestServerNetworkDataPacket.STREAM_CODEC,
+                ClientRequestServerNetworkDataPacket::serverHandler,
                 (payload, context) -> {
-                },
-                ClientRequestServerNetworkDataPacket::serverHandler
+                }
         );
     }
 }
