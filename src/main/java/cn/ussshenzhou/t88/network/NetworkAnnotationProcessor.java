@@ -172,6 +172,7 @@ public class NetworkAnnotationProcessor extends AbstractProcessor {
                     import net.neoforged.fml.common.EventBusSubscriber;
                     import net.neoforged.fml.common.Mod;
                     import net.neoforged.neoforge.network.event.RegisterPayloadHandlersEvent;
+                    import net.neoforged.neoforge.network.registration.HandlerThread;
                     import net.neoforged.neoforge.network.registration.PayloadRegistrar;
                     """, thisPackageName));
             sources.forEach(element -> {

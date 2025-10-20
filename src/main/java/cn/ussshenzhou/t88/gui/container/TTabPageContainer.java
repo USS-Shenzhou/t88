@@ -96,7 +96,7 @@ public class TTabPageContainer extends TPanel {
         public TabContainerVertical() {
             super();
             this.bottomMargin = 0;
-            this.setBorder(new Border(0x7f_ffffff, 1));
+            //this.setBorder(new Border(0x7f_ffffff, 1));
         }
 
         private Tab newTab(Component c, TWidget content) {
