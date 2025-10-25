@@ -128,6 +128,7 @@ public class TestScreen extends TScreen {
         //this.add(editBox2);
         this.add(scrollPanel);
         scrollPanel.add(editBox);
+        editBox.setValue("Test");
         scrollPanel.add(editBox2);
         scrollPanel.add(selectList);
         //this.add(selectList);

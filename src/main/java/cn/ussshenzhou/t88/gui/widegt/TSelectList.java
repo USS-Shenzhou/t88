@@ -285,12 +285,11 @@ public class TSelectList<E> extends ObjectSelectionList<TSelectList<E>.Entry> im
 
     @Override
     protected void enableScissor(GuiGraphics guigraphics) {
-        var scroll = this.getParentScroll();
         guigraphics.enableScissor(
-                (int) (this.x),
-                (int) (this.y),
-                (int) (this.x1 + width),
-                (int) (this.y1 + height));
+                this.x,
+                this.y,
+                this.x1,
+                this.y1);
     }
 
     @Override
