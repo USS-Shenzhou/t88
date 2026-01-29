@@ -1,6 +1,6 @@
 package cn.ussshenzhou.t88.networkanalyzer;
 
-import net.minecraft.Util;
+import net.minecraft.util.Util;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.neoforge.client.event.ClientTickEvent;

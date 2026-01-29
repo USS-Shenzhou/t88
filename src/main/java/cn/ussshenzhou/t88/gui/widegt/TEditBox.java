@@ -3,11 +3,10 @@ package cn.ussshenzhou.t88.gui.widegt;
 import cn.ussshenzhou.t88.gui.event.ClearEditBoxFocusEvent;
 import cn.ussshenzhou.t88.gui.event.TWidgetContentUpdatedEvent;
 import cn.ussshenzhou.t88.gui.screen.TScreen;
-import cn.ussshenzhou.t88.gui.util.AccessorProxy;
 import cn.ussshenzhou.t88.gui.util.VanillaWidget2TComponentHelper;
-import net.minecraft.client.gui.screens.Screen;
+import net.minecraft.client.input.CharacterEvent;
+import net.minecraft.client.input.MouseButtonEvent;
 import net.minecraft.util.StringUtil;
-import org.jetbrains.annotations.NotNull;
 import org.joml.Vector2i;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Font;
@@ -43,14 +42,14 @@ public class TEditBox extends EditBox implements TWidget, TResponder<String> {
     }
 
     @Override
-    public boolean charTyped(char pCodePoint, int pModifiers) {
+    public boolean charTyped(CharacterEvent event) {
         if (!this.canConsumeInput()) {
             return false;
         }
         if (isEditable()) {
-            boolean canInsert = !checkInput || StringUtil.isAllowedChatCharacter(pCodePoint);
+            boolean canInsert = !checkInput || StringUtil.isAllowedChatCharacter(event.codepoint());
             if (canInsert) {
-                this.insertText(Character.toString(pCodePoint));
+                this.insertText(Character.toString(event.codepoint()));
                 return true;
             }
         }
@@ -100,7 +99,7 @@ public class TEditBox extends EditBox implements TWidget, TResponder<String> {
     }
 
     public int getCursorX() {
-        return getXT() + Minecraft.getInstance().font.width(getValue().substring(AccessorProxy.EditBoxProxy.getDisplayPos(this), getCursorPosition()));
+        return getXT() + Minecraft.getInstance().font.width(getValue().substring(this.displayPos, getCursorPosition()));
     }
 
     public int getCurrentWordBeginX() {
@@ -111,7 +110,7 @@ public class TEditBox extends EditBox implements TWidget, TResponder<String> {
         }
         b++;
         Font font = Minecraft.getInstance().font;
-        return getXT() + font.width(s.substring(AccessorProxy.EditBoxProxy.getDisplayPos(this), b)) + font.width(" ");
+        return getXT() + font.width(s.substring(this.displayPos, b)) + font.width(" ");
     }
 
     @Deprecated
@@ -220,19 +219,19 @@ public class TEditBox extends EditBox implements TWidget, TResponder<String> {
     }
 
     @Override
-    public boolean mouseDragged(double pMouseX, double pMouseY, int pButton, double pDragX, double pDragY) {
-        if (isInRange(pMouseX, pMouseY)) {
-            return super.mouseDragged(pMouseX, pMouseY, pButton, pDragX, pDragY);
+    public boolean mouseDragged(MouseButtonEvent event, double dx, double dy) {
+        if (isInRange(event)) {
+            return super.mouseDragged(event, dx, dy);
         }
         return false;
     }
 
     @Override
-    public boolean mouseClicked(double pMouseX, double pMouseY, int pButton) {
-        if (AccessorProxy.EditBoxProxy.isEditBoxEdible(this)) {
-            if (isInRange(pMouseX, pMouseY)) {
+    public boolean mouseClicked(MouseButtonEvent event, boolean doubleClick) {
+        if (this.isEditable()) {
+            if (isInRange(event)) {
                 this.setFocused(true);
-                return super.mouseClicked(pMouseX, pMouseY, pButton);
+                return super.mouseClicked(event, doubleClick);
             }
         }
         return false;
@@ -241,9 +240,9 @@ public class TEditBox extends EditBox implements TWidget, TResponder<String> {
     @Override
     public void setEditable(boolean pEnabled) {
         String s = Language.getInstance().getOrDefault("gui.t88.invalid");
-        if (!pEnabled && "".equals(getValue())) {
+        if (!pEnabled && getValue().isEmpty()) {
             setValue(s);
-            AccessorProxy.EditBoxProxy.setDisplayPos(this, 0);
+            this.displayPos = 0;
         } else if (pEnabled && s.equals(getValue())) {
             setValue("");
         }
@@ -251,6 +250,6 @@ public class TEditBox extends EditBox implements TWidget, TResponder<String> {
     }
 
     public boolean isEditable() {
-        return AccessorProxy.EditBoxProxy.isEditBoxEdible(this);
+        return this.isEditable;
     }
 }

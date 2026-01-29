@@ -4,12 +4,12 @@ import cn.ussshenzhou.t88.T88;
 import cn.ussshenzhou.t88.networkanalyzer.NetworkWatcher;
 import cn.ussshenzhou.t88.networkanalyzer.SenderInfo;
 import cn.ussshenzhou.t88.networkanalyzer.SizeAndTimes;
+import com.mojang.logging.annotations.MethodsReturnNonnullByDefault;
 import io.netty.buffer.ByteBuf;
-import net.minecraft.MethodsReturnNonnullByDefault;
 import net.minecraft.network.codec.ByteBufCodecs;
 import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.neoforged.neoforge.network.handling.IPayloadContext;
 
 import java.util.HashMap;
@@ -21,7 +21,7 @@ import java.util.HashMap;
 public record ServerNetworkDataPacket(HashMap<SenderInfo, SizeAndTimes> sent,
                                       HashMap<SenderInfo, SizeAndTimes> received) implements CustomPacketPayload {
 
-    public static final Type<ServerNetworkDataPacket> TYPE = new Type<>(ResourceLocation.fromNamespaceAndPath(T88.MOD_ID, "server_network_data"));
+    public static final Type<ServerNetworkDataPacket> TYPE = new Type<>(Identifier.fromNamespaceAndPath(T88.MOD_ID, "server_network_data"));
 
     public static final StreamCodec<ByteBuf, ServerNetworkDataPacket> STREAM_CODEC = StreamCodec.composite(
             ByteBufCodecs.map(HashMap::new, SenderInfo.STREAM_CODEC, SizeAndTimes.STREAM_CODEC),

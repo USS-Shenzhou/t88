@@ -2,12 +2,11 @@ plugins {
     id 'java-library'
     id 'maven-publish'
     id 'idea'
-    id 'net.neoforged.moddev' version '2.0.105'
+    id 'net.neoforged.moddev' version '2.0.137'
 }
 
 version = mod_version
 group = mod_group_id
-var shaderpack_in_dev = project.shaderpack_in_dev == 'true'
 
 repositories {
     mavenLocal()
@@ -17,21 +16,13 @@ base {
     archivesName = mod_id
 }
 
-java.toolchain.languageVersion = JavaLanguageVersion.of(21)
-
-sourceSets {
-    main {
-        java {
-            if (!shaderpack_in_dev) {
-                exclude 'cn/ussshenzhou/t88/mixin/compat/*'
-            }
-        }
-    }
-}
+java.toolchain.languageVersion = JavaLanguageVersion.of(25)
 
 neoForge {
     // Specify the version of NeoForge to use.
-    version = project.neo_version
+    enable {
+        version = project.neo_version
+    }
 
     parchment {
         mappingsVersion = project.parchment_mappings_version
@@ -123,15 +114,6 @@ dependencies {
     // This maps to ./libs/coolmod-${mc_version}-${coolmod_version}.jar
     // The group id is ignored when searching -- in this case, it is "blank"
     // implementation "blank:coolmod-${mc_version}:${coolmod_version}"
-    if (shaderpack_in_dev) {
-        implementation fileTree(dir: 'libs', include: ['*.jar'])
-        implementation(jarJar("org.sinytra.forgified-fabric-api:fabric-api-base:0.4.42+d1308ded19"))
-        implementation(jarJar("org.sinytra.forgified-fabric-api:fabric-renderer-api-v1:3.4.0+acb05a3919"))
-        implementation(jarJar("org.sinytra.forgified-fabric-api:fabric-rendering-data-attachment-v1:0.3.48+73761d2e19"))
-        implementation(jarJar("org.sinytra.forgified-fabric-api:fabric-block-view-api-v2:1.0.10+9afaaf8c19"))
-
-        implementation "curse.maven:irisshaders-455508:5765375"
-    }
     // Example mod dependency using a file as dependency
     // implementation files("libs/coolmod-${mc_version}-${coolmod_version}.jar")
 

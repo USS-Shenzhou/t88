@@ -57,10 +57,10 @@ public class TDotChart<T extends Number & Comparable<T>> extends TPanel {
     }
 
     @Override
-    public void render(GuiGraphics graphics, int pMouseX, int pMouseY, float pPartialTick) {
+    public void render(GuiGraphics graphics, int mouseX, int mouseY, float pPartialTick) {
         renderAxis(graphics);
         renderDots(graphics);
-        super.render(graphics, pMouseX, pMouseY, pPartialTick);
+        super.render(graphics, mouseX, mouseY, pPartialTick);
     }
 
     protected void renderAxis(GuiGraphics graphics) {

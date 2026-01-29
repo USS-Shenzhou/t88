@@ -74,7 +74,7 @@ public class NetworkAnnotationProcessor extends AbstractProcessor {
                         
                         public class %2$s extends %3$s.%4$s implements net.minecraft.network.protocol.common.custom.CustomPacketPayload {
                         
-                            public static final net.minecraft.resources.ResourceLocation ID = net.minecraft.resources.ResourceLocation.fromNamespaceAndPath("%5$s", "%6$s");
+                            public static final net.minecraft.resources.Identifier ID = net.minecraft.resources.Identifier.fromNamespaceAndPath("%5$s", "%6$s");
                             public static final net.minecraft.network.protocol.common.custom.CustomPacketPayload.Type<%2$s> TYPE = new net.minecraft.network.protocol.common.custom.CustomPacketPayload.Type<>(ID);
                         
                             public %2$s(net.minecraft.network.FriendlyByteBuf buf) {
@@ -139,7 +139,7 @@ public class NetworkAnnotationProcessor extends AbstractProcessor {
         proxyRecordContent.insert(proxyRecordContent.lastIndexOf("}") - 1, String.format("""
                         
                         
-                            public static final net.minecraft.resources.ResourceLocation ID = net.minecraft.resources.ResourceLocation.fromNamespaceAndPath("%1$s", "%2$s");
+                            public static final net.minecraft.resources.Identifier ID = net.minecraft.resources.Identifier.fromNamespaceAndPath("%1$s", "%2$s");
                             public static final net.minecraft.network.protocol.common.custom.CustomPacketPayload.Type<%3$s> TYPE = new net.minecraft.network.protocol.common.custom.CustomPacketPayload.Type<>(ID);
                         
                             @Override

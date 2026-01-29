@@ -11,6 +11,7 @@ import com.mojang.blaze3d.platform.InputConstants;
 import com.mojang.logging.LogUtils;
 import net.minecraft.client.KeyMapping;
 import net.minecraft.client.Minecraft;
+import net.minecraft.resources.Identifier;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.neoforge.client.event.InputEvent;
@@ -29,25 +30,27 @@ import java.util.List;
  */
 @EventBusSubscriber(value = Dist.CLIENT)
 public class ModKeyInput {
+
+    private static final KeyMapping.Category CATEGORY = new KeyMapping.Category(Identifier.fromNamespaceAndPath(T88.MOD_ID, "general"));
     public static final KeyMapping GUI_TEST = new KeyMapping(
             "key.t88.gui_test", KeyConflictContext.UNIVERSAL, KeyModifier.ALT,
-            InputConstants.Type.KEYSYM, GLFW.GLFW_KEY_T, "key.categories.t88"
+            InputConstants.Type.KEYSYM, GLFW.GLFW_KEY_T, CATEGORY
     );
     public static final KeyMapping OPEN_ANALYZER = new KeyMapping(
             "key.t88.open_analyzer", KeyConflictContext.IN_GAME, KeyModifier.ALT,
-            InputConstants.Type.KEYSYM, GLFW.GLFW_KEY_A, "key.categories.t88"
+            InputConstants.Type.KEYSYM, GLFW.GLFW_KEY_A, CATEGORY
     );
     public static final KeyMapping CLEAR_ANALYZER = new KeyMapping(
             "key.t88.clear_recorder", KeyConflictContext.IN_GAME, KeyModifier.NONE,
-            InputConstants.Type.KEYSYM, GLFW.GLFW_KEY_UNKNOWN, "key.categories.t88"
+            InputConstants.Type.KEYSYM, GLFW.GLFW_KEY_UNKNOWN, CATEGORY
     );
     public static final KeyMapping OPEN_WATCHER = new KeyMapping(
             "key.t88.open_watcher", KeyConflictContext.IN_GAME, KeyModifier.ALT,
-            InputConstants.Type.KEYSYM, GLFW.GLFW_KEY_W, "key.categories.t88"
+            InputConstants.Type.KEYSYM, GLFW.GLFW_KEY_W, CATEGORY
     );
     public static final KeyMapping OPEN_CONFIG = new KeyMapping(
             "key.t88.open_cfg", KeyConflictContext.IN_GAME, KeyModifier.ALT,
-            InputConstants.Type.KEYSYM, GLFW.GLFW_KEY_8, "key.categories.t88"
+            InputConstants.Type.KEYSYM, GLFW.GLFW_KEY_8, CATEGORY
     );
 
     @SubscribeEvent

@@ -3,15 +3,21 @@ package cn.ussshenzhou.t88.gui.widegt;
 import cn.ussshenzhou.t88.gui.screen.TScreen;
 import cn.ussshenzhou.t88.gui.util.MouseHelper;
 import cn.ussshenzhou.t88.gui.util.VanillaWidget2TComponentHelper;
+import net.minecraft.client.input.InputWithModifiers;
+import net.minecraft.client.input.KeyEvent;
+import net.minecraft.client.input.MouseButtonEvent;
 import org.joml.Vector2i;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.Button;
 import net.minecraft.network.chat.Component;
 import org.jetbrains.annotations.Nullable;
 
+import javax.annotation.ParametersAreNonnullByDefault;
+
 /**
  * @author USS_Shenzhou
  */
+@ParametersAreNonnullByDefault
 public class TButton extends Button implements TWidget {
     public static final Vector2i RECOMMEND_SIZE = new Vector2i(52, 20);
     protected boolean visible = true;
@@ -34,10 +40,16 @@ public class TButton extends Button implements TWidget {
     }
 
     @Override
-    public void renderWidget(GuiGraphics p_281670_, int p_282682_, int p_281714_, float p_282542_) {
+    public void renderWidget(GuiGraphics graphics, int mouseX, int mouseY, float a) {
         if (!skipRenderAsBackend) {
-            super.renderWidget(p_281670_, p_282682_, p_281714_, p_282542_);
+            super.renderWidget(graphics, mouseX, mouseY, a);
         }
+    }
+
+    @Override
+    protected void renderContents(GuiGraphics graphics, int mouseX, int mouseY, float a) {
+        this.renderDefaultSprite(graphics);
+        this.renderDefaultLabel(graphics.textRendererForWidget(this, GuiGraphics.HoveredTextEffects.NONE));
     }
 
     public boolean isSkipRenderAsBackend() {
@@ -53,14 +65,18 @@ public class TButton extends Button implements TWidget {
     }
 
     @Override
-    public boolean mouseDragged(double pMouseX, double pMouseY, int pButton, double pDragX, double pDragY) {
-        if (isInRange(pMouseX, pMouseY)) {
-            return super.mouseDragged(pMouseX, pMouseY, pButton, pDragX, pDragY);
+    public boolean mouseDragged(MouseButtonEvent event, double dx, double dy) {
+        if (isInRange(event)) {
+            return super.mouseDragged(event, dx, dy);
         }
         return false;
     }
 
     @Override
+    public void onPress(InputWithModifiers input) {
+        this.onPress.onPress(this);
+    }
+
     public void onPress() {
         this.onPress.onPress(this);
     }
@@ -144,9 +160,9 @@ public class TButton extends Button implements TWidget {
     }
 
     @Override
-    public boolean keyPressed(int pKeyCode, int pScanCode, int pModifiers) {
-        if (isInRange(MouseHelper.getMouseX(), MouseHelper.getMouseY())) {
-            return super.keyPressed(pKeyCode, pScanCode, pModifiers);
+    public boolean keyPressed(KeyEvent event) {
+        if (isInRangeNow()) {
+            return super.keyPressed(event);
         }
         return false;
     }

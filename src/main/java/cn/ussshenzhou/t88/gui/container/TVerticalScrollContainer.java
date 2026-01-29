@@ -1,12 +1,12 @@
 package cn.ussshenzhou.t88.gui.container;
 
+import cn.ussshenzhou.t88.gui.util.RecordHelper;
 import cn.ussshenzhou.t88.gui.widegt.TPanel;
-import cn.ussshenzhou.t88.gui.widegt.TSelectList;
 import cn.ussshenzhou.t88.gui.widegt.TWidget;
 import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.input.MouseButtonEvent;
 import net.minecraft.client.renderer.RenderPipelines;
-import net.minecraft.client.renderer.RenderType;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.util.Mth;
 import org.joml.Vector2d;
 
@@ -14,7 +14,7 @@ import org.joml.Vector2d;
  * @author USS_Shenzhou
  */
 public class TVerticalScrollContainer extends TPanel implements TScrollContainer {
-    private static final ResourceLocation SCROLLER_SPRITE = ResourceLocation.withDefaultNamespace("widget/scroller");
+    private static final Identifier SCROLLER_SPRITE = Identifier.withDefaultNamespace("widget/scroller");
     protected double scrollAmount = 0;
     protected double prevScrollAmount = 0;
     protected int bottomY = 0;
@@ -51,13 +51,13 @@ public class TVerticalScrollContainer extends TPanel implements TScrollContainer
     }
 
     @Override
-    public void render(GuiGraphics guigraphics, int pMouseX, int pMouseY, float pPartialTick) {
+    public void render(GuiGraphics guigraphics, int mouseX, int mouseY, float pPartialTick) {
         renderScrollBar(guigraphics);
-        super.render(guigraphics, pMouseX, pMouseY, pPartialTick);
+        super.render(guigraphics, mouseX, mouseY, pPartialTick);
     }
 
     @Override
-    protected void renderChildren(GuiGraphics guigraphics, int pMouseX, int pMouseY, float pPartialTick) {
+    protected void renderChildren(GuiGraphics guigraphics, int mouseX, int mouseY, float pPartialTick) {
         var scroll = this.getParentScroll();
         guigraphics.enableScissor(
                 (int) (this.x - scroll.x),
@@ -65,15 +65,15 @@ public class TVerticalScrollContainer extends TPanel implements TScrollContainer
                 (int) (this.x + width - scroll.x),
                 (int) (this.y + height - scroll.y));
         prepareTranslate(guigraphics, pPartialTick);
-        super.renderChildren(guigraphics, pMouseX, pMouseY, pPartialTick);
+        super.renderChildren(guigraphics, mouseX, mouseY, pPartialTick);
         endTranslate(guigraphics, pPartialTick);
         guigraphics.disableScissor();
     }
 
     @Override
-    public void renderTop(GuiGraphics guigraphics, int pMouseX, int pMouseY, float pPartialTick) {
+    public void renderTop(GuiGraphics guigraphics, int mouseX, int mouseY, float pPartialTick) {
         prepareTranslate(guigraphics, pPartialTick);
-        super.renderTop(guigraphics, pMouseX, pMouseY, pPartialTick);
+        super.renderTop(guigraphics, mouseX, mouseY, pPartialTick);
         endTranslate(guigraphics, pPartialTick);
     }
 
@@ -86,7 +86,7 @@ public class TVerticalScrollContainer extends TPanel implements TScrollContainer
     }
 
     @Override
-    protected void renderBackground(GuiGraphics guigraphics, int pMouseX, int pMouseY, float pPartialTick) {
+    protected void renderBackground(GuiGraphics guigraphics, int mouseX, int mouseY, float pPartialTick) {
         if (getMaxScroll() > 0) {
             guigraphics.fill(x, y, x + width - getScrollbarGap() - 6, y + height, background);
         } else {
@@ -124,20 +124,20 @@ public class TVerticalScrollContainer extends TPanel implements TScrollContainer
     }
 
     @Override
-    public boolean mouseDragged(double pMouseX, double pMouseY, int pButton, double pDragX, double pDragY) {
-        if (isInRange(pMouseX, pMouseY, scrollbarGap, scrollbarGap)) {
+    public boolean mouseDragged(MouseButtonEvent event, double dx, double dy) {
+        if (isInRange(event, scrollbarGap, scrollbarGap)) {
             for (TWidget tWidget : reversed(children)) {
-                if (tWidget.mouseDragged(pMouseX, pMouseY + scrollAmount, pButton, pDragX, pDragY)) {
+                if (tWidget.mouseDragged(RecordHelper.scroll(event, scrollAmount), dx, dy)) {
                     return true;
                 }
             }
-            if (pMouseX > getScrollBarX() - scrollbarGap - 6) {
+            if (event.x() > getScrollBarX() - scrollbarGap - 6) {
                 double d0 = Math.max(1, this.getMaxScroll());
                 int j = Mth.clamp((int) ((float) (height * height) / (float) bottomY), 32, height);
                 double d1 = Math.max(1.0D, d0 / (double) (height - j));
-                this.addScrollAmount(-pDragY * d1 / speedFactor);
+                this.addScrollAmount(-dy * d1 / speedFactor);
             } else {
-                this.addScrollAmount(pDragY / speedFactor);
+                this.addScrollAmount(dy / speedFactor);
             }
             return true;
         }
@@ -145,9 +145,9 @@ public class TVerticalScrollContainer extends TPanel implements TScrollContainer
     }
 
     @Override
-    public boolean mouseScrolled(double pMouseX, double pMouseY, double deltaX, double deltaY) {
-        if (isInRange(pMouseX, pMouseY)) {
-            if (!super.mouseScrolled(pMouseX, pMouseY, deltaX, deltaY)) {
+    public boolean mouseScrolled(double mouseX, double mouseY, double deltaX, double deltaY) {
+        if (isInRange(mouseX, mouseY)) {
+            if (!super.mouseScrolled(mouseX, mouseY, deltaX, deltaY)) {
                 this.addScrollAmount(deltaY);
                 return true;
             }
@@ -156,17 +156,17 @@ public class TVerticalScrollContainer extends TPanel implements TScrollContainer
     }
 
     @Override
-    public boolean mouseClicked(double pMouseX, double pMouseY, int pButton) {
-        if (isInRange(pMouseX, pMouseY)) {
-            return super.mouseClicked(pMouseX, pMouseY + scrollAmount, pButton);
+    public boolean mouseClicked(MouseButtonEvent event, boolean doubleClick) {
+        if (isInRange(event)) {
+            return super.mouseClicked(RecordHelper.scroll(event, scrollAmount), doubleClick);
         }
         return false;
     }
 
     @Override
-    public boolean mouseReleased(double pMouseX, double pMouseY, int pButton) {
-        if (isInRange(pMouseX, pMouseY)) {
-            return super.mouseReleased(pMouseX, pMouseY + scrollAmount, pButton);
+    public boolean mouseReleased(MouseButtonEvent event) {
+        if (isInRange(event)) {
+            return super.mouseReleased(RecordHelper.scroll(event, scrollAmount));
         }
         return false;
     }

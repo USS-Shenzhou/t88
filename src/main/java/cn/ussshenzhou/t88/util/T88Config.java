@@ -8,7 +8,6 @@ import cn.ussshenzhou.t88.gui.util.ITranslatable;
  */
 public class T88Config implements TConfig {
 
-    public boolean replaceStyle = true;
     public NetworkUnit networkUnit = NetworkUnit.BYTE;
 
 

@@ -6,7 +6,7 @@ import net.minecraft.network.protocol.Packet;
 import net.minecraft.network.protocol.common.ClientboundCustomPayloadPacket;
 import net.minecraft.network.protocol.common.ServerboundCustomPayloadPacket;
 import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.neoforged.fml.ModContainer;
 import net.neoforged.fml.ModList;
 import net.neoforged.fml.javafmlmod.FMLModContainer;
@@ -26,10 +26,10 @@ public class NetworkWatcher {
     public static final DelayedMap<SenderInfo, SizeAndTimes> SENT = new DelayedMap<>();
     public static final DelayedMap<SenderInfo, SizeAndTimes> RECEIVED = new DelayedMap<>();
     public static final ConcurrentHashMap<Class<?>, String> MOD_ID_CACHE = new ConcurrentHashMap<>();
-    public static final ConcurrentHashMap<ResourceLocation, Object> SIZE_BLACKLIST = new ConcurrentHashMap<>() {{
-        ConfigHelper.getConfigRead(NetworkWatcherBlacklist.class).blacklist.forEach(resourceLocation -> put(resourceLocation, NULL));
+    public static final ConcurrentHashMap<Identifier, Object> SIZE_BLACKLIST = new ConcurrentHashMap<>() {{
+        ConfigHelper.getConfigRead(NetworkWatcherBlacklist.class).blacklist.forEach(Identifier -> put(Identifier, NULL));
     }};
-    public static final ConcurrentHashMap<ResourceLocation, Object> MOD_ID_BLACKLIST = new ConcurrentHashMap<>();
+    public static final ConcurrentHashMap<Identifier, Object> MOD_ID_BLACKLIST = new ConcurrentHashMap<>();
 
     public static void record(Packet<?> packet, TR dir, int size) {
         CompletableFuture.runAsync(() -> {

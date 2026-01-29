@@ -6,7 +6,7 @@ import cn.ussshenzhou.t88.gui.widegt.TButton;
 import cn.ussshenzhou.t88.gui.widegt.TImage;
 import net.minecraft.client.gui.components.Button;
 import net.minecraft.network.chat.Component;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 
 /**
  * @author USS_Shenzhou
@@ -16,7 +16,7 @@ public class TImageButton extends TImage {
     protected int normalBorder = ColorManager.get().defaultBackground();
     protected int hoverBorder = ColorManager.get().themeColor();
 
-    public TImageButton(ResourceLocation imageLocation, Button.OnPress onPress) {
+    public TImageButton(Identifier imageLocation, Button.OnPress onPress) {
         super(imageLocation);
         button = new TButton(Component.empty(), onPress);
         button.setSkipRenderAsBackend(true);
@@ -24,7 +24,7 @@ public class TImageButton extends TImage {
         this.setBorder(new Border(normalBorder, -1));
     }
 
-    public TImageButton(ResourceLocation imageLocation, Button.OnPress onPress, int normalBorder, int hoverBorder) {
+    public TImageButton(Identifier imageLocation, Button.OnPress onPress, int normalBorder, int hoverBorder) {
         this(imageLocation, onPress);
         this.normalBorder = normalBorder;
         this.hoverBorder = hoverBorder;

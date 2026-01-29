@@ -7,22 +7,21 @@ import cn.ussshenzhou.t88.gui.util.ColorManager;
 import cn.ussshenzhou.t88.gui.util.HorizontalAlignment;
 import cn.ussshenzhou.t88.gui.util.HorizontalColoredRectangleRenderState;
 import com.google.common.collect.ImmutableList;
-import net.minecraft.Util;
 import net.minecraft.client.gui.Font;
 import net.minecraft.client.gui.components.Tooltip;
 import net.minecraft.client.gui.components.WidgetTooltipHolder;
 import net.minecraft.client.gui.render.TextureSetup;
-import net.minecraft.client.gui.render.state.ColoredRectangleRenderState;
+import net.minecraft.client.input.CharacterEvent;
+import net.minecraft.client.input.KeyEvent;
+import net.minecraft.client.input.MouseButtonEvent;
 import net.minecraft.client.renderer.RenderPipelines;
 import net.minecraft.network.chat.Component;
 import net.minecraft.util.Mth;
+import net.minecraft.util.Util;
 import org.joml.Matrix3x2f;
 import org.joml.Vector2i;
-import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.*;
 import net.minecraft.client.gui.GuiGraphics;
-import net.minecraft.client.renderer.GameRenderer;
-import org.joml.Matrix4f;
 
 import javax.annotation.Nullable;
 import java.time.Duration;
@@ -84,48 +83,48 @@ public abstract class TComponent implements TWidget {
     }
 
     @Override
-    public void render(GuiGraphics graphics, int pMouseX, int pMouseY, float pPartialTick) {
-        renderBackground(graphics, pMouseX, pMouseY, pPartialTick);
+    public void render(GuiGraphics graphics, int mouseX, int mouseY, float pPartialTick) {
+        renderBackground(graphics, mouseX, mouseY, pPartialTick);
         if (border != null) {
-            renderBorder(graphics, pMouseX, pMouseY, pPartialTick);
+            renderBorder(graphics, mouseX, mouseY, pPartialTick);
         }
-        renderChildren(graphics, pMouseX, pMouseY, pPartialTick);
+        renderChildren(graphics, mouseX, mouseY, pPartialTick);
         var t = this.getTooltip();
         if (t != null) {
             var scroll = getParentScroll();
             //FIXME multi-scroller
             var inRange = getParentInstanceOfOptional(TScrollContainer.class)
-                    .map(tScrollContainer -> tScrollContainer.isInRange(pMouseX, pMouseY))
-                    .orElse(true) && this.isInRange(pMouseX + scroll.x, pMouseY + scroll.y);
-            t.refreshTooltipForNextRenderPass(graphics, pMouseX, pMouseY, inRange, this.isFocused(), this.getRectangle());
+                    .map(tScrollContainer -> tScrollContainer.isInRange(mouseX, mouseY))
+                    .orElse(true) && this.isInRange(mouseX + scroll.x, mouseY + scroll.y);
+            t.refreshTooltipForNextRenderPass(graphics, mouseX, mouseY, inRange, this.isFocused(), this.getRectangle());
         }
     }
 
-    protected void renderBorder(GuiGraphics graphics, int pMouseX, int pMouseY, float pPartialTick) {
+    protected void renderBorder(GuiGraphics graphics, int mouseX, int mouseY, float pPartialTick) {
         int thickness = border.getThickness();
         int color = border.getColor();
         Border.renderBorder(graphics, color, thickness, x, y, width, height);
     }
 
-    protected void renderBackground(GuiGraphics graphics, int pMouseX, int pMouseY, float pPartialTick) {
+    protected void renderBackground(GuiGraphics graphics, int mouseX, int mouseY, float pPartialTick) {
         graphics.fill(x, y, x + width, y + height, background);
     }
 
-    protected void renderChildren(GuiGraphics graphics, int pMouseX, int pMouseY, float pPartialTick) {
+    protected void renderChildren(GuiGraphics graphics, int mouseX, int mouseY, float pPartialTick) {
         for (TWidget tWidget : children) {
             if (tWidget.isVisibleT()) {
 
-                tWidget.render(graphics, pMouseX, pMouseY, pPartialTick);
+                tWidget.render(graphics, mouseX, mouseY, pPartialTick);
             }
         }
     }
 
     @Override
-    public void renderTop(GuiGraphics graphics, int pMouseX, int pMouseY, float pPartialTick) {
+    public void renderTop(GuiGraphics graphics, int mouseX, int mouseY, float pPartialTick) {
         for (TWidget w : children) {
             if (w.isVisibleT()) {
 
-                w.renderTop(graphics, pMouseX, pMouseY, pPartialTick);
+                w.renderTop(graphics, mouseX, mouseY, pPartialTick);
             }
         }
     }
@@ -211,12 +210,12 @@ public abstract class TComponent implements TWidget {
     }
 
     @Override
-    public boolean mouseClicked(double pMouseX, double pMouseY, int pButton) {
+    public boolean mouseClicked(MouseButtonEvent event, boolean doubleClick) {
         for (TWidget tWidget : reversed(children)) {
             if (!tWidget.isVisibleT()) {
                 continue;
             }
-            if (tWidget.mouseClicked(pMouseX, pMouseY, pButton)) {
+            if (tWidget.mouseClicked(event, doubleClick)) {
                 return true;
             }
         }
@@ -224,12 +223,12 @@ public abstract class TComponent implements TWidget {
     }
 
     @Override
-    public boolean mouseReleased(double pMouseX, double pMouseY, int pButton) {
+    public boolean mouseReleased(MouseButtonEvent event) {
         for (TWidget tWidget : reversed(children)) {
             if (!tWidget.isVisibleT()) {
                 continue;
             }
-            if (tWidget.mouseReleased(pMouseX, pMouseY, pButton)) {
+            if (tWidget.mouseReleased(event)) {
                 return true;
             }
         }
@@ -237,12 +236,12 @@ public abstract class TComponent implements TWidget {
     }
 
     @Override
-    public boolean mouseDragged(double pMouseX, double pMouseY, int pButton, double pDragX, double pDragY) {
+    public boolean mouseDragged(MouseButtonEvent event, double dx, double dy) {
         for (TWidget tWidget : reversed(children)) {
             if (!tWidget.isVisibleT()) {
                 continue;
             }
-            if (tWidget.mouseDragged(pMouseX, pMouseY, pButton, pDragX, pDragY)) {
+            if (tWidget.mouseDragged(event, dx, dy)) {
                 return true;
             }
         }
@@ -250,12 +249,12 @@ public abstract class TComponent implements TWidget {
     }
 
     @Override
-    public boolean mouseScrolled(double pMouseX, double pMouseY, double deltaX, double deltaY) {
+    public boolean mouseScrolled(double mouseX, double mouseY, double deltaX, double deltaY) {
         for (TWidget tWidget : reversed(children)) {
             if (!tWidget.isVisibleT()) {
                 continue;
             }
-            if (tWidget.mouseScrolled(pMouseX, pMouseY, deltaX, deltaY)) {
+            if (tWidget.mouseScrolled(mouseX, mouseY, deltaX, deltaY)) {
                 return true;
             }
         }
@@ -263,12 +262,12 @@ public abstract class TComponent implements TWidget {
     }
 
     @Override
-    public boolean keyPressed(int pKeyCode, int pScanCode, int pModifiers) {
+    public boolean keyPressed(KeyEvent event) {
         for (TWidget tWidget : reversed(children)) {
             if (!tWidget.isVisibleT()) {
                 continue;
             }
-            if (tWidget.keyPressed(pKeyCode, pScanCode, pModifiers)) {
+            if (tWidget.keyPressed(event)) {
                 return true;
             }
         }
@@ -276,12 +275,12 @@ public abstract class TComponent implements TWidget {
     }
 
     @Override
-    public boolean keyReleased(int pKeyCode, int pScanCode, int pModifiers) {
+    public boolean keyReleased(KeyEvent event) {
         for (TWidget tWidget : reversed(children)) {
             if (!tWidget.isVisibleT()) {
                 continue;
             }
-            if (tWidget.keyReleased(pKeyCode, pScanCode, pModifiers)) {
+            if (tWidget.keyReleased(event)) {
                 return true;
             }
         }
@@ -289,12 +288,12 @@ public abstract class TComponent implements TWidget {
     }
 
     @Override
-    public boolean charTyped(char pCodePoint, int pModifiers) {
+    public boolean charTyped(CharacterEvent event) {
         for (TWidget tWidget : reversed(children)) {
             if (!tWidget.isVisibleT()) {
                 continue;
             }
-            if (tWidget.charTyped(pCodePoint, pModifiers)) {
+            if (tWidget.charTyped(event)) {
                 return true;
             }
         }

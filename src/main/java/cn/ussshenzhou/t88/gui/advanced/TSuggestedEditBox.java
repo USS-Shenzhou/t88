@@ -9,6 +9,7 @@ import com.mojang.brigadier.suggestion.Suggestion;
 import com.mojang.brigadier.suggestion.Suggestions;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.input.KeyEvent;
 import net.minecraft.commands.CommandSourceStack;
 import net.neoforged.neoforge.client.ClientCommandHandler;
 import org.lwjgl.glfw.GLFW;
@@ -73,18 +74,18 @@ public class TSuggestedEditBox extends TPanel {
     }
 
     @Override
-    protected void renderChildren(GuiGraphics guigraphics, int pMouseX, int pMouseY, float pPartialTick) {
+    protected void renderChildren(GuiGraphics guigraphics, int mouseX, int mouseY, float pPartialTick) {
         if (editBox.isVisible()) {
-            editBox.render(guigraphics, pMouseX, pMouseY, pPartialTick);
+            editBox.render(guigraphics, mouseX, mouseY, pPartialTick);
         }
     }
 
     @Override
-    public void renderTop(GuiGraphics guigraphics, int pMouseX, int pMouseY, float pPartialTick) {
+    public void renderTop(GuiGraphics guigraphics, int mouseX, int mouseY, float pPartialTick) {
         if (suggestionList.isVisibleT()) {
-            suggestionList.render(guigraphics, pMouseX, pMouseY, pPartialTick);
+            suggestionList.render(guigraphics, mouseX, mouseY, pPartialTick);
         }
-        super.renderTop(guigraphics, pMouseX, pMouseY, pPartialTick);
+        super.renderTop(guigraphics, mouseX, mouseY, pPartialTick);
     }
 
     public void updateSuggestion(String value) {
@@ -131,7 +132,7 @@ public class TSuggestedEditBox extends TPanel {
                     listY = Math.max(0, y - texts.size() * suggestionList.getItemHeight() - 4);
                     h = Math.min(h, this.getYT() - s - 1);
                 }
-                w = w + suggestionList.getScrollbarGap() + TSelectList.SCROLLBAR_WIDTH + 2;
+                w = w + TSelectList.SCROLLBAR_WIDTH + 2;
                 suggestionList.setAbsBounds(calculateSuggestionX(w), listY, w, h);
                 //choose first
                 if (suggestionList.getSelected() == null) {
@@ -202,13 +203,13 @@ public class TSuggestedEditBox extends TPanel {
     }
 
     @Override
-    public boolean keyPressed(int pKeyCode, int pScanCode, int pModifiers) {
+    public boolean keyPressed(KeyEvent event) {
         if (editBox.isFocused()) {
-            if (pKeyCode == GLFW.GLFW_KEY_TAB || pKeyCode == GLFW.GLFW_KEY_ENTER) {
+            if (event.key() == GLFW.GLFW_KEY_TAB || event.key() == GLFW.GLFW_KEY_ENTER) {
                 applySuggestion();
                 return true;
             }
-            return super.keyPressed(pKeyCode, pScanCode, pModifiers);
+            return super.keyPressed(event);
         }
         return false;
     }

@@ -10,17 +10,13 @@
     "PacketEncoderMixin"
   ],
   "client": [
-    "AbstractSelectionListAccessor",
     "AbstractWidgetMixin",
     "EditBoxAccessor",
     "GuiGraphicsMixin",
     "MinecraftMixin",
     "SliderButtonAccessor",
     "AbstractContainerWidgetMixin",
-    "GuiSpriteManagerMixin",
-    "TextureManagerMixin",
     "GameRendererMixin"
-    //CLASS_FOR_COMPAT
   ],
   "injectors": {
     "defaultRequire": 1

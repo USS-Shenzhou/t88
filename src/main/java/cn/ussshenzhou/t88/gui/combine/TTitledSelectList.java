@@ -22,7 +22,7 @@ public class TTitledSelectList<E> extends TTitledComponent<TSelectList<E>> {
 
     @Override
     public void defaultLayout() {
-        title.setBounds(0, 0, this.width - widget.getScrollbarGap() - TSelectList.SCROLLBAR_WIDTH, labelHeight);
+        title.setBounds(0, 0, this.width - TSelectList.SCROLLBAR_WIDTH, labelHeight);
         LayoutHelper.BBottomOfA(widget, gap, title, width, height - title.getHeight() - gap);
     }
 

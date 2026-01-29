@@ -13,7 +13,7 @@ import net.minecraft.world.level.BlockAndTintGetter;
 public class RenderUtil {
 
     public static int getPackedLight(int sourceLight, BlockAndTintGetter level, BlockPos pos) {
-        return getPackedLight(sourceLight, LevelRenderer.getLightColor(level, pos));
+        return getPackedLight(sourceLight, LevelRenderer.getLightCoords(level, pos));
     }
 
     public static int getPackedLight(int sourceLight, int packedLight) {

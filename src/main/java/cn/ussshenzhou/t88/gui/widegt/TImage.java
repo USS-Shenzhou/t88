@@ -2,13 +2,11 @@ package cn.ussshenzhou.t88.gui.widegt;
 
 import cn.ussshenzhou.t88.gui.util.ImageFit;
 import com.mojang.blaze3d.platform.NativeImage;
-import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.logging.LogUtils;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.renderer.RenderPipelines;
-import net.minecraft.client.renderer.RenderType;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 
 import java.io.IOException;
 import java.util.NoSuchElementException;
@@ -17,24 +15,24 @@ import java.util.NoSuchElementException;
  * @author USS_Shenzhou
  */
 public class TImage extends TPanel {
-    protected ResourceLocation imageLocation;
+    protected Identifier imageLocation;
     protected ImageFit imageFit = ImageFit.FILL;
     protected int imageWidth;
     protected int imageHeight;
     protected float scale = 1;
     protected float alpha = 1;
 
-    public TImage(ResourceLocation imageLocation) {
+    public TImage(Identifier imageLocation) {
         this.imageLocation = imageLocation;
         loadImageWH();
     }
 
     public TImage(String imageLocation) {
-        this(ResourceLocation.parse(imageLocation));
+        this(Identifier.parse(imageLocation));
     }
 
     public TImage(String namespace, String imageLocation) {
-        this(ResourceLocation.fromNamespaceAndPath(namespace, imageLocation));
+        this(Identifier.fromNamespaceAndPath(namespace, imageLocation));
     }
 
     public ImageFit getImageFit() {
@@ -53,11 +51,11 @@ public class TImage extends TPanel {
         this.scale = scale;
     }
 
-    public ResourceLocation getImageLocation() {
+    public Identifier getImageLocation() {
         return imageLocation;
     }
 
-    public void setImageLocation(ResourceLocation imageLocation) {
+    public void setImageLocation(Identifier imageLocation) {
         if (this.imageLocation.equals(imageLocation)) {
             return;
         }
@@ -87,7 +85,7 @@ public class TImage extends TPanel {
 
     @SuppressWarnings("AlibabaSwitchStatement")
     @Override
-    public void render(GuiGraphics guigraphics, int pMouseX, int pMouseY, float pPartialTick) {
+    public void render(GuiGraphics guigraphics, int mouseX, int mouseY, float pPartialTick) {
         if (imageLocation != null) {
             int color = (((int) alpha * 255) << 24) | 0xffffff;
             switch (imageFit) {
@@ -131,6 +129,6 @@ public class TImage extends TPanel {
                         guigraphics.blit(RenderPipelines.GUI_TEXTURED, imageLocation, this.x, this.y, 0, 0, width, height, width, height, (int) (imageWidth * scale), (int) (imageHeight * scale));
             }
         }
-        super.render(guigraphics, pMouseX, pMouseY, pPartialTick);
+        super.render(guigraphics, mouseX, mouseY, pPartialTick);
     }
 }

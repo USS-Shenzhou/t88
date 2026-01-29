@@ -70,7 +70,7 @@ public class TProgressBar extends TLabel {
     }
 
     @Override
-    protected void renderBackground(GuiGraphics graphics, int pMouseX, int pMouseY, float pPartialTick) {
+    protected void renderBackground(GuiGraphics graphics, int mouseX, int mouseY, float pPartialTick) {
         graphics.fill(x,
                 y,
                 x + width,

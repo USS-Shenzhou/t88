@@ -90,12 +90,12 @@ public class TLabel extends TPanel {
     }
 
     @Override
-    public void render(GuiGraphics guigraphics, int pMouseX, int pMouseY, float pPartialTick) {
-        super.render(guigraphics, pMouseX, pMouseY, pPartialTick);
-        renderText(guigraphics, pMouseX, pMouseY, pPartialTick);
+    public void render(GuiGraphics guigraphics, int mouseX, int mouseY, float pPartialTick) {
+        super.render(guigraphics, mouseX, mouseY, pPartialTick);
+        renderText(guigraphics, mouseX, mouseY, pPartialTick);
     }
 
-    protected void renderText(GuiGraphics guigraphics, int pMouseX, int pMouseY, float pPartialTick) {
+    protected void renderText(GuiGraphics guigraphics, int mouseX, int mouseY, float pPartialTick) {
         guigraphics.pose().pushMatrix();
         float y0 = Mth.ceil((y + (height - (fontSize + lineSpacing) * textLines.size()) / 2));
         for (Component line : textLines) {

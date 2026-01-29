@@ -13,13 +13,17 @@ import net.neoforged.neoforge.network.PacketDistributor;
 import javax.annotation.Nullable;
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Modifier;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 
 /**
  * @author USS_Shenzhou
  */
 public class NetworkHelper {
     private static final HashMap<Class<?>, Class<? extends CustomPacketPayload>> ORIGINAL_PROXY_CLASS = new HashMap<>();
+    private static final HashMap<Class<?>, List<Field>> PACKET_FIELDS_CACHE = new HashMap<>();
 
     public static @Nullable <MSG, T extends CustomPacketPayload> CustomPacketPayload convert(MSG packet) {
         var proxyClass = ORIGINAL_PROXY_CLASS.get(packet.getClass());
@@ -30,13 +34,15 @@ public class NetworkHelper {
         try {
             //noinspection unchecked
             T proxy = (T) MagicHelper.UNSAFE.allocateInstance(proxyClass);
-            for (Field field : packet.getClass().getDeclaredFields()) {
-                field.setAccessible(true);
-                if (proxyClass.isRecord()) {
+            if (proxyClass.isRecord()) {
+                for (var field : packet.getClass().getDeclaredFields()) {
+                    field.setAccessible(true);
                     Field proxyField = proxyClass.getDeclaredField(field.getName());
                     //noinspection unchecked
-                    proxy = (T) MagicHelper.set((Record) proxy, proxyField, field.get(packet));
-                } else {
+                    proxy = (T) MagicHelper.setRecordField((Record) proxy, proxyField, field.get(packet));
+                }
+            } else {
+                for (var field : PACKET_FIELDS_CACHE.get(packet.getClass())) {
                     field.set(proxy, field.get(packet));
                 }
             }
@@ -52,11 +58,29 @@ public class NetworkHelper {
         try {
             //noinspection unchecked
             ORIGINAL_PROXY_CLASS.put(packet, (Class<? extends CustomPacketPayload>) proxy);
+            PACKET_FIELDS_CACHE.put(packet, getAllNonStaticFields(packet));
         } catch (ClassCastException e) {
             LogUtils.getLogger().error("T88 Failed to cast {}. This should not happen.", proxy);
             throw new RuntimeException(e);
         }
     }
+
+    private static ArrayList<Field> getAllNonStaticFields(Class<?> clazz) {
+        ArrayList<Field> fieldList = new ArrayList<>();
+        Class<?> currentClass = clazz;
+        while (currentClass != null) {
+            Field[] declaredFields = currentClass.getDeclaredFields();
+            for (Field field : declaredFields) {
+                if (!Modifier.isStatic(field.getModifiers())) {
+                    field.setAccessible(true);
+                    fieldList.add(field);
+                }
+            }
+            currentClass = currentClass.getSuperclass();
+        }
+        return fieldList;
+    }
+
 
     public static <MSG> void sendToServer(MSG packet) {
         if (packet instanceof CustomPacketPayload c) {

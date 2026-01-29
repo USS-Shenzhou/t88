@@ -3,6 +3,8 @@ package cn.ussshenzhou.t88.gui.widegt;
 import cn.ussshenzhou.t88.gui.screen.TScreen;
 import cn.ussshenzhou.t88.gui.util.MouseHelper;
 import cn.ussshenzhou.t88.gui.util.VanillaWidget2TComponentHelper;
+import net.minecraft.client.input.KeyEvent;
+import net.minecraft.client.input.MouseButtonEvent;
 import org.joml.Vector2i;
 import com.mojang.serialization.Codec;
 import net.minecraft.client.Minecraft;
@@ -93,9 +95,9 @@ public class TSlider extends OptionInstance.OptionInstanceSliderButton<Double> i
     }
 
     @Deprecated
+    @Override
     public void setValue(double value) {
-        this.value = Mth.clamp(value, min, max);
-        applyValue();
+        super.setValue(value);
     }
 
     public void setRelValue(double relativeValue) {
@@ -161,14 +163,14 @@ public class TSlider extends OptionInstance.OptionInstanceSliderButton<Double> i
     protected float factor3 = 0.01f;
 
     @Override
-    public boolean mouseScrolled(double pMouseX, double pMouseY, double deltaX, double deltaY) {
-        if (isInRange(pMouseX, pMouseY, 2, 2)) {
-            if (Screen.hasControlDown()) {
-                if (Screen.hasShiftDown()) {
+    public boolean mouseScrolled(double mouseX, double mouseY, double deltaX, double deltaY) {
+        if (isInRange(mouseX, mouseY, 2, 2)) {
+            if (Minecraft.getInstance().hasControlDown()) {
+                if (Minecraft.getInstance().hasShiftDown()) {
                     //TODO
                 }
 
-            } else if (Screen.hasShiftDown()) {
+            } else if (Minecraft.getInstance().hasShiftDown()) {
 
             } else {
 
@@ -178,17 +180,17 @@ public class TSlider extends OptionInstance.OptionInstanceSliderButton<Double> i
     }
 
     @Override
-    public boolean mouseDragged(double pMouseX, double pMouseY, int pButton, double pDragX, double pDragY) {
-        if (isInRange(pMouseX, pMouseY, 2, 2)) {
-            return super.mouseDragged(pMouseX, pMouseY, pButton, pDragX, pDragY);
+    public boolean mouseDragged(MouseButtonEvent event, double dx, double dy) {
+        if (isInRange(event, 2, 2)) {
+            return super.mouseDragged(event, dx, dy);
         }
         return false;
     }
 
     @Override
-    public boolean keyPressed(int pKeyCode, int pScanCode, int pModifiers) {
+    public boolean keyPressed(KeyEvent event) {
         if (isInRange(MouseHelper.getMouseX(), MouseHelper.getMouseY(), 2, 2)) {
-            return super.keyPressed(pKeyCode, pScanCode, pModifiers);
+            return super.keyPressed(event);
         }
         return false;
     }
@@ -283,9 +285,9 @@ public class TSlider extends OptionInstance.OptionInstanceSliderButton<Double> i
     }
 
     @Override
-    public void onRelease(double pMouseX, double pMouseY) {
-        if (isInRange(pMouseX, pMouseY)) {
-            super.onRelease(pMouseX, pMouseY);
+    public void onRelease(MouseButtonEvent event) {
+        if (isInRange(event)) {
+            super.onRelease(event);
         }
     }
 

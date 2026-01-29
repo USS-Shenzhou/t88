@@ -3,11 +3,13 @@ package cn.ussshenzhou.t88.gui.widegt;
 import cn.ussshenzhou.t88.gui.container.TScrollContainer;
 import cn.ussshenzhou.t88.gui.container.TVerticalScrollContainer;
 import cn.ussshenzhou.t88.gui.screen.TScreen;
+import cn.ussshenzhou.t88.gui.util.MouseHelper;
 import com.mojang.logging.LogUtils;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.Renderable;
 import net.minecraft.client.gui.components.events.GuiEventListener;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.client.input.MouseButtonEvent;
+import net.minecraft.resources.Identifier;
 import org.joml.Vector2d;
 import org.joml.Vector2i;
 
@@ -23,8 +25,8 @@ import static cn.ussshenzhou.t88.T88.MOD_ID;
  */
 @SuppressWarnings("AlibabaAbstractMethodOrInterfaceMethodMustUseJavadoc")
 public interface TWidget extends Renderable, GuiEventListener {
-    public static final ResourceLocation BACKGROUND_LOCATION = ResourceLocation.parse("textures/gui/options_background.png");
-    public static final ResourceLocation PLACEHOLDER_IMAGE = ResourceLocation.fromNamespaceAndPath(MOD_ID, "textures/gui/placeholder.png");
+    public static final Identifier BACKGROUND_LOCATION = Identifier.parse("textures/gui/options_background.png");
+    public static final Identifier PLACEHOLDER_IMAGE = Identifier.fromNamespaceAndPath(MOD_ID, "textures/gui/placeholder.png");
 
     boolean isVisibleT();
 
@@ -75,15 +77,31 @@ public interface TWidget extends Renderable, GuiEventListener {
 
     void layout();
 
-    default void renderTop(GuiGraphics graphics, int pMouseX, int pMouseY, float pPartialTick) {
+    default void renderTop(GuiGraphics graphics, int mouseX, int mouseY, float pPartialTick) {
     }
 
-    default boolean isInRange(double pMouseX, double pMouseY) {
-        return isInRange(pMouseX, pMouseY, 0, 0);
+    default boolean isInRangeNow() {
+        return isInRange(MouseHelper.getMouseX(), MouseHelper.getMouseY(), 0, 0);
     }
 
-    default boolean isInRange(double pMouseX, double pMouseY, double xPadding, double yPadding) {
-        return pMouseX >= getXT() - xPadding && pMouseX <= getXT() + getSize().x + xPadding && pMouseY >= getYT() - yPadding && pMouseY <= getYT() + getSize().y + yPadding;
+    default boolean isInRangeNow(double xPadding, double yPadding) {
+        return isInRange(MouseHelper.getMouseX(), MouseHelper.getMouseY(), xPadding, yPadding);
+    }
+
+    default boolean isInRange(MouseButtonEvent event) {
+        return isInRange(event, 0, 0);
+    }
+
+    default boolean isInRange(MouseButtonEvent event, double xPadding, double yPadding) {
+        return isInRange(event.x(), event.y(), xPadding, yPadding);
+    }
+
+    default boolean isInRange(double mouseX, double mouseY) {
+        return isInRange(mouseX, mouseY, 0, 0);
+    }
+
+    default boolean isInRange(double mouseX, double mouseY, double xPadding, double yPadding) {
+        return mouseX >= getXT() - xPadding && mouseX <= getXT() + getSize().x + xPadding && mouseY >= getYT() - yPadding && mouseY <= getYT() + getSize().y + yPadding;
     }
 
     default void onFinalClose() {

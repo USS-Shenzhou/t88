@@ -17,7 +17,7 @@ import net.minecraft.client.gui.Font;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.commands.Commands;
 import net.minecraft.network.chat.Component;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 
@@ -31,14 +31,14 @@ public class TestScreen extends TScreen {
 
     private final TLabel linesTest = new TLabel(Component.literal("§6Test1 \nTest223456\n...")) {
         @Override
-        public void render(GuiGraphics guigraphics, int pMouseX, int pMouseY, float pPartialTick) {
-            //super.render(guigraphics, pMouseX, pMouseY, pPartialTick);
+        public void render(GuiGraphics guigraphics, int mouseX, int mouseY, float pPartialTick) {
+            //super.render(guigraphics, mouseX, mouseY, pPartialTick);
         }
 
         @Override
-        public void renderTop(GuiGraphics guigraphics, int pMouseX, int pMouseY, float pPartialTick) {
-            super.render(guigraphics, pMouseX, pMouseY, pPartialTick);
-            super.renderTop(guigraphics, pMouseX, pMouseY, pPartialTick);
+        public void renderTop(GuiGraphics guigraphics, int mouseX, int mouseY, float pPartialTick) {
+            super.render(guigraphics, mouseX, mouseY, pPartialTick);
+            super.renderTop(guigraphics, mouseX, mouseY, pPartialTick);
         }
     };
     private final TTimer tTimer = TTimer.newTimerCountDown(30);
@@ -71,7 +71,9 @@ public class TestScreen extends TScreen {
     private final TItem item = new TItem(new ItemStack(Items.GRASS_BLOCK, 10), null, 32);
 
     private final TProgressBar progressBar = new TProgressBar();
-    private final TImage image = new TImage(ResourceLocation.fromNamespaceAndPath(T88.MOD_ID, "textures/gui/t88.png"));
+    private final TImage image = new TImage(Identifier.fromNamespaceAndPath(T88.MOD_ID, "textures/gui/t88.png"));
+    private final TButton button = new TButton(Component.literal("Test"), pButton -> {
+    });
 
     public TestScreen() {
         super(Component.empty());
@@ -147,6 +149,8 @@ public class TestScreen extends TScreen {
 
         TSimpleNotification.fire(Component.literal("Test Test"), 10, TSimpleNotification.Severity.ERROR);
         this.add(image);
+
+        this.add(button);
     }
 
     @Override
@@ -162,6 +166,7 @@ public class TestScreen extends TScreen {
         LayoutHelper.BRightOfA(item, 4, tTimer, item.getPreferredSize());
         progressBar.setBounds(10, (int) (height * 0.8), 200, 10);
         image.setBounds(100, 0, 40, 40);
+        button.setBounds(100, 300, 100, 20);
         super.layout();
     }
 
@@ -177,8 +182,8 @@ public class TestScreen extends TScreen {
     }
 
     @Override
-    public void render(GuiGraphics graphics, int pMouseX, int pMouseY, float pPartialTick) {
+    public void render(GuiGraphics graphics, int mouseX, int mouseY, float pPartialTick) {
         graphics.drawString(Minecraft.getInstance().font, "ABCDE", 30, 30, 0xff000000);
-        super.render(graphics, pMouseX, pMouseY, pPartialTick);
+        super.render(graphics, mouseX, mouseY, pPartialTick);
     }
 }

@@ -6,11 +6,11 @@ import net.neoforged.bus.api.Event;
  * @author USS_Shenzhou
  */
 public class ClearEditBoxFocusEvent extends Event {
-    public final double pMouseX;
-    public final double pMouseY;
+    public final double mouseX;
+    public final double mouseY;
 
-    public ClearEditBoxFocusEvent(double pMouseX, double pMouseY) {
-        this.pMouseX = pMouseX;
-        this.pMouseY = pMouseY;
+    public ClearEditBoxFocusEvent(double mouseX, double mouseY) {
+        this.mouseX = mouseX;
+        this.mouseY = mouseY;
     }
 }

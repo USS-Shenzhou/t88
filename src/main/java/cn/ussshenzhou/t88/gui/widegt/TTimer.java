@@ -129,7 +129,7 @@ public class TTimer extends TLabel {
     }
 
     @Override
-    public void render(GuiGraphics guigraphics, int pMouseX, int pMouseY, float pPartialTick) {
+    public void render(GuiGraphics guigraphics, int mouseX, int mouseY, float pPartialTick) {
         if (countdown) {
             if (startMs == 0 && pausedMs == 0) {
                 time = countDownSec * 1000L;
@@ -153,7 +153,7 @@ public class TTimer extends TLabel {
             );
         } catch (StringIndexOutOfBoundsException ignored) {
         }
-        super.render(guigraphics, pMouseX, pMouseY, pPartialTick);
+        super.render(guigraphics, mouseX, mouseY, pPartialTick);
     }
 
     public void start() {

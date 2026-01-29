@@ -176,7 +176,7 @@ public class ChartPanel extends TPanel {
             });
             var c = Component.literal(s.toString());
             var widgetTooltipHolder = new WidgetTooltipHolder();
-            widgetTooltipHolder.set(new Tooltip(c, c) {
+            widgetTooltipHolder.set(new Tooltip(c, c, Optional.empty(), null) {
                 @Override
                 public @NotNull List<FormattedCharSequence> toCharSequence(@NotNull Minecraft pMinecraft) {
                     if (this.cachedTooltip == null) {

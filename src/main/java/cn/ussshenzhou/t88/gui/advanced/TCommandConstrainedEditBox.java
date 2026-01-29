@@ -3,12 +3,7 @@ package cn.ussshenzhou.t88.gui.advanced;
 import com.mojang.brigadier.CommandDispatcher;
 import com.mojang.brigadier.ParseResults;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
-import net.minecraft.client.Minecraft;
-import net.minecraft.commands.CommandSource;
 import net.minecraft.commands.CommandSourceStack;
-import net.minecraft.network.chat.Component;
-import net.minecraft.server.level.ServerPlayer;
-import net.minecraft.world.level.GameRules;
 import net.neoforged.neoforge.client.ClientCommandHandler;
 
 import java.util.Map;

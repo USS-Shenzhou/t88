@@ -1,9 +1,6 @@
 package cn.ussshenzhou.t88.magic;
 
 import com.mojang.logging.LogUtils;
-import net.neoforged.bus.api.SubscribeEvent;
-import net.neoforged.fml.common.EventBusSubscriber;
-import net.neoforged.fml.event.lifecycle.FMLConstructModEvent;
 import sun.misc.Unsafe;
 
 import javax.annotation.CheckReturnValue;
@@ -30,7 +27,7 @@ public class MagicHelper {
     }
 
     @CheckReturnValue
-    public static <R extends Record> R set(R record, Field field, Object value) throws InvocationTargetException, InstantiationException, IllegalAccessException {
+    public static <R extends Record> R setRecordField(R record, Field field, Object value) throws InvocationTargetException, InstantiationException, IllegalAccessException {
         var clazz = record.getClass();
         var constructor = clazz.getDeclaredConstructors()[0];
         constructor.setAccessible(true);

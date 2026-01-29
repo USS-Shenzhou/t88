@@ -1,6 +1,6 @@
 {
   "key.t88.gui_test": "GUI 测试",
-  "key.categories.t88": "T88",
+  "key.categories.t88.general": "T88",
 
   "key.t88.open_analyzer": "打开分析器",
   "key.t88.clear_recorder": "清空分析器",

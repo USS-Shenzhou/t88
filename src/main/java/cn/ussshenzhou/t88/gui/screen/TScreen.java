@@ -8,6 +8,9 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.Renderable;
 import net.minecraft.client.gui.screens.Screen;
+import net.minecraft.client.input.CharacterEvent;
+import net.minecraft.client.input.KeyEvent;
+import net.minecraft.client.input.MouseButtonEvent;
 import net.minecraft.network.chat.Component;
 import net.neoforged.neoforge.client.ClientHooks;
 import net.neoforged.neoforge.common.NeoForge;
@@ -24,12 +27,11 @@ public abstract class TScreen extends Screen {
 
     public TScreen(Component pTitle) {
         super(pTitle);
-        minecraft = Minecraft.getInstance();
     }
 
     @Override
-    public void resize(Minecraft pMinecraft, int pWidth, int pHeight) {
-        super.resize(pMinecraft, pWidth, pHeight);
+    public void resize(int width, int height) {
+        super.resize(width, height);
         needRelayout = true;
     }
 
@@ -46,16 +48,16 @@ public abstract class TScreen extends Screen {
     }
 
     @Override
-    public void render(GuiGraphics graphics, int pMouseX, int pMouseY, float pPartialTick) {
+    public void render(GuiGraphics graphics, int mouseX, int mouseY, float pPartialTick) {
         graphics.pose().pushMatrix();
         for (TWidget w : this.tChildren) {
             if (w.isVisibleT()) {
-                w.render(graphics, pMouseX, pMouseY, pPartialTick);
+                w.render(graphics, mouseX, mouseY, pPartialTick);
             }
         }
         for (TWidget w : this.tChildren) {
             if (w.isVisibleT()) {
-                w.renderTop(graphics, pMouseX, pMouseY, pPartialTick);
+                w.renderTop(graphics, mouseX, mouseY, pPartialTick);
             }
         }
         graphics.pose().pushMatrix();
@@ -105,15 +107,15 @@ public abstract class TScreen extends Screen {
     }
 
     @Override
-    public boolean mouseClicked(double pMouseX, double pMouseY, int pButton) {
-        NeoForge.EVENT_BUS.post(new ClearEditBoxFocusEvent(pMouseX, pMouseY));
+    public boolean mouseClicked(MouseButtonEvent event, boolean doubleClick) {
+        NeoForge.EVENT_BUS.post(new ClearEditBoxFocusEvent(event.x(), event.y()));
         for (TWidget tWidget : reversed(tChildren)) {
             if (!tWidget.isVisibleT()) {
                 continue;
             }
-            if (tWidget.mouseClicked(pMouseX, pMouseY, pButton)) {
+            if (tWidget.mouseClicked(event, doubleClick)) {
                 this.setFocused(tWidget);
-                if (pButton == 0) {
+                if (event.button() == 0) {
                     this.setDragging(true);
                 }
                 return true;
@@ -123,13 +125,13 @@ public abstract class TScreen extends Screen {
     }
 
     @Override
-    public boolean mouseReleased(double pMouseX, double pMouseY, int pButton) {
+    public boolean mouseReleased(MouseButtonEvent event) {
         this.setDragging(false);
         for (TWidget tWidget : reversed(tChildren)) {
             if (!tWidget.isVisibleT()) {
                 continue;
             }
-            if (tWidget.mouseReleased(pMouseX, pMouseY, pButton)) {
+            if (tWidget.mouseReleased(event)) {
                 return true;
             }
         }
@@ -137,12 +139,12 @@ public abstract class TScreen extends Screen {
     }
 
     @Override
-    public boolean mouseDragged(double pMouseX, double pMouseY, int pButton, double pDragX, double pDragY) {
+    public boolean mouseDragged(MouseButtonEvent event, double dx, double dy) {
         for (TWidget tWidget : reversed(tChildren)) {
             if (!tWidget.isVisibleT()) {
                 continue;
             }
-            if (tWidget.mouseDragged(pMouseX, pMouseY, pButton, pDragX, pDragY)) {
+            if (tWidget.mouseDragged(event, dx, dy)) {
                 return true;
             }
         }
@@ -150,12 +152,12 @@ public abstract class TScreen extends Screen {
     }
 
     @Override
-    public boolean mouseScrolled(double pMouseX, double pMouseY, double deltaX, double deltaY) {
+    public boolean mouseScrolled(double mouseX, double mouseY, double deltaX, double deltaY) {
         for (TWidget tWidget : reversed(tChildren)) {
             if (!tWidget.isVisibleT()) {
                 continue;
             }
-            if (tWidget.mouseScrolled(pMouseX, pMouseY, deltaX, deltaY)) {
+            if (tWidget.mouseScrolled(mouseX, mouseY, deltaX, deltaY)) {
                 return true;
             }
         }
@@ -163,23 +165,23 @@ public abstract class TScreen extends Screen {
     }
 
     @Override
-    public boolean keyPressed(int pKeyCode, int pScanCode, int pModifiers) {
-        if (pKeyCode == 256 && this.shouldCloseOnEsc()) {
+    public boolean keyPressed(KeyEvent event) {
+        if (event.key() == 256 && this.shouldCloseOnEsc()) {
             this.onClose(true);
             return true;
         } else {
-            return this.getFocused() != null && this.getFocused().keyPressed(pKeyCode, pScanCode, pModifiers);
+            return this.getFocused() != null && this.getFocused().keyPressed(event);
         }
     }
 
     @Override
-    public boolean keyReleased(int pKeyCode, int pScanCode, int pModifiers) {
-        return this.getFocused() != null && this.getFocused().keyReleased(pKeyCode, pScanCode, pModifiers);
+    public boolean keyReleased(KeyEvent event) {
+        return this.getFocused() != null && this.getFocused().keyReleased(event);
     }
 
     @Override
-    public boolean charTyped(char pCodePoint, int pModifiers) {
-        return this.getFocused() != null && this.getFocused().charTyped(pCodePoint, pModifiers);
+    public boolean charTyped(CharacterEvent event) {
+        return this.getFocused() != null && this.getFocused().charTyped(event);
     }
 
     @Deprecated

@@ -5,6 +5,7 @@ import cn.ussshenzhou.t88.gui.util.Border;
 import cn.ussshenzhou.t88.gui.util.LayoutHelper;
 import cn.ussshenzhou.t88.gui.widegt.TWidget;
 import com.google.common.collect.ImmutableList;
+import net.minecraft.client.input.MouseButtonEvent;
 import org.joml.Vector2i;
 import cn.ussshenzhou.t88.gui.widegt.TPanel;
 import net.minecraft.network.chat.Component;
@@ -232,8 +233,8 @@ public class TTabPageContainer extends TPanel {
         }
 
         @Override
-        public boolean mouseClicked(double pMouseX, double pMouseY, int pButton) {
-            return close.mouseClicked(pMouseX, pMouseY, pButton) || super.mouseClicked(pMouseX, pMouseY, pButton);
+        public boolean mouseClicked(MouseButtonEvent event, boolean doubleClick) {
+            return close.mouseClicked(event, doubleClick) || super.mouseClicked(event, doubleClick);
         }
     }
 }

@@ -22,10 +22,6 @@ public class ConfigScreen extends TScreen {
         title.setFontSize(TLabel.STD_FONT_SIZE * 2);
         this.add(config);
         config.addOptionSplitter(Component.translatable("gui.t88.net.options.general"));
-        config.addOptionCycleButtonInit(Component.translatable("gui.t88.net.options.style"), List.of(Boolean.TRUE, Boolean.FALSE),
-                boo -> b -> ConfigHelper.getConfigWrite(T88Config.class, c -> {
-                    b.getSelectedOptional().ifPresent(e -> c.replaceStyle = e.getContent());
-                }), e -> e.getContent() == ConfigHelper.getConfigRead(T88Config.class).replaceStyle);
         config.addOptionSplitter(Component.translatable("gui.t88.net.options.net"));
         config.addOptionCycleButtonInit(Component.translatable("gui.t88.net.options.unit"), List.of(T88Config.NetworkUnit.values()),
                 s -> b -> ConfigHelper.getConfigWrite(T88Config.class, c -> {

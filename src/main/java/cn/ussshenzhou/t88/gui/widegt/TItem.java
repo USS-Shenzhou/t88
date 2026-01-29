@@ -65,14 +65,14 @@ public class TItem extends TPanel {
     }
 
     @Override
-    public void render(GuiGraphics graphics, int pMouseX, int pMouseY, float pPartialTick) {
+    public void render(GuiGraphics graphics, int mouseX, int mouseY, float pPartialTick) {
         graphics.pose().pushMatrix();
-        renderItem(graphics, pMouseX, pMouseY, pPartialTick);
+        renderItem(graphics, mouseX, mouseY, pPartialTick);
         float scale = itemSize / DEFAULT_SIZE;
         if (count.isVisibleT()) {
-            count.render(graphics, pMouseX, pMouseY, pPartialTick);
+            count.render(graphics, mouseX, mouseY, pPartialTick);
         }
-        if (showTooltip && isInRange(pMouseX, pMouseY) && this.getTopParentScreen() != null) {
+        if (showTooltip && isInRange(mouseX, mouseY) && this.getTopParentScreen() != null) {
             graphics.disableScissor();
             graphics.setTooltipForNextFrame(
                     Minecraft.getInstance().font,
@@ -95,7 +95,7 @@ public class TItem extends TPanel {
                 graphics.enableScissor((int) d1, (int) d2, Math.max(0, (int) d3), Math.max(0, (int) d4));
             }
         }
-        super.render(graphics, pMouseX, pMouseY, pPartialTick);
+        super.render(graphics, mouseX, mouseY, pPartialTick);
         graphics.pose().popMatrix();
     }
 

@@ -3,6 +3,7 @@ package cn.ussshenzhou.t88.gui.widegt;
 import cn.ussshenzhou.t88.gui.event.TWidgetContentUpdatedEvent;
 import cn.ussshenzhou.t88.gui.util.ITranslatable;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.input.MouseButtonEvent;
 import net.minecraft.locale.Language;
 import net.minecraft.network.chat.Component;
 import net.minecraft.util.Mth;
@@ -141,15 +142,15 @@ public class TCycleButton<E> extends TButton {
     }
 
     @Override
-    public boolean mouseClicked(double pMouseX, double pMouseY, int pButton) {
-        if (isInRange(pMouseX, pMouseY)) {
-            if (pButton == 1) {
+    public boolean mouseClicked(MouseButtonEvent event, boolean doubleClick) {
+        if (isInRange(event)) {
+            if (event.button() == 1) {
                 this.playDownSound(Minecraft.getInstance().getSoundManager());
                 cycleOnce(-1);
                 return true;
             }
         }
-        return super.mouseClicked(pMouseX, pMouseY, pButton);
+        return super.mouseClicked(event, doubleClick);
     }
 
     protected void cycleOnce(int i) {

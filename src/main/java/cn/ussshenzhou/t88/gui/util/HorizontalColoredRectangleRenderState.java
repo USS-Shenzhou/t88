@@ -50,12 +50,11 @@ public record HorizontalColoredRectangleRenderState(
     }
 
     @Override
-    public void buildVertices(VertexConsumer consumer, float z) {
-        consumer.addVertexWith2DPose(this.pose(), this.x0(), this.y0(), z).setColor(this.col1());
-        consumer.addVertexWith2DPose(this.pose(), this.x0(), this.y1(), z).setColor(this.col1());
-        consumer.addVertexWith2DPose(this.pose(), this.x1(), this.y1(), z).setColor(this.col2());
-        consumer.addVertexWith2DPose(this.pose(), this.x1(), this.y0(), z).setColor(this.col2());
-
+    public void buildVertices(VertexConsumer vertexConsumer) {
+        vertexConsumer.addVertexWith2DPose(this.pose(), this.x0(), this.y0()).setColor(this.col1());
+        vertexConsumer.addVertexWith2DPose(this.pose(), this.x0(), this.y1()).setColor(this.col1());
+        vertexConsumer.addVertexWith2DPose(this.pose(), this.x1(), this.y1()).setColor(this.col2());
+        vertexConsumer.addVertexWith2DPose(this.pose(), this.x1(), this.y0()).setColor(this.col2());
     }
 
     @Nullable
