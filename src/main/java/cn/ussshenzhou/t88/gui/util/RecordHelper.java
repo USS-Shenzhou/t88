@@ -14,4 +14,8 @@ public class RecordHelper {
     public static MouseButtonEvent scroll(MouseButtonEvent event, double scrollX, double scrollY) {
         return new MouseButtonEvent(event.x() + scrollX, event.y() + scrollY, event.buttonInfo());
     }
+
+    public static MouseButtonEvent reset(MouseButtonEvent event, double x, double y) {
+        return new MouseButtonEvent(x, y, event.buttonInfo());
+    }
 }

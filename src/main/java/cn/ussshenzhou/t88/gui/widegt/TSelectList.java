@@ -70,7 +70,7 @@ public class TSelectList<Element> extends ObjectSelectionList<TSelectList<Elemen
 
     public void clearElement() {
         this.setSelected(null);
-        super.children().clear();
+        children.clear();
     }
 
     @Override

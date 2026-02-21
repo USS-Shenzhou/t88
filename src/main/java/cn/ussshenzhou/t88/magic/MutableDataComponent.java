@@ -3,6 +3,7 @@ package cn.ussshenzhou.t88.magic;
 import net.minecraft.core.component.DataComponentType;
 import net.minecraft.world.item.ItemStack;
 
+import javax.annotation.CheckReturnValue;
 import java.lang.reflect.InvocationTargetException;
 import java.util.Arrays;
 import java.util.NoSuchElementException;
@@ -15,6 +16,7 @@ public interface MutableDataComponent<R extends Record> {
     DataComponentType<R> componentType();
 
     @SuppressWarnings("unchecked")
+    @CheckReturnValue
     default <F> MutableDataComponent<R> setFirst(ItemStack stack, F value) {
         try {
             @SuppressWarnings("OptionalGetWithoutIsPresent") var field = Arrays.stream(this.getClass().getDeclaredFields()).filter(f -> f.getType() == value.getClass()).findFirst().get();
@@ -28,6 +30,7 @@ public interface MutableDataComponent<R extends Record> {
     }
 
     @SuppressWarnings("unchecked")
+    @CheckReturnValue
     default <F> MutableDataComponent<R> set(ItemStack stack, F value, int ordinal) {
         try {
             var field = Arrays.stream(this.getClass().getDeclaredFields()).filter(f -> f.getType() == value.getClass()).toList().get(ordinal);
@@ -41,6 +44,7 @@ public interface MutableDataComponent<R extends Record> {
     }
 
     @SuppressWarnings("unchecked")
+    @CheckReturnValue
     default <F> MutableDataComponent<R> setByName(ItemStack stack, String fieldName, F value) {
         try {
             @SuppressWarnings("OptionalGetWithoutIsPresent") var field = Arrays.stream(this.getClass().getDeclaredFields()).filter(f -> f.getName().equals(fieldName)).findFirst().get();

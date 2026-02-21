@@ -44,7 +44,7 @@ public class TLabel extends TPanel {
     protected void parseTextLines() {
         String[] lines = text.getString().split("\n");
         textLines.clear();
-        Stream.of(lines).forEach(line -> textLines.add(Component.literal(line)));
+        Stream.of(lines).forEach(line -> textLines.add(Component.literal(line).setStyle(text.getStyle())));
     }
 
     public Component getText() {

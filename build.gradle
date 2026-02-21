@@ -98,11 +98,6 @@ sourceSets.main.resources {
     srcDir 'src/generated/resources'
 }
 
-tasks.withType(Jar) {
-    exclude('assets/t88/textures/t88_style_todo')
-}
-
-
 dependencies {
     // Example mod dependency with JEI
     // The JEI API is declared for compile time use, while the full JEI artifact is used at runtime
@@ -143,21 +138,6 @@ var generateModMetadata = tasks.register("generateModMetadata", ProcessResources
                              mod_description        : mod_description]
     inputs.properties replaceProperties
     expand replaceProperties
-
-    var mixinClassesForCompat = "";
-    if (shaderpack_in_dev) {
-        mixinClassesForCompat = """,
-    "compat.SodiumChunkBuilderMeshingTaskMixin",
-    "compat.SodiumDefaultTerrainRenderPassesMixin",
-    "compat.SodiumSodiumWorldRendererMixin",
-    "compat.IrisSodiumProgramsMixin",
-    "compat.IrisWorldRenderingPhaseMixin"
-"""
-    }
-    filter { line ->
-        line.replace('"//CLASS_FOR_COMPAT"', mixinClassesForCompat)
-    }
-
     into "build/generated/sources/modMetadata"
 }
 
