@@ -20,7 +20,7 @@ import java.util.function.Consumer;
 public class ConfigHelper {
     private static final File CONFIG_DIR = FMLPaths.CONFIGDIR.relative().toFile();
     private static final ConcurrentHashMap<Class<? extends TConfig>, TConfig> CACHE = new ConcurrentHashMap<>();
-    private static final Gson GSON = new GsonBuilder().setPrettyPrinting().disableHtmlEscaping().create();
+    private static final Gson GSON = new GsonBuilder().setPrettyPrinting().disableHtmlEscaping().enableComplexMapKeySerialization().create();
     private static final File UNIVERSAL_CONFIG_DIR = FileUtils.getUserDirectory().toPath().resolve("MinecraftT88Config").toFile();
 
     private static void checkDir(File dir) {

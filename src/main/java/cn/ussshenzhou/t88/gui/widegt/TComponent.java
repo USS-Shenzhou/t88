@@ -2,10 +2,7 @@ package cn.ussshenzhou.t88.gui.widegt;
 
 import cn.ussshenzhou.t88.gui.container.TScrollContainer;
 import cn.ussshenzhou.t88.gui.screen.TScreen;
-import cn.ussshenzhou.t88.gui.util.Border;
-import cn.ussshenzhou.t88.gui.util.ColorManager;
-import cn.ussshenzhou.t88.gui.util.HorizontalAlignment;
-import cn.ussshenzhou.t88.gui.util.HorizontalColoredRectangleRenderState;
+import cn.ussshenzhou.t88.gui.util.*;
 import com.google.common.collect.ImmutableList;
 import net.minecraft.client.gui.Font;
 import net.minecraft.client.gui.components.Tooltip;
@@ -486,6 +483,22 @@ public abstract class TComponent implements TWidget {
     public void fillGradientHorizontal(GuiGraphics graphics, int minX, int minY, int maxX, int maxY, int colorFrom, int colorTo) {
         graphics.guiRenderState.submitGuiElement(
                 new HorizontalColoredRectangleRenderState(
+                        RenderPipelines.GUI, TextureSetup.noTexture(),
+                        new Matrix3x2f(graphics.pose()),
+                        minX,
+                        minY,
+                        maxX,
+                        maxY,
+                        colorFrom,
+                        colorTo,
+                        graphics.scissorStack.peek()
+                )
+        );
+    }
+
+    public void fillGradientVertical(GuiGraphics graphics, int minX, int minY, int maxX, int maxY, int colorFrom, int colorTo) {
+        graphics.guiRenderState.submitGuiElement(
+                new VerticalColoredRectangleRenderState(
                         RenderPipelines.GUI, TextureSetup.noTexture(),
                         new Matrix3x2f(graphics.pose()),
                         minX,

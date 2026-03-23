@@ -16,6 +16,7 @@ public class TProgressBar extends TLabel {
     protected TextMode textMode = TextMode.NONE;
     protected int progressBarColor0 = ColorManager.get().themeColor();
     protected int progressBarColor1 = ColorManager.get().themeColor();
+    protected Type type = Type.HORIZONTAL;
 
     public TProgressBar() {
         this("", 1);
@@ -63,6 +64,10 @@ public class TProgressBar extends TLabel {
         this.progressBarColor1 = color1;
     }
 
+    public void setType(Type type) {
+        this.type = type;
+    }
+
     @Override
     public void tickT() {
         this.setText(Component.literal(this.textMode.generator.get(this.prefix, this.maxValue, this.value)));
@@ -76,19 +81,36 @@ public class TProgressBar extends TLabel {
                 x + width,
                 y + height,
                 background);
-        int dx = (int) (width * value / maxValue);
-        var scroll = getParentScroll();
-        graphics.scissorStack.push(new ScreenRectangle(
-                (int) (scroll.x + x),
-                (int) (y - scroll.y),
-                dx,
-                height));
-        fillGradientHorizontal(graphics,
-                x,
-                y,
-                x + width,
-                y + height,
-                progressBarColor0, progressBarColor1);
+        if (type == Type.HORIZONTAL) {
+            int dx = (int) (width * value / maxValue);
+            var scroll = getParentScroll();
+            graphics.scissorStack.push(new ScreenRectangle(
+                    (int) (scroll.x + x),
+                    (int) (y - scroll.y),
+                    dx,
+                    height));
+            fillGradientHorizontal(graphics,
+                    x,
+                    y,
+                    x + width,
+                    y + height,
+                    progressBarColor0, progressBarColor1);
+        } else {
+            int dy = (int) (height * value / maxValue);
+            var scroll = getParentScroll();
+            graphics.scissorStack.push(new ScreenRectangle(
+                    (int) (scroll.x + x),
+                    (int) (y - scroll.y + height - dy),
+                    width,
+                    dy));
+            fillGradientVertical(graphics,
+                    x,
+                    y,
+                    x + width,
+                    y + height,
+                    progressBarColor0, progressBarColor1);
+        }
+
         graphics.scissorStack.pop();
     }
 
@@ -112,6 +134,11 @@ public class TProgressBar extends TLabel {
         public TextMode(TextGenerator generator) {
             this.generator = generator;
         }
+    }
+
+    public enum Type {
+        VERTICAL,
+        HORIZONTAL
     }
 
     @FunctionalInterface

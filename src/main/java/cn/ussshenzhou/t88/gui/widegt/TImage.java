@@ -21,6 +21,7 @@ public class TImage extends TPanel {
     protected int imageHeight;
     protected float scale = 1;
     protected float alpha = 1;
+    protected int color = 0xffffff;
 
     public TImage(Identifier imageLocation) {
         this.imageLocation = imageLocation;
@@ -71,6 +72,14 @@ public class TImage extends TPanel {
         this.alpha = alpha;
     }
 
+    public int getColor() {
+        return color;
+    }
+
+    public void setColor(int rgb) {
+        this.color = rgb;
+    }
+
     @SuppressWarnings("AlibabaLowerCamelCaseVariableNaming")
     protected void loadImageWH() {
         try (NativeImage n = NativeImage.read(Minecraft.getInstance().getResourceManager().getResource(imageLocation).get().open())) {
@@ -87,7 +96,7 @@ public class TImage extends TPanel {
     @Override
     public void render(GuiGraphics guigraphics, int mouseX, int mouseY, float pPartialTick) {
         if (imageLocation != null) {
-            int color = (((int) alpha * 255) << 24) | 0xffffff;
+            int c = ((int) (alpha * 255) << 24) | color;
             switch (imageFit) {
                 case FILL -> {
                     float panelWHRatio = width / (float) height;
@@ -97,13 +106,13 @@ public class TImage extends TPanel {
                                 0, (int) ((imageHeight - imageWidth / panelWHRatio) / 2),
                                 width, height,
                                 imageWidth, (int) (imageWidth / panelWHRatio),
-                                (int) (imageWidth * scale), (int) (imageHeight * scale), color);
+                                (int) (imageWidth * scale), (int) (imageHeight * scale), c);
                     } else {
                         guigraphics.blit(RenderPipelines.GUI_TEXTURED, imageLocation, this.x, this.y,
                                 (int) ((imageWidth - imageHeight * panelWHRatio) / 2), 0,
                                 width, height,
                                 (int) (imageHeight * panelWHRatio), imageHeight,
-                                (int) (imageWidth * scale), (int) (imageHeight * scale), color);
+                                (int) (imageWidth * scale), (int) (imageHeight * scale), c);
                     }
                 }
                 case FIT -> {
@@ -114,13 +123,13 @@ public class TImage extends TPanel {
                                 0, 0,
                                 (int) (height * imageWHRatio), height,
                                 imageWidth, imageHeight,
-                                (int) (imageWidth * scale), (int) (imageHeight * scale), color);
+                                (int) (imageWidth * scale), (int) (imageHeight * scale), c);
                     } else {
                         guigraphics.blit(RenderPipelines.GUI_TEXTURED, imageLocation, this.x, (int) (this.y + (height - width / imageWHRatio) / 2),
                                 0, 0,
                                 width, (int) (width / imageWHRatio),
                                 imageWidth, imageHeight,
-                                (int) (imageWidth * scale), (int) (imageHeight * scale), color);
+                                (int) (imageWidth * scale), (int) (imageHeight * scale), c);
                     }
                 }
                 case STRETCH ->
