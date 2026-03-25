@@ -17,8 +17,10 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 @Mixin(GameRenderer.class)
 public class GameRendererMixin {
 
-    @Inject(method = "extractGui", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/Gui;extractRenderState(Lnet/minecraft/client/gui/GuiGraphicsExtractor;Lnet/minecraft/client/DeltaTracker;)V"))
+    @Inject(method = "extractGui", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/Gui;extractDeferredSubtitles()V"))
     public void t88RenderHud(CallbackInfo info, @Local GuiGraphicsExtractor guiGraphics, @Local(ordinal = 0) int mouseX, @Local(ordinal = 1) int mouseY, @Local(argsOnly = true) DeltaTracker deltaTracker) {
+        guiGraphics.nextStratum();
         HudManager.renderHud(guiGraphics, mouseX, mouseY, deltaTracker);
+        guiGraphics.nextStratum();
     }
 }

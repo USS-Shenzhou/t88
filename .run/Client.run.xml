@@ -1,7 +1,7 @@
 <component name="ProjectRunConfigurationManager">
   <configuration default="false" name="Client" type="Application" factoryName="Application">
     <option name="MAIN_CLASS_NAME" value="net.neoforged.devlaunch.Main" />
-    <module name="cn.ussshenzhou.t88.main" />
+    <module name="t88.main" />
     <option name="PROGRAM_PARAMETERS" value="&quot;@H:\\Minecraft Develop\\t88\\build\\moddev\\clientRunProgramArgs.txt&quot;" />
     <option name="VM_PARAMETERS" value="&quot;@H:\\Minecraft Develop\\t88\\build\\moddev\\clientRunVmArgs.txt&quot; &quot;-Dfml.modFolders=t88%%H:\\Minecraft Develop\\t88\\build\\classes\\java\\main;t88%%H:\\Minecraft Develop\\t88\\build\\resources\\main&quot;" />
     <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/run" />
