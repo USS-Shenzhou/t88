@@ -33,7 +33,7 @@ public abstract class AbstractWidgetMixin {
     protected int height;
 
     @SuppressWarnings("AlibabaLowerCamelCaseVariableNaming")
-    @Redirect(method = "render", at = @At(value = "FIELD", target = "Lnet/minecraft/client/gui/components/AbstractWidget;isHovered:Z", opcode = Opcodes.PUTFIELD))
+    @Redirect(method = "extractRenderState", at = @At(value = "FIELD", target = "Lnet/minecraft/client/gui/components/AbstractWidget;isHovered:Z", opcode = Opcodes.PUTFIELD))
     private void t88TScrollPanelCompatability(AbstractWidget instance, boolean value, @Local(argsOnly = true, ordinal = 0) int x, @Local(argsOnly = true, ordinal = 1) int y) {
         if (instance instanceof TWidget tWidget) {
             var scroll = tWidget.getParentScroll();

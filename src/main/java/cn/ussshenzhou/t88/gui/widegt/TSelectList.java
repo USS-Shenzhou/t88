@@ -11,7 +11,7 @@ import net.minecraft.resources.Identifier;
 import org.joml.Vector2i;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Font;
-import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.client.gui.components.ObjectSelectionList;
 import net.minecraft.locale.Language;
 import net.minecraft.network.chat.Component;
@@ -186,7 +186,7 @@ public class TSelectList<Element> extends ObjectSelectionList<TSelectList<Elemen
         return width - SCROLLBAR_WIDTH;
     }
 
-    protected void renderBackground(GuiGraphics guigraphics) {
+    protected void renderBackground(GuiGraphicsExtractor guigraphics) {
         guigraphics.fill(x, y, x + width - 6, y + height, background);
     }
 
@@ -226,7 +226,7 @@ public class TSelectList<Element> extends ObjectSelectionList<TSelectList<Elemen
     }
 
     @Override
-    protected void renderListBackground(GuiGraphics guiGraphics) {
+    protected void extractListBackground(GuiGraphicsExtractor guiGraphics) {
         Identifier Identifier = this.minecraft.level == null ? MENU_LIST_BACKGROUND : INWORLD_MENU_LIST_BACKGROUND;
         guiGraphics.blit(
                 RenderPipelines.GUI_TEXTURED,
@@ -243,7 +243,7 @@ public class TSelectList<Element> extends ObjectSelectionList<TSelectList<Elemen
     }
 
     @Override
-    protected void renderListSeparators(GuiGraphics guiGraphics) {
+    protected void extractListSeparators(GuiGraphicsExtractor guiGraphics) {
         Identifier Identifier = this.minecraft.level == null ? Screen.HEADER_SEPARATOR : Screen.INWORLD_HEADER_SEPARATOR;
         Identifier Identifier1 = this.minecraft.level == null ? Screen.FOOTER_SEPARATOR : Screen.INWORLD_FOOTER_SEPARATOR;
         guiGraphics.blit(RenderPipelines.GUI_TEXTURED, Identifier, this.getX(), this.getY() - 2, 0.0F, 0.0F,
@@ -255,13 +255,13 @@ public class TSelectList<Element> extends ObjectSelectionList<TSelectList<Elemen
     }
 
     @Override
-    public void renderWidget(GuiGraphics guiGraphics, int mouseX, int mouseY, float partialTick) {
+    public void extractWidgetRenderState(GuiGraphicsExtractor guiGraphics, int mouseX, int mouseY, float partialTick) {
         this.hovered = this.isMouseOver(mouseX, mouseY) ? this.getEntryAtPosition(mouseX, mouseY) : null;
-        this.renderListBackground(guiGraphics);
+        this.extractListBackground(guiGraphics);
         this.enableScissor(guiGraphics);
-        this.renderListItems(guiGraphics, mouseX, mouseY, partialTick);
+        this.extractListItems(guiGraphics, mouseX, mouseY, partialTick);
         guiGraphics.disableScissor();
-        this.renderListSeparators(guiGraphics);
+        this.extractListSeparators(guiGraphics);
         //if (this.scrollable()) {
         //    int i = this.scrollBarX();
         //    int j = this.scrollerHeight();
@@ -269,11 +269,11 @@ public class TSelectList<Element> extends ObjectSelectionList<TSelectList<Elemen
         //    guiGraphics.blitSprite(RenderPipelines.GUI_TEXTURED, SCROLLER_BACKGROUND_SPRITE, i, this.getY(), 6, this.getHeight());
         //    guiGraphics.blitSprite(RenderPipelines.GUI_TEXTURED, SCROLLER_SPRITE, i, k, 6, j);
         //}
-        this.renderScrollbar(guiGraphics, mouseX, mouseY);
+        this.extractScrollbar(guiGraphics, mouseX, mouseY);
     }
 
     @Override
-    protected void enableScissor(GuiGraphics guigraphics) {
+    protected void enableScissor(GuiGraphicsExtractor guigraphics) {
         guigraphics.enableScissor(
                 this.x,
                 this.y,
@@ -390,7 +390,7 @@ public class TSelectList<Element> extends ObjectSelectionList<TSelectList<Elemen
         }
 
         @Override
-        public void renderContent(GuiGraphics graphics, int mouseX, int mouseY, boolean hovered, float a) {
+        public void extractContent(GuiGraphicsExtractor graphics, int mouseX, int mouseY, boolean hovered, float a) {
             Font font = Minecraft.getInstance().font;
             int color = specialForeground == null ? (getSelected() == this ? selectedForeGround : foreground) : specialForeground;
             int left = getContentX();
@@ -400,10 +400,10 @@ public class TSelectList<Element> extends ObjectSelectionList<TSelectList<Elemen
             TComponent.drawStringSingleLine(TSelectList.this, graphics, font, getNarration(), horizontalAlignment, left + 1, left + width - 2, top + (height - font.lineHeight) / 2, color);
             /*switch (horizontalAlignment) {
                 case LEFT:
-                    guigraphics.drawString(font, getNarration(), pLeft + 1, pTop + (pHeight - font.lineHeight) / 2, color);
+                    guigraphics.text(font, getNarration(), pLeft + 1, pTop + (pHeight - font.lineHeight) / 2, color);
                     break;
                 case RIGHT:
-                    guigraphics.drawString(font, getNarration(), pLeft + width - font.width(getNarration()) - 1, pTop + (pHeight - font.lineHeight) / 2, color);
+                    guigraphics.text(font, getNarration(), pLeft + width - font.width(getNarration()) - 1, pTop + (pHeight - font.lineHeight) / 2, color);
                     break;
                 default:
                     guigraphics.drawCenteredString(font, getNarration(), pLeft + pWidth / 2, pTop + (pHeight - font.lineHeight) / 2, color);

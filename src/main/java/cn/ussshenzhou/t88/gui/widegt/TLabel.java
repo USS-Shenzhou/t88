@@ -4,7 +4,7 @@ import cn.ussshenzhou.t88.gui.util.HorizontalAlignment;
 import org.joml.Vector2i;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Font;
-import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.network.chat.Component;
 import net.minecraft.util.Mth;
 
@@ -90,12 +90,12 @@ public class TLabel extends TPanel {
     }
 
     @Override
-    public void render(GuiGraphics guigraphics, int mouseX, int mouseY, float pPartialTick) {
-        super.render(guigraphics, mouseX, mouseY, pPartialTick);
+    public void extractRenderState(GuiGraphicsExtractor guigraphics, int mouseX, int mouseY, float pPartialTick) {
+        super.extractRenderState(guigraphics, mouseX, mouseY, pPartialTick);
         renderText(guigraphics, mouseX, mouseY, pPartialTick);
     }
 
-    protected void renderText(GuiGraphics guigraphics, int mouseX, int mouseY, float pPartialTick) {
+    protected void renderText(GuiGraphicsExtractor guigraphics, int mouseX, int mouseY, float pPartialTick) {
         guigraphics.pose().pushMatrix();
         float y0 = Mth.ceil((y + (height - (fontSize + lineSpacing) * textLines.size()) / 2));
         for (Component line : textLines) {
@@ -106,7 +106,7 @@ public class TLabel extends TPanel {
                 int x0 = getAlignedX(line);
                 float scaleFactor = fontSize / (float) STD_FONT_SIZE;
                 guigraphics.pose().scale(scaleFactor, scaleFactor);
-                guigraphics.drawString(font, line, (int) (x0 / scaleFactor), (int) (y0 / scaleFactor), foreground);
+                guigraphics.text(font, line, (int) (x0 / scaleFactor), (int) (y0 / scaleFactor), foreground);
                 guigraphics.pose().popMatrix();
             }
             y0 += (fontSize + lineSpacing);
@@ -128,7 +128,7 @@ public class TLabel extends TPanel {
         int maxLineWidth = 0;
         for (Component line : textLines) {
             maxLineWidth = Mth.ceil(
-                    Math.max(font.width(line) * fontSize / 7,  maxLineWidth)
+                    Math.max(font.width(line) * fontSize / 7, maxLineWidth)
             );
         }
         return new Vector2i(maxLineWidth, (int) ((fontSize + lineSpacing) * textLines.size()) + 1);

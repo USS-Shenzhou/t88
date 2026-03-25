@@ -14,7 +14,7 @@ import cn.ussshenzhou.t88.gui.util.LayoutHelper;
 import cn.ussshenzhou.t88.gui.widegt.*;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Font;
-import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.commands.Commands;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.Identifier;
@@ -31,13 +31,13 @@ public class TestScreen extends TScreen {
 
     private final TLabel linesTest = new TLabel(Component.literal("§6Test1 \nTest223456\n...")) {
         @Override
-        public void render(GuiGraphics guigraphics, int mouseX, int mouseY, float pPartialTick) {
-            //super.render(guigraphics, mouseX, mouseY, pPartialTick);
+        public void extractRenderState(GuiGraphicsExtractor guigraphics, int mouseX, int mouseY, float pPartialTick) {
+            super.extractRenderState(guigraphics, mouseX, mouseY, pPartialTick);
         }
 
         @Override
-        public void renderTop(GuiGraphics guigraphics, int mouseX, int mouseY, float pPartialTick) {
-            super.render(guigraphics, mouseX, mouseY, pPartialTick);
+        public void renderTop(GuiGraphicsExtractor guigraphics, int mouseX, int mouseY, float pPartialTick) {
+            //super.extractRenderState(guigraphics, mouseX, mouseY, pPartialTick);
             super.renderTop(guigraphics, mouseX, mouseY, pPartialTick);
         }
     };
@@ -182,8 +182,8 @@ public class TestScreen extends TScreen {
     }
 
     @Override
-    public void render(GuiGraphics graphics, int mouseX, int mouseY, float pPartialTick) {
-        graphics.drawString(Minecraft.getInstance().font, "ABCDE", 30, 30, 0xff000000);
-        super.render(graphics, mouseX, mouseY, pPartialTick);
+    public void extractRenderState(GuiGraphicsExtractor graphics, int mouseX, int mouseY, float pPartialTick) {
+        graphics.text(Minecraft.getInstance().font, "ABCDE", 30, 30, 0xff000000);
+        super.extractRenderState(graphics, mouseX, mouseY, pPartialTick);
     }
 }

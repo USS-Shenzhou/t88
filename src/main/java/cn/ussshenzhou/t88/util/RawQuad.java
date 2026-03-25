@@ -4,8 +4,8 @@ import com.mojang.blaze3d.vertex.DefaultVertexFormat;
 import com.mojang.blaze3d.vertex.VertexFormat;
 import com.mojang.blaze3d.vertex.VertexFormatElement;
 import net.minecraft.client.model.geom.builders.UVPair;
-import net.minecraft.client.renderer.block.model.BakedQuad;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
+import net.minecraft.client.resources.model.geometry.BakedQuad;
 import net.minecraft.core.Direction;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.api.distmarker.OnlyIn;
@@ -35,32 +35,24 @@ public class RawQuad {
      */
 
     private final Point[] points;
-    private final int tintIndex;
     private final Direction direction;
-    private final TextureAtlasSprite sprite;
-    private final boolean shade;
-    private final int lightEmission;
     private final BakedNormals bakedNormals;
     private final BakedColors bakedColors;
-    private final boolean hasAmbientOcclusion;
+    private final BakedQuad.MaterialInfo materialInfo;
 
     static VertexFormat format = DefaultVertexFormat.BLOCK;
     static List<VertexFormatElement> elements = format.getElements();
 
-    public RawQuad(int tintIndex, Direction direction, TextureAtlasSprite sprite, boolean shade, int lightEmission, BakedNormals bakedNormals, BakedColors bakedColors, boolean hasAmbientOcclusion, Point... points) {
+    public RawQuad(Direction direction, BakedNormals bakedNormals, BakedColors bakedColors, BakedQuad.MaterialInfo materialInfo, Point... points) {
         this.points = points;
-        this.tintIndex = tintIndex;
         this.direction = direction;
-        this.sprite = sprite;
-        this.shade = shade;
-        this.lightEmission = lightEmission;
         this.bakedNormals = bakedNormals;
         this.bakedColors = bakedColors;
-        this.hasAmbientOcclusion = hasAmbientOcclusion;
+        this.materialInfo = materialInfo;
     }
 
     public RawQuad(BakedQuad bakedQuad) {
-        this(bakedQuad.tintIndex(), bakedQuad.direction(), bakedQuad.sprite(), bakedQuad.shade(), bakedQuad.lightEmission(), bakedQuad.bakedNormals(), bakedQuad.bakedColors(), bakedQuad.hasAmbientOcclusion(),
+        this(bakedQuad.direction(), bakedQuad.bakedNormals(), bakedQuad.bakedColors(), bakedQuad.materialInfo(),
                 new Point(bakedQuad.position0(), bakedQuad.packedUV0()),
                 new Point(bakedQuad.position1(), bakedQuad.packedUV1()),
                 new Point(bakedQuad.position2(), bakedQuad.packedUV2()),
@@ -167,7 +159,7 @@ public class RawQuad {
                 points[1].getUV(),
                 points[2].getUV(),
                 points[3].getUV(),
-                tintIndex, direction, sprite, shade, lightEmission, bakedNormals, bakedColors, hasAmbientOcclusion
+                direction, materialInfo, bakedNormals, bakedColors
         );
     }
 
@@ -191,12 +183,8 @@ public class RawQuad {
         return direction;
     }
 
-    public boolean isShade() {
-        return shade;
-    }
-
     public RawQuad copy() {
-        return new RawQuad(tintIndex, direction, sprite, shade, lightEmission, bakedNormals, bakedColors, hasAmbientOcclusion, points);
+        return new RawQuad(direction, bakedNormals, bakedColors, materialInfo, points);
     }
 
     @SuppressWarnings("UnusedReturnValue")

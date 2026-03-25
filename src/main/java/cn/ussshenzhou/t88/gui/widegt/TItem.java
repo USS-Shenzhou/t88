@@ -9,7 +9,7 @@ import net.minecraft.CrashReport;
 import net.minecraft.CrashReportCategory;
 import net.minecraft.ReportedException;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.core.component.DataComponents;
@@ -65,12 +65,12 @@ public class TItem extends TPanel {
     }
 
     @Override
-    public void render(GuiGraphics graphics, int mouseX, int mouseY, float pPartialTick) {
+    public void extractRenderState(GuiGraphicsExtractor graphics, int mouseX, int mouseY, float pPartialTick) {
         graphics.pose().pushMatrix();
         renderItem(graphics, mouseX, mouseY, pPartialTick);
         float scale = itemSize / DEFAULT_SIZE;
         if (count.isVisibleT()) {
-            count.render(graphics, mouseX, mouseY, pPartialTick);
+            count.extractRenderState(graphics, mouseX, mouseY, pPartialTick);
         }
         if (showTooltip && isInRange(mouseX, mouseY) && this.getTopParentScreen() != null) {
             graphics.disableScissor();
@@ -95,18 +95,18 @@ public class TItem extends TPanel {
                 graphics.enableScissor((int) d1, (int) d2, Math.max(0, (int) d3), Math.max(0, (int) d4));
             }
         }
-        super.render(graphics, mouseX, mouseY, pPartialTick);
+        super.extractRenderState(graphics, mouseX, mouseY, pPartialTick);
         graphics.pose().popMatrix();
     }
 
-    protected void renderItem(GuiGraphics graphics, int mouseX, int mouseY, float partialTick) {
+    protected void renderItem(GuiGraphicsExtractor graphics, int mouseX, int mouseY, float partialTick) {
         if (item.isEmpty()) {
             return;
         }
         graphics.pose().pushMatrix();
         graphics.pose().translate(x, y);
         graphics.pose().scale(itemSize / DEFAULT_SIZE);
-        graphics.renderItem(item, 0, 0);
+        graphics.item(item, 0, 0);
         graphics.pose().popMatrix();
     }
 

@@ -2,7 +2,7 @@ package cn.ussshenzhou.t88.gui.widegt;
 
 import cn.ussshenzhou.t88.gui.event.TimerCountdownReachEvent;
 import cn.ussshenzhou.t88.mixin.MutableComponentAccessor;
-import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.contents.PlainTextContents.LiteralContents;
 import net.neoforged.neoforge.common.NeoForge;
@@ -129,7 +129,7 @@ public class TTimer extends TLabel {
     }
 
     @Override
-    public void render(GuiGraphics guigraphics, int mouseX, int mouseY, float pPartialTick) {
+    public void extractRenderState(GuiGraphicsExtractor guigraphics, int mouseX, int mouseY, float pPartialTick) {
         if (countdown) {
             if (startMs == 0 && pausedMs == 0) {
                 time = countDownSec * 1000L;
@@ -153,7 +153,7 @@ public class TTimer extends TLabel {
             );
         } catch (StringIndexOutOfBoundsException ignored) {
         }
-        super.render(guigraphics, mouseX, mouseY, pPartialTick);
+        super.extractRenderState(guigraphics, mouseX, mouseY, pPartialTick);
     }
 
     public void start() {

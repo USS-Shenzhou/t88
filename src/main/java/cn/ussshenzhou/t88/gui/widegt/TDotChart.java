@@ -4,7 +4,7 @@ import cn.ussshenzhou.t88.gui.util.ColorManager;
 import cn.ussshenzhou.t88.gui.util.HorizontalAlignment;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Font;
-import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.network.chat.Component;
 
 import java.util.Arrays;
@@ -57,24 +57,24 @@ public class TDotChart<T extends Number & Comparable<T>> extends TPanel {
     }
 
     @Override
-    public void render(GuiGraphics graphics, int mouseX, int mouseY, float pPartialTick) {
+    public void extractRenderState(GuiGraphicsExtractor graphics, int mouseX, int mouseY, float pPartialTick) {
         renderAxis(graphics);
         renderDots(graphics);
-        super.render(graphics, mouseX, mouseY, pPartialTick);
+        super.extractRenderState(graphics, mouseX, mouseY, pPartialTick);
     }
 
-    protected void renderAxis(GuiGraphics graphics) {
+    protected void renderAxis(GuiGraphicsExtractor graphics) {
         //Y axis
         graphics.fill(minX - 1, minY, minX, maxY + 1, c0);
         //X axis
         graphics.fill(minX, maxY, maxX, maxY + 1, c0);
         //x=0
-        graphics.drawString(font, Component.literal(String.valueOf(0)), minX - 1, maxY + 1 + labelGap, c0);
+        graphics.text(font, Component.literal(String.valueOf(0)), minX - 1, maxY + 1 + labelGap, c0);
         //x=max
         var text = Component.literal(String.valueOf(xMax));
         var x0 = (int) (minX + (maxX - minX) * 0.9);
         graphics.fill(x0, maxY - spikeHeight, x0 + 1, maxY, c0);
-        graphics.drawString(font, text, x0 - font.width(text) / 2, xAxisLabel.getYT(), c0);
+        graphics.text(font, text, x0 - font.width(text) / 2, xAxisLabel.getYT(), c0);
         //y=lowerBounds
         int fontSizeOffsetY = 4;
         var x1 = minX - 1 - labelGap;
@@ -89,7 +89,7 @@ public class TDotChart<T extends Number & Comparable<T>> extends TPanel {
         drawStringSingleLine(graphics, font, Component.literal(String.valueOf(yMax)), HorizontalAlignment.RIGHT, 0, x1, y1 - fontSizeOffsetY, c0);
     }
 
-    protected void renderDots(GuiGraphics graphics) {
+    protected void renderDots(GuiGraphicsExtractor graphics) {
         int i = 0;
         float stepX = (maxX - minX) * 0.9f / numbers.length;
         float bottomY = (maxY - minY) * 0.1f;

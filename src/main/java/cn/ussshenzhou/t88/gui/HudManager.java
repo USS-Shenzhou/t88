@@ -6,7 +6,7 @@ import cn.ussshenzhou.t88.gui.widegt.TComponent;
 import com.llamalad7.mixinextras.sugar.Local;
 import net.minecraft.client.DeltaTracker;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.neoforge.client.event.ClientPlayerNetworkEvent;
@@ -65,13 +65,13 @@ public class HudManager {
         needRemove.addAll(CHILDREN.stream().filter(clazz::isInstance).toList());
     }
 
-    public static void renderHud(GuiGraphics graphics, int mouseX, int mouseY, DeltaTracker partialTick) {
+    public static void renderHud(GuiGraphicsExtractor graphics, int mouseX, int mouseY, DeltaTracker partialTick) {
         if (Minecraft.getInstance().options.hideGui) {
             return;
         }
         CHILDREN.forEach((tComponent) -> {
             if (tComponent.isVisibleT()) {
-                tComponent.render(graphics, mouseX, mouseY, partialTick.getRealtimeDeltaTicks());
+                tComponent.extractRenderState(graphics, mouseX, mouseY, partialTick.getRealtimeDeltaTicks());
             }
         });
         CHILDREN.forEach((tComponent) -> {

@@ -4,7 +4,7 @@ import cn.ussshenzhou.t88.gui.util.ImageFit;
 import com.mojang.blaze3d.platform.NativeImage;
 import com.mojang.logging.LogUtils;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.client.renderer.RenderPipelines;
 import net.minecraft.resources.Identifier;
 
@@ -94,7 +94,7 @@ public class TImage extends TPanel {
 
     @SuppressWarnings("AlibabaSwitchStatement")
     @Override
-    public void render(GuiGraphics guigraphics, int mouseX, int mouseY, float pPartialTick) {
+    public void extractRenderState(GuiGraphicsExtractor guigraphics, int mouseX, int mouseY, float pPartialTick) {
         if (imageLocation != null) {
             int c = ((int) (alpha * 255) << 24) | color;
             switch (imageFit) {
@@ -138,6 +138,6 @@ public class TImage extends TPanel {
                         guigraphics.blit(RenderPipelines.GUI_TEXTURED, imageLocation, this.x, this.y, 0, 0, width, height, width, height, (int) (imageWidth * scale), (int) (imageHeight * scale));
             }
         }
-        super.render(guigraphics, mouseX, mouseY, pPartialTick);
+        super.extractRenderState(guigraphics, mouseX, mouseY, pPartialTick);
     }
 }

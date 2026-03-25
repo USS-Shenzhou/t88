@@ -3,10 +3,8 @@ package cn.ussshenzhou.t88.gui.screen;
 import cn.ussshenzhou.t88.gui.event.ClearEditBoxFocusEvent;
 import cn.ussshenzhou.t88.gui.widegt.TComponent;
 import cn.ussshenzhou.t88.gui.widegt.TWidget;
-import com.mojang.blaze3d.systems.RenderSystem;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.GuiGraphics;
-import net.minecraft.client.gui.components.Renderable;
+import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.client.input.CharacterEvent;
 import net.minecraft.client.input.KeyEvent;
@@ -48,19 +46,21 @@ public abstract class TScreen extends Screen {
     }
 
     @Override
-    public void render(GuiGraphics graphics, int mouseX, int mouseY, float pPartialTick) {
+    public void extractRenderState(GuiGraphicsExtractor graphics, int mouseX, int mouseY, float pPartialTick) {
         graphics.pose().pushMatrix();
         for (TWidget w : this.tChildren) {
             if (w.isVisibleT()) {
-                w.render(graphics, mouseX, mouseY, pPartialTick);
+                w.extractRenderState(graphics, mouseX, mouseY, pPartialTick);
             }
         }
+        graphics.pose().popMatrix();
+        graphics.pose().pushMatrix();
         for (TWidget w : this.tChildren) {
             if (w.isVisibleT()) {
                 w.renderTop(graphics, mouseX, mouseY, pPartialTick);
             }
         }
-        graphics.pose().pushMatrix();
+        graphics.pose().popMatrix();
     }
 
     public void add(TWidget tWidget) {

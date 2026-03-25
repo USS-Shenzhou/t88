@@ -3,7 +3,7 @@ package cn.ussshenzhou.t88.gui.advanced;
 import cn.ussshenzhou.t88.gui.util.HorizontalAlignment;
 import cn.ussshenzhou.t88.gui.util.LayoutHelper;
 import cn.ussshenzhou.t88.gui.widegt.*;
-import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.client.gui.components.Button;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.Identifier;
@@ -38,7 +38,7 @@ public class THoverSensitiveImageButton extends TPanel {
                 .setHorizontalAlignment(HorizontalAlignment.CENTER);
         this.button = new TButton(Component.literal(""), onPress) {
             @Override
-            public void renderWidget(GuiGraphics graphics, int mouseX, int mouseY, float pPartialTick) {
+            public void extractWidgetRenderState(GuiGraphicsExtractor graphics, int mouseX, int mouseY, float a) {
                 return;
             }
         };
@@ -93,7 +93,7 @@ public class THoverSensitiveImageButton extends TPanel {
     }
 
     @Override
-    protected void renderChildren(GuiGraphics graphics, int mouseX, int mouseY, float pPartialTick) {
+    protected void renderChildren(GuiGraphicsExtractor graphics, int mouseX, int mouseY, float pPartialTick) {
         for (TWidget tWidget : children) {
             if (tWidget.isVisibleT()) {
                 graphics.pose().translate(0, 0);
@@ -105,7 +105,7 @@ public class THoverSensitiveImageButton extends TPanel {
                     renderBgImageHovered(graphics, mouseX, mouseY, pPartialTick);
                     continue;
                 }
-                tWidget.render(graphics, mouseX, mouseY, pPartialTick);
+                tWidget.extractRenderState(graphics, mouseX, mouseY, pPartialTick);
             }
         }
     }
@@ -113,7 +113,7 @@ public class THoverSensitiveImageButton extends TPanel {
     /**
      * backgroundImage will be stretched to the size of backgroundImage, then magnified to original.
      */
-    protected void renderBgImageHovered(GuiGraphics graphics, int mouseX, int mouseY, float pPartialTick) {
+    protected void renderBgImageHovered(GuiGraphicsExtractor graphics, int mouseX, int mouseY, float pPartialTick) {
         if (padding != 0 && inTransition && transitionTick < transitionTimeMinus1) {
             float minScaleX = (float) backgroundImage.getWidth() / backgroundImageHovered.getWidth();
             float minScaleY = (float) backgroundImage.getHeight() / backgroundImageHovered.getHeight();
@@ -127,18 +127,18 @@ public class THoverSensitiveImageButton extends TPanel {
                     (1 - scaleX) * backgroundImageHovered.getXT() + compensationRelativeX,
                     (1 - scaleY) * backgroundImageHovered.getYT() + compensationRelativeY);
             graphics.pose().scale(scaleX, scaleY);
-            backgroundImageHovered.render(graphics, mouseX, mouseY, pPartialTick);
+            backgroundImageHovered.extractRenderState(graphics, mouseX, mouseY, pPartialTick);
             graphics.pose().popMatrix();
             transitionTick += pPartialTick;
         } else {
-            backgroundImageHovered.render(graphics, mouseX, mouseY, pPartialTick);
+            backgroundImageHovered.extractRenderState(graphics, mouseX, mouseY, pPartialTick);
         }
     }
 
     /**
      * Text will be magnified when focused. To keep text's original shape, scaling will not calculate separately.
      */
-    protected void renderText(GuiGraphics graphics, int mouseX, int mouseY, float pPartialTick) {
+    protected void renderText(GuiGraphicsExtractor graphics, int mouseX, int mouseY, float pPartialTick) {
         float maxScaleX = (float) backgroundImageHovered.getWidth() / backgroundImage.getWidth();
         float maxScaleY = (float) backgroundImageHovered.getHeight() / backgroundImage.getHeight();
         float maxScale = Math.min(maxScaleX, maxScaleY);
@@ -150,14 +150,14 @@ public class THoverSensitiveImageButton extends TPanel {
         }
     }
 
-    public void renderTextInternal(GuiGraphics graphics, int mouseX, int mouseY, float pPartialTick, float scale, float maxScale) {
+    public void renderTextInternal(GuiGraphicsExtractor graphics, int mouseX, int mouseY, float pPartialTick, float scale, float maxScale) {
         float compensationRelative = padding == 0 ? 0 : (1 - scale) / (maxScale - 1) * padding;
         graphics.pose().pushMatrix();
         graphics.pose().translate(
                 (1 - scale) * text.getXT() + compensationRelative,
                 (1 - scale) * text.getYT() + compensationRelative);
         graphics.pose().scale(scale, scale);
-        text.render(graphics, mouseX, mouseY, pPartialTick);
+        text.extractRenderState(graphics, mouseX, mouseY, pPartialTick);
         graphics.pose().popMatrix();
     }
 

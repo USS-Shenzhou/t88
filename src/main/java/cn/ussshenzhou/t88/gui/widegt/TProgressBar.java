@@ -2,7 +2,7 @@ package cn.ussshenzhou.t88.gui.widegt;
 
 import cn.ussshenzhou.t88.gui.util.ColorManager;
 import cn.ussshenzhou.t88.gui.util.HorizontalAlignment;
-import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.client.gui.navigation.ScreenRectangle;
 import net.minecraft.network.chat.Component;
 
@@ -75,7 +75,7 @@ public class TProgressBar extends TLabel {
     }
 
     @Override
-    protected void renderBackground(GuiGraphics graphics, int mouseX, int mouseY, float pPartialTick) {
+    protected void renderBackground(GuiGraphicsExtractor graphics, int mouseX, int mouseY, float pPartialTick) {
         graphics.fill(x,
                 y,
                 x + width,

@@ -18,7 +18,7 @@ import net.minecraft.util.Util;
 import org.joml.Matrix3x2f;
 import org.joml.Vector2i;
 import com.mojang.blaze3d.vertex.*;
-import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.gui.GuiGraphicsExtractor;
 
 import javax.annotation.Nullable;
 import java.time.Duration;
@@ -80,7 +80,7 @@ public abstract class TComponent implements TWidget {
     }
 
     @Override
-    public void render(GuiGraphics graphics, int mouseX, int mouseY, float pPartialTick) {
+    public void extractRenderState(GuiGraphicsExtractor graphics, int mouseX, int mouseY, float pPartialTick) {
         renderBackground(graphics, mouseX, mouseY, pPartialTick);
         if (border != null) {
             renderBorder(graphics, mouseX, mouseY, pPartialTick);
@@ -97,27 +97,26 @@ public abstract class TComponent implements TWidget {
         }
     }
 
-    protected void renderBorder(GuiGraphics graphics, int mouseX, int mouseY, float pPartialTick) {
+    protected void renderBorder(GuiGraphicsExtractor graphics, int mouseX, int mouseY, float pPartialTick) {
         int thickness = border.getThickness();
         int color = border.getColor();
         Border.renderBorder(graphics, color, thickness, x, y, width, height);
     }
 
-    protected void renderBackground(GuiGraphics graphics, int mouseX, int mouseY, float pPartialTick) {
+    protected void renderBackground(GuiGraphicsExtractor graphics, int mouseX, int mouseY, float pPartialTick) {
         graphics.fill(x, y, x + width, y + height, background);
     }
 
-    protected void renderChildren(GuiGraphics graphics, int mouseX, int mouseY, float pPartialTick) {
+    protected void renderChildren(GuiGraphicsExtractor graphics, int mouseX, int mouseY, float pPartialTick) {
         for (TWidget tWidget : children) {
             if (tWidget.isVisibleT()) {
-
-                tWidget.render(graphics, mouseX, mouseY, pPartialTick);
+                tWidget.extractRenderState(graphics, mouseX, mouseY, pPartialTick);
             }
         }
     }
 
     @Override
-    public void renderTop(GuiGraphics graphics, int mouseX, int mouseY, float pPartialTick) {
+    public void renderTop(GuiGraphicsExtractor graphics, int mouseX, int mouseY, float pPartialTick) {
         for (TWidget w : children) {
             if (w.isVisibleT()) {
 
@@ -415,11 +414,11 @@ public abstract class TComponent implements TWidget {
         return false;
     }
 
-    public void drawStringSingleLine(GuiGraphics graphics, Font font, Component text, float fontSize, HorizontalAlignment align, int minX, int maxX, int minY, @SuppressWarnings("AlibabaLowerCamelCaseVariableNaming") int maxYOnlyForScissor, int color) {
+    public void drawStringSingleLine(GuiGraphicsExtractor graphics, Font font, Component text, float fontSize, HorizontalAlignment align, int minX, int maxX, int minY, @SuppressWarnings("AlibabaLowerCamelCaseVariableNaming") int maxYOnlyForScissor, int color) {
         drawStringSingleLine(this, graphics, font, text, fontSize, align, minX, maxX, minY, maxYOnlyForScissor, color);
     }
 
-    public static void drawStringSingleLine(TWidget thiz, GuiGraphics graphics, Font font, Component text, float fontSize, HorizontalAlignment align, int minX, int maxX, int minY, @SuppressWarnings("AlibabaLowerCamelCaseVariableNaming") int maxYOnlyForScissor, int color) {
+    public static void drawStringSingleLine(TWidget thiz, GuiGraphicsExtractor graphics, Font font, Component text, float fontSize, HorizontalAlignment align, int minX, int maxX, int minY, @SuppressWarnings("AlibabaLowerCamelCaseVariableNaming") int maxYOnlyForScissor, int color) {
         graphics.pose().pushMatrix();
         float scaleFactor = fontSize / TLabel.STD_FONT_SIZE;
         int need = font.width(text);
@@ -440,48 +439,48 @@ public abstract class TComponent implements TWidget {
             minX = (int) (minX / scaleFactor);
             minY = (int) (minY / scaleFactor);
             switch (align) {
-                case LEFT -> graphics.drawString(font, text, minX, minY, color);
-                case CENTER -> graphics.drawString(font, text, minX - extra / 2, minY, color);
-                case RIGHT -> graphics.drawString(font, text, minX - extra, minY, color);
+                case LEFT -> graphics.text(font, text, minX, minY, color);
+                case CENTER -> graphics.text(font, text, minX - extra / 2, minY, color);
+                case RIGHT -> graphics.text(font, text, minX - extra, minY, color);
             }
         }
         graphics.pose().popMatrix();
     }
 
-    public static void drawStringSingleLine(TWidget thiz, GuiGraphics graphics, Font font, Component text, HorizontalAlignment align, int minX, int maxX, int minY, int color) {
+    public static void drawStringSingleLine(TWidget thiz, GuiGraphicsExtractor graphics, Font font, Component text, HorizontalAlignment align, int minX, int maxX, int minY, int color) {
         drawStringSingleLine(thiz, graphics, font, text, TLabel.STD_FONT_SIZE, align, minX, maxX, minY, minY + 9, color);
     }
 
-    public static void drawStringSingleLine(TWidget thiz, GuiGraphics graphics, Font font, Component text, int minX, int maxX, int minY, @SuppressWarnings("AlibabaLowerCamelCaseVariableNaming") int maxYOnlyForScissor, int color) {
+    public static void drawStringSingleLine(TWidget thiz, GuiGraphicsExtractor graphics, Font font, Component text, int minX, int maxX, int minY, @SuppressWarnings("AlibabaLowerCamelCaseVariableNaming") int maxYOnlyForScissor, int color) {
         drawStringSingleLine(thiz, graphics, font, text, TLabel.STD_FONT_SIZE, HorizontalAlignment.LEFT, minX, maxX, minY, maxYOnlyForScissor, color);
     }
 
-    public static void drawStringSingleLine(TWidget thiz, GuiGraphics graphics, Font font, Component text, int minX, int maxX, int minY, int color) {
+    public static void drawStringSingleLine(TWidget thiz, GuiGraphicsExtractor graphics, Font font, Component text, int minX, int maxX, int minY, int color) {
         drawStringSingleLine(thiz, graphics, font, text, TLabel.STD_FONT_SIZE, HorizontalAlignment.LEFT, minX, maxX, minY, minY + 9, color);
     }
 
-    public void drawStringSingleLine(GuiGraphics graphics, Font font, Component text, HorizontalAlignment align, int minX, int maxX, int minY, int color) {
+    public void drawStringSingleLine(GuiGraphicsExtractor graphics, Font font, Component text, HorizontalAlignment align, int minX, int maxX, int minY, int color) {
         drawStringSingleLine(this, graphics, font, text, TLabel.STD_FONT_SIZE, align, minX, maxX, minY, minY + 9, color);
     }
 
-    public void drawStringSingleLine(GuiGraphics graphics, Font font, Component text, int minX, int maxX, int minY, @SuppressWarnings("AlibabaLowerCamelCaseVariableNaming") int maxYOnlyForScissor, int color) {
+    public void drawStringSingleLine(GuiGraphicsExtractor graphics, Font font, Component text, int minX, int maxX, int minY, @SuppressWarnings("AlibabaLowerCamelCaseVariableNaming") int maxYOnlyForScissor, int color) {
         drawStringSingleLine(this, graphics, font, text, TLabel.STD_FONT_SIZE, HorizontalAlignment.LEFT, minX, maxX, minY, maxYOnlyForScissor, color);
     }
 
-    public void drawStringSingleLine(GuiGraphics graphics, Font font, Component text, int minX, int maxX, int minY, int color) {
+    public void drawStringSingleLine(GuiGraphicsExtractor graphics, Font font, Component text, int minX, int maxX, int minY, int color) {
         drawStringSingleLine(this, graphics, font, text, TLabel.STD_FONT_SIZE, HorizontalAlignment.LEFT, minX, maxX, minY, minY + 9, color);
     }
 
-    public static void renderScrollingString(int extra, GuiGraphics graphics, Font font, Component text, int minX, int maxX, int minY, int maxY, int color) {
+    public static void renderScrollingString(int extra, GuiGraphicsExtractor graphics, Font font, Component text, int minX, int maxX, int minY, int maxY, int color) {
         double d0 = (double) Util.getMillis() / 1000.0D;
         double d1 = Math.max((double) extra * 0.5D, 3.0D);
         double d2 = Math.sin((Math.PI / 2D) * Math.cos((Math.PI * 2D) * d0 / d1)) / 2.0D + 0.5D;
         double d3 = Mth.lerp(d2, 0.0D, extra);
-        graphics.drawString(font, text, minX - (int) d3, minY, color);
+        graphics.text(font, text, minX - (int) d3, minY, color);
     }
 
-    public void fillGradientHorizontal(GuiGraphics graphics, int minX, int minY, int maxX, int maxY, int colorFrom, int colorTo) {
-        graphics.guiRenderState.submitGuiElement(
+    public void fillGradientHorizontal(GuiGraphicsExtractor graphics, int minX, int minY, int maxX, int maxY, int colorFrom, int colorTo) {
+        graphics.guiRenderState.addGuiElement(
                 new HorizontalColoredRectangleRenderState(
                         RenderPipelines.GUI, TextureSetup.noTexture(),
                         new Matrix3x2f(graphics.pose()),
@@ -496,8 +495,8 @@ public abstract class TComponent implements TWidget {
         );
     }
 
-    public void fillGradientVertical(GuiGraphics graphics, int minX, int minY, int maxX, int maxY, int colorFrom, int colorTo) {
-        graphics.guiRenderState.submitGuiElement(
+    public void fillGradientVertical(GuiGraphicsExtractor graphics, int minX, int minY, int maxX, int maxY, int colorFrom, int colorTo) {
+        graphics.guiRenderState.addGuiElement(
                 new VerticalColoredRectangleRenderState(
                         RenderPipelines.GUI, TextureSetup.noTexture(),
                         new Matrix3x2f(graphics.pose()),

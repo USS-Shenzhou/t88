@@ -14,7 +14,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 @Mixin(Minecraft.class)
 public class MinecraftMixin {
 
-    @Inject(method = "resizeDisplay",at = @At("RETURN"))
+    @Inject(method = "resizeGui",at = @At("RETURN"))
     private void t88ResizeHud(CallbackInfo ci){
         NeoForge.EVENT_BUS.post(new ResizeHudEvent());
     }

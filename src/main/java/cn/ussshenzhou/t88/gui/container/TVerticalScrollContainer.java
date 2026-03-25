@@ -3,7 +3,7 @@ package cn.ussshenzhou.t88.gui.container;
 import cn.ussshenzhou.t88.gui.util.RecordHelper;
 import cn.ussshenzhou.t88.gui.widegt.TPanel;
 import cn.ussshenzhou.t88.gui.widegt.TWidget;
-import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.client.input.MouseButtonEvent;
 import net.minecraft.client.renderer.RenderPipelines;
 import net.minecraft.resources.Identifier;
@@ -51,13 +51,13 @@ public class TVerticalScrollContainer extends TPanel implements TScrollContainer
     }
 
     @Override
-    public void render(GuiGraphics guigraphics, int mouseX, int mouseY, float pPartialTick) {
+    public void extractRenderState(GuiGraphicsExtractor guigraphics, int mouseX, int mouseY, float pPartialTick) {
         renderScrollBar(guigraphics);
-        super.render(guigraphics, mouseX, mouseY, pPartialTick);
+        super.extractRenderState(guigraphics, mouseX, mouseY, pPartialTick);
     }
 
     @Override
-    protected void renderChildren(GuiGraphics guigraphics, int mouseX, int mouseY, float pPartialTick) {
+    protected void renderChildren(GuiGraphicsExtractor guigraphics, int mouseX, int mouseY, float pPartialTick) {
         var scroll = this.getParentScroll();
         guigraphics.enableScissor(
                 (int) (this.x - scroll.x),
@@ -71,22 +71,22 @@ public class TVerticalScrollContainer extends TPanel implements TScrollContainer
     }
 
     @Override
-    public void renderTop(GuiGraphics guigraphics, int mouseX, int mouseY, float pPartialTick) {
+    public void renderTop(GuiGraphicsExtractor guigraphics, int mouseX, int mouseY, float pPartialTick) {
         prepareTranslate(guigraphics, pPartialTick);
         super.renderTop(guigraphics, mouseX, mouseY, pPartialTick);
         endTranslate(guigraphics, pPartialTick);
     }
 
-    protected void prepareTranslate(GuiGraphics guigraphics, float pPartialTick) {
+    protected void prepareTranslate(GuiGraphicsExtractor guigraphics, float pPartialTick) {
         guigraphics.pose().translate(0, (float) Mth.lerp(pPartialTick, -prevScrollAmount, -scrollAmount));
     }
 
-    protected void endTranslate(GuiGraphics guigraphics, float pPartialTick) {
+    protected void endTranslate(GuiGraphicsExtractor guigraphics, float pPartialTick) {
         guigraphics.pose().translate(0, (float) -Mth.lerp(pPartialTick, -prevScrollAmount, -scrollAmount));
     }
 
     @Override
-    protected void renderBackground(GuiGraphics guigraphics, int mouseX, int mouseY, float pPartialTick) {
+    protected void renderBackground(GuiGraphicsExtractor guigraphics, int mouseX, int mouseY, float pPartialTick) {
         if (getMaxScroll() > 0) {
             guigraphics.fill(x, y, x + width - getScrollbarGap() - 6, y + height, background);
         } else {
@@ -97,9 +97,9 @@ public class TVerticalScrollContainer extends TPanel implements TScrollContainer
     /**
      * modified from
      *
-     * @see net.minecraft.client.gui.components.AbstractSelectionList#render(GuiGraphics, int, int, float)
+     * @see net.minecraft.client.gui.components.AbstractSelectionList#render(GuiGraphicsExtractor, int, int, float)
      */
-    protected void renderScrollBar(GuiGraphics guiGraphics) {
+    protected void renderScrollBar(GuiGraphicsExtractor guiGraphics) {
         int k1 = this.getMaxScroll();
         if (k1 > 0) {
             int l1 = getScrollBarX();

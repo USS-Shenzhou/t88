@@ -5,7 +5,7 @@ import cn.ussshenzhou.t88.gui.container.TVerticalScrollContainer;
 import cn.ussshenzhou.t88.gui.screen.TScreen;
 import cn.ussshenzhou.t88.gui.util.MouseHelper;
 import com.mojang.logging.LogUtils;
-import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.client.gui.components.Renderable;
 import net.minecraft.client.gui.components.events.GuiEventListener;
 import net.minecraft.client.input.MouseButtonEvent;
@@ -77,7 +77,7 @@ public interface TWidget extends Renderable, GuiEventListener {
 
     void layout();
 
-    default void renderTop(GuiGraphics graphics, int mouseX, int mouseY, float pPartialTick) {
+    default void renderTop(GuiGraphicsExtractor graphics, int mouseX, int mouseY, float pPartialTick) {
     }
 
     default boolean isInRangeNow() {

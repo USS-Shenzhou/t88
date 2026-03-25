@@ -1,6 +1,6 @@
 package cn.ussshenzhou.t88.gui.util;
 
-import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.gui.GuiGraphicsExtractor;
 
 /**
  * @author USS_Shenzhou
@@ -30,7 +30,7 @@ public class Border {
         this.thickness = thickness;
     }
 
-    public static void renderBorder(GuiGraphics guiGraphics, int color, int thickness, int x, int y, int width, int height) {
+    public static void renderBorder(GuiGraphicsExtractor guiGraphics, int color, int thickness, int x, int y, int width, int height) {
         guiGraphics.fill(x - thickness, y - thickness, x + width + thickness, y, color);
         guiGraphics.fill(x - thickness, y + height, x + width + thickness, y + height + thickness, color);
         guiGraphics.fill(x - thickness, y, x, y + height, color);

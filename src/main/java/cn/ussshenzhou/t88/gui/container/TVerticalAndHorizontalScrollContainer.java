@@ -4,7 +4,7 @@ import cn.ussshenzhou.t88.T88;
 import cn.ussshenzhou.t88.gui.util.RecordHelper;
 import cn.ussshenzhou.t88.gui.widegt.TPanel;
 import cn.ussshenzhou.t88.gui.widegt.TWidget;
-import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.client.input.MouseButtonEvent;
 import net.minecraft.client.renderer.RenderPipelines;
 import net.minecraft.resources.Identifier;
@@ -63,18 +63,18 @@ public class TVerticalAndHorizontalScrollContainer extends TPanel implements TSc
     }
 
     @Override
-    public void render(GuiGraphics guigraphics, int mouseX, int mouseY, float pPartialTick) {
+    public void extractRenderState(GuiGraphicsExtractor guigraphics, int mouseX, int mouseY, float pPartialTick) {
         if (isScrollBarVisibleVertical()) {
             renderVerticalScrollBar(guigraphics);
         }
         if (isScrollBarVisibleHorizontal()) {
             renderHorizontalScrollBar(guigraphics);
         }
-        super.render(guigraphics, mouseX, mouseY, pPartialTick);
+        super.extractRenderState(guigraphics, mouseX, mouseY, pPartialTick);
     }
 
     @Override
-    protected void renderChildren(GuiGraphics guigraphics, int mouseX, int mouseY, float pPartialTick) {
+    protected void renderChildren(GuiGraphicsExtractor guigraphics, int mouseX, int mouseY, float pPartialTick) {
         var scroll = this.getParentScroll();
         guigraphics.enableScissor(
                 (int) (this.x - scroll.x),
@@ -88,22 +88,22 @@ public class TVerticalAndHorizontalScrollContainer extends TPanel implements TSc
     }
 
     @Override
-    public void renderTop(GuiGraphics guigraphics, int mouseX, int mouseY, float pPartialTick) {
+    public void renderTop(GuiGraphicsExtractor guigraphics, int mouseX, int mouseY, float pPartialTick) {
         prepareTranslate(guigraphics, pPartialTick);
         super.renderTop(guigraphics, mouseX, mouseY, pPartialTick);
         endTranslate(guigraphics, pPartialTick);
     }
 
-    protected void prepareTranslate(GuiGraphics guigraphics, float pPartialTick) {
+    protected void prepareTranslate(GuiGraphicsExtractor guigraphics, float pPartialTick) {
         guigraphics.pose().translate((float) Mth.lerp(pPartialTick, -prevScrollAmountX, -scrollAmountX), (float) Mth.lerp(pPartialTick, -prevScrollAmountY, -scrollAmountY));
     }
 
-    protected void endTranslate(GuiGraphics guigraphics, float pPartialTick) {
+    protected void endTranslate(GuiGraphicsExtractor guigraphics, float pPartialTick) {
         guigraphics.pose().translate((float) -Mth.lerp(pPartialTick, -prevScrollAmountX, -scrollAmountX), (float) -Mth.lerp(pPartialTick, -prevScrollAmountY, -scrollAmountY));
     }
 
     @Override
-    protected void renderBackground(GuiGraphics guigraphics, int mouseX, int mouseY, float pPartialTick) {
+    protected void renderBackground(GuiGraphicsExtractor guigraphics, int mouseX, int mouseY, float pPartialTick) {
         guigraphics.fill(x, y,
                 x + width - (isScrollBarVisibleVertical() ? getScrollbarGap() + SCROLL_BAR_WIDTH : 0),
                 y + height - (isScrollBarVisibleHorizontal() ? getScrollbarGap() + SCROLL_BAR_WIDTH : 0),
@@ -119,7 +119,7 @@ public class TVerticalAndHorizontalScrollContainer extends TPanel implements TSc
         return SCROLLER_HORIZONTAL;
     }
 
-    protected void renderVerticalScrollBar(GuiGraphics guiGraphics) {
+    protected void renderVerticalScrollBar(GuiGraphicsExtractor guiGraphics) {
         int x1 = getScrollBarVerticalX();
         int k = (int) ((float) (this.height * this.height) / bottomY);
         k = Mth.clamp(k, 32, this.height - 8);
@@ -131,7 +131,7 @@ public class TVerticalAndHorizontalScrollContainer extends TPanel implements TSc
         guiGraphics.blitSprite(RenderPipelines.GUI_TEXTURED, getScrollerVerticalTexture(), x1, l, 6, k);
     }
 
-    protected void renderHorizontalScrollBar(GuiGraphics guiGraphics) {
+    protected void renderHorizontalScrollBar(GuiGraphicsExtractor guiGraphics) {
         int y1 = getScrollBarVerticalY();
         int w = getUsableWidth();
         int k = (int) ((float) (w * w) / bottomX);

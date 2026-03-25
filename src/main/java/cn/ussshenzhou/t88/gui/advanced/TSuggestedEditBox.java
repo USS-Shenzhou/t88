@@ -8,7 +8,7 @@ import com.mojang.brigadier.ParseResults;
 import com.mojang.brigadier.suggestion.Suggestion;
 import com.mojang.brigadier.suggestion.Suggestions;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.client.input.KeyEvent;
 import net.minecraft.commands.CommandSourceStack;
 import net.neoforged.neoforge.client.ClientCommandHandler;
@@ -74,16 +74,16 @@ public class TSuggestedEditBox extends TPanel {
     }
 
     @Override
-    protected void renderChildren(GuiGraphics guigraphics, int mouseX, int mouseY, float pPartialTick) {
+    protected void renderChildren(GuiGraphicsExtractor guigraphics, int mouseX, int mouseY, float pPartialTick) {
         if (editBox.isVisible()) {
-            editBox.render(guigraphics, mouseX, mouseY, pPartialTick);
+            editBox.extractRenderState(guigraphics, mouseX, mouseY, pPartialTick);
         }
     }
 
     @Override
-    public void renderTop(GuiGraphics guigraphics, int mouseX, int mouseY, float pPartialTick) {
+    public void renderTop(GuiGraphicsExtractor guigraphics, int mouseX, int mouseY, float pPartialTick) {
         if (suggestionList.isVisibleT()) {
-            suggestionList.render(guigraphics, mouseX, mouseY, pPartialTick);
+            suggestionList.extractRenderState(guigraphics, mouseX, mouseY, pPartialTick);
         }
         super.renderTop(guigraphics, mouseX, mouseY, pPartialTick);
     }
@@ -146,7 +146,7 @@ public class TSuggestedEditBox extends TPanel {
 
     private int calculateSuggestionX(int l) {
         int i = editBox.getCurrentWordBeginX() - 1;
-        int w = Minecraft.getInstance().screen.width - 5;
+        int w = Minecraft.getInstance().getWindow().getGuiScaledWidth() - 5;
         if (i + l > w) {
             return w - l;
         } else {

@@ -1,7 +1,7 @@
 package cn.ussshenzhou.t88.gui.advanced;
 
 import cn.ussshenzhou.t88.gui.widegt.TButton;
-import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.client.gui.components.Button;
 import net.minecraft.client.input.InputWithModifiers;
 import net.minecraft.network.chat.Component;
@@ -20,7 +20,7 @@ public class TFocusSensitiveImageSelectButton extends THoverSensitiveImageButton
         this.remove(button);
         this.button = new TButton(Component.literal(""), onPress) {
             @Override
-            public void renderWidget(GuiGraphics graphics, int mouseX, int mouseY, float pPartialTick) {
+            public void extractWidgetRenderState(GuiGraphicsExtractor graphics, int mouseX, int mouseY, float pPartialTick) {
                 return;
             }
 
