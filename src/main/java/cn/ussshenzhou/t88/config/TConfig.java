@@ -8,5 +8,8 @@ public interface TConfig {
         return "";
     }
 
+    /**
+     * WARNING: Caller thread or time is not guaranteed by T88, which depends on your calling {@link ConfigHelper#loadConfig(TConfig)}.
+     */
     default void onLoad() {}
 }
