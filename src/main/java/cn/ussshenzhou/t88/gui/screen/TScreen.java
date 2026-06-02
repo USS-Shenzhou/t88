@@ -84,9 +84,7 @@ public abstract class TScreen extends Screen {
 
     public void layout() {
         for (TWidget w : this.tChildren) {
-            if (w instanceof TComponent t) {
-                t.layout();
-            }
+            w.layout();
         }
     }
 
