@@ -6,6 +6,7 @@ import net.minecraft.client.renderer.LevelRenderer;
 import net.minecraft.client.renderer.block.BlockAndTintGetter;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.util.LightCoordsUtil;
 
 /**
  * @author USS_Shenzhou
@@ -13,7 +14,7 @@ import net.minecraft.core.Direction;
 public class RenderUtil {
 
     public static int getPackedLight(int sourceLight, BlockAndTintGetter level, BlockPos pos) {
-        return getPackedLight(sourceLight, LevelRenderer.getLightCoords(level, pos));
+        return getPackedLight(sourceLight, LightCoordsUtil.getLightCoords(level, pos));
     }
 
     public static int getPackedLight(int sourceLight, int packedLight) {

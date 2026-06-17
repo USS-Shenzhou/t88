@@ -4,7 +4,6 @@ import cn.ussshenzhou.t88.T88;
 import cn.ussshenzhou.t88.networkanalyzer.NetworkWatcher;
 import cn.ussshenzhou.t88.networkanalyzer.SenderInfo;
 import cn.ussshenzhou.t88.networkanalyzer.SizeAndTimes;
-import com.mojang.logging.annotations.MethodsReturnNonnullByDefault;
 import io.netty.buffer.ByteBuf;
 import net.minecraft.network.codec.ByteBufCodecs;
 import net.minecraft.network.codec.StreamCodec;
@@ -17,7 +16,6 @@ import java.util.HashMap;
 /**
  * @author USS_Shenzhou
  */
-@MethodsReturnNonnullByDefault
 public record ServerNetworkDataPacket(HashMap<SenderInfo, SizeAndTimes> sent,
                                       HashMap<SenderInfo, SizeAndTimes> received) implements CustomPacketPayload {
 

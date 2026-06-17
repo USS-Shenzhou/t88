@@ -118,15 +118,15 @@ public class TSuggestedEditBox extends TPanel {
                 w = Math.max(w, font.width(suggestion.getText()));
             }
             suggestionList.addElement(texts);
-            if (Minecraft.getInstance().screen != null) {
+            if (Minecraft.getInstance().gui.screen() != null) {
                 int listY;
                 int s = (int) this.getParentScroll().y;
                 int h = //ideal
                         texts.size() * suggestionList.getItemHeight() + 4;
-                if (y - s <= Minecraft.getInstance().screen.height / 2) {
+                if (y - s <= Minecraft.getInstance().gui.screen().height / 2) {
                     //start from upper half to screen bottom
                     listY = y + height + 1;
-                    h = Math.min(h, Minecraft.getInstance().screen.height - listY + s);
+                    h = Math.min(h, Minecraft.getInstance().gui.screen().height - listY + s);
                 } else {
                     //start from lower half to screen top
                     listY = Math.max(0, y - texts.size() * suggestionList.getItemHeight() - 4);

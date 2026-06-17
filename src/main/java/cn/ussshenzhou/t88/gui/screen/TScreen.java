@@ -192,6 +192,6 @@ public abstract class TScreen extends Screen {
         if (isFinal) {
             reversed(tChildren).forEach(TWidget::onFinalClose);
         }
-        ClientHooks.popGuiLayer(Minecraft.getInstance());
+        Minecraft.getInstance().gui.popScreenLayer();
     }
 }

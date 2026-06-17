@@ -2,7 +2,7 @@ package cn.ussshenzhou.t88.modnetwork;
 
 import cn.ussshenzhou.t88.T88;
 import cn.ussshenzhou.t88.networkanalyzer.NetworkWatcher;
-import com.mojang.logging.annotations.MethodsReturnNonnullByDefault;
+
 import io.netty.buffer.ByteBuf;
 import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
@@ -17,7 +17,6 @@ import java.util.HashMap;
 /**
  * @author USS_Shenzhou
  */
-@MethodsReturnNonnullByDefault
 public record ClientRequestServerNetworkDataPacket() implements CustomPacketPayload {
     public static final Type<ClientRequestServerNetworkDataPacket> TYPE = new Type<>(Identifier.fromNamespaceAndPath(T88.MOD_ID, "client_request_server_network_data"));
 

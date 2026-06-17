@@ -66,7 +66,7 @@ public class HudManager {
     }
 
     public static void renderHud(GuiGraphicsExtractor graphics, int mouseX, int mouseY, DeltaTracker partialTick) {
-        if (Minecraft.getInstance().options.hideGui) {
+        if (Minecraft.getInstance().gui.hud.isHidden()) {
             return;
         }
         CHILDREN.forEach((tComponent) -> {

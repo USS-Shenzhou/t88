@@ -73,13 +73,13 @@ public class ModKeyInput {
             }
         }
         if (OPEN_ANALYZER.consumeClick()) {
-            Minecraft.getInstance().setScreen(new AnalyzerScreen());
+            Minecraft.getInstance().gui.setScreen(new AnalyzerScreen());
         } else if (CLEAR_ANALYZER.consumeClick()) {
             T88AnalyzerClient.RECORDERS.clear();
         } else if (OPEN_WATCHER.consumeClick()) {
-            Minecraft.getInstance().setScreen(new NetworkWatcherScreen());
+            Minecraft.getInstance().gui.setScreen(new NetworkWatcherScreen());
         } else if (OPEN_CONFIG.consumeClick()) {
-            Minecraft.getInstance().setScreen(new ConfigScreen());
+            Minecraft.getInstance().gui.setScreen(new ConfigScreen());
         }
     }
 
@@ -88,12 +88,12 @@ public class ModKeyInput {
         String testScreen = System.getProperty("t88.test_screen_override");
         Minecraft minecraft = Minecraft.getInstance();
         if (testScreen == null) {
-            minecraft.setScreen(new TestScreen());
+            minecraft.gui.setScreen(new TestScreen());
         } else {
             try {
                 Class<?> testScreenClsOvr = Class.forName(testScreen);
                 TScreen testScreenOvr = (TScreen) testScreenClsOvr.getDeclaredConstructor().newInstance();
-                minecraft.setScreen(testScreenOvr);
+                minecraft.gui.setScreen(testScreenOvr);
             } catch (ClassNotFoundException e) {
                 LogUtils.getLogger().error("Failed to find {}.", testScreen);
                 LogUtils.getLogger().error(e.getMessage());

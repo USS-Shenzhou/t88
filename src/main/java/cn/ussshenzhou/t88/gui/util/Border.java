@@ -9,8 +9,8 @@ public class Border {
     private int color;
     private int thickness;
 
-    public Border(int color, int thickness) {
-        this.color = color;
+    public Border(int argb, int thickness) {
+        this.color = argb;
         this.thickness = thickness;
     }
 
@@ -18,8 +18,8 @@ public class Border {
         return color;
     }
 
-    public void setColor(int color) {
-        this.color = color;
+    public void setColor(int argb) {
+        this.color = argb;
     }
 
     public int getThickness() {
@@ -30,10 +30,10 @@ public class Border {
         this.thickness = thickness;
     }
 
-    public static void renderBorder(GuiGraphicsExtractor guiGraphics, int color, int thickness, int x, int y, int width, int height) {
-        guiGraphics.fill(x - thickness, y - thickness, x + width + thickness, y, color);
-        guiGraphics.fill(x - thickness, y + height, x + width + thickness, y + height + thickness, color);
-        guiGraphics.fill(x - thickness, y, x, y + height, color);
-        guiGraphics.fill(x + width, y, x + width + thickness, y + height, color);
+    public static void renderBorder(GuiGraphicsExtractor guiGraphics, int argb, int thickness, int x, int y, int width, int height) {
+        guiGraphics.fill(x - thickness, y - thickness, x + width + thickness, y, argb);
+        guiGraphics.fill(x - thickness, y + height, x + width + thickness, y + height + thickness, argb);
+        guiGraphics.fill(x - thickness, y, x, y + height, argb);
+        guiGraphics.fill(x + width, y, x + width + thickness, y + height, argb);
     }
 }

@@ -5,8 +5,8 @@ import cn.ussshenzhou.t88.gui.util.HorizontalAlignment;
 import cn.ussshenzhou.t88.gui.util.LayoutHelper;
 import cn.ussshenzhou.t88.gui.widegt.*;
 import cn.ussshenzhou.t88.util.Util;
+import com.mojang.datafixers.util.Pair;
 import net.minecraft.network.chat.Component;
-import net.minecraft.util.Tuple;
 import org.joml.Vector2i;
 
 import javax.annotation.Nullable;
@@ -27,37 +27,37 @@ public class TOptionsPanel extends TPanel {
         this.add(container);
     }
 
-    public <T extends TWidget> Tuple<TOptionsPanel, T> addOption(Component title, T controller) {
+    public <T extends TWidget> Pair<TOptionsPanel, T> addOption(Component title, T controller) {
         var option = new HorizontalTitledOption<>(title, controller);
         container.add(option);
-        return new Tuple<>(this, controller);
+        return new Pair<>(this, controller);
     }
 
-    public Tuple<TOptionsPanel, TSlider> addOptionSliderDouble(Component title, double minValue, double maxValue, @Nullable Component tipText, BiConsumer<TSlider, Double> responder, boolean applyValueImmediately) {
+    public Pair<TOptionsPanel, TSlider> addOptionSliderDouble(Component title, double minValue, double maxValue, @Nullable Component tipText, BiConsumer<TSlider, Double> responder, boolean applyValueImmediately) {
         var slider = new TSlider("", minValue, maxValue, true, tipText, applyValueImmediately);
         slider.addResponder(d -> responder.accept(slider, d));
         return addOption(title, slider);
     }
 
-    public Tuple<TOptionsPanel, TSlider> addOptionSliderDouble(Component title, double minValue, double maxValue, BiFunction<Component, Double, Component> textFromCaptionAndValue, @Nullable Component tipText, BiConsumer<TSlider, Double> responder, boolean applyValueImmediately) {
+    public Pair<TOptionsPanel, TSlider> addOptionSliderDouble(Component title, double minValue, double maxValue, BiFunction<Component, Double, Component> textFromCaptionAndValue, @Nullable Component tipText, BiConsumer<TSlider, Double> responder, boolean applyValueImmediately) {
         var slider = new TSlider("", minValue, maxValue, textFromCaptionAndValue, tipText, applyValueImmediately);
         slider.addResponder(d -> responder.accept(slider, d));
         return addOption(title, slider);
     }
 
-    public Tuple<TOptionsPanel, TSlider> addOptionSliderDoubleInit(Component title, double minValue, double maxValue, @Nullable Component tipText, BiConsumer<TSlider, Double> responder, double initAbsValue, boolean applyValueImmediately) {
+    public Pair<TOptionsPanel, TSlider> addOptionSliderDoubleInit(Component title, double minValue, double maxValue, @Nullable Component tipText, BiConsumer<TSlider, Double> responder, double initAbsValue, boolean applyValueImmediately) {
         var r = addOptionSliderDouble(title, minValue, maxValue, tipText, responder, applyValueImmediately);
-        r.getB().setAbsValueWithoutRespond(initAbsValue);
+        r.getSecond().setAbsValueWithoutRespond(initAbsValue);
         return r;
     }
 
-    public Tuple<TOptionsPanel, TSlider> addOptionSliderDoubleInit(Component title, double minValue, double maxValue, BiFunction<Component, Double, Component> textFromCaptionAndValue, @Nullable Component tipText, BiConsumer<TSlider, Double> responder, double initAbsValue, boolean applyValueImmediately) {
+    public Pair<TOptionsPanel, TSlider> addOptionSliderDoubleInit(Component title, double minValue, double maxValue, BiFunction<Component, Double, Component> textFromCaptionAndValue, @Nullable Component tipText, BiConsumer<TSlider, Double> responder, double initAbsValue, boolean applyValueImmediately) {
         var r = addOptionSliderDouble(title, minValue, maxValue, textFromCaptionAndValue, tipText, responder, applyValueImmediately);
-        r.getB().setAbsValueWithoutRespond(initAbsValue);
+        r.getSecond().setAbsValueWithoutRespond(initAbsValue);
         return r;
     }
 
-    public <E> Tuple<TOptionsPanel, TCycleButton<E>> addOptionCycleButton(Component title, List<E> entryContents, List<Consumer<TCycleButton<E>>> responders) {
+    public <E> Pair<TOptionsPanel, TCycleButton<E>> addOptionCycleButton(Component title, List<E> entryContents, List<Consumer<TCycleButton<E>>> responders) {
         if (entryContents.size() != responders.size()) {
             throw new IllegalArgumentException(String.format("Collection %s with size %d must be the same size as collection %s with size %d.", entryContents, entryContents.size(), responders, responders.size()));
         }
@@ -66,29 +66,29 @@ public class TOptionsPanel extends TPanel {
             option.controller.addElement(entryContents.get(i), responders.get(i));
         }
         container.add(option);
-        return new Tuple<>(this, option.controller);
+        return new Pair<>(this, option.controller);
     }
 
-    public <E> Tuple<TOptionsPanel, TCycleButton<E>> addOptionCycleButton(Component title, List<E> entryContents, Function<E, Consumer<TCycleButton<E>>> responderGenerator) {
+    public <E> Pair<TOptionsPanel, TCycleButton<E>> addOptionCycleButton(Component title, List<E> entryContents, Function<E, Consumer<TCycleButton<E>>> responderGenerator) {
         return addOptionCycleButton(title, entryContents, entryContents.stream().map(responderGenerator).toList());
     }
 
-    public <E> Tuple<TOptionsPanel, TCycleButton<E>> addOptionCycleButtonInit(Component title, List<E> entryContents, List<Consumer<TCycleButton<E>>> responders, Predicate<TCycleButton<E>.Entry> initializer) {
+    public <E> Pair<TOptionsPanel, TCycleButton<E>> addOptionCycleButtonInit(Component title, List<E> entryContents, List<Consumer<TCycleButton<E>>> responders, Predicate<TCycleButton<E>.Entry> initializer) {
         var r = addOptionCycleButton(title, entryContents, responders);
-        r.getB().selectWithoutRespond(initializer);
+        r.getSecond().selectWithoutRespond(initializer);
         return r;
     }
 
-    public <E> Tuple<TOptionsPanel, TCycleButton<E>> addOptionCycleButtonInit(Component title, List<E> entryContents, Function<E, Consumer<TCycleButton<E>>> responderGenerator, Predicate<TCycleButton<E>.Entry> initializer) {
+    public <E> Pair<TOptionsPanel, TCycleButton<E>> addOptionCycleButtonInit(Component title, List<E> entryContents, Function<E, Consumer<TCycleButton<E>>> responderGenerator, Predicate<TCycleButton<E>.Entry> initializer) {
         var r = addOptionCycleButton(title, entryContents, responderGenerator);
-        r.getB().selectWithoutRespond(initializer);
+        r.getSecond().selectWithoutRespond(initializer);
         return r;
     }
 
-    public Tuple<TOptionsPanel, OptionSplitter> addOptionSplitter(Component title) {
+    public Pair<TOptionsPanel, OptionSplitter> addOptionSplitter(Component title) {
         var splitter = new OptionSplitter(title);
         container.add(splitter);
-        return new Tuple<>(this, splitter);
+        return new Pair<>(this, splitter);
     }
 
     public void setGapBetweenOptions(int gapBetweenOptions) {
