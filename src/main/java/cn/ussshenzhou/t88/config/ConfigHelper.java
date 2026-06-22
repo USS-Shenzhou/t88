@@ -1,5 +1,6 @@
 package cn.ussshenzhou.t88.config;
 
+import com.google.common.util.concurrent.ThreadFactoryBuilder;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.mojang.logging.LogUtils;
@@ -12,6 +13,8 @@ import java.nio.charset.StandardCharsets;
 import java.nio.file.Path;
 import java.util.HashMap;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 import java.util.function.Consumer;
 
 /**
@@ -22,6 +25,12 @@ public class ConfigHelper {
     private static final ConcurrentHashMap<Class<? extends TConfig>, TConfig> CACHE = new ConcurrentHashMap<>();
     private static final Gson GSON = new GsonBuilder().setPrettyPrinting().disableHtmlEscaping().enableComplexMapKeySerialization().create();
     private static final File UNIVERSAL_CONFIG_DIR = FileUtils.getUserDirectory().toPath().resolve("MinecraftT88Config").toFile();
+    static final ExecutorService EXECUTOR = Executors.newSingleThreadExecutor(
+            new ThreadFactoryBuilder()
+                    .setNameFormat("T88 Config Save")
+                    .setDaemon(true)
+                    .build()
+    );
 
     private static void checkDir(File dir) {
         if (!dir.isDirectory()) {
@@ -75,7 +84,7 @@ public class ConfigHelper {
     }
 
     private static <T extends TConfig> void saveConfigInternal(T config, File configFile) {
-        Thread.startVirtualThread(()->{
+        EXECUTOR.execute(() -> {
             try {
                 FileUtils.write(configFile, GSON.toJson(config), StandardCharsets.UTF_8);
             } catch (IOException ignored) {
