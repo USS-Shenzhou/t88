@@ -58,26 +58,24 @@ public class TEditBox extends EditBox implements TWidget, TResponder<String> {
 
     @Override
     public void insertText(String pTextToWrite) {
-        int i = Math.min(this.cursorPos, this.highlightPos);
-        int j = Math.max(this.cursorPos, this.highlightPos);
-        int k = this.maxLength - this.value.length() - (i - j);
-        String s = pTextToWrite;
+        int start = Math.min(this.cursorPos, this.highlightPos);
+        int end = Math.max(this.cursorPos, this.highlightPos);
+        int maxInsertionLength = this.maxLength - this.value.length() - (start - end);
+        String text = pTextToWrite;
         if (checkInput) {
-            s = StringUtil.filterText(pTextToWrite);
+            text = StringUtil.filterText(pTextToWrite);
         }
-        int l = s.length();
-        if (k < l) {
-            s = s.substring(0, k);
-            l = k;
+        int l = text.length();
+        if (maxInsertionLength < l) {
+            text = text.substring(0, maxInsertionLength);
+            l = maxInsertionLength;
         }
 
-        String s1 = (new StringBuilder(this.value)).replace(i, j, s).toString();
-        if (this.filter.test(s1)) {
-            this.value = s1;
-            this.setCursorPosition(i + l);
-            this.setHighlightPos(this.cursorPos);
-            this.onValueChange(this.value);
-        }
+        this.value = (new StringBuilder(this.value)).replace(start, end, text).toString();
+        this.setCursorPosition(start + l);
+        this.setHighlightPos(this.cursorPos);
+        this.onValueChange(this.value);
+
     }
 
     public boolean isCheckInput() {
