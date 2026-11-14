@@ -3,6 +3,7 @@ package cn.ussshenzhou.t88.gui.screen;
 import cn.ussshenzhou.t88.gui.event.ClearEditBoxFocusEvent;
 import cn.ussshenzhou.t88.gui.widegt.TComponent;
 import cn.ussshenzhou.t88.gui.widegt.TWidget;
+import com.mojang.blaze3d.platform.InputConstants;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.client.gui.screens.Screen;
@@ -164,7 +165,7 @@ public abstract class TScreen extends Screen {
 
     @Override
     public boolean keyPressed(KeyEvent event) {
-        if (event.key() == 256 && this.shouldCloseOnEsc()) {
+        if (event.key() == InputConstants.KEY_ESCAPE && this.shouldCloseOnEsc()) {
             this.onClose(true);
             return true;
         } else {

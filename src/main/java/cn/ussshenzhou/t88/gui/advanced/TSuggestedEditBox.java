@@ -3,6 +3,7 @@ package cn.ussshenzhou.t88.gui.advanced;
 import cn.ussshenzhou.t88.gui.util.HorizontalAlignment;
 import cn.ussshenzhou.t88.gui.widegt.TPanel;
 import cn.ussshenzhou.t88.gui.widegt.TSelectList;
+import com.mojang.blaze3d.platform.InputConstants;
 import com.mojang.brigadier.CommandDispatcher;
 import com.mojang.brigadier.ParseResults;
 import com.mojang.brigadier.suggestion.Suggestion;
@@ -12,7 +13,6 @@ import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.client.input.KeyEvent;
 import net.minecraft.commands.CommandSourceStack;
 import net.neoforged.neoforge.client.ClientCommandHandler;
-import org.lwjgl.glfw.GLFW;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -205,7 +205,7 @@ public class TSuggestedEditBox extends TPanel {
     @Override
     public boolean keyPressed(KeyEvent event) {
         if (editBox.isFocused()) {
-            if (event.key() == GLFW.GLFW_KEY_TAB || event.key() == GLFW.GLFW_KEY_ENTER) {
+            if (event.key() == InputConstants.KEY_TAB || event.key() == InputConstants.KEY_NUMPADENTER) {
                 applySuggestion();
                 return true;
             }

@@ -17,7 +17,7 @@ import net.minecraft.locale.Language;
 import net.minecraft.network.chat.Component;
 import net.minecraft.util.Mth;
 import org.jetbrains.annotations.Nullable;
-import org.lwjgl.glfw.GLFW;
+import com.mojang.blaze3d.platform.InputConstants;
 
 import java.util.Collection;
 import java.util.function.Consumer;
@@ -75,14 +75,14 @@ public class TSelectList<Element> extends ObjectSelectionList<TSelectList<Elemen
 
     @Override
     public boolean keyPressed(KeyEvent event) {
-        boolean acceptableKey = event.key() == GLFW.GLFW_KEY_DOWN || event.key() == GLFW.GLFW_KEY_UP;
+        boolean acceptableKey = event.key() == InputConstants.KEY_DOWN || event.key() == InputConstants.KEY_UP;
         if (this.isFocused() && acceptableKey) {
             Entry selected = this.getSelected();
             if (selected == null) {
                 this.setSelected(0);
             } else {
                 int i = this.children().indexOf(selected);
-                if (event.key() == GLFW.GLFW_KEY_DOWN) {
+                if (event.key() == InputConstants.KEY_DOWN) {
                     if (i >= this.children().size() - 1) {
                         this.setSelected(0);
                     } else {

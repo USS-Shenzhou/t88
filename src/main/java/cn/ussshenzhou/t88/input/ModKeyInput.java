@@ -20,7 +20,7 @@ import net.neoforged.neoforge.client.settings.KeyConflictContext;
 import net.neoforged.neoforge.client.settings.KeyModifier;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.Mod;
-import org.lwjgl.glfw.GLFW;
+import com.mojang.blaze3d.platform.InputConstants;
 
 import java.lang.reflect.InvocationTargetException;
 import java.util.List;
@@ -34,23 +34,23 @@ public class ModKeyInput {
     private static final KeyMapping.Category CATEGORY = new KeyMapping.Category(Identifier.fromNamespaceAndPath(T88.MOD_ID, "general"));
     public static final KeyMapping GUI_TEST = new KeyMapping(
             "key.t88.gui_test", KeyConflictContext.UNIVERSAL, KeyModifier.ALT,
-            InputConstants.Type.KEYSYM, GLFW.GLFW_KEY_T, CATEGORY
+            InputConstants.Type.KEYBOARD, InputConstants.KEY_T, CATEGORY
     );
     public static final KeyMapping OPEN_ANALYZER = new KeyMapping(
             "key.t88.open_analyzer", KeyConflictContext.IN_GAME, KeyModifier.ALT,
-            InputConstants.Type.KEYSYM, GLFW.GLFW_KEY_A, CATEGORY
+            InputConstants.Type.KEYBOARD, InputConstants.KEY_A, CATEGORY
     );
     public static final KeyMapping CLEAR_ANALYZER = new KeyMapping(
             "key.t88.clear_recorder", KeyConflictContext.IN_GAME, KeyModifier.NONE,
-            InputConstants.Type.KEYSYM, GLFW.GLFW_KEY_UNKNOWN, CATEGORY
+            InputConstants.UNKNOWN, CATEGORY
     );
     public static final KeyMapping OPEN_WATCHER = new KeyMapping(
             "key.t88.open_watcher", KeyConflictContext.IN_GAME, KeyModifier.ALT,
-            InputConstants.Type.KEYSYM, GLFW.GLFW_KEY_W, CATEGORY
+            InputConstants.Type.KEYBOARD, InputConstants.KEY_W, CATEGORY
     );
     public static final KeyMapping OPEN_CONFIG = new KeyMapping(
             "key.t88.open_cfg", KeyConflictContext.IN_GAME, KeyModifier.ALT,
-            InputConstants.Type.KEYSYM, GLFW.GLFW_KEY_8, CATEGORY
+            InputConstants.Type.KEYBOARD, InputConstants.KEY_8, CATEGORY
     );
 
     @SubscribeEvent
