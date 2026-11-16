@@ -35,12 +35,15 @@ public class NetworkHelper {
             //noinspection unchecked
             T proxy = (T) MagicHelper.UNSAFE.allocateInstance(proxyClass);
             if (proxyClass.isRecord()) {
-                for (var field : packet.getClass().getDeclaredFields()) {
-                    field.setAccessible(true);
-                    Field proxyField = proxyClass.getDeclaredField(field.getName());
-                    //noinspection unchecked
-                    proxy = (T) MagicHelper.setRecordField((Record) proxy, proxyField, field.get(packet));
+                var components = proxyClass.getRecordComponents();
+                var arguments = new Object[components.length];
+                for (int i = 0; i < components.length; i++) {
+                    Field originalField = packet.getClass().getDeclaredField(components[i].getName());
+                    originalField.setAccessible(true);
+                    arguments[i] = originalField.get(packet);
                 }
+                //noinspection unchecked
+                proxy = (T) MagicHelper.setRecordFields((Record) proxy, arguments);
             } else {
                 for (var field : PACKET_FIELDS_CACHE.get(packet.getClass())) {
                     field.set(proxy, field.get(packet));

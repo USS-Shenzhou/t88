@@ -232,10 +232,10 @@ public class NetworkAnnotationProcessor extends AbstractProcessor {
             return;
         }
         registryWriter.println(String.format("""
-                                %4$s.playBidirectional(%1$s.TYPE, %1$s.%5$s,
+                                %4$s%8$s.playBidirectional(%1$s.TYPE, %1$s.%5$s,
                                         (payload, context) -> %3$s,
                                         (payload, context) -> %2$s
-                                )%8$s;
+                                );
                                 try {
                                     cn.ussshenzhou.t88.network.NetworkHelper.register(Class.forName("%6$s"), Class.forName("%7$s"));
                                 } catch (ClassNotFoundException e) {
